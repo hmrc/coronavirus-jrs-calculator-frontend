@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.coronavirusjrscalculatorfrontend.config
+package uk.gov.hmrc.coronavirus.jrs.calculator.config
 
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration

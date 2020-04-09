@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import uk.gov.hmrc.coronavirusjrscalculatorfrontend.config.AppConfig
-@import uk.gov.hmrc.coronavirusjrscalculatorfrontend.views.html._
+package uk.gov.hmrc.coronavirus.jrs.calculator.services
 
-@this(appConfig: AppConfig, govUkWrapper: govuk_wrapper)
+class CalculatorService {
 
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
-
-@contentHeader = {
-  <h1>@heading</h1>
 }
-
-@mainContent = {
-  <p>@message</p>
-}
-
-@govUkWrapper(appConfig = appConfig, title = pageTitle, contentHeader = Some(contentHeader), mainContent = mainContent)

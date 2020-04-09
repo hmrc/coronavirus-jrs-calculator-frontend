@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.coronavirusjrscalculatorfrontend.controllers
+package uk.gov.hmrc.coronavirus.jrs.calculator.config
 
 import javax.inject.{Inject, Singleton}
-import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.coronavirusjrscalculatorfrontend.views.html.warm_up
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.Future
+import play.api.i18n.MessagesApi
+import play.api.mvc.Request
+import play.twirl.api.Html
+import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
+import uk.gov.hmrc.coronavirus.jrs.calculator.views.html.error_template
 
 @Singleton
-class CalculatorController @Inject()(mcc: MessagesControllerComponents,
-                                     warmUpView: warm_up) extends FrontendController(mcc) {
-
-  def warmUp = Action.async { implicit request =>
-    Future successful Ok(warmUpView())
-  }
-
+class ErrorHandler @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig, errorTemplateView: error_template) extends FrontendErrorHandler {
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]): Html =
+    errorTemplateView(pageTitle, heading, message)
 }
