@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import uk.gov.hmrc.coronavirusjrscalculatorfrontend.config.AppConfig
-@import uk.gov.hmrc.coronavirusjrscalculatorfrontend.views.html._
+package uk.gov.hmrc.coronavirusjrscalculatorfrontend.controllers
 
-@this(appConfig: AppConfig, govUkWrapper: govuk_wrapper)
+import javax.inject.{Inject, Singleton}
+import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.coronavirusjrscalculatorfrontend.views.html.warm_up
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
+import scala.concurrent.Future
 
-@contentHeader = {
-  <h1>@heading</h1>
+@Singleton
+class CalculatorController @Inject()(mcc: MessagesControllerComponents,
+                                     warmUpView: warm_up) extends FrontendController(mcc) {
+
+  def warmUp = Action.async { implicit request =>
+    Future successful Ok(warmUpView())
+  }
+
 }
-
-@mainContent = {
-  <p>@message</p>
-}
-
-@govUkWrapper(appConfig = appConfig, title = pageTitle, contentHeader = Some(contentHeader), mainContent = mainContent)

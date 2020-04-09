@@ -8,6 +8,8 @@ lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory)
   .settings(
     majorVersion                     := 0,
+    name                             := appName,
+    PlayKeys.playDefaultPort         := 9264,
     libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test
   )
   .settings(publishingSettings: _*)
