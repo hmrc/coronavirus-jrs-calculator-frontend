@@ -5,24 +5,41 @@
 
 package forms
 
-import java.time.{LocalDate, ZoneOffset}
-
 import forms.behaviours.DateBehaviours
 import play.api.data.FormError
 
 class ClaimPeriodFormProviderSpec extends DateBehaviours {
 
   val form = new ClaimPeriodFormProvider()()
-
   ".value" should {
 
-    val validData = datesBetween(
-      min = LocalDate.of(2000, 1, 1),
-      max = LocalDate.now(ZoneOffset.UTC)
-    )
+    "bind valid data" in {
 
-    behave like dateField(form, "value", validData)
+      forAll(claimPeriodModelGen -> "valid date") {
+        model =>
+          val data = Map(
+            "startDateValue.day" -> model.startDate.getDayOfMonth.toString,
+            "startDateValue.month" -> model.startDate.getMonthValue.toString,
+            "startDateValue.year" -> model.startDate.getYear.toString,
+            "endDateValue.day" -> model.endDate.getDayOfMonth.toString,
+            "endDateValue.month" -> model.endDate.getMonthValue.toString,
+            "endDateValue.year" -> model.endDate.getYear.toString
+          )
 
-    behave like mandatoryDateField(form, "value", "claimPeriod.error.required.all")
+          val result = form.bind(data)
+
+          result.value.value shouldEqual model
+      }
+    }
+
+    "fail to bind an empty date" in {
+
+      val result = form.bind(Map.empty[String, String])
+
+      result.errors shouldBe List(
+        FormError("startDateValue", "claimPeriod.start.error.required.all"),
+        FormError("endDateValue", "claimPeriod.end.error.required.all")
+      )
+    }
   }
 }

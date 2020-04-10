@@ -9,7 +9,7 @@ import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
 import forms.ClaimPeriodFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{ClaimPeriodModel, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -32,7 +32,7 @@ class ClaimPeriodControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
+  val validAnswer = ClaimPeriodModel(LocalDate.now(ZoneOffset.UTC), LocalDate.now(ZoneOffset.UTC))
 
   lazy val claimPeriodRoute = routes.ClaimPeriodController.onPageLoad(NormalMode).url
 
@@ -48,9 +48,12 @@ class ClaimPeriodControllerSpec extends SpecBase with MockitoSugar {
       .withCSRFToken
       .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
       .withFormUrlEncodedBody(
-        "value.day"   -> validAnswer.getDayOfMonth.toString,
-        "value.month" -> validAnswer.getMonthValue.toString,
-        "value.year"  -> validAnswer.getYear.toString
+        "startDateValue.day"   -> validAnswer.startDate.getDayOfMonth.toString,
+        "startDateValue.month" -> validAnswer.startDate.getMonthValue.toString,
+        "startDateValue.year"  -> validAnswer.startDate.getYear.toString,
+        "endDateValue.day"   -> validAnswer.endDate.getDayOfMonth.toString,
+        "endDateValue.month" -> validAnswer.endDate.getMonthValue.toString,
+        "endDateValue.year"  -> validAnswer.endDate.getYear.toString
       )
 
   "ClaimPeriod Controller" must {

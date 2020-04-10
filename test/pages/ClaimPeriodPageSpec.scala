@@ -5,8 +5,7 @@
 
 package pages
 
-import java.time.LocalDate
-
+import models.ClaimPeriodModel
 import org.scalacheck.Arbitrary
 import pages.behaviours.PageBehaviours
 
@@ -14,14 +13,10 @@ class ClaimPeriodPageSpec extends PageBehaviours {
 
   "ClaimPeriodPage" must {
 
-    implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] = Arbitrary {
-      datesBetween(LocalDate.of(1900, 1, 1), LocalDate.of(2100, 1, 1))
-    }
+    beRetrievable[ClaimPeriodModel](ClaimPeriodPage)
 
-    beRetrievable[LocalDate](ClaimPeriodPage)
+    beSettable[ClaimPeriodModel](ClaimPeriodPage)
 
-    beSettable[LocalDate](ClaimPeriodPage)
-
-    beRemovable[LocalDate](ClaimPeriodPage)
+    beRemovable[ClaimPeriodModel](ClaimPeriodPage)
   }
 }
