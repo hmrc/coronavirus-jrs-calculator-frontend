@@ -161,3 +161,11 @@ session_expired.guidance = The details you have given have been deleted because 
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+claimPeriod.title = ClaimPeriod
+claimPeriod.heading = ClaimPeriod
+claimPeriod.checkYourAnswersLabel = ClaimPeriod
+claimPeriod.error.required.all = Enter the claimPeriod
+claimPeriod.error.required.two = The claimPeriod must include {0} and {1}
+claimPeriod.error.required = The claimPeriod must include {0}
+claimPeriod.error.invalid = Enter a real ClaimPeriod
