@@ -5,6 +5,7 @@
 
 package forms
 
+import base.SpecBaseWithApplication
 import java.time.LocalDate
 
 import base.SpecBase
@@ -12,7 +13,7 @@ import forms.behaviours.DateBehaviours
 import models.ClaimPeriodModel
 import play.api.data.FormError
 
-class ClaimPeriodFormProviderSpec extends SpecBase {
+class ClaimPeriodFormProviderSpecWithApplication extends SpecBaseWithApplication {
 
   val form = new ClaimPeriodFormProvider(frontendAppConfig)
   val dateBehaviours = new DateBehaviours
