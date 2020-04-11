@@ -7,7 +7,7 @@ package controllers
 
 import java.time.{LocalDate, ZoneOffset}
 
-import base.{SpecBase, SpecBaseWithApplication}
+import base.SpecBaseWithApplication
 import forms.TestOnlyNICGrantCalculatorFormProvider
 import models.PaymentFrequency.Weekly
 import models.{NormalMode, TestOnlyNICGrantModel, UserAnswers}
