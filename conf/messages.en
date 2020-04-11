@@ -220,3 +220,11 @@ payFrequency.fourweekly = Every 4 weeks
 payFrequency.monthly = Monthly
 payFrequency.checkYourAnswersLabel = How often do you pay this employee?
 payFrequency.error.required = Select paymentFrequency
+
+payDate.title = PayDate
+payDate.heading = PayDate
+payDate.checkYourAnswersLabel = PayDate
+payDate.error.required.all = Enter the payDate
+payDate.error.required.two = The payDate must include {0} and {1}
+payDate.error.required = The payDate must include {0}
+payDate.error.invalid = Enter a real PayDate
