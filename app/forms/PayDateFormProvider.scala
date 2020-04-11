@@ -16,10 +16,10 @@ class PayDateFormProvider @Inject() extends Mappings {
   def apply(): Form[LocalDate] =
     Form(
       "value" -> localDate(
-        invalidKey     = "payDate.error.invalid",
+        invalidKey = "payDate.error.invalid",
         allRequiredKey = "payDate.error.required.all",
         twoRequiredKey = "payDate.error.required.two",
-        requiredKey    = "payDate.error.required"
+        requiredKey = "payDate.error.required"
       )
     )
 }

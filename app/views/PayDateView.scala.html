@@ -11,11 +11,11 @@
     button: components.button
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], idx: Int)(implicit request: Request[_], messages: Messages)
 
 @govukLayout(pageTitle = Some(title(form, "payDate.title"))) {
 
-    @formHelper(action = PayDateController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = PayDateController.onSubmit(idx), 'autoComplete -> "off") {
 
         @errorSummary(form.errors, Some("date-value.day"))
 
