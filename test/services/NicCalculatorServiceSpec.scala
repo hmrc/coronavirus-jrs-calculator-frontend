@@ -22,7 +22,11 @@ class NicCalculatorServiceSpec extends WordSpec with MustMatchers with ScalaChec
   private lazy val scenarios = Table(
     ("paymentFrequency", "FurloughPayment", "expected"),
     (Monthly, FurloughPayment(700.00, PayPeriod(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))), 0.00),
-    (Monthly, FurloughPayment(1000.00, PayPeriod(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))), 38.77)
+    (Monthly, FurloughPayment(1000.00, PayPeriod(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))), 38.77),
+    (Monthly, FurloughPayment(5000.00, PayPeriod(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))), 245.77),
+    (Monthly, FurloughPayment(700.00, PayPeriod(LocalDate.of(2020, 5, 1), LocalDate.of(2020, 5, 31))), 0),
+    (Monthly, FurloughPayment(1000.00, PayPeriod(LocalDate.of(2020, 5, 1), LocalDate.of(2020, 5, 31))), 36.98),
+    (Monthly, FurloughPayment(5000.00, PayPeriod(LocalDate.of(2020, 5, 1), LocalDate.of(2020, 5, 31))), 243.98)
   )
 
 }
