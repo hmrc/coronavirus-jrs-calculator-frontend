@@ -18,3 +18,8 @@ GET        /claim-period                  controllers.ClaimPeriodController.onPa
 POST       /claim-period                  controllers.ClaimPeriodController.onSubmit(mode: Mode = NormalMode)
 GET        /change-claim-period                        controllers.ClaimPeriodController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-claim-period                        controllers.ClaimPeriodController.onSubmit(mode: Mode = CheckMode)
+
+GET        /testOnlyNICGrantCalculator                  controllers.TestOnlyNICGrantCalculatorController.onPageLoad(mode: Mode = NormalMode)
+POST       /testOnlyNICGrantCalculator                  controllers.TestOnlyNICGrantCalculatorController.onSubmit(mode: Mode = NormalMode)
+GET        /changeTestOnlyNICGrantCalculator                        controllers.TestOnlyNICGrantCalculatorController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeTestOnlyNICGrantCalculator                        controllers.TestOnlyNICGrantCalculatorController.onSubmit(mode: Mode = CheckMode)
