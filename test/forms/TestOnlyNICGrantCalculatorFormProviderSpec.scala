@@ -7,11 +7,11 @@ package forms
 
 import java.time.{LocalDate, ZoneOffset}
 
-import base.SpecBase
+import base.{SpecBase, SpecBaseWithApplication}
 import forms.behaviours.DateBehaviours
 import play.api.data.FormError
 
-class TestOnlyNICGrantCalculatorFormProviderSpec extends SpecBase {
+class TestOnlyNICGrantCalculatorFormProviderSpec extends SpecBaseWithApplication {
 
   val form = new TestOnlyNICGrantCalculatorFormProvider(frontendAppConfig)
   val dateBehaviours = new DateBehaviours
