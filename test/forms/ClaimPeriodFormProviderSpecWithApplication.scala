@@ -69,7 +69,10 @@ class ClaimPeriodFormProviderSpecWithApplication extends SpecBaseWithApplication
 
         val result = form().bind(data)
 
-        result.errors should contain only FormError("startDateValue", "claimPeriod.start.error.outofrange", Seq("1 March 2020", "31 May 2020"))
+        result.errors should contain only FormError(
+          "startDateValue",
+          "claimPeriod.start.error.outofrange",
+          Seq("1 March 2020", "31 May 2020"))
       }
     }
 
@@ -77,7 +80,9 @@ class ClaimPeriodFormProviderSpecWithApplication extends SpecBaseWithApplication
 
       val claimPeriodModelStartTooEarlyGen = for {
         startDate <- datesBetween(frontendAppConfig.schemeStartDate, frontendAppConfig.schemeEndDate.minusDays(1))
-        endDate   <- datesBetween(frontendAppConfig.schemeEndDate.plusDays(1), frontendAppConfig.schemeEndDate.plusYears(1))
+        endDate <- datesBetween(
+                    frontendAppConfig.schemeEndDate.plusDays(1),
+                    frontendAppConfig.schemeEndDate.plusYears(1))
       } yield ClaimPeriodModel(startDate, endDate)
 
       forAll(claimPeriodModelStartTooEarlyGen -> "late end date") { model =>
@@ -92,7 +97,10 @@ class ClaimPeriodFormProviderSpecWithApplication extends SpecBaseWithApplication
 
         val result = form().bind(data)
 
-        result.errors should contain only FormError("endDateValue", "claimPeriod.end.error.outofrange", Seq("1 March 2020", "31 May 2020"))
+        result.errors should contain only FormError(
+          "endDateValue",
+          "claimPeriod.end.error.outofrange",
+          Seq("1 March 2020", "31 May 2020"))
       }
     }
 

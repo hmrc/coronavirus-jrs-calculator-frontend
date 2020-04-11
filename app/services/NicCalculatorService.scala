@@ -31,8 +31,8 @@ case class FrequencyTaxYearKey(paymentFrequency: PaymentFrequency, taxYear: TaxY
 
 object FrequencyTaxYearMapping {
   val mappings: Map[FrequencyTaxYearKey, Double] = Map(
-    FrequencyTaxYearKey(Monthly, TaxYearEnding2020) -> 719.00,
-    FrequencyTaxYearKey(Monthly, TaxYearEnding2021) -> 732.00,
+    FrequencyTaxYearKey(Monthly, TaxYearEnding2020)    -> 719.00,
+    FrequencyTaxYearKey(Monthly, TaxYearEnding2021)    -> 732.00,
     FrequencyTaxYearKey(FourWeekly, TaxYearEnding2020) -> 664.00
   )
 }
