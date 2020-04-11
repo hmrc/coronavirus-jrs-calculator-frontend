@@ -14,7 +14,7 @@ GET        /unauthorised                                controllers.Unauthorised
 
 GET        /accessibility                               controllers.AccessibilityStatementController.onPageLoad
 
-GET        /claimPeriod                  controllers.ClaimPeriodController.onPageLoad(mode: Mode = NormalMode)
-POST       /claimPeriod                  controllers.ClaimPeriodController.onSubmit(mode: Mode = NormalMode)
-GET        /changeClaimPeriod                        controllers.ClaimPeriodController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeClaimPeriod                        controllers.ClaimPeriodController.onSubmit(mode: Mode = CheckMode)
+GET        /claim-period                  controllers.ClaimPeriodController.onPageLoad(mode: Mode = NormalMode)
+POST       /claim-period                  controllers.ClaimPeriodController.onSubmit(mode: Mode = NormalMode)
+GET        /change-claim-period                        controllers.ClaimPeriodController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-claim-period                        controllers.ClaimPeriodController.onSubmit(mode: Mode = CheckMode)

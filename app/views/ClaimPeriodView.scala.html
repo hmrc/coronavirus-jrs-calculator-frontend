@@ -9,7 +9,8 @@
     inputDate: components.inputDate,
     formHelper: FormWithCSRF,
     button: components.button,
-    h1: components.h1
+    h1: components.h1,
+    p: components.p
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -21,6 +22,10 @@
         @errorSummary(form.errors, Some("date-value.day"))
 
         @h1("claimPeriod.heading")
+
+        @p(Html(Messages("claimPeriod.p1")))
+
+        @p(Html(Messages("claimPeriod.p2")))
 
         @inputDate(
             form = form,
