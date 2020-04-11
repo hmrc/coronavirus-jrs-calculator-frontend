@@ -7,7 +7,7 @@ package controllers
 
 import java.time.{LocalDate, ZoneOffset}
 
-import base.SpecBase
+import base.{SpecBase, SpecBaseWithApplication}
 import forms.TestOnlyNICGrantCalculatorFormProvider
 import models.PaymentFrequency.Weekly
 import models.{NormalMode, TestOnlyNICGrantModel, UserAnswers}
@@ -26,7 +26,7 @@ import views.html.TestOnlyNICGrantCalculatorView
 
 import scala.concurrent.Future
 
-class TestOnlyNICGrantCalculatorControllerSpec extends SpecBase with MockitoSugar {
+class TestOnlyNICGrantCalculatorControllerSpec extends SpecBaseWithApplication with MockitoSugar {
 
   val formProvider = new TestOnlyNICGrantCalculatorFormProvider(frontendAppConfig)
   private def form = formProvider()
