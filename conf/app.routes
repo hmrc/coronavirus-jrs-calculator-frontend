@@ -25,3 +25,8 @@ GET        /test-only/change-nic-grant                        controllers.TestOn
 POST       /test-only/change-nic-grant                        controllers.TestOnlyNICGrantCalculatorController.onSubmit(mode: Mode = CheckMode)
 
 GET       /test-only/nic-grant-response      controllers.TestOnlyNICGrantCalculatorController.showResult()
+
+GET        /pay-question                        controllers.PayQuestionController.onPageLoad(mode: Mode = NormalMode)
+POST       /pay-question                        controllers.PayQuestionController.onSubmit(mode: Mode = NormalMode)
+GET        /change-pay-question                  controllers.PayQuestionController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-pay-question                  controllers.PayQuestionController.onSubmit(mode: Mode = CheckMode)
