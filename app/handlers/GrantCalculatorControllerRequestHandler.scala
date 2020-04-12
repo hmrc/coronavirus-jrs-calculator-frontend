@@ -10,9 +10,6 @@ import services.{CalculatorService, Rate}
 
 class GrantCalculatorControllerRequestHandler extends CalculatorService {
 
-  def handleCalculation(
-    paymentFrequency: PaymentFrequency,
-    furloughPayments: List[FurloughPayment],
-    rate: Rate): CalculationResult =
+  def handleCalculation(paymentFrequency: PaymentFrequency, furloughPayments: List[FurloughPayment], rate: Rate): CalculationResult =
     calculateResult(paymentFrequency, furloughPayments, rate)
 }

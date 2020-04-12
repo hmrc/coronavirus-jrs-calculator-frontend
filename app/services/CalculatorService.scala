@@ -10,13 +10,9 @@ import utils.TaxYearFinder
 
 trait CalculatorService extends TaxYearFinder {
 
-  def calculateResult(
-    paymentFrequency: PaymentFrequency,
-    furloughPayment: List[FurloughPayment],
-    rate: Rate): CalculationResult = {
+  def calculateResult(paymentFrequency: PaymentFrequency, furloughPayment: List[FurloughPayment], rate: Rate): CalculationResult = {
     val paymentDateBreakdowns: Seq[PaymentDateBreakdown] =
-      furloughPayment.map(payment =>
-        PaymentDateBreakdown(calculate(paymentFrequency, payment, rate), payment.paymentDate))
+      furloughPayment.map(payment => PaymentDateBreakdown(calculate(paymentFrequency, payment, rate), payment.paymentDate))
 
     CalculationResult(paymentDateBreakdowns.map(_.amount).sum, paymentDateBreakdowns)
   }
