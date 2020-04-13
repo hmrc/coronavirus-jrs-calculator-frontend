@@ -36,7 +36,11 @@ class ReviewPayDatesController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val payDateList = request.userAnswers.getList(PayDatePage)
-    Ok(view(payDateList, form, mode))
+    if (payDateList.nonEmpty) {
+      Ok(view(payDateList, form, mode))
+    } else {
+      Redirect(routes.PayDateController.onPageLoad(1))
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
