@@ -8,7 +8,7 @@ package controllers
 import controllers.actions._
 import forms.PayDateFormProvider
 import javax.inject.Inject
-import models.{Mode, NormalMode}
+import models.NormalMode
 import navigation.Navigator
 import pages.PayDatePage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,8 +32,6 @@ class PayDateController @Inject()(
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
-  def form = formProvider()
-
   def onPageLoad(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers.get(PayDatePage) match {
       case None        => form
@@ -42,6 +40,8 @@ class PayDateController @Inject()(
 
     Ok(view(preparedForm, idx))
   }
+
+  def form = formProvider()
 
   def onSubmit(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>

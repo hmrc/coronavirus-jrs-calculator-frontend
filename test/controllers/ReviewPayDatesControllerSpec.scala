@@ -5,6 +5,8 @@
 
 package controllers
 
+import java.time.LocalDate
+
 import base.SpecBaseWithApplication
 import forms.ReviewPayDatesFormProvider
 import models.{NormalMode, UserAnswers}
@@ -12,10 +14,11 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.PayDatePage
 import play.api.inject.bind
-import play.api.mvc.{AnyContentAsEmpty, Call}
-import play.api.test.FakeRequest
+import play.api.mvc.{AnyContentAsEmpty, Call, Request}
 import play.api.test.CSRFTokenHelper._
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.ReviewPayDatesView
@@ -25,6 +28,7 @@ import scala.concurrent.Future
 class ReviewPayDatesControllerSpec extends SpecBaseWithApplication with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
+  val addMoreRoute = Call("GET", "/coronavirus-job-retention-scheme/calculator/payDate/1")
 
   val formProvider = new ReviewPayDatesFormProvider()
   val form = formProvider()
@@ -33,45 +37,71 @@ class ReviewPayDatesControllerSpec extends SpecBaseWithApplication with MockitoS
 
   "ReviewPayDates Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "redirect to pay date page when date list is empty" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, reviewPayDatesRoute).withCSRFToken
+      val request: Request[AnyContentAsEmpty.type] = FakeRequest(GET, reviewPayDatesRoute).withCSRFToken
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ReviewPayDatesView]
+      status(result) mustEqual SEE_OTHER
 
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
+      redirectLocation(result).value mustEqual addMoreRoute.url
 
       application.stop()
     }
 
-    "populate the view correctly on a GET when the question has previously been answered" in {
+    "return OK and the correct view for a GET when date list is non-empty" in {
+      val date = LocalDate.of(2020, 3, 1)
 
-      val userAnswers = UserAnswers(userAnswersId).set(ReviewPayDatesPage, true).success.value
+      val userAnswers = UserAnswers("id").set(PayDatePage, date, Some(1))
+        .getOrElse(fail("Could not initialise user answers with PayDate data"))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, reviewPayDatesRoute).withCSRFToken
-
-      val view = application.injector.instanceOf[ReviewPayDatesView]
+      val request: Request[AnyContentAsEmpty.type] = FakeRequest(GET, reviewPayDatesRoute).withCSRFToken
 
       val result = route(application, request).value
+
+      val view = application.injector.instanceOf[ReviewPayDatesView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode)(request, messages).toString
+        view(Seq(date), form, NormalMode)(request, messages).toString
 
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "redirect to the next page when 'no more pay dates' is submitted" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      val request =
+        FakeRequest(POST, reviewPayDatesRoute)
+          .withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+      application.stop()
+    }
+
+    "redirect to the next page when 'pay dates' is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
 
@@ -93,14 +123,19 @@ class ReviewPayDatesControllerSpec extends SpecBaseWithApplication with MockitoS
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+      redirectLocation(result).value mustEqual addMoreRoute.url
 
       application.stop()
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val date = LocalDate.of(2020, 3, 1)
+
+      val userAnswers = UserAnswers("id").set(PayDatePage, date, Some(1))
+        .getOrElse(fail("Could not initialise user answers with PayDate data"))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
         FakeRequest(POST, reviewPayDatesRoute)
@@ -117,7 +152,7 @@ class ReviewPayDatesControllerSpec extends SpecBaseWithApplication with MockitoS
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
+        view(Seq(date), boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

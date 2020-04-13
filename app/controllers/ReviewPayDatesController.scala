@@ -10,7 +10,7 @@ import forms.ReviewPayDatesFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.PayDatePage
+import pages.{PayDatePage, ReviewPayDatesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -54,7 +54,7 @@ class ReviewPayDatesController @Inject()(
               case true => {
                 Redirect(routes.PayDateController.onPageLoad(payDateList.size + 1))
               }
-              case false => ???
+              case false => Redirect(navigator.nextPage(ReviewPayDatesPage, mode, request.userAnswers))
             }
           ))
   }

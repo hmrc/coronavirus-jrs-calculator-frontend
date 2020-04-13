@@ -36,8 +36,8 @@ POST       /pay-frequency                        controllers.PaymentFrequencyCon
 GET        /change-pay-frequency                 controllers.PaymentFrequencyController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-pay-frequency                 controllers.PaymentFrequencyController.onSubmit(mode: Mode = CheckMode)
 
-GET        /payDate                              controllers.PayDateController.onPageLoad(idx: Int)
-POST       /payDate                              controllers.PayDateController.onSubmit(idx: Int)
+GET        /payDate/:idx                         controllers.PayDateController.onPageLoad(idx: Int)
+POST       /payDate/:idx                         controllers.PayDateController.onSubmit(idx: Int)
 
 GET        /reviewPayDates                       controllers.ReviewPayDatesController.onPageLoad(mode: Mode = NormalMode)
 POST       /reviewPayDates                       controllers.ReviewPayDatesController.onSubmit(mode: Mode = NormalMode)
