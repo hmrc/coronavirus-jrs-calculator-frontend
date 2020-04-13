@@ -222,6 +222,8 @@ payFrequency.error.required = Select paymentFrequency
 
 payDate.title = What is this employee’s next pay day?
 payDate.heading = What is this employee’s next pay day?
+payDate.title.firstDate = What was this employee’s last pay day before the claim period started?
+payDate.heading.firstDate = What was this employee’s last pay day before the claim period started?
 payDate.checkYourAnswersLabel = PayDate
 payDate.hint = For example, 30 4 2020
 payDate.error.required.all = Enter the pay date

@@ -13,7 +13,7 @@
 
 @(form: Form[_], idx: Int)(implicit request: Request[_], messages: Messages)
 
-@govukLayout(pageTitle = Some(title(form, "payDate.title"))) {
+@govukLayout(pageTitle = Some(title(form, if(idx == 1){"payDate.title.firstDate"} else {"payDate.title"}))) {
 
     @formHelper(action = PayDateController.onSubmit(idx), 'autoComplete -> "off") {
 
@@ -21,7 +21,7 @@
 
         @inputDate(
             form,
-            "payDate.heading",
+            if(idx == 1){"payDate.heading.firstDate"} else {"payDate.heading"},
             hintText = Some("payDate.hint")
         )
 
