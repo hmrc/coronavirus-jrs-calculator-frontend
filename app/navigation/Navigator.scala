@@ -24,7 +24,7 @@ class Navigator @Inject()() {
         routes.PaymentFrequencyController.onPageLoad(NormalMode)
     case _ =>
       _ =>
-        routes.IndexController.onPageLoad()
+        routes.RootPageController.onPageLoad()
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
