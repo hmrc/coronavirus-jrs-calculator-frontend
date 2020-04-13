@@ -9,15 +9,24 @@ import java.time.temporal.ChronoUnit
 
 import models.{PayPeriod, RegularPayment}
 
+import scala.math.BigDecimal.RoundingMode.RoundingMode
+import scala.math.BigDecimal.RoundingMode._
+
 class MonthlyMaxCalculator {
 
-  def calculate(payPeriod: PayPeriod): Double = {
-    val daysMonthOne: Long = ChronoUnit.DAYS.between(payPeriod.start, payPeriod.start.withDayOfMonth(payPeriod.start.getMonth.maxLength())) + 1
-    val daysMonthTwo = ChronoUnit.DAYS.between(payPeriod.end.withDayOfMonth(1), payPeriod.end) + 1
+  def calculate(payPeriod: PayPeriod): Double =
+    if (payPeriod.start.getMonth == payPeriod.end.getMonth) 2500.0
+    else calculateMonthMax(payPeriod)
 
-    val result = (daysMonthOne * 80.65) + (daysMonthTwo * 83.34)
+  private def calculateMonthMax(payPeriod: PayPeriod): Double = {
+    val startMonthDays: Long = ChronoUnit.DAYS.between(payPeriod.start, payPeriod.start.withDayOfMonth(payPeriod.start.getMonth.maxLength))
+    val endMonthDays: Long = ChronoUnit.DAYS.between(payPeriod.start.withDayOfMonth(payPeriod.start.getMonth.maxLength), payPeriod.end)
+    val startMonthDailyMax: Double = helper(2500.0 / payPeriod.start.getMonth.maxLength, UP)
+    val endMonthDailyMax: Double = helper(2500.0 / payPeriod.end.getMonth.maxLength, UP)
 
-    BigDecimal(result).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
+    helper((startMonthDays * startMonthDailyMax) + (endMonthDays * endMonthDailyMax), HALF_UP)
   }
+
+  val helper: (Double, RoundingMode) => Double = (value, mode) => BigDecimal(value).setScale(2, mode).toDouble
 
 }
