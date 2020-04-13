@@ -278,3 +278,6 @@ pensionAutoEnrolment.title = Has this employee opted out of pension auto-enrolme
 pensionAutoEnrolment.heading = Has this employee opted out of pension auto-enrolment?
 pensionAutoEnrolment.checkYourAnswersLabel = pensionAutoEnrolment
 pensionAutoEnrolment.error.required = Select yes if this employee opted out of pension auto-enrolment
+
+confirmation.title = Calculation result
+confirmation.heading = For this employee you can claim:

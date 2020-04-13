@@ -1,0 +1,25 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ *@
+
+@this(
+    govukLayout: templates.GovukLayoutWrapper,
+    h1: components.h1,
+    p: components.p,
+    confirmation: components.confirmation
+)
+
+@()(implicit request: Request[_], messages: Messages)
+
+@govukLayout(pageTitle = Some(titleNoForm("confirmation.title"))) {
+
+    @confirmation{
+
+        @h1(Html(messages("confirmation.heading")), classes = Some("govuk-panel__body"))
+
+<span class="govuk-!-font-weight-bold">&pound;300.00</span> - Furloughed pay <br/>
+<span class="govuk-!-font-weight-bold">&pound;50.00</span> - Employer NIC <br/>
+<span class="govuk-!-font-weight-bold">&pound;25.00</span> - Pension contribution <br/>
+    }
+}
