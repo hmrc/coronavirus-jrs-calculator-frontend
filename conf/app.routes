@@ -12,6 +12,8 @@ GET         /check-your-answers                  controllers.CheckYourAnswersCon
 
 GET         /unauthorised                        controllers.UnauthorisedController.onPageLoad
 
+GET         /service-unavailable                 controllers.ErrorController.internalServerError
+
 GET         /accessibility                       controllers.AccessibilityStatementController.onPageLoad
 
 GET         /claim-period-start                  controllers.ClaimPeriodStartController.onPageLoad(mode: Mode = NormalMode)
