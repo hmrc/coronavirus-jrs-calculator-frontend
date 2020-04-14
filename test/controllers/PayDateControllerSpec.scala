@@ -9,7 +9,7 @@ import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBaseWithApplication
 import forms.PayDateFormProvider
-import models.UserAnswers
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -36,16 +36,15 @@ class PayDateControllerSpec extends SpecBaseWithApplication with MockitoSugar {
   val schemeStartDate = LocalDate.of(2020, 3, 1)
   val claimStartDate = LocalDate.of(2020, 3, 5)
 
-//  lazy val payDateRoute = routes.PayDateController.onPageLoad(1).url
-  lazy val payDateRoute = "/coronavirus-job-retention-scheme/calculator/payDate/1"
+  lazy val payDateRoute = routes.PayDateController.onPageLoad(1).url
 
   val userAnswersWithStartDate = UserAnswers(userAnswersId).set(ClaimPeriodStartPage, claimStartDate).success.value
 
-  val getRequest: FakeRequest[AnyContentAsEmpty.type] =
+  lazy val getRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, payDateRoute).withCSRFToken
       .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
-  val postRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
+  lazy val postRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
     FakeRequest(POST, payDateRoute).withCSRFToken
       .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
       .withFormUrlEncodedBody(
