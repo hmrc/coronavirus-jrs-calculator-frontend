@@ -11,6 +11,7 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import play.api.data.Form
 import play.api.data.validation.{Constraint, Invalid, Valid}
+import views.ViewUtils
 
 class PayDateFormProvider @Inject() extends Mappings {
 
@@ -26,10 +27,10 @@ class PayDateFormProvider @Inject() extends Mappings {
     )
 
   private def isBeforeIfDefined(beforeDate: Option[LocalDate]): Constraint[LocalDate] = Constraint { date =>
-    if (beforeDate.forall(date.isBefore(_))) Valid else Invalid("payDate.error.mustBeBefore")
+    if (beforeDate.forall(date.isBefore(_))) Valid else Invalid("payDate.error.mustBeBefore", ViewUtils.dateToString(beforeDate.get))
   }
 
   private def isAfterIfDefined(afterDate: Option[LocalDate]): Constraint[LocalDate] = Constraint { date =>
-    if (afterDate.forall(date.isAfter(_))) Valid else Invalid("payDate.error.mustBeAfter")
+    if (afterDate.forall(date.isAfter(_))) Valid else Invalid("payDate.error.mustBeAfter", ViewUtils.dateToString(afterDate.get))
   }
 }

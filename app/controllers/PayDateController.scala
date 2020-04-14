@@ -47,12 +47,27 @@ class PayDateController @Inject()(
     }
   }
 
+  private def messageDateFrom(claimStartDate: LocalDate, userAnswers: UserAnswers, idx: Int): LocalDate =
+    userAnswers.getList(PayDatePage).+:(claimStartDate).apply(idx - 1)
+
+  def form = formProvider()
+
   def onSubmit(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     getRequiredAnswer(ClaimPeriodStartPage) { claimStartDate =>
       val messageDate = messageDateFrom(claimStartDate, request.userAnswers, idx)
+      val dayBeforeClaimStart = claimStartDate.minusDays(1)
+      val latestDate = request.userAnswers
+        .getList(PayDatePage)
+        .lift(idx - 2)
+        .map(
+          lastDate => if (lastDate.isAfter(dayBeforeClaimStart)) lastDate else dayBeforeClaimStart
+        )
+        .getOrElse(dayBeforeClaimStart)
 
-      form
-        .bindFromRequest()
+      formProvider(
+        beforeDate = if (idx == 1) Some(claimStartDate) else None,
+        afterDate = if (idx != 1) Some(latestDate) else None
+      ).bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, idx, messageDate))),
           value =>
@@ -63,9 +78,4 @@ class PayDateController @Inject()(
         )
     }
   }
-
-  private def messageDateFrom(claimStartDate: LocalDate, userAnswers: UserAnswers, idx: Int): LocalDate =
-    userAnswers.getList(PayDatePage).+:(claimStartDate).apply(idx - 1)
-
-  def form = formProvider()
 }
