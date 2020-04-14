@@ -8,21 +8,135 @@ package forms
 import java.time.{LocalDate, ZoneOffset}
 
 import forms.behaviours.DateBehaviours
+import org.scalacheck.Gen
 import play.api.data.FormError
 
 class PayDateFormProviderSpec extends DateBehaviours {
 
   val form = new PayDateFormProvider()()
 
-  ".value" should {
+  "PayDateFormProvider" should {
 
-    val validData = datesBetween(
-      min = LocalDate.of(2000, 1, 1),
-      max = LocalDate.now(ZoneOffset.UTC)
-    )
+    ".value" should {
 
-    behave like dateField(form, "value", validData)
+      val validData = datesBetween(
+        min = LocalDate.of(2000, 1, 1),
+        max = LocalDate.now(ZoneOffset.UTC)
+      )
 
-    behave like mandatoryDateField(form, "value", "payDate.error.required.all")
+      behave like dateField(form, "value", validData)
+
+      behave like mandatoryDateField(form, "value", "payDate.error.required.all")
+    }
+
+    "before constraint" must {
+
+      "accept valid data" in {
+        val gen = for {
+          daysMinus <- Gen.choose(1, 100)
+          validDates <- datesBetween(
+                         min = LocalDate.of(2020, 3, 1),
+                         max = LocalDate.of(2020, 5, 1)
+                       )
+        } yield (validDates, daysMinus)
+
+        forAll(gen -> "valid dates") {
+          case (date: LocalDate, minusDays: Int) =>
+            val dateBefore = date.minusDays(minusDays)
+
+            val data = Map(
+              "value.day"   -> dateBefore.getDayOfMonth.toString,
+              "value.month" -> dateBefore.getMonthValue.toString,
+              "value.year"  -> dateBefore.getYear.toString
+            )
+
+            val result = new PayDateFormProvider().apply(beforeDate = Some(date)).bind(data)
+
+            result.errors shouldBe empty
+            result.value.value shouldEqual dateBefore
+        }
+      }
+
+      "reject invalid data" in {
+        val gen = for {
+          daysPlus <- Gen.choose(1, 100)
+          validDates <- datesBetween(
+                         min = LocalDate.of(2020, 3, 1),
+                         max = LocalDate.of(2020, 5, 1)
+                       )
+        } yield (validDates, daysPlus)
+
+        forAll(gen -> "valid dates") {
+          case (date: LocalDate, plusDays: Int) =>
+            val dateAfter = date.plusDays(plusDays)
+
+            val data = Map(
+              "value.day"   -> dateAfter.getDayOfMonth.toString,
+              "value.month" -> dateAfter.getMonthValue.toString,
+              "value.year"  -> dateAfter.getYear.toString
+            )
+
+            val result = new PayDateFormProvider().apply(beforeDate = Some(date)).bind(data)
+
+            result.errors should contain only FormError("value", "payDate.error.mustBeBefore")
+        }
+      }
+    }
+
+    "after constraint" must {
+
+      "accept valid data" in {
+        val gen = for {
+          daysPlus <- Gen.choose(1, 100)
+          validDates <- datesBetween(
+                         min = LocalDate.of(2020, 3, 1),
+                         max = LocalDate.of(2020, 5, 1)
+                       )
+        } yield (validDates, daysPlus)
+
+        forAll(gen -> "valid dates") {
+          case (date: LocalDate, plusDays: Int) =>
+            val dateAfter = date.plusDays(plusDays)
+
+            val data = Map(
+              "value.day"   -> dateAfter.getDayOfMonth.toString,
+              "value.month" -> dateAfter.getMonthValue.toString,
+              "value.year"  -> dateAfter.getYear.toString
+            )
+
+            val result = new PayDateFormProvider().apply(afterDate = Some(date)).bind(data)
+
+            result.errors shouldBe empty
+            result.value.value shouldEqual dateAfter
+        }
+      }
+
+      "reject invalid data" in {
+        val gen = for {
+          daysPlus <- Gen.choose(1, 100)
+          validDates <- datesBetween(
+                         min = LocalDate.of(2020, 3, 1),
+                         max = LocalDate.of(2020, 5, 1)
+                       )
+        } yield (validDates, daysPlus)
+
+        forAll(gen -> "valid dates") {
+          case (date: LocalDate, plusDays: Int) =>
+            val dateBefore = date.minusDays(plusDays)
+
+            val data = Map(
+              "value.day"   -> dateBefore.getDayOfMonth.toString,
+              "value.month" -> dateBefore.getMonthValue.toString,
+              "value.year"  -> dateBefore.getYear.toString
+            )
+
+            val result = new PayDateFormProvider().apply(afterDate = Some(date)).bind(data)
+
+            result.errors should contain only FormError("value", "payDate.error.mustBeAfter")
+        }
+      }
+    }
+
   }
+
 }
