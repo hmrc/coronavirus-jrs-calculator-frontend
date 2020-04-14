@@ -51,11 +51,6 @@ POST        /change-pay-frequency                controllers.PaymentFrequencyCon
 GET         /payDate/:idx                        controllers.PayDateController.onPageLoad(idx: Int)
 POST        /payDate/:idx                        controllers.PayDateController.onSubmit(idx: Int)
 
-GET         /reviewPayDates                      controllers.ReviewPayDatesController.onPageLoad(mode: Mode = NormalMode)
-POST        /reviewPayDates                      controllers.ReviewPayDatesController.onSubmit(mode: Mode = NormalMode)
-GET         /changeReviewPayDates                controllers.ReviewPayDatesController.onPageLoad(mode: Mode = CheckMode)
-POST        /changeReviewPayDates                controllers.ReviewPayDatesController.onSubmit(mode: Mode = CheckMode)
-
 GET         /salary                              controllers.SalaryQuestionController.onPageLoad(mode: Mode = NormalMode)
 POST        /salary                              controllers.SalaryQuestionController.onSubmit(mode: Mode = NormalMode)
 GET         /change-salary                       controllers.SalaryQuestionController.onPageLoad(mode: Mode = CheckMode)
