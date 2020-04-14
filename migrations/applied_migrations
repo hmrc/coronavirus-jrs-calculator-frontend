@@ -13,3 +13,8 @@ echo "confirmation.title = confirmation" >> ../conf/messages.en
 echo "confirmation.heading = confirmation" >> ../conf/messages.en
 
 echo "Migration Confirmation completed"
+echo "GET        /pensionAutoEnrolment                        controllers.PensionAutoEnrolmentController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /pensionAutoEnrolment                        controllers.PensionAutoEnrolmentController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+
+echo "GET        /changePensionAutoEnrolment                  controllers.PensionAutoEnrolmentController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changePensionAutoEnrolment                  controllers.PensionAutoEnrolmentController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
