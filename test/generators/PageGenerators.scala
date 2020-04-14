@@ -9,12 +9,12 @@ import org.scalacheck.Arbitrary
 import pages._
 
 trait PageGenerators {
-  
-  implicit lazy val arbitraryPensionAutoEnrolmentPage: Arbitrary[PensionAutoEnrolmentPage.type] =
-    Arbitrary(PensionAutoEnrolmentPage)
-  
-  implicit lazy val arbitraryNicCategoryPage: Arbitrary[NicCategoryPage.type] =
-    Arbitrary(NicCategoryPage)
+
+  implicit lazy val arbitraryClaimPeriodEndPage: Arbitrary[ClaimPeriodEndPage.type] =
+    Arbitrary(ClaimPeriodEndPage)
+
+  implicit lazy val arbitraryClaimPeriodStartPage: Arbitrary[ClaimPeriodStartPage.type] =
+    Arbitrary(ClaimPeriodStartPage)
 
   implicit lazy val arbitraryPensionAutoEnrolmentPage: Arbitrary[PensionAutoEnrolmentPage.type] =
     Arbitrary(PensionAutoEnrolmentPage)
@@ -36,7 +36,4 @@ trait PageGenerators {
 
   implicit lazy val arbitraryTestOnlyNICGrantCalculatorPage: Arbitrary[TestOnlyNICGrantCalculatorPage.type] =
     Arbitrary(TestOnlyNICGrantCalculatorPage)
-
-  implicit lazy val arbitraryClaimPeriodPage: Arbitrary[ClaimPeriodPage.type] =
-    Arbitrary(ClaimPeriodPage)
 }
