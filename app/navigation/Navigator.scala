@@ -6,10 +6,9 @@
 package navigation
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.mvc.Call
 import controllers.routes
-import pages._
+import pages.{PayDatePage, _}
 import models._
 
 @Singleton
@@ -40,9 +39,6 @@ class Navigator @Inject()() {
     case SalaryQuestionPage =>
       _ =>
         routes.PayDateController.onPageLoad(1)
-    case PayDatePage =>
-      _ =>
-        routes.ReviewPayDatesController.onPageLoad(NormalMode)
     case _ =>
       _ =>
         routes.RootPageController.onPageLoad()
@@ -54,10 +50,21 @@ class Navigator @Inject()() {
         routes.CheckYourAnswersController.onPageLoad()
   }
 
+  private val payDateRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
+    (for {
+      claimEndDate <- userAnswers.get(ClaimPeriodEndPage)
+      lastPayDate  <- userAnswers.getList(PayDatePage).lastOption
+    } yield {
+      if (lastPayDate.isAfter(claimEndDate)) {
+        routes.NicCategoryController.onPageLoad(NormalMode)
+      } else {
+        routes.PayDateController.onPageLoad(previousIdx + 1)
+      }
+    }).getOrElse(routes.ErrorController.internalServerError())
+  }
+
   private val idxRoutes: Page => (Int, UserAnswers) => Call = {
-    case PayDatePage =>
-      (idx, _) =>
-        routes.PayDateController.onPageLoad(idx)
+    case PayDatePage => payDateRoutes
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers, idx: Option[Int] = None): Call = mode match {

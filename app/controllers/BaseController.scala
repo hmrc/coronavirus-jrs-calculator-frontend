@@ -37,4 +37,23 @@ trait BaseController extends FrontendBaseController with I18nSupport {
         Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
     }
 
+  def getRequiredAnswers[A, B](pageA: QuestionPage[A], pageB: QuestionPage[B], idxA: Option[Int] = None, idxB: Option[Int] = None)(
+    f: (A, B) => Future[Result])(
+    implicit request: DataRequest[_],
+    readsA: Reads[A],
+    readsB: Reads[B],
+    errorHandler: ErrorHandler): Future[Result] =
+    getAnswer(pageA, idxA) match {
+      case Some(ansA) =>
+        getAnswer(pageB, idxB) match {
+          case Some(ansB) => f(ansA, ansB)
+          case _ =>
+            Logger.error(s"[BaseController][getRequiredAnswers] Failed to retrieve expected data for page: $pageB")
+            Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+        }
+      case _ =>
+        Logger.error(s"[BaseController][getRequiredAnswers] Failed to retrieve expected data for page: $pageA")
+        Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+    }
+
 }
