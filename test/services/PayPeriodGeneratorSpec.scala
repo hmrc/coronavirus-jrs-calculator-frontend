@@ -41,6 +41,21 @@ class PayPeriodGeneratorSpec extends SpecBase {
     generatePayPeriods(endDatesTwo) mustBe expectedTwo
   }
 
+  "determine if a period contains the start of a new tax year" in new PayPeriodGenerator {
+    periodContainsNewTaxYear(PayPeriod(LocalDate.of(2020, 3, 20), LocalDate.of(2020, 4, 20))) mustBe true
+    periodContainsNewTaxYear(PayPeriod(LocalDate.of(2020, 3, 6), LocalDate.of(2020, 4, 6))) mustBe true
+    periodContainsNewTaxYear(PayPeriod(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))) mustBe false
+  }
+
+  "determine whether a given date falls in a certain period" in new PayPeriodGenerator {
+    val period = PayPeriod(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))
+
+    dateExistsInPayPeriod(LocalDate.of(2020, 3, 15), period) mustBe true
+    dateExistsInPayPeriod(LocalDate.of(2020, 4, 15), period) mustBe false
+    dateExistsInPayPeriod(LocalDate.of(2020, 3, 31), period) mustBe true
+    dateExistsInPayPeriod(LocalDate.of(2020, 3, 1), period) mustBe true
+  }
+
   "counts days in a given period" in new PayPeriodGenerator {
     val periodOne = PayPeriod(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30))
     val periodTwo = PayPeriod(LocalDate.of(2020, 4, 15), LocalDate.of(2020, 4, 30))

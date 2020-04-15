@@ -5,6 +5,7 @@
 
 package services
 
+import java.time.Month
 import java.time.temporal.ChronoUnit
 
 import models.PaymentFrequency.Monthly
@@ -32,15 +33,20 @@ trait FurloughCapCalculator {
     }
   }
 
+  def partialFurloughCap(payPeriod: PayPeriod): Double = calculateFurloughCapNonSimplified(payPeriod)
+
+  protected def dailyMax(month: Month): Double =
+    roundWithMode(2500.00 / month.maxLength, UP)
+
   private def calculateFurloughCapNonSimplified(payPeriod: PayPeriod): Double = {
     val startMonthDays: Long = ChronoUnit.DAYS.between(payPeriod.start, payPeriod.start.withDayOfMonth(payPeriod.start.getMonth.maxLength))
     val endMonthDays: Long = ChronoUnit.DAYS.between(payPeriod.start.withDayOfMonth(payPeriod.start.getMonth.maxLength), payPeriod.end)
-    val startMonthDailyMax: Double = helper(2500.0 / payPeriod.start.getMonth.maxLength, UP)
-    val endMonthDailyMax: Double = helper(2500.0 / payPeriod.end.getMonth.maxLength, UP)
+    val startMonthDailyMax: Double = dailyMax(payPeriod.start.getMonth)
+    val endMonthDailyMax: Double = dailyMax(payPeriod.end.getMonth)
 
-    helper((startMonthDays * startMonthDailyMax) + (endMonthDays * endMonthDailyMax), HALF_UP)
+    roundWithMode((startMonthDays * startMonthDailyMax) + (endMonthDays * endMonthDailyMax), HALF_UP)
   }
 
-  val helper: (Double, RoundingMode) => Double = (value, mode) => BigDecimal(value).setScale(2, mode).toDouble
+  val roundWithMode: (Double, RoundingMode) => Double = (value, mode) => BigDecimal(value).setScale(2, mode).toDouble
 
 }

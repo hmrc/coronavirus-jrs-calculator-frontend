@@ -8,7 +8,7 @@ package handlers
 import models.Calculation.{NicCalculationResult, PensionCalculationResult}
 import models.NicCategory.{Nonpayable, Payable}
 import models.PensionStatus.{OptedIn, OptedOut}
-import models.{CalculationResult, ClaimPeriodModel, RegularPayment, UserAnswers}
+import models.{CalculationResult, ClaimPeriodModel, FurloughPeriod, RegularPayment, UserAnswers}
 import pages._
 import services._
 import viewmodels.{ConfirmationDataResult, ConfirmationMetadata, ConfirmationViewBreakdown}
@@ -37,17 +37,20 @@ trait ConfirmationControllerRequestHandler extends FurloughCalculator with PayPe
       nic        <- userAnswers.get(NicCategoryPage)
       pension    <- userAnswers.get(PensionAutoEnrolmentPage)
       claimPeriod = ClaimPeriodModel(claimStart, claimEnd)
-    } yield ConfirmationMetadata(claimPeriod, furlough, frequency, nic, pension) //TODO gather actual FurloughPeriod
+    } yield ConfirmationMetadata(claimPeriod, furlough, frequency, nic, pension) //TODO get actual furloughPeriod from userAnswers
 
   private def handleCalculation(userAnswers: UserAnswers): Option[CalculationResult] =
     for {
+      claimStart <- userAnswers.get(ClaimPeriodStartPage)
+      claimEnd   <- userAnswers.get(ClaimPeriodEndPage)
       frequency  <- userAnswers.get(PaymentFrequencyPage)
       taxPayYear <- userAnswers.get(TaxYearPayDatePage)
       payDate = userAnswers.getList(PayDatePage)
       periods = generatePayPeriods(payDate.toList)
       salary = userAnswers.get(SalaryQuestionPage)
       regulars = periods.map(p => RegularPayment(salary.get, p))
-    } yield calculateFurlough(frequency, regulars, taxPayYear)
+      furloughPeriod = FurloughPeriod(claimStart, claimEnd)
+    } yield calculateFurlough(frequency, regulars, furloughPeriod, taxPayYear) //TODO get actual furloughPeriod from userAnswers
 
   private def handleCalculationNi(userAnswers: UserAnswers, furloughResult: CalculationResult): Option[CalculationResult] =
     userAnswers.get(NicCategoryPage) match {
