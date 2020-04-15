@@ -27,10 +27,6 @@ class PayPeriodGeneratorSpec extends SpecBase {
   }
 
   "Returns a sorted List[PayPeriod] for a given List[LocalDate] that represents PayPeriod.end LocalDates" in new PayPeriodGenerator {
-    // (0, 1) => PayPeriod(0.plusDays(1), 1)
-    // (1, 2) => PayPeriod(1.plusDays(1), 2)
-    // (2, 3) => PayPeriod(2.plusDays(1), 3)
-
     val endDates: List[LocalDate] = List(LocalDate.of(2020, 4, 20), LocalDate.of(2020, 3, 20), LocalDate.of(2020, 2, 20))
     val endDatesTwo: List[LocalDate] = List(LocalDate.of(2020, 3, 20), LocalDate.of(2020, 2, 20))
 
@@ -43,6 +39,16 @@ class PayPeriodGeneratorSpec extends SpecBase {
 
     generatePayPeriods(endDates) mustBe expected
     generatePayPeriods(endDatesTwo) mustBe expectedTwo
+  }
+
+  "counts days in a given period" in new PayPeriodGenerator {
+    val periodOne = PayPeriod(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30))
+    val periodTwo = PayPeriod(LocalDate.of(2020, 4, 15), LocalDate.of(2020, 4, 30))
+    val periodThree = PayPeriod(LocalDate.of(2020, 5, 1), LocalDate.of(2020, 5, 20))
+
+    periodDaysCount(periodOne) mustBe 30
+    periodDaysCount(periodTwo) mustBe 15
+    periodDaysCount(periodThree) mustBe 20
   }
 
 }

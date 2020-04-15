@@ -47,10 +47,10 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase {
     val pensionPayPeriodBreakdowns = List(PayPeriodBreakdown(0.0, withPayDay), PayPeriodBreakdown(0.0, withPayDayTwo))
 
     loadResultData(userAnswers).get.confirmationViewBreakdown mustBe ConfirmationViewBreakdown(
-        CalculationResult(FurloughCalculationResult, 3200.0, payPeriodBreakdowns),
-        CalculationResult(NicCalculationResult, 0.0, nicPayPeriodBreakdowns),
-        CalculationResult(PensionCalculationResult, 0.0, pensionPayPeriodBreakdowns)
-      ) //TODO metadata to be tested
+      CalculationResult(FurloughCalculationResult, 3200.0, payPeriodBreakdowns),
+      CalculationResult(NicCalculationResult, 0.0, nicPayPeriodBreakdowns),
+      CalculationResult(PensionCalculationResult, 0.0, pensionPayPeriodBreakdowns)
+    ) //TODO metadata to be tested
   }
 
   private val userAnswersJson: String =
