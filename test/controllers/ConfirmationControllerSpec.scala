@@ -11,7 +11,6 @@ import base.SpecBaseWithApplication
 import models.Calculation.{FurloughCalculationResult, NicCalculationResult, PensionCalculationResult}
 import models.{CalculationResult, PayPeriod, PayPeriodBreakdown, PayPeriodWithPayDay, PaymentDate}
 import play.api.test.FakeRequest
-import play.api.test.CSRFTokenHelper._
 import play.api.test.Helpers._
 import viewmodels.ConfirmationViewBreakdown
 import views.html.ConfirmationView
@@ -21,7 +20,7 @@ class ConfirmationControllerSpec extends SpecBaseWithApplication {
   "Confirmation Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(dummyUserAnswers)).build()
 
       val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
 
