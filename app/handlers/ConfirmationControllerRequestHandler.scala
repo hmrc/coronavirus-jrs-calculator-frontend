@@ -8,10 +8,10 @@ package handlers
 import models.Calculation.{NicCalculationResult, PensionCalculationResult}
 import models.NicCategory.{Nonpayable, Payable}
 import models.PensionStatus.{OptedIn, OptedOut}
-import models.{CalculationResult, RegularPayment, UserAnswers}
+import models.{CalculationResult, ClaimPeriodModel, FurloughPeriod, RegularPayment, UserAnswers}
 import pages._
 import services._
-import viewmodels.ConfirmationViewBreakdown
+import viewmodels.{ConfirmationMetadata, ConfirmationViewBreakdown}
 
 trait ConfirmationControllerRequestHandler extends FurloughCalculator with PayPeriodGenerator with NicPensionCalculator {
 
@@ -21,6 +21,17 @@ trait ConfirmationControllerRequestHandler extends FurloughCalculator with PayPe
       ni       <- handleCalculationNi(userAnswers, furlough)
       pension  <- handleCalculationPension(userAnswers, furlough)
     } yield ConfirmationViewBreakdown(furlough, ni, pension)
+
+  def meta(userAnswers: UserAnswers): Option[ConfirmationMetadata] =
+    for {
+      claimStart <- userAnswers.get(ClaimPeriodStartPage)
+      claimEnd   <- userAnswers.get(ClaimPeriodEndPage)
+      furlough   <- userAnswers.get(FurloughQuestionPage)
+      frequency  <- userAnswers.get(PaymentFrequencyPage)
+      nic        <- userAnswers.get(NicCategoryPage)
+      pension    <- userAnswers.get(PensionAutoEnrolmentPage)
+      claimPeriod = ClaimPeriodModel(claimStart, claimEnd)
+    } yield ConfirmationMetadata(claimPeriod, furlough, frequency, nic, pension) //TODO gather actual FurloughPeriod
 
   def handleCalculation(userAnswers: UserAnswers): Option[CalculationResult] =
     for {
