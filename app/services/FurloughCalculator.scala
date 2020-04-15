@@ -79,14 +79,14 @@ trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with P
     PayPeriod(start, end)
   }
 
-  protected def calculateFullPeriod(paymentFrequency: PaymentFrequency, regularPayment: RegularPayment): Double = {
+  protected def calculateFullPeriod(paymentFrequency: PaymentFrequency, regularPayment: RegularPayment): BigDecimal = {
     val eighty = roundWithMode(regularPayment.salary.amount * 0.8, RoundingMode.HALF_UP)
     val cap = furloughCap(paymentFrequency, regularPayment.payPeriod)
 
     if (eighty > cap) cap else eighty
   }
 
-  protected def calculatePartialPeriod(regularPayment: RegularPayment): Double = {
+  protected def calculatePartialPeriod(regularPayment: RegularPayment): BigDecimal = {
     val eighty = roundWithMode(regularPayment.salary.amount * 0.8, RoundingMode.HALF_UP)
     val cap = partialFurloughCap(regularPayment.payPeriod)
 

@@ -16,12 +16,12 @@ import scala.math.BigDecimal.RoundingMode.{RoundingMode, _}
 
 trait FurloughCapCalculator {
 
-  def furloughCap(paymentFrequency: PaymentFrequency, payPeriod: PayPeriod): Double = {
+  def furloughCap(paymentFrequency: PaymentFrequency, payPeriod: PayPeriod): BigDecimal = {
     val furloughCap = FurloughCapMapping.mappings
       .get(paymentFrequency)
       .fold {
         Logger.warn(s"Unable to find a Furlough Cap for $paymentFrequency")
-        0.00
+        BigDecimal(0).setScale(2)
       } { cap =>
         cap.value
       }
@@ -33,20 +33,20 @@ trait FurloughCapCalculator {
     }
   }
 
-  def partialFurloughCap(payPeriod: PayPeriod): Double = calculateFurloughCapNonSimplified(payPeriod)
+  def partialFurloughCap(payPeriod: PayPeriod): BigDecimal = calculateFurloughCapNonSimplified(payPeriod)
 
-  protected def dailyMax(month: Month): Double =
+  protected def dailyMax(month: Month): BigDecimal =
     roundWithMode(2500.00 / month.maxLength, UP)
 
-  private def calculateFurloughCapNonSimplified(payPeriod: PayPeriod): Double = {
+  private def calculateFurloughCapNonSimplified(payPeriod: PayPeriod): BigDecimal = {
     val startMonthDays: Long = ChronoUnit.DAYS.between(payPeriod.start, payPeriod.start.withDayOfMonth(payPeriod.start.getMonth.maxLength))
     val endMonthDays: Long = ChronoUnit.DAYS.between(payPeriod.start.withDayOfMonth(payPeriod.start.getMonth.maxLength), payPeriod.end)
-    val startMonthDailyMax: Double = dailyMax(payPeriod.start.getMonth)
-    val endMonthDailyMax: Double = dailyMax(payPeriod.end.getMonth)
+    val startMonthDailyMax: BigDecimal = dailyMax(payPeriod.start.getMonth)
+    val endMonthDailyMax: BigDecimal = dailyMax(payPeriod.end.getMonth)
 
     roundWithMode((startMonthDays * startMonthDailyMax) + (endMonthDays * endMonthDailyMax), HALF_UP)
   }
 
-  val roundWithMode: (Double, RoundingMode) => Double = (value, mode) => BigDecimal(value).setScale(2, mode).toDouble
+  val roundWithMode: (BigDecimal, RoundingMode) => BigDecimal = (value, mode) => value.setScale(2, mode)
 
 }
