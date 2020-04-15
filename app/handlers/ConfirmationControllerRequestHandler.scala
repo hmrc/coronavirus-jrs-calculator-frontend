@@ -7,6 +7,7 @@ package handlers
 
 import models.Calculation.{NicCalculationResult, PensionCalculationResult}
 import models.NicCategory.{Nonpayable, Payable}
+import models.PensionStatus.{OptedIn, OptedOut}
 import models.{CalculationResult, RegularPayment, UserAnswers}
 import pages._
 import services._
@@ -35,14 +36,14 @@ trait ConfirmationControllerRequestHandler extends FurloughCalculator with PayPe
     userAnswers.get(NicCategoryPage) match {
       case Some(Payable) => calculateNi(userAnswers, furloughResult)
       case Some(Nonpayable) =>
-        Option(CalculationResult(NicCalculationResult, 0.0, furloughResult.payPeriodBreakdowns.map(_.copy(amount = 0.0)))) // TODO cleanup
+        Option(CalculationResult(NicCalculationResult, 0.0, furloughResult.payPeriodBreakdowns.map(_.copy(amount = 0.0))))
     }
 
   protected def handleCalculationPension(userAnswers: UserAnswers, furloughResult: CalculationResult): Option[CalculationResult] =
     userAnswers.get(PensionAutoEnrolmentPage) match {
-      case Some(false) => calculatePension(userAnswers, furloughResult)
-      case Some(true) =>
-        Option(CalculationResult(PensionCalculationResult, 0.0, furloughResult.payPeriodBreakdowns.map(_.copy(amount = 0.0)))) // TODO cleanup
+      case Some(OptedIn) => calculatePension(userAnswers, furloughResult)
+      case Some(OptedOut) =>
+        Option(CalculationResult(PensionCalculationResult, 0.0, furloughResult.payPeriodBreakdowns.map(_.copy(amount = 0.0))))
     }
 
   private def calculateNi(userAnswers: UserAnswers, furloughResult: CalculationResult): Option[CalculationResult] =
