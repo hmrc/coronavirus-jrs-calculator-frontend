@@ -363,7 +363,9 @@ furloughEndDate.checkYourAnswersLabel = FurloughEndDate
 furloughEndDate.error.required.all = Enter the furlough end date
 furloughEndDate.error.required.two = The furlough end date must include {0} and {1}
 furloughEndDate.error.required = The furlough end date must include {0}
-furloughEndDate.error.invalid = Enter a real FurloughEndDate
+furloughEndDate.error.invalid = Enter a real furlough end date
+furloughStartDate.error.minimum = The furlough end date must be after {0}
+furloughStartDate.error.maximum = The furlough end date must be before {0}
 
 furloughStartDate.title = When did their furlough start?
 furloughStartDate.heading = When did their furlough start?
@@ -372,6 +374,8 @@ furloughStartDate.error.required.all = Enter the furlough start date
 furloughStartDate.error.required.two = The furlough start date must include {0} and {1}
 furloughStartDate.error.required = The furlough start date must include {0}
 furloughStartDate.error.invalid = Enter a real furlough start date
+furloughStartDate.error.minimum = The furlough start date must be after {0}
+furloughStartDate.error.maximum = The furlough start date must be before {0}
 
 variableLengthEmployed.title = How long has this employee been working for the business?
 variableLengthEmployed.heading = How long has this employee been working for the business?
