@@ -14,7 +14,11 @@ trait CoreTestData {
   def dummyUserAnswers = Json.parse(userAnswersJson()).as[UserAnswers]
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 
-  def userAnswersJson(furloughQuestion: String = "yes", furloughDates: String = "", furloughStartDate: String = ""): String =
+  def userAnswersJson(
+    furloughQuestion: String = "yes",
+    furloughDates: String = "",
+    furloughStartDate: String = "",
+    furloughEndDate: String = ""): String =
     s"""
        |{
        |    "_id" : "session-3fdd2682-dad1-48e1-80d6-8c1480696811",
@@ -23,6 +27,7 @@ trait CoreTestData {
        |        "furloughQuestion" : "$furloughQuestion",
        |        "furloughDates" : "$furloughDates",
        |        "furloughStartDate" : "$furloughStartDate",
+       |        "furloughEndDate" : "$furloughEndDate",
        |        "payQuestion" : "regularly",
        |        "pensionAutoEnrolment" : "optedIn",
        |        "claimPeriodEnd" : "2020-04-30",

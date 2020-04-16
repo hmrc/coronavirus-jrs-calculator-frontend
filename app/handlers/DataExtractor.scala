@@ -7,9 +7,9 @@ package handlers
 
 import java.time.LocalDate
 
-import models.FurloughDates.StartedInClaim
+import models.FurloughDates.{EndedInClaim, StartedAndEndedInClaim, StartedInClaim}
 import models.FurloughQuestion.{No, Yes}
-import models.{ClaimPeriodModel, FurloughDates, FurloughPeriod, FurloughQuestion, NicCategory, PayPeriod, PayQuestion, PaymentFrequency, PensionStatus, UserAnswers}
+import models.{FurloughPeriod, FurloughQuestion, NicCategory, PayPeriod, PayQuestion, PaymentFrequency, PensionStatus, UserAnswers}
 import pages._
 
 case class MandatoryData(
@@ -36,28 +36,37 @@ trait DataExtractor {
     } yield MandatoryData(PayPeriod(claimStart, claimEnd), frequency, nic, pension, payQuestion, furlough, payDate)
 
   def extractFurloughPeriod(userAnswers: UserAnswers): Option[FurloughPeriod] =
-    for {
-      data <- extract(userAnswers)
-      furloughDates = userAnswers.get(FurloughDatesPage)
-      furloughStart = userAnswers.get(FurloughStartDatePage)
-    } yield {
+    extract(userAnswers).flatMap { data =>
       data.furloughQuestion match {
-        case Yes => FurloughPeriod(data.claimPeriod.start, data.claimPeriod.end)
-        case No =>
-          processFurloughDates(data, furloughDates, furloughStart)
-            .getOrElse(FurloughPeriod(data.claimPeriod.start, data.claimPeriod.end)) //TODO fix this
+        case Yes => Some(FurloughPeriod(data.claimPeriod.start, data.claimPeriod.end))
+        case No  => processFurloughDates(userAnswers)
       }
     }
 
-  private def processFurloughDates(
-    data: MandatoryData,
-    furloughDates: Option[FurloughDates],
-    furloughStart: Option[LocalDate]): Option[FurloughPeriod] =
-    for {
-      start <- furloughStart
-    } yield {
+  private def processFurloughDates(userAnswers: UserAnswers): Option[FurloughPeriod] =
+    userAnswers.get(FurloughDatesPage).flatMap { furloughDates =>
       furloughDates match {
-        case Some(StartedInClaim) => FurloughPeriod(start, data.claimPeriod.end)
+        case StartedInClaim         => patchStartDate(userAnswers)
+        case EndedInClaim           => patchEndDate(userAnswers)
+        case StartedAndEndedInClaim => patchStartAndEndDate(userAnswers)
       }
     }
+
+  private def patchStartDate(userAnswers: UserAnswers): Option[FurloughPeriod] =
+    for {
+      data  <- extract(userAnswers)
+      start <- userAnswers.get(FurloughStartDatePage)
+    } yield FurloughPeriod(start, data.claimPeriod.end)
+
+  private def patchEndDate(userAnswers: UserAnswers): Option[FurloughPeriod] =
+    for {
+      data <- extract(userAnswers)
+      end  <- userAnswers.get(FurloughEndDatePage)
+    } yield FurloughPeriod(data.claimPeriod.start, end)
+
+  private def patchStartAndEndDate(userAnswers: UserAnswers): Option[FurloughPeriod] =
+    for {
+      start <- userAnswers.get(FurloughStartDatePage)
+      end   <- userAnswers.get(FurloughEndDatePage)
+    } yield FurloughPeriod(start, end)
 }

@@ -37,4 +37,21 @@ class DataExtractorSpec extends SpecBase with CoreTestData {
 
     extractFurloughPeriod(userAnswers) mustBe Some(expected)
   }
+
+  "Extract furlough period with start date matching the claim start date with user submitted end date" in new DataExtractor {
+    val userAnswers = Json.parse(userAnswersJson("no", "endedInClaim", furloughEndDate = "2020-04-15")).as[UserAnswers]
+    val claimPeriod = PayPeriod(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 4, 30))
+    val expected = FurloughPeriod(claimPeriod.start, LocalDate.of(2020, 4, 15))
+
+    extractFurloughPeriod(userAnswers) mustBe Some(expected)
+  }
+
+  "Extract furlough period with user submitted start and end date" in new DataExtractor {
+    val userAnswers = Json.parse(userAnswersJson("no", "startedAndEndedInClaim", "2020-03-15", "2020-04-15")).as[UserAnswers]
+    val claimPeriod = PayPeriod(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 4, 30))
+    val expected = FurloughPeriod(LocalDate.of(2020, 3, 15), LocalDate.of(2020, 4, 15))
+
+    extractFurloughPeriod(userAnswers) mustBe Some(expected)
+  }
+
 }
