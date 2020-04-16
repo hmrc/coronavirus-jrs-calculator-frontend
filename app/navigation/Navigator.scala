@@ -26,6 +26,8 @@ class Navigator @Inject()() {
       furloughQuestionRoutes
     case FurloughDatesPage =>
       furloughDatesRoutes
+    case FurloughStartDatePage =>
+      furloughStartDateRoutes
     case PayQuestionPage =>
       _ =>
         routes.PaymentFrequencyController.onPageLoad(NormalMode)
@@ -69,6 +71,13 @@ class Navigator @Inject()() {
       case Some(FurloughDates.EndedInClaim)           => routes.FurloughEndDateController.onPageLoad(NormalMode)
       case Some(FurloughDates.StartedAndEndedInClaim) => routes.FurloughStartDateController.onPageLoad(NormalMode)
       case None                                       => routes.FurloughDatesController.onPageLoad(NormalMode)
+    }
+  }
+
+  private def furloughStartDateRoutes: UserAnswers => Call = { userAnswers =>
+    userAnswers.get(FurloughDatesPage) match {
+      case Some(FurloughDates.StartedAndEndedInClaim) => routes.FurloughEndDateController.onPageLoad(NormalMode)
+      case _                                          => routes.PayQuestionController.onPageLoad(NormalMode)
     }
   }
 
