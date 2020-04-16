@@ -29,9 +29,7 @@ trait ConfirmationControllerRequestHandler extends FurloughCalculator with PayPe
     } yield ConfirmationViewBreakdown(furlough, ni, pension)
 
   private def meta(userAnswers: UserAnswers): Option[ConfirmationMetadata] =
-    for {
-      extractedData <- extract(userAnswers)
-    } yield {
+    extract(userAnswers).map { extractedData =>
       import extractedData._
       import extractedData.claimPeriod._
       ConfirmationMetadata(ClaimPeriodModel(start, end), furloughQuestion, paymentFrequency, nicCategory, pensionStatus)

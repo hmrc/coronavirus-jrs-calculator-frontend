@@ -8,7 +8,7 @@ package handlers
 import java.time.LocalDate
 
 import models.{FurloughQuestion, NicCategory, PayPeriod, PayQuestion, PaymentFrequency, PensionStatus, UserAnswers}
-import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage, FurloughQuestionPage, NicCategoryPage, PayDatePage, PayQuestionPage, PaymentFrequencyPage, PensionAutoEnrolmentPage}
+import pages._
 
 case class MandatoryData(
   claimPeriod: PayPeriod,
