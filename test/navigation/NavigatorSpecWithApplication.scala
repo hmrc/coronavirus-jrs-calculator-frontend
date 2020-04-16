@@ -72,7 +72,29 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication {
           val answers = emptyUserAnswers
           navigator.nextPage(FurloughQuestionPage, NormalMode, answers) mustBe routes.FurloughQuestionController.onPageLoad(NormalMode)
         }
+      }
 
+      "go from furlough dates" must {
+
+        "to start date when started in claim" in {
+          val answers = emptyUserAnswers.set(FurloughDatesPage, FurloughDates.StartedInClaim).success.value
+          navigator.nextPage(FurloughDatesPage, NormalMode, answers) mustBe routes.FurloughStartDateController.onPageLoad(NormalMode)
+        }
+
+        "to end date when ended in claim" in {
+          val answers = emptyUserAnswers.set(FurloughDatesPage, FurloughDates.EndedInClaim).success.value
+          navigator.nextPage(FurloughDatesPage, NormalMode, answers) mustBe routes.FurloughEndDateController.onPageLoad(NormalMode)
+        }
+
+        "to start date when started and ended in claim" in {
+          val answers = emptyUserAnswers.set(FurloughDatesPage, FurloughDates.StartedAndEndedInClaim).success.value
+          navigator.nextPage(FurloughDatesPage, NormalMode, answers) mustBe routes.FurloughStartDateController.onPageLoad(NormalMode)
+        }
+
+        "to furlough question when unanswered" in {
+          val answers = emptyUserAnswers
+          navigator.nextPage(FurloughDatesPage, NormalMode, answers) mustBe routes.FurloughDatesController.onPageLoad(NormalMode)
+        }
       }
     }
 

@@ -14,12 +14,14 @@ sealed trait FurloughDates
 
 object FurloughDates extends Enumerable.Implicits {
 
-  case object Startedinclaim extends WithName("startedInClaim") with FurloughDates
-  case object Endedinclaim extends WithName("endedInClaim") with FurloughDates
+  case object StartedInClaim extends WithName("startedInClaim") with FurloughDates
+  case object EndedInClaim extends WithName("endedInClaim") with FurloughDates
+  case object StartedAndEndedInClaim extends WithName("startedAndEndedInClaim") with FurloughDates
 
   val values: Seq[FurloughDates] = Seq(
-    Startedinclaim,
-    Endedinclaim
+    StartedInClaim,
+    EndedInClaim,
+    StartedAndEndedInClaim
   )
 
   def options(form: Form[_])(implicit messages: Messages): Seq[RadioItem] = values.map { value =>
