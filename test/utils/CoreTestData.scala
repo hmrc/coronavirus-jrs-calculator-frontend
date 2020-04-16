@@ -18,7 +18,10 @@ trait CoreTestData {
     furloughQuestion: String = "yes",
     furloughDates: String = "",
     furloughStartDate: String = "",
-    furloughEndDate: String = ""): String =
+    furloughEndDate: String = "",
+    payQuestion: String = "regularly",
+    variableGrossPay: String = "",
+    employeeStartDate: String = ""): String =
     s"""
        |{
        |    "_id" : "session-3fdd2682-dad1-48e1-80d6-8c1480696811",
@@ -28,7 +31,11 @@ trait CoreTestData {
        |        "furloughDates" : "$furloughDates",
        |        "furloughStartDate" : "$furloughStartDate",
        |        "furloughEndDate" : "$furloughEndDate",
-       |        "payQuestion" : "regularly",
+       |        "payQuestion" : "$payQuestion",
+       |        "variableGrossPay": {
+       |            "amount" : "$variableGrossPay"
+       |        },
+       |        "employeeStartDate": "$employeeStartDate",
        |        "pensionAutoEnrolment" : "optedIn",
        |        "claimPeriodEnd" : "2020-04-30",
        |        "paymentFrequency" : "monthly",

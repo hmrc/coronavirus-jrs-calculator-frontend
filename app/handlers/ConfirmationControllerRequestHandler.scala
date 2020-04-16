@@ -8,7 +8,7 @@ package handlers
 import models.Calculation.{NicCalculationResult, PensionCalculationResult}
 import models.NicCategory.{Nonpayable, Payable}
 import models.PensionStatus.{OptedIn, OptedOut}
-import models.{CalculationResult, ClaimPeriodModel, FurloughPeriod, NicCategory, PaymentFrequency, PensionStatus, RegularPayment, UserAnswers}
+import models.{CalculationResult, ClaimPeriodModel, NicCategory, PaymentFrequency, PensionStatus, UserAnswers}
 import pages._
 import services._
 import viewmodels.{ConfirmationDataResult, ConfirmationMetadata, ConfirmationViewBreakdown}
@@ -45,10 +45,8 @@ trait ConfirmationControllerRequestHandler extends FurloughCalculator with PayPe
       data           <- extract(userAnswers)
       taxPayYear     <- userAnswers.get(TaxYearPayDatePage)
       furloughPeriod <- extractFurloughPeriod(userAnswers)
-      periods = generatePayPeriods(data.payDates.toList)
-      salary = userAnswers.get(SalaryQuestionPage)
-      regulars = periods.map(p => RegularPayment(salary.get, p))
-    } yield calculateFurlough(data.paymentFrequency, regulars, furloughPeriod, taxPayYear) //TODO get actual furloughPeriod from userAnswers
+      regulars       <- extractRegularPayments(userAnswers)
+    } yield calculateFurlough(data.paymentFrequency, regulars, furloughPeriod, taxPayYear)
 
   private def handleCalculationNi(data: Option[MandatoryData], furloughResult: CalculationResult): Option[CalculationResult] =
     for {
