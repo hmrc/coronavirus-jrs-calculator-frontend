@@ -109,6 +109,13 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication {
           navigator.nextPage(FurloughStartDatePage, NormalMode, answers) mustBe routes.PayQuestionController.onPageLoad(NormalMode)
         }
       }
+
+      "go from furlough end date" must {
+
+        "to pay question" in {
+          navigator.nextPage(FurloughEndDatePage, NormalMode, emptyUserAnswers) mustBe routes.PayQuestionController.onPageLoad(NormalMode)
+        }
+      }
     }
 
     "in Check mode" must {

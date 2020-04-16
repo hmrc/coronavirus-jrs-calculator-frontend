@@ -28,6 +28,9 @@ class Navigator @Inject()() {
       furloughDatesRoutes
     case FurloughStartDatePage =>
       furloughStartDateRoutes
+    case FurloughEndDatePage =>
+      _ =>
+        routes.PayQuestionController.onPageLoad(NormalMode)
     case PayQuestionPage =>
       _ =>
         routes.PaymentFrequencyController.onPageLoad(NormalMode)
@@ -56,6 +59,28 @@ class Navigator @Inject()() {
       _ =>
         routes.CheckYourAnswersController.onPageLoad()
   }
+  private val payDateRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
+    (for {
+      claimEndDate <- userAnswers.get(ClaimPeriodEndPage)
+      lastPayDate  <- userAnswers.getList(PayDatePage).lastOption
+    } yield {
+      if (lastPayDate.isAfter(claimEndDate.minusDays(1))) {
+        routes.NicCategoryController.onPageLoad(NormalMode)
+      } else {
+        routes.PayDateController.onPageLoad(previousIdx + 1)
+      }
+    }).getOrElse(routes.ErrorController.internalServerError())
+  }
+  private val idxRoutes: Page => (Int, UserAnswers) => Call = {
+    case PayDatePage => payDateRoutes
+  }
+
+  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers, idx: Option[Int] = None): Call = mode match {
+    case NormalMode =>
+      idx.fold(normalRoutes(page)(userAnswers))(idx => idxRoutes(page)(idx, userAnswers))
+    case CheckMode =>
+      checkRouteMap(page)(userAnswers)
+  }
 
   private def furloughQuestionRoutes: UserAnswers => Call = { userAnswers =>
     userAnswers.get(FurloughQuestionPage) match {
@@ -79,29 +104,5 @@ class Navigator @Inject()() {
       case Some(FurloughDates.StartedAndEndedInClaim) => routes.FurloughEndDateController.onPageLoad(NormalMode)
       case _                                          => routes.PayQuestionController.onPageLoad(NormalMode)
     }
-  }
-
-  private val payDateRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
-    (for {
-      claimEndDate <- userAnswers.get(ClaimPeriodEndPage)
-      lastPayDate  <- userAnswers.getList(PayDatePage).lastOption
-    } yield {
-      if (lastPayDate.isAfter(claimEndDate.minusDays(1))) {
-        routes.NicCategoryController.onPageLoad(NormalMode)
-      } else {
-        routes.PayDateController.onPageLoad(previousIdx + 1)
-      }
-    }).getOrElse(routes.ErrorController.internalServerError())
-  }
-
-  private val idxRoutes: Page => (Int, UserAnswers) => Call = {
-    case PayDatePage => payDateRoutes
-  }
-
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers, idx: Option[Int] = None): Call = mode match {
-    case NormalMode =>
-      idx.fold(normalRoutes(page)(userAnswers))(idx => idxRoutes(page)(idx, userAnswers))
-    case CheckMode =>
-      checkRouteMap(page)(userAnswers)
   }
 }
