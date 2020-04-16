@@ -345,3 +345,25 @@ taxYearPayDate.error.required.two = The payday must include {0} and {1}
 taxYearPayDate.error.required = The payday must include {0}
 taxYearPayDate.error.invalid = Enter a real date
 taxYearPayDate.error.outofrange = The pay date should be between {0} and {1}
+furloughDates.title = What is the furlough period for this employee?
+furloughDates.heading = What is the furlough period for this employee?
+furloughDates.startedInClaim = It started after STARTDATE
+furloughDates.endedInClaim = It ended before ENDDATE
+furloughDates.checkYourAnswersLabel = What is the furlough period for this employee?
+furloughDates.error.required = Select furloughDates
+
+furloughEndDate.title = FurloughEndDate
+furloughEndDate.heading = FurloughEndDate
+furloughEndDate.checkYourAnswersLabel = FurloughEndDate
+furloughEndDate.error.required.all = Enter the furloughEndDate
+furloughEndDate.error.required.two = The furloughEndDate must include {0} and {1}
+furloughEndDate.error.required = The furloughEndDate must include {0}
+furloughEndDate.error.invalid = Enter a real FurloughEndDate
+
+furloughStartDate.title = FurloughStartDate
+furloughStartDate.heading = FurloughStartDate
+furloughStartDate.checkYourAnswersLabel = FurloughStartDate
+furloughStartDate.error.required.all = Enter the furloughStartDate
+furloughStartDate.error.required.two = The furloughStartDate must include {0} and {1}
+furloughStartDate.error.required = The furloughStartDate must include {0}
+furloughStartDate.error.invalid = Enter a real FurloughStartDate
