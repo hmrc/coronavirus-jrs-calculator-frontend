@@ -55,6 +55,25 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication {
 
         navigator.nextPage(PayDatePage, NormalMode, userAnswers, Some(1)) mustBe routes.NicCategoryController.onPageLoad(NormalMode)
       }
+
+      "go from furlough question" must {
+
+        "to pay question when employee has been furloughed the whole period" in {
+          val answers = emptyUserAnswers.set(FurloughQuestionPage, FurloughQuestion.Yes).success.value
+          navigator.nextPage(FurloughQuestionPage, NormalMode, answers) mustBe routes.PayQuestionController.onPageLoad(NormalMode)
+        }
+
+        "to furlough dates when employee has not been furloughed the whole period" in {
+          val answers = emptyUserAnswers.set(FurloughQuestionPage, FurloughQuestion.No).success.value
+          navigator.nextPage(FurloughQuestionPage, NormalMode, answers) mustBe routes.FurloughDatesController.onPageLoad(NormalMode)
+        }
+
+        "to furlough question when unanswered" in {
+          val answers = emptyUserAnswers
+          navigator.nextPage(FurloughQuestionPage, NormalMode, answers) mustBe routes.FurloughQuestionController.onPageLoad(NormalMode)
+        }
+
+      }
     }
 
     "in Check mode" must {

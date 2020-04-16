@@ -23,13 +23,7 @@ class Navigator @Inject()() {
       _ =>
         routes.FurloughQuestionController.onPageLoad(NormalMode)
     case FurloughQuestionPage =>
-      userAnswers =>
-        {
-          val fq = Option((userAnswers.data \ "furloughQuestion").as[String]).getOrElse("no")
-          if (fq == "yes")
-            routes.PayQuestionController.onPageLoad(NormalMode)
-          else routes.RootPageController.onPageLoad()
-        }
+      furloughQuestionRoutes
     case PayQuestionPage =>
       _ =>
         routes.PaymentFrequencyController.onPageLoad(NormalMode)
@@ -57,6 +51,14 @@ class Navigator @Inject()() {
     case _ =>
       _ =>
         routes.CheckYourAnswersController.onPageLoad()
+  }
+
+  private def furloughQuestionRoutes: UserAnswers => Call = { userAnswers =>
+    userAnswers.get(FurloughQuestionPage) match {
+      case Some(FurloughQuestion.Yes) => routes.PayQuestionController.onPageLoad(NormalMode)
+      case Some(FurloughQuestion.No)  => routes.FurloughDatesController.onPageLoad(NormalMode)
+      case None                       => routes.FurloughQuestionController.onPageLoad(NormalMode)
+    }
   }
 
   private val payDateRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
