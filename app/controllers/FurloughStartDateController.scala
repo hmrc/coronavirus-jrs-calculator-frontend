@@ -17,7 +17,6 @@ import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage, FurloughStartDatePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.FurloughStartDateView
 
 import scala.concurrent.{ExecutionContext, Future}

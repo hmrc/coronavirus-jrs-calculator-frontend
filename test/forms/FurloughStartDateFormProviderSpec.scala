@@ -27,7 +27,7 @@ class FurloughStartDateFormProviderSpec extends DateBehaviours {
 
     behave like dateFieldWithMax(form, "value", endDate, FormError("value", "furloughStartDate.error.maximum", Array("1 May 2020")))
 
-    behave like dateFieldWithMin(form, "value", endDate, FormError("value", "furloughStartDate.error.minimum", Array("1 March 2020")))
+    behave like dateFieldWithMin(form, "value", startDate, FormError("value", "furloughStartDate.error.minimum", Array("1 March 2020")))
 
     behave like mandatoryDateField(form, "value", "furloughStartDate.error.required.all")
   }
