@@ -351,9 +351,9 @@ taxYearPayDate.error.outofrange = The pay date should be between {0} and {1}
 
 furloughDates.title = What is the furlough period for this employee?
 furloughDates.heading = What is the furlough period for this employee?
-furloughDates.startedInClaim = It started after STARTDATE
-furloughDates.endedInClaim = It ended before ENDDATE
-furloughDates.startedAndEndedInClaim = It starts and ends between STARTDATE and ENDDATE
+furloughDates.startedInClaim = Starts after {0}
+furloughDates.endedInClaim = Ends before {0}
+furloughDates.startedAndEndedInClaim = Starts and ends between {0} and {1}
 furloughDates.checkYourAnswersLabel = What is the furlough period for this employee?
 furloughDates.error.required = Select furloughDates
 
