@@ -27,21 +27,15 @@ object Period {
   implicit val defaultFormat: Format[Period] = Json.format
 }
 
-case class FurloughPeriod(start: LocalDate, end: LocalDate)
+case class PeriodWithPayDay(payPeriod: Period, paymentDate: PaymentDate)
 
-object FurloughPeriod {
-  implicit val defaultFormat: Format[FurloughPeriod] = Json.format
-}
-
-case class PayPeriodWithPayDay(payPeriod: Period, paymentDate: PaymentDate)
-
-object PayPeriodWithPayDay {
-  implicit val defaultFormat: Format[PayPeriodWithPayDay] = Json.format
+object PeriodWithPayDay {
+  implicit val defaultFormat: Format[PeriodWithPayDay] = Json.format
 }
 
 case class RegularPayment(salary: Salary, payPeriod: Period)
 
-case class PayPeriodBreakdown(amount: BigDecimal, payPeriodWithPayDay: PayPeriodWithPayDay)
+case class PayPeriodBreakdown(amount: BigDecimal, payPeriodWithPayDay: PeriodWithPayDay)
 
 object PayPeriodBreakdown {
   implicit val defaultFormat: Format[PayPeriodBreakdown] = Json.format

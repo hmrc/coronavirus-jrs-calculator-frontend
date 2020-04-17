@@ -8,9 +8,9 @@ package services
 import java.time.LocalDate
 
 import models.Calculation.FurloughCalculationResult
-import models.{CalculationResult, FurloughPeriod, PayPeriodBreakdown, PayPeriodWithPayDay, PaymentDate, PaymentFrequency, Period, RegularPayment, Salary}
-import utils.TaxYearFinder
+import models.{CalculationResult, PayPeriodBreakdown, PaymentDate, PaymentFrequency, Period, PeriodWithPayDay, RegularPayment, Salary}
 import utils.AmountRounding._
+import utils.TaxYearFinder
 
 import scala.math.BigDecimal.RoundingMode
 
@@ -19,16 +19,16 @@ trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with P
   def calculateFurlough(
     paymentFrequency: PaymentFrequency,
     regularPayments: Seq[RegularPayment],
-    furloughPeriod: FurloughPeriod,
+    Period: Period,
     taxYearPayDate: LocalDate): CalculationResult = {
-    val paymentDateBreakdowns = payPeriodBreakdownFromRegularPayment(paymentFrequency, regularPayments, furloughPeriod, taxYearPayDate)
+    val paymentDateBreakdowns = payPeriodBreakdownFromRegularPayment(paymentFrequency, regularPayments, Period, taxYearPayDate)
     CalculationResult(FurloughCalculationResult, paymentDateBreakdowns.map(_.amount).sum, paymentDateBreakdowns)
   }
 
   protected def payPeriodBreakdownFromRegularPayment(
     paymentFrequency: PaymentFrequency,
     regularPayments: Seq[RegularPayment],
-    furloughPeriod: FurloughPeriod,
+    furloughPeriod: Period,
     taxYearPayDate: LocalDate): Seq[PayPeriodBreakdown] =
     regularPayments.map { payment =>
       val paymentDate = periodContainsNewTaxYear(payment.payPeriod) match {
@@ -42,13 +42,13 @@ trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with P
 
       if (isPartialPeriod) {
         val partialPayment = regularPaymentForFurloughPeriod(furloughPeriod, payment)
-        PayPeriodBreakdown(calculatePartialPeriod(partialPayment), PayPeriodWithPayDay(partialPayment.payPeriod, paymentDate))
+        PayPeriodBreakdown(calculatePartialPeriod(partialPayment), PeriodWithPayDay(partialPayment.payPeriod, paymentDate))
       } else {
-        PayPeriodBreakdown(calculateFullPeriod(paymentFrequency, payment), PayPeriodWithPayDay(payment.payPeriod, paymentDate))
+        PayPeriodBreakdown(calculateFullPeriod(paymentFrequency, payment), PeriodWithPayDay(payment.payPeriod, paymentDate))
       }
     }
 
-  protected def regularPaymentForFurloughPeriod(furloughPeriod: FurloughPeriod, payment: RegularPayment): RegularPayment = {
+  protected def regularPaymentForFurloughPeriod(furloughPeriod: Period, payment: RegularPayment): RegularPayment = {
     val furloughPayPeriod: Period = payPeriodFromFurloughPeriod(furloughPeriod, payment.payPeriod)
     val daysInPayPeriod = periodDaysCount(payment.payPeriod)
     val daysInFurloughDayPeriod = periodDaysCount(furloughPayPeriod)
@@ -62,7 +62,7 @@ trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with P
     RegularPayment(Salary(newSalary), Period(furloughPayPeriod.start, furloughPayPeriod.end))
   }
 
-  protected def payPeriodFromFurloughPeriod(furloughPeriod: FurloughPeriod, payPeriod: Period) = {
+  protected def payPeriodFromFurloughPeriod(furloughPeriod: Period, payPeriod: Period) = {
     val start =
       if (furloughPeriod.start.isAfter(payPeriod.start) && furloughPeriod.start.isBefore(payPeriod.end)) {
         furloughPeriod.start

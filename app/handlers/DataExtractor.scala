@@ -10,7 +10,7 @@ import java.time.LocalDate
 import models.FurloughDates.{EndedInClaim, StartedAndEndedInClaim, StartedInClaim}
 import models.FurloughQuestion.{No, Yes}
 import models.PayQuestion.{Regularly, Varies}
-import models.{Amount, FurloughPeriod, FurloughQuestion, NicCategory, PayQuestion, PaymentFrequency, PensionStatus, Period, RegularPayment, Salary, UserAnswers}
+import models.{Amount, FurloughQuestion, NicCategory, PayQuestion, PaymentFrequency, PensionStatus, Period, RegularPayment, Salary, UserAnswers}
 import pages._
 import services.ReferencePayCalculator
 
@@ -37,10 +37,10 @@ trait DataExtractor extends ReferencePayCalculator {
       payDate = userAnswers.getList(PayDatePage)
     } yield MandatoryData(Period(claimStart, claimEnd), frequency, nic, pension, payQuestion, furlough, payDate)
 
-  def extractFurloughPeriod(userAnswers: UserAnswers): Option[FurloughPeriod] =
+  def extractFurloughPeriod(userAnswers: UserAnswers): Option[Period] =
     extract(userAnswers).flatMap { data =>
       data.furloughQuestion match {
-        case Yes => Some(FurloughPeriod(data.claimPeriod.start, data.claimPeriod.end))
+        case Yes => Some(Period(data.claimPeriod.start, data.claimPeriod.end))
         case No  => processFurloughDates(userAnswers)
       }
     }
@@ -81,7 +81,7 @@ trait DataExtractor extends ReferencePayCalculator {
       periods = generatePayPeriods(data.payDates)
     } yield calculateVariablePay(priorFurloughPeriod, periods, Amount(grossPay.amount))
 
-  private def processFurloughDates(userAnswers: UserAnswers): Option[FurloughPeriod] =
+  private def processFurloughDates(userAnswers: UserAnswers): Option[Period] =
     userAnswers.get(FurloughDatesPage).flatMap { furloughDates =>
       furloughDates match {
         case StartedInClaim         => patchStartDate(userAnswers)
@@ -90,21 +90,21 @@ trait DataExtractor extends ReferencePayCalculator {
       }
     }
 
-  private def patchStartDate(userAnswers: UserAnswers): Option[FurloughPeriod] =
+  private def patchStartDate(userAnswers: UserAnswers): Option[Period] =
     for {
       data  <- extract(userAnswers)
       start <- userAnswers.get(FurloughStartDatePage)
-    } yield FurloughPeriod(start, data.claimPeriod.end)
+    } yield Period(start, data.claimPeriod.end)
 
-  private def patchEndDate(userAnswers: UserAnswers): Option[FurloughPeriod] =
+  private def patchEndDate(userAnswers: UserAnswers): Option[Period] =
     for {
       data <- extract(userAnswers)
       end  <- userAnswers.get(FurloughEndDatePage)
-    } yield FurloughPeriod(data.claimPeriod.start, end)
+    } yield Period(data.claimPeriod.start, end)
 
-  private def patchStartAndEndDate(userAnswers: UserAnswers): Option[FurloughPeriod] =
+  private def patchStartAndEndDate(userAnswers: UserAnswers): Option[Period] =
     for {
       start <- userAnswers.get(FurloughStartDatePage)
       end   <- userAnswers.get(FurloughEndDatePage)
-    } yield FurloughPeriod(start, end)
+    } yield Period(start, end)
 }

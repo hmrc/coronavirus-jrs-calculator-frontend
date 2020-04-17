@@ -10,7 +10,7 @@ import java.time.LocalDate
 import base.SpecBase
 import models.Calculation.FurloughCalculationResult
 import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
-import models.{CalculationResult, FurloughPeriod, PayPeriodBreakdown, PayPeriodWithPayDay, PaymentDate, Period, RegularPayment, Salary}
+import models.{CalculationResult, PayPeriodBreakdown, PaymentDate, Period, PeriodWithPayDay, RegularPayment, Salary}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class FurloughCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks {
@@ -30,14 +30,14 @@ class FurloughCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
   "return a CalculationResult with a total and a list of furlough payments for a given list regular payment" in new FurloughCalculator {
     val periodOne =
-      PayPeriodWithPayDay(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)), PaymentDate(LocalDate.of(2020, 3, 31)))
+      PeriodWithPayDay(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)), PaymentDate(LocalDate.of(2020, 3, 31)))
     val periodTwo =
-      PayPeriodWithPayDay(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)), PaymentDate(LocalDate.of(2020, 4, 30)))
+      PeriodWithPayDay(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)), PaymentDate(LocalDate.of(2020, 4, 30)))
     val paymentOne: RegularPayment = RegularPayment(Salary(2000.00), periodOne.payPeriod)
     val paymentTwo: RegularPayment = RegularPayment(Salary(2000.00), periodTwo.payPeriod)
     val payments: List[RegularPayment] = List(paymentOne, paymentTwo)
 
-    val furloughPeriod = FurloughPeriod(periodOne.payPeriod.start, periodTwo.payPeriod.end)
+    val furloughPeriod = Period(periodOne.payPeriod.start, periodTwo.payPeriod.end)
 
     val taxYearDate = LocalDate.of(2020, 4, 20)
     val periodTwoWithNewPaymentDate = periodTwo.copy(paymentDate = PaymentDate(taxYearDate))
@@ -52,13 +52,13 @@ class FurloughCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks {
   }
 
   "return a pay period with new start/end dates if a given furlough period begins/ends in the pay period" in new FurloughCalculator {
-    val furloughPeriodOne = FurloughPeriod(LocalDate.of(2020, 3, 15), LocalDate.of(2020, 5, 30))
+    val furloughPeriodOne = Period(LocalDate.of(2020, 3, 15), LocalDate.of(2020, 5, 30))
     val payPeriodOne = Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))
     val expectedOne = Period(LocalDate.of(2020, 3, 15), LocalDate.of(2020, 3, 31))
-    val furloughPeriodTwo = FurloughPeriod(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 25))
+    val furloughPeriodTwo = Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 25))
     val payPeriodTwo = Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))
     val expectedTwo = Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 25))
-    val furloughPeriodThr = FurloughPeriod(LocalDate.of(2020, 3, 5), LocalDate.of(2020, 3, 28))
+    val furloughPeriodThr = Period(LocalDate.of(2020, 3, 5), LocalDate.of(2020, 3, 28))
     val payPeriodThr = Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))
     val expectedThr = Period(LocalDate.of(2020, 3, 5), LocalDate.of(2020, 3, 28))
 
