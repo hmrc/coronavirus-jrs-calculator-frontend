@@ -13,7 +13,7 @@ import models.FurloughQuestion.Yes
 import models.NicCategory.Payable
 import models.PaymentFrequency.Monthly
 import models.PensionStatus.OptedIn
-import models.{CalculationResult, ClaimPeriodModel, FurloughPeriod, PayPeriod, PayPeriodBreakdown, PayPeriodWithPayDay, PaymentDate}
+import models.{CalculationResult, ClaimPeriodModel, FurloughPeriod, PayPeriodBreakdown, PayPeriodWithPayDay, PaymentDate, Period}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.{ConfirmationMetadata, ConfirmationViewBreakdown}
@@ -43,11 +43,11 @@ class ConfirmationControllerSpec extends SpecBaseWithApplication {
   def periodBreakdownOne(amount: BigDecimal) =
     PayPeriodBreakdown(
       amount.setScale(2),
-      PayPeriodWithPayDay(PayPeriod(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)), PaymentDate(LocalDate.of(2020, 3, 31))))
+      PayPeriodWithPayDay(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)), PaymentDate(LocalDate.of(2020, 3, 31))))
   def periodBreakdownTwo(amount: BigDecimal) =
     PayPeriodBreakdown(
       amount.setScale(2),
-      PayPeriodWithPayDay(PayPeriod(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)), PaymentDate(LocalDate.of(2020, 4, 20))))
+      PayPeriodWithPayDay(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)), PaymentDate(LocalDate.of(2020, 4, 20))))
   val furlough = CalculationResult(FurloughCalculationResult, 3200.00, List(periodBreakdownOne(1600.00), periodBreakdownTwo(1600.00)))
   val nic = CalculationResult(NicCalculationResult, 241.36, List(periodBreakdownOne(121.58), periodBreakdownTwo(119.78)))
   val pension = CalculationResult(PensionCalculationResult, 65.07, List(periodBreakdownOne(32.67), periodBreakdownTwo(32.40)))

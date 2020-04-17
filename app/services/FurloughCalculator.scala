@@ -8,7 +8,7 @@ package services
 import java.time.LocalDate
 
 import models.Calculation.FurloughCalculationResult
-import models.{CalculationResult, FurloughPeriod, PayPeriod, PayPeriodBreakdown, PayPeriodWithPayDay, PaymentDate, PaymentFrequency, RegularPayment, Salary}
+import models.{CalculationResult, FurloughPeriod, PayPeriodBreakdown, PayPeriodWithPayDay, PaymentDate, PaymentFrequency, Period, RegularPayment, Salary}
 import utils.TaxYearFinder
 import utils.AmountRounding._
 
@@ -49,7 +49,7 @@ trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with P
     }
 
   protected def regularPaymentForFurloughPeriod(furloughPeriod: FurloughPeriod, payment: RegularPayment): RegularPayment = {
-    val furloughPayPeriod: PayPeriod = payPeriodFromFurloughPeriod(furloughPeriod, payment.payPeriod)
+    val furloughPayPeriod: Period = payPeriodFromFurloughPeriod(furloughPeriod, payment.payPeriod)
     val daysInPayPeriod = periodDaysCount(payment.payPeriod)
     val daysInFurloughDayPeriod = periodDaysCount(furloughPayPeriod)
     val daily = roundWithMode(payment.salary.amount / daysInPayPeriod, RoundingMode.HALF_UP)
@@ -59,10 +59,10 @@ trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with P
       payment.salary.amount
     }
 
-    RegularPayment(Salary(newSalary), PayPeriod(furloughPayPeriod.start, furloughPayPeriod.end))
+    RegularPayment(Salary(newSalary), Period(furloughPayPeriod.start, furloughPayPeriod.end))
   }
 
-  protected def payPeriodFromFurloughPeriod(furloughPeriod: FurloughPeriod, payPeriod: PayPeriod) = {
+  protected def payPeriodFromFurloughPeriod(furloughPeriod: FurloughPeriod, payPeriod: Period) = {
     val start =
       if (furloughPeriod.start.isAfter(payPeriod.start) && furloughPeriod.start.isBefore(payPeriod.end)) {
         furloughPeriod.start
@@ -77,7 +77,7 @@ trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with P
         payPeriod.end
       }
 
-    PayPeriod(start, end)
+    Period(start, end)
   }
 
   protected def calculateFullPeriod(paymentFrequency: PaymentFrequency, regularPayment: RegularPayment): BigDecimal = {

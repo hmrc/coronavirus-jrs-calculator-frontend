@@ -10,12 +10,12 @@ import java.time.LocalDate
 import models.FurloughDates.{EndedInClaim, StartedAndEndedInClaim, StartedInClaim}
 import models.FurloughQuestion.{No, Yes}
 import models.PayQuestion.{Regularly, Varies}
-import models.{Amount, FurloughPeriod, FurloughQuestion, NicCategory, PayPeriod, PayQuestion, PaymentFrequency, PensionStatus, RegularPayment, Salary, UserAnswers}
+import models.{Amount, FurloughPeriod, FurloughQuestion, NicCategory, PayQuestion, PaymentFrequency, PensionStatus, Period, RegularPayment, Salary, UserAnswers}
 import pages._
 import services.ReferencePayCalculator
 
 case class MandatoryData(
-  claimPeriod: PayPeriod,
+  claimPeriod: Period,
   paymentFrequency: PaymentFrequency,
   nicCategory: NicCategory,
   pensionStatus: PensionStatus,
@@ -35,7 +35,7 @@ trait DataExtractor extends ReferencePayCalculator {
       payQuestion <- userAnswers.get(PayQuestionPage)
       furlough    <- userAnswers.get(FurloughQuestionPage)
       payDate = userAnswers.getList(PayDatePage)
-    } yield MandatoryData(PayPeriod(claimStart, claimEnd), frequency, nic, pension, payQuestion, furlough, payDate)
+    } yield MandatoryData(Period(claimStart, claimEnd), frequency, nic, pension, payQuestion, furlough, payDate)
 
   def extractFurloughPeriod(userAnswers: UserAnswers): Option[FurloughPeriod] =
     extract(userAnswers).flatMap { data =>
@@ -67,11 +67,11 @@ trait DataExtractor extends ReferencePayCalculator {
       }
     }
 
-  protected def extractPriorFurloughPeriod(userAnswers: UserAnswers): Option[PayPeriod] =
+  protected def extractPriorFurloughPeriod(userAnswers: UserAnswers): Option[Period] =
     for {
       data              <- extract(userAnswers)
       employeeStartDate <- userAnswers.get(EmployeeStartDatePage)
-    } yield endDateOrTaxYearEnd(PayPeriod(employeeStartDate, data.claimPeriod.start.minusDays(1)))
+    } yield endDateOrTaxYearEnd(Period(employeeStartDate, data.claimPeriod.start.minusDays(1)))
 
   private def extractVariableRegularPayments(userAnswers: UserAnswers): Option[Seq[RegularPayment]] =
     for {

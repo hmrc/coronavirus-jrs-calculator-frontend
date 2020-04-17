@@ -10,30 +10,30 @@ import java.time.LocalDate
 import base.SpecBase
 import models.Calculation.NicCalculationResult
 import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
-import models.{CalculationResult, PayPeriod, PayPeriodBreakdown, PayPeriodWithPayDay, PaymentDate, TaxYearEnding2020, TaxYearEnding2021}
+import models.{CalculationResult, PayPeriodBreakdown, PayPeriodWithPayDay, PaymentDate, Period, TaxYearEnding2020, TaxYearEnding2021}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class NicPensionCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
   val monthlyPayPeriodOne =
-    PayPeriodWithPayDay(PayPeriod(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)), PaymentDate(LocalDate.of(2020, 3, 20)))
+    PayPeriodWithPayDay(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)), PaymentDate(LocalDate.of(2020, 3, 20)))
   val monthlyPayPeriodTwo =
-    PayPeriodWithPayDay(PayPeriod(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)), PaymentDate(LocalDate.of(2020, 4, 20)))
+    PayPeriodWithPayDay(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)), PaymentDate(LocalDate.of(2020, 4, 20)))
 
   val fourWeeklyPayPeriodOne =
-    PayPeriodWithPayDay(PayPeriod(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 28)), PaymentDate(LocalDate.of(2020, 3, 20)))
+    PayPeriodWithPayDay(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 28)), PaymentDate(LocalDate.of(2020, 3, 20)))
   val fourWeeklyPayPeriodTwo =
-    PayPeriodWithPayDay(PayPeriod(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 28)), PaymentDate(LocalDate.of(2020, 4, 20)))
+    PayPeriodWithPayDay(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 28)), PaymentDate(LocalDate.of(2020, 4, 20)))
 
   val fortnightlyPayPeriodOne =
-    PayPeriodWithPayDay(PayPeriod(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 14)), PaymentDate(LocalDate.of(2020, 3, 14)))
+    PayPeriodWithPayDay(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 14)), PaymentDate(LocalDate.of(2020, 3, 14)))
   val fortnightlyPayPeriodTwo =
-    PayPeriodWithPayDay(PayPeriod(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 14)), PaymentDate(LocalDate.of(2020, 4, 14)))
+    PayPeriodWithPayDay(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 14)), PaymentDate(LocalDate.of(2020, 4, 14)))
 
   val weeklyPayPeriodOne =
-    PayPeriodWithPayDay(PayPeriod(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 7)), PaymentDate(LocalDate.of(2020, 3, 7)))
+    PayPeriodWithPayDay(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 7)), PaymentDate(LocalDate.of(2020, 3, 7)))
   val weeklyPayPeriodTwo =
-    PayPeriodWithPayDay(PayPeriod(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 7)), PaymentDate(LocalDate.of(2020, 4, 7)))
+    PayPeriodWithPayDay(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 7)), PaymentDate(LocalDate.of(2020, 4, 7)))
 
   forAll(scenarios) { (frequency, payment, taxYear, rate, expected) =>
     s"For payment frequency $frequency, payment amount ${payment.amount}, rate $rate in $taxYear should return $expected" in new NicPensionCalculator {
