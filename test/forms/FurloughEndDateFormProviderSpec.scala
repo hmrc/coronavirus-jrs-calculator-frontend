@@ -17,45 +17,45 @@ class FurloughEndDateFormProviderSpec extends DateBehaviours {
 
   ".value" should {
 
-//    "use startDate as minimum if furlough start date is earlier than startDate" must {
-//      val furloughStartDate = LocalDate.of(2020, 2, 1)
-//      val form = new FurloughEndDateFormProvider()(startDate, endDate, furloughStartDate)
-//
-//      val validData = datesBetween(
-//        min = startDate.plusDays(1),
-//        max = endDate.minusDays(1)
-//      )
-//
-//      behave like dateField(form, "value", validData)
-//
-//      behave like dateFieldWithMax(form, "value", endDate, FormError("value", "furloughEndDate.error.maximum", Array("1 May 2020")))
-//
-//      behave like dateFieldWithMin(form, "value", startDate, FormError("value", "furloughEndDate.error.minimum", Array("1 March 2020")))
-//
-//      behave like mandatoryDateField(form, "value", "furloughEndDate.error.required.all")
-//    }
-//
-//    "use furloughStartDate as minimum if furlough start date is later thant startDate" must {
-//      val furloughStartDate = LocalDate.of(2020, 4, 1)
-//      val form = new FurloughEndDateFormProvider()(startDate, endDate, furloughStartDate)
-//
-//      val validData = datesBetween(
-//        min = startDate.plusDays(1),
-//        max = endDate.minusDays(1)
-//      )
-//
-//      behave like dateField(form, "value", validData)
-//
-//      behave like dateFieldWithMax(form, "value", endDate, FormError("value", "furloughEndDate.error.maximum", Array("1 May 2020")))
-//
-//      behave like dateFieldWithMin(
-//        form,
-//        "value",
-//        furloughStartDate,
-//        FormError("value", "furloughEndDate.error.minimum", Array("1 March 2020")))
-//
-//      behave like mandatoryDateField(form, "value", "furloughEndDate.error.required.all")
-//    }
+    "use startDate as minimum if furlough start date is earlier than startDate" must {
+      val furloughStartDate = LocalDate.of(2020, 2, 1)
+      val form = new FurloughEndDateFormProvider()(startDate, endDate, furloughStartDate)
+
+      val validData = datesBetween(
+        min = startDate.plusDays(1),
+        max = LocalDate.now
+      )
+
+      behave like dateField(form, "value", validData)
+
+      behave like dateFieldWithMax(form, "value", endDate, FormError("value", "furloughEndDate.error.maximum", Array("1 May 2020")))
+
+      behave like dateFieldWithMin(form, "value", startDate, FormError("value", "furloughEndDate.error.minimum", Array("1 March 2020")))
+
+      behave like mandatoryDateField(form, "value", "furloughEndDate.error.required.all")
+    }
+
+    "use furloughStartDate as minimum if furlough start date is later than startDate" must {
+      val furloughStartDate = LocalDate.of(2020, 4, 1)
+      val form = new FurloughEndDateFormProvider()(startDate, endDate, furloughStartDate)
+
+      val validData = datesBetween(
+        min = furloughStartDate.plusDays(1),
+        max = LocalDate.now
+      )
+
+      behave like dateField(form, "value", validData)
+
+      behave like dateFieldWithMax(form, "value", endDate, FormError("value", "furloughEndDate.error.maximum", Array("1 May 2020")))
+
+      behave like dateFieldWithMin(
+        form,
+        "value",
+        furloughStartDate,
+        FormError("value", "furloughEndDate.error.minimum", Array("1 April 2020")))
+
+      behave like mandatoryDateField(form, "value", "furloughEndDate.error.required.all")
+    }
 
   }
 }
