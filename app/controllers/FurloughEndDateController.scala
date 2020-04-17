@@ -43,7 +43,7 @@ class FurloughEndDateController @Inject()(
             case Some(value) => form(claimStartDate, claimEndDate, start).fill(value)
           }
 
-          Future.successful(Ok(view(preparedForm, mode)))
+          Future.successful(Ok(view(preparedForm, mode, claimEndDate)))
         }
 
       case None => Future.successful(Redirect(routes.FurloughStartDateController.onPageLoad(mode)))
@@ -60,7 +60,7 @@ class FurloughEndDateController @Inject()(
           form(claimStartDate, claimEndDate, start)
             .bindFromRequest()
             .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, claimEndDate))),
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(FurloughEndDatePage, value))
