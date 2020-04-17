@@ -218,7 +218,7 @@ rootPage.beforeYouStart.l3 = National Insurance category number
 rootPage.beforeYouStart.l4 = pension auto-enrolment status (whether or not they opted out)
 
 payDate.title = When was the end of the next pay period?
-payDate.heading = What’s the end of the pay period after {0}?
+payDate.heading = What’s the end of the next pay period after {0}?
 payDate.title.firstDate = When was the end of this employee’s last pay period the claim period?
 payDate.heading.firstDate = What’s the last day this employee was paid for before {0}?
 payDate.checkYourAnswersLabel = PayDate
@@ -229,6 +229,7 @@ payDate.error.required = The date must include {0}
 payDate.error.invalid = Enter a real date
 payDate.error.mustBeBefore = The date must be before {0}
 payDate.error.mustBeAfter = The date must be after {0}
+payDate.p = This is the end of the last pay period before the claim started.
 
 reviewPayDates.title = Pay dates within the claim period
 reviewPayDates.heading = Pay dates within the claim period
@@ -337,8 +338,8 @@ furloughQuestion.no = No, it is ongoing
 furloughQuestion.checkYourAnswersLabel = Has the employee’s furlough ended?
 furloughQuestion.error.required = Select one of the options below
 
-taxYearPayDate.title = What’s the first payday in the current tax year (starting 6 April 2020)?
-taxYearPayDate.heading = What’s the first payday in the current tax year (starting 6 April 2020)?
+taxYearPayDate.title = What’s the first pay date in the current tax year (starting 6 April 2020)?
+taxYearPayDate.heading = What’s the first pay date in the current tax year (starting 6 April 2020)?
 taxYearPayDate.p1 = This is the date this employee got paid. It may not be the same as the pay period end date.
 taxYearPayDate.p2 = We need this date because there are different National Insurance and pension calculations for different tax years.
 taxYearPayDate.checkYourAnswersLabel = TaxYearPayDate
