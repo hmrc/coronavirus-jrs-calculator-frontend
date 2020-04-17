@@ -29,12 +29,12 @@ class Navigator @Inject()() {
       furloughQuestionRoutes
     case FurloughEndDatePage =>
       _ =>
-        routes.PayQuestionController.onPageLoad(NormalMode)
-    case PayQuestionPage =>
-      payQuestionRoutes
+        routes.PaymentFrequencyController.onPageLoad(NormalMode)
     case PaymentFrequencyPage =>
       _ =>
         routes.PayQuestionController.onPageLoad(NormalMode)
+    case PayQuestionPage =>
+      payQuestionRoutes
     case SalaryQuestionPage =>
       _ =>
         routes.PayDateController.onPageLoad(1)

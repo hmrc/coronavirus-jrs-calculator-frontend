@@ -53,8 +53,8 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication {
             .value) mustBe routes.FurloughEndDateController.onPageLoad(NormalMode)
       }
 
-      "go to PayQuestionPage after FurloughEndDatePage" in {
-        navigator.nextPage(FurloughEndDatePage, NormalMode, UserAnswers("id")) mustBe routes.PayQuestionController
+      "go to PaymentFrequencyPage after FurloughEndDatePage" in {
+        navigator.nextPage(FurloughEndDatePage, NormalMode, UserAnswers("id")) mustBe routes.PaymentFrequencyController
           .onPageLoad(NormalMode)
       }
 
@@ -125,7 +125,7 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication {
       "go from furlough end date" must {
 
         "to pay question" in {
-          navigator.nextPage(FurloughEndDatePage, NormalMode, emptyUserAnswers) mustBe routes.PayQuestionController
+          navigator.nextPage(FurloughEndDatePage, NormalMode, emptyUserAnswers) mustBe routes.PaymentFrequencyController
             .onPageLoad(NormalMode)
         }
       }
