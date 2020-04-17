@@ -249,6 +249,7 @@ salaryQuestion.salary.hint = This is the gross amount before deductions.
 salaryQuestion.salary.error.required = Enter a valid amount
 salaryQuestion.salary.error.invalid = Enter a valid amount
 salaryQuestion.salary.error.negative = Salary can’t be negative
+salaryQuestion.inset.info = If this employee started work between 1 and 18 March 2020, enter the amount they’ll get paid from now on.
 
 nicCategory.title = What is the employee’s National Insurance category letter?
 nicCategory.heading = What is the employee’s National Insurance category letter?
