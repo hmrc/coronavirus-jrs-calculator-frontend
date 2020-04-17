@@ -374,12 +374,13 @@ furloughStartDate.error.invalid = Enter a real furlough start date
 furloughStartDate.error.minimum = The furlough start date must be after {0}
 furloughStartDate.error.maximum = The furlough start date must be before {0}
 
-variableLengthEmployed.title = How long has this employee been working for the business?
-variableLengthEmployed.heading = How long has this employee been working for the business?
-variableLengthEmployed.lessThan12Months = Less than 12 months
-variableLengthEmployed.morethan12Months = 12 months or more
+variableLengthEmployed.title = Was this employee working for you on or before 1 February 2019?
+variableLengthEmployed.heading = Was this employee working for you on or before 1 February 2019?
+variableLengthEmployed.yes = Yes
+variableLengthEmployed.no = No
 variableLengthEmployed.checkYourAnswersLabel = How long has this employee been working for the business?
 variableLengthEmployed.error.required = Select one of the options below
+variableLengthEmployed.hint = This is needed to calculate average pay based on when the employee started work.
 
 employeeStartDate.title = When did this employee start working for the business?
 employeeStartDate.heading = When did this employee start working for the business?
@@ -391,10 +392,13 @@ employeeStartDate.error.invalid = Enter a real date
 employeeStartDate.hint = For example, 28 11 2019
 employeeStartDate.error.outofrange = The start date should be between {0} and {1}
 
-variableGrossPay.title = What is the total gross pay since they started?
-variableGrossPay.heading = What is the total gross pay since they started?
+variableGrossPay.title = What is the employee's total pay since 6 April 2019?
+variableGrossPay.heading = What is the employee's total pay since 6 April 2019?
 variableGrossPay.checkYourAnswersLabel = variableGrossPay
 variableGrossPay.error.required = Enter a valid amount
 variableGrossPay.label = This is the gross amount before deductions.
 variableGrossPay.error.invalid = Enter a valid amount
 variableGrossPay.error.negative = Salary can’t be negative
+variableGrossPay.p = This is the total gross amount before deductions the employee has been paid up to the earlier of:
+variableGrossPay.l1 = 5th April 2020 or
+variableGrossPay.l2 = the day before they were furloughed

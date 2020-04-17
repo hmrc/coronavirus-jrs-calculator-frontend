@@ -39,14 +39,13 @@ class Navigator @Inject()() {
       _ =>
         routes.PayDateController.onPageLoad(1)
     case VariableLengthEmployedPage =>
-      _ =>
-        routes.EmployeeStartDateController.onPageLoad(NormalMode)
+      variableLengthEmployedRoutes
     case EmployeeStartDatePage =>
       _ =>
         routes.VariableGrossPayController.onPageLoad(NormalMode)
     case VariableGrossPayPage =>
       _ =>
-        routes.PayDateController.onPageLoad(1)
+        routes.NicCategoryController.onPageLoad(NormalMode)
     case NicCategoryPage =>
       _ =>
         routes.PensionAutoEnrolmentController.onPageLoad(NormalMode)
@@ -101,6 +100,14 @@ class Navigator @Inject()() {
     userAnswers.get(PayQuestionPage) match {
       case Some(Regularly) => routes.SalaryQuestionController.onPageLoad(NormalMode)
       case _               => routes.VariableLengthEmployedController.onPageLoad(NormalMode)
+    }
+  }
+
+  private def variableLengthEmployedRoutes: UserAnswers => Call = { userAnswers =>
+    userAnswers.get(VariableLengthEmployedPage) match {
+      case Some(VariableLengthEmployed.Yes) => routes.PayDateController.onPageLoad(1)
+      case Some(VariableLengthEmployed.No)  => routes.EmployeeStartDateController.onPageLoad(NormalMode)
+      case _                                => routes.VariableLengthEmployedController.onPageLoad(NormalMode)
     }
   }
 
