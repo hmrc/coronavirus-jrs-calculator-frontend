@@ -9,7 +9,7 @@ import java.time.LocalDate
 
 import base.SpecBase
 import models.Calculation.{FurloughCalculationResult, NicCalculationResult, PensionCalculationResult}
-import models.{Amount, CalculationResult, Payment, PaymentDate, Period, PeriodBreakdown, PeriodWithPaymentDate, UserAnswers}
+import models.{Amount, CalculationResult, PaymentDate, Period, PeriodBreakdown, PeriodWithPaymentDate, UserAnswers}
 import play.api.libs.json.Json
 import utils.CoreTestData
 import viewmodels.ConfirmationViewBreakdown
@@ -21,15 +21,13 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
 
     def periodBreakdownOne(amount: Double) =
       PeriodBreakdown(
-        Payment(Amount(amount)),
-        PeriodWithPaymentDate(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)), PaymentDate(LocalDate.of(2020, 3, 31))),
-        Amount(2500.00)
+        Amount(amount),
+        PeriodWithPaymentDate(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)), PaymentDate(LocalDate.of(2020, 3, 31)))
       )
     def periodBreakdownTwo(amount: Double) =
       PeriodBreakdown(
-        Payment(Amount(amount)),
-        PeriodWithPaymentDate(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)), PaymentDate(LocalDate.of(2020, 4, 20))),
-        Amount(2500.00)
+        Amount(amount),
+        PeriodWithPaymentDate(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)), PaymentDate(LocalDate.of(2020, 4, 20)))
       )
     val furlough = CalculationResult(FurloughCalculationResult, 3200.00, List(periodBreakdownOne(1600.00), periodBreakdownTwo(1600.00)))
     val nic = CalculationResult(NicCalculationResult, 241.36, List(periodBreakdownOne(121.58), periodBreakdownTwo(119.78)))
@@ -48,17 +46,11 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
       PeriodWithPaymentDate(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)), PaymentDate(LocalDate.of(2020, 4, 20)))
 
     val payPeriodBreakdowns =
-      List(
-        PeriodBreakdown(Payment(Amount(1600.0)), withPayDay, Amount(2500.00)),
-        PeriodBreakdown(Payment(Amount(1600.0)), withPayDayTwo, Amount(2500.00)))
+      List(PeriodBreakdown(Amount(1600.0), withPayDay), PeriodBreakdown(Amount(1600.0), withPayDayTwo))
     val nicPayPeriodBreakdowns =
-      List(
-        PeriodBreakdown(Payment(Amount(0.0)), withPayDay, Amount(2500.00)),
-        PeriodBreakdown(Payment(Amount(0.0)), withPayDayTwo, Amount(2500.00)))
+      List(PeriodBreakdown(Amount(0.0), withPayDay), PeriodBreakdown(Amount(0.0), withPayDayTwo))
     val pensionPayPeriodBreakdowns =
-      List(
-        PeriodBreakdown(Payment(Amount(0.0)), withPayDay, Amount(2500.00)),
-        PeriodBreakdown(Payment(Amount(0.0)), withPayDayTwo, Amount(2500.00)))
+      List(PeriodBreakdown(Amount(0.0), withPayDay), PeriodBreakdown(Amount(0.0), withPayDayTwo))
 
     loadResultData(userAnswers).get.confirmationViewBreakdown mustBe ConfirmationViewBreakdown(
       CalculationResult(FurloughCalculationResult, 3200.0, payPeriodBreakdowns),

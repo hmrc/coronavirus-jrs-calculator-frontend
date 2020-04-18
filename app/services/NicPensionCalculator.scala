@@ -6,7 +6,7 @@
 package services
 
 import models.Calculation.{NicCalculationResult, PensionCalculationResult}
-import models.{Amount, CalculationResult, Payment, PaymentFrequency, PeriodBreakdown}
+import models.{Amount, CalculationResult, PaymentFrequency, PeriodBreakdown}
 import play.api.Logger
 import utils.TaxYearFinder
 import utils.AmountRounding._
@@ -17,13 +17,13 @@ trait NicPensionCalculator extends TaxYearFinder with FurloughCapCalculator {
 
   def calculateGrant(paymentFrequency: PaymentFrequency, furloughPayment: Seq[PeriodBreakdown], rate: Rate): CalculationResult = {
     val paymentDateBreakdowns: Seq[PeriodBreakdown] =
-      furloughPayment.map(payment => payment.copy(payment = Payment(Amount(calculate(paymentFrequency, payment, rate)))))
+      furloughPayment.map(payment => payment.copy(payment = Amount(calculate(paymentFrequency, payment, rate))))
 
     rate match {
       case NiRate(_) =>
-        CalculationResult(NicCalculationResult, paymentDateBreakdowns.map(_.payment.amount.value).sum, paymentDateBreakdowns)
+        CalculationResult(NicCalculationResult, paymentDateBreakdowns.map(_.payment.value).sum, paymentDateBreakdowns)
       case PensionRate(_) =>
-        CalculationResult(PensionCalculationResult, paymentDateBreakdowns.map(_.payment.amount.value).sum, paymentDateBreakdowns)
+        CalculationResult(PensionCalculationResult, paymentDateBreakdowns.map(_.payment.value).sum, paymentDateBreakdowns)
     }
   }
 
@@ -36,8 +36,9 @@ trait NicPensionCalculator extends TaxYearFinder with FurloughCapCalculator {
         Logger.warn(s"Unable to find a threshold for $frequencyTaxYearKey")
         BigDecimal(0).setScale(2)
       } { threshold =>
-        val cap = furloughPayment.furloughCap.value.setScale(0, RoundingMode.DOWN) //Remove the pennies
-        val cappedFurloughPayment = cap.min(furloughPayment.payment.amount.value)
+        val roundedFurloughPayment = furloughPayment.payment.value.setScale(0, RoundingMode.DOWN)
+        val cap = furloughCap(paymentFrequency, furloughPayment.periodWithPaymentDate.period).setScale(0, RoundingMode.DOWN)
+        val cappedFurloughPayment = cap.min(roundedFurloughPayment)
 
         if (cappedFurloughPayment < threshold.lower) {
           BigDecimal(0).setScale(2)

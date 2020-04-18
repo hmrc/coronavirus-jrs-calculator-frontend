@@ -10,12 +10,6 @@ import java.time.LocalDate
 import play.api.libs.json.{Format, Json}
 import utils.ValueClassFormat
 
-case class Payment(amount: Amount)
-
-object Payment {
-  implicit val defaultFormat: Format[Payment] = Json.format[Payment]
-}
-
 case class PaymentDate(value: LocalDate)
 
 object PaymentDate {
@@ -25,8 +19,14 @@ object PaymentDate {
 
 case class PaymentWithPeriod(amount: Amount, period: Period)
 
-case class PeriodBreakdown(payment: Payment, periodWithPaymentDate: PeriodWithPaymentDate, furloughCap: Amount)
+case class PeriodBreakdown(payment: Amount, periodWithPaymentDate: PeriodWithPaymentDate)
 
 object PeriodBreakdown {
   implicit val defaultFormat: Format[PeriodBreakdown] = Json.format[PeriodBreakdown]
+}
+
+case class PartialPeriodBreakdown(payment: Amount, partialPeriodWithPaymentDate: PartialPeriodWithPaymentDate)
+
+object PartialPeriodBreakdown {
+  implicit val defaultFormat: Format[PartialPeriodBreakdown] = Json.format[PartialPeriodBreakdown]
 }

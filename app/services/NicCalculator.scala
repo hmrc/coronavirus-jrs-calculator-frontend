@@ -5,10 +5,7 @@
 
 package services
 
-import java.time.Period
-
-import models.{Amount, PartialPeriod, Payment, PaymentFrequency, PeriodBreakdown, PeriodWithPaymentDate}
-import play.api.Logger
+import models.{Amount, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentFrequency, PeriodBreakdown, PeriodWithPaymentDate}
 import utils.AmountRounding.roundWithMode
 import utils.TaxYearFinder
 
@@ -16,30 +13,62 @@ import scala.math.BigDecimal.RoundingMode
 
 trait NicCalculator extends TaxYearFinder with FurloughCapCalculator {
 
-  def calculateFullPeriod(frequency: PaymentFrequency, furloughPayment: Payment, periodWithPaymentDate: PeriodWithPaymentDate): PeriodBreakdown = {
-    val frequencyTaxYearKey = FrequencyTaxYearKey(frequency, taxYearAt(periodWithPaymentDate.paymentDate), NiRate())
+  def calculateFullPeriod(
+    frequency: PaymentFrequency,
+    furloughPayment: Amount,
+    periodWithPaymentDate: PeriodWithPaymentDate): PeriodBreakdown = {
+    val threshold = FrequencyTaxYearThresholdMapping.findThreshold(frequency, taxYearAt(periodWithPaymentDate.paymentDate), NiRate())
 
-    val roundedFurloughPayment = furloughPayment.amount.value.setScale(0, RoundingMode.DOWN)
+    val roundedFurloughPayment = furloughPayment.value.setScale(0, RoundingMode.DOWN)
     val cap = furloughCap(frequency, periodWithPaymentDate.period).setScale(0, RoundingMode.DOWN)
+    val cappedFurloughPayment = cap.min(roundedFurloughPayment)
 
-    val grant = FrequencyTaxYearThresholdMapping.mappings
-      .get(frequencyTaxYearKey)
-      .fold {
-        Logger.warn(s"Unable to find a threshold for $frequencyTaxYearKey")
+    val grant =
+      if (cappedFurloughPayment < threshold) {
         BigDecimal(0).setScale(2)
-      } { threshold =>
-        val cappedFurloughPayment = cap.min(roundedFurloughPayment)
-
-        if(cappedFurloughPayment < threshold.lower) {
-          BigDecimal(0).setScale(2)
-        } else {
-          roundWithMode((cappedFurloughPayment - threshold.lower) * frequencyTaxYearKey.rate.value, RoundingMode.HALF_UP)
-        }
+      } else {
+        roundWithMode((cappedFurloughPayment - threshold) * NiRate().value, RoundingMode.HALF_UP)
       }
 
-    PeriodBreakdown(Payment(Amount(grant)), periodWithPaymentDate, Amount(cap))
+    PeriodBreakdown(Amount(grant), periodWithPaymentDate)
   }
 
-  def calculatPartialPeriod(period: PartialPeriod) = ???
+  def calculatePartialPeriod(
+    frequency: PaymentFrequency,
+    totalPay: Amount,
+    partialPeriodWithPaymentDate: PartialPeriodWithPaymentDate): PartialPeriodBreakdown = {
+    val threshold = FrequencyTaxYearThresholdMapping.findThreshold(frequency, taxYearAt(partialPeriodWithPaymentDate.paymentDate), NiRate())
+
+    val roundedTotalPay = totalPay.value.setScale(0, RoundingMode.DOWN)
+
+    val totalNic = roundWithMode((roundedTotalPay - threshold) * NiRate().value, RoundingMode.HALF_UP)
+    val dailyNic = totalNic / periodDaysCount(partialPeriodWithPaymentDate.period.original)
+    val furloughNic = roundWithMode(dailyNic * periodDaysCount(partialPeriodWithPaymentDate.period.partial), RoundingMode.HALF_UP)
+
+    PartialPeriodBreakdown(Amount(furloughNic), partialPeriodWithPaymentDate)
+  }
+
+  def calculatePartialPeriodWithTopUp(
+    frequency: PaymentFrequency,
+    totalPay: Amount,
+    furloughPayment: Amount,
+    partialPeriodWithPaymentDate: PartialPeriodWithPaymentDate): PartialPeriodBreakdown = {
+    val threshold = FrequencyTaxYearThresholdMapping.findThreshold(frequency, taxYearAt(partialPeriodWithPaymentDate.paymentDate), NiRate())
+
+    val roundedTotalPay = totalPay.value.setScale(0, RoundingMode.DOWN)
+
+    val totalNic = roundWithMode((roundedTotalPay - threshold) * NiRate().value, RoundingMode.HALF_UP)
+    val dailyNic = totalNic / periodDaysCount(partialPeriodWithPaymentDate.period.original)
+
+    val totalPayForFurloughPeriod =
+      (totalPay.value / periodDaysCount(partialPeriodWithPaymentDate.period.original)) * periodDaysCount(
+        partialPeriodWithPaymentDate.period.partial)
+
+    val furloughNic = dailyNic * periodDaysCount(partialPeriodWithPaymentDate.period.partial)
+
+    val grant = roundWithMode(furloughNic * (furloughPayment.value / totalPayForFurloughPeriod), RoundingMode.HALF_UP)
+
+    PartialPeriodBreakdown(Amount(grant), partialPeriodWithPaymentDate)
+  }
 
 }

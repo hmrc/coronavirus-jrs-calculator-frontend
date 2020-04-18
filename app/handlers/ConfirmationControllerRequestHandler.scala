@@ -8,7 +8,7 @@ package handlers
 import models.Calculation.{NicCalculationResult, PensionCalculationResult}
 import models.NicCategory.{Nonpayable, Payable}
 import models.PensionStatus.{OptedIn, OptedOut}
-import models.{Amount, CalculationResult, NicCategory, Payment, PaymentFrequency, PensionStatus, Period, UserAnswers}
+import models.{Amount, CalculationResult, NicCategory, PaymentFrequency, PensionStatus, Period, UserAnswers}
 import pages._
 import services._
 import viewmodels.{ConfirmationDataResult, ConfirmationMetadata, ConfirmationViewBreakdown}
@@ -58,7 +58,7 @@ trait ConfirmationControllerRequestHandler extends FurloughCalculator with Perio
     nic match {
       case Payable => calculateGrant(frequency, furloughResult.payPeriodBreakdowns.toList, NiRate())
       case Nonpayable =>
-        CalculationResult(NicCalculationResult, 0.0, furloughResult.payPeriodBreakdowns.map(_.copy(payment = Payment(Amount(0.0)))))
+        CalculationResult(NicCalculationResult, 0.0, furloughResult.payPeriodBreakdowns.map(_.copy(payment = Amount(0.0))))
     }
 
   private def handleCalculationPension(data: Option[MandatoryData], furloughResult: CalculationResult): Option[CalculationResult] =
@@ -74,6 +74,6 @@ trait ConfirmationControllerRequestHandler extends FurloughCalculator with Perio
     pensionStatus match {
       case OptedIn => calculateGrant(frequency, furloughResult.payPeriodBreakdowns.toList, PensionRate())
       case OptedOut =>
-        CalculationResult(PensionCalculationResult, 0.0, furloughResult.payPeriodBreakdowns.map(_.copy(payment = Payment(Amount(0.0)))))
+        CalculationResult(PensionCalculationResult, 0.0, furloughResult.payPeriodBreakdowns.map(_.copy(payment = Amount(0.0))))
     }
 }
