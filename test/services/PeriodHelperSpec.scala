@@ -8,9 +8,11 @@ package services
 import java.time.LocalDate
 
 import base.SpecBase
-import models.{FullPeriod, PartialPeriod, Period, Periods}
+import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
+import models.{FullPeriod, PartialPeriod, PaymentDate, Period, PeriodWithPaymentDate, Periods}
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class PeriodHelperSpec extends SpecBase {
+class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks {
 
   "For a given list of pay period end dates, should return a List[LocalDate] in ascending order" in new PeriodHelper {
     val unsortedEndDates: List[LocalDate] = List(LocalDate.of(2020, 3, 20), LocalDate.of(2020, 3, 18), LocalDate.of(2020, 3, 19))
@@ -125,5 +127,86 @@ class PeriodHelperSpec extends SpecBase {
     val expectedOne = Left(PartialPeriod(periodOne, Period(furloughOne.start, periodOne.end)))
     val expectedTwo = Right(periodOne)
   }
+
+  forAll(payDateScenarios) { (frequency, periods, lastPeriodPayDate, expected) =>
+    s"For a given list of SORTED periods: $periods, the payment frequency: $frequency and the " +
+      s"last period's pay date: $lastPeriodPayDate assign a pay date to each period: $expected" in new PeriodHelper {
+
+      assignPayDates(frequency, periods, lastPeriodPayDate) map (_.paymentDate) mustBe expected
+    }
+  }
+
+  private lazy val payDateScenarios = Table(
+    ("frequency", "periods", "lastPeriodPayDate", "expected"),
+    (
+      Monthly,
+      Seq(
+        FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))),
+        FullPeriod(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)))),
+      LocalDate.of(2020, 4, 20),
+      Seq(
+        PaymentDate(LocalDate.of(2020, 3, 20)),
+        PaymentDate(LocalDate.of(2020, 4, 20))
+      )
+    ),
+    (
+      Monthly,
+      Seq(
+        FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))),
+        FullPeriod(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)))),
+      LocalDate.of(2020, 5, 20),
+      Seq(
+        PaymentDate(LocalDate.of(2020, 4, 20)),
+        PaymentDate(LocalDate.of(2020, 5, 20))
+      )
+    ),
+    (
+      FourWeekly,
+      Seq(
+        FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 28))),
+        FullPeriod(Period(LocalDate.of(2020, 3, 29), LocalDate.of(2020, 4, 25)))),
+      LocalDate.of(2020, 4, 25),
+      Seq(
+        PaymentDate(LocalDate.of(2020, 3, 28)),
+        PaymentDate(LocalDate.of(2020, 4, 25))
+      )
+    ),
+    (
+      FortNightly,
+      Seq(
+        FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 14))),
+        FullPeriod(Period(LocalDate.of(2020, 3, 15), LocalDate.of(2020, 3, 28)))),
+      LocalDate.of(2020, 4, 4),
+      Seq(
+        PaymentDate(LocalDate.of(2020, 3, 21)),
+        PaymentDate(LocalDate.of(2020, 4, 4))
+      )
+    ),
+    (
+      Weekly,
+      Seq(
+        FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 7))),
+        FullPeriod(Period(LocalDate.of(2020, 3, 8), LocalDate.of(2020, 3, 14)))),
+      LocalDate.of(2020, 3, 28),
+      Seq(
+        PaymentDate(LocalDate.of(2020, 3, 21)),
+        PaymentDate(LocalDate.of(2020, 3, 28))
+      )
+    ),
+    (
+      Weekly,
+      Seq(
+        PartialPeriod(
+          Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 7)),
+          Period(LocalDate.of(2020, 3, 4), LocalDate.of(2020, 3, 7))),
+        FullPeriod(Period(LocalDate.of(2020, 3, 8), LocalDate.of(2020, 3, 14)))
+      ),
+      LocalDate.of(2020, 3, 28),
+      Seq(
+        PaymentDate(LocalDate.of(2020, 3, 21)),
+        PaymentDate(LocalDate.of(2020, 3, 28))
+      )
+    )
+  )
 
 }

@@ -8,7 +8,8 @@ package services
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-import models.{FullPeriod, PartialPeriod, Period, PeriodWithPaymentDate, Periods}
+import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
+import models.{FullPeriod, PartialPeriod, PaymentDate, PaymentFrequency, Period, PeriodWithPaymentDate, Periods}
 
 trait PeriodHelper {
 
@@ -67,5 +68,20 @@ trait PeriodHelper {
   protected def sortedEndDates(in: Seq[LocalDate]): Seq[LocalDate] = in.sortWith((x, y) => x.isBefore(y))
 
   protected def periodSpansMonth(period: Period): Boolean = period.start.getMonth != period.end.getMonth
+
+  protected def assignPayDates(
+    frequency: PaymentFrequency,
+    sortedPeriods: Seq[Periods],
+    lastPayDay: LocalDate): Seq[PeriodWithPaymentDate] =
+    sortedPeriods.reverse.zipWithIndex.map {
+      case (p, idx) => {
+        frequency match {
+          case Monthly     => PeriodWithPaymentDate(p, PaymentDate(lastPayDay.minusMonths(idx)))
+          case FourWeekly  => PeriodWithPaymentDate(p, PaymentDate(lastPayDay.minusWeeks(idx * 4)))
+          case FortNightly => PeriodWithPaymentDate(p, PaymentDate(lastPayDay.minusWeeks(idx * 2)))
+          case Weekly      => PeriodWithPaymentDate(p, PaymentDate(lastPayDay.minusWeeks(idx * 1)))
+        }
+      }
+    }.reverse
 
 }
