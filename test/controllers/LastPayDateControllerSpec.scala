@@ -28,7 +28,8 @@ import scala.concurrent.Future
 class LastPayDateControllerSpec extends SpecBaseWithApplication with MockitoSugar {
 
   val formProvider = new LastPayDateFormProvider()
-  private def form = formProvider()
+  //TODO This should be a date from user answers based on pay date loop
+  private def form = formProvider(LocalDate.now())
 
   def onwardRoute = Call("GET", "/foo")
 

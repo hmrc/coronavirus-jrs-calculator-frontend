@@ -5,23 +5,24 @@
 
 package forms
 
-import java.time.{LocalDate, ZoneOffset}
+import java.time.LocalDate
 
 import forms.behaviours.DateBehaviours
 import play.api.data.FormError
+import views.ViewUtils
 
 class LastPayDateFormProviderSpec extends DateBehaviours {
 
-  val form = new LastPayDateFormProvider()()
+  lazy val form = new LastPayDateFormProvider()(minimiumDate)
+  val minimiumDate = LocalDate.now()
 
   ".value" should {
 
-    val validData = datesBetween(
-      min = LocalDate.of(2000, 1, 1),
-      max = LocalDate.now(ZoneOffset.UTC)
-    )
-
-    behave like dateField(form, "value", validData)
+    behave like dateFieldWithMin(
+      form,
+      "value",
+      minimiumDate,
+      FormError("value", "lastPayDate.error.minimum", Array(ViewUtils.dateToString(minimiumDate))))
 
     behave like mandatoryDateField(form, "value", "lastPayDate.error.required.all")
   }

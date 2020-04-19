@@ -5,6 +5,8 @@
 
 package controllers
 
+import java.time.LocalDate
+
 import controllers.actions._
 import forms.LastPayDateFormProvider
 import javax.inject.Inject
@@ -32,7 +34,8 @@ class LastPayDateController @Inject()(
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
-  def form = formProvider()
+  // TODO: This needs to be the latest date value from pay-dates loop
+  def form = formProvider(LocalDate.now())
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers.get(LastPayDatePage) match {
