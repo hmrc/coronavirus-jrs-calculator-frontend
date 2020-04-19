@@ -14,7 +14,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.LastPayDatePage
+import pages.{LastPayDatePage, PayDatePage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
@@ -37,7 +37,7 @@ class LastPayDateControllerSpec extends SpecBaseWithApplication with MockitoSuga
 
   lazy val lastPayDateRoute = routes.LastPayDateController.onPageLoad(NormalMode).url
 
-  override val emptyUserAnswers = UserAnswers(userAnswersId)
+  val userAnswers = UserAnswers(userAnswersId).set(PayDatePage, validAnswer, Some(1)).success.value
 
   val getRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, lastPayDateRoute).withCSRFToken
@@ -56,7 +56,7 @@ class LastPayDateControllerSpec extends SpecBaseWithApplication with MockitoSuga
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val result = route(application, getRequest).value
 
@@ -65,16 +65,16 @@ class LastPayDateControllerSpec extends SpecBaseWithApplication with MockitoSuga
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode)(getRequest, messages).toString
+        view(form, NormalMode, validAnswer)(getRequest, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(LastPayDatePage, validAnswer).success.value
+      val userAnswersUpdated = userAnswers.set(LastPayDatePage, LocalDate.now()).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersUpdated)).build()
 
       val view = application.injector.instanceOf[LastPayDateView]
 
@@ -83,7 +83,7 @@ class LastPayDateControllerSpec extends SpecBaseWithApplication with MockitoSuga
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), NormalMode)(getRequest, messages).toString
+        view(form.fill(validAnswer), NormalMode, validAnswer)(getRequest, messages).toString
 
       application.stop()
     }
@@ -95,7 +95,7 @@ class LastPayDateControllerSpec extends SpecBaseWithApplication with MockitoSuga
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -111,9 +111,32 @@ class LastPayDateControllerSpec extends SpecBaseWithApplication with MockitoSuga
       application.stop()
     }
 
+    "redirect to the /pay-date/1 when there is no pay-dates saved already in mongo" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId)))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      val result = route(application, postRequest).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual routes.PayDateController.onPageLoad(1).url
+
+      application.stop()
+    }
+
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
         FakeRequest(POST, lastPayDateRoute).withCSRFToken
@@ -129,7 +152,7 @@ class LastPayDateControllerSpec extends SpecBaseWithApplication with MockitoSuga
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
+        view(boundForm, NormalMode, validAnswer)(request, messages).toString
 
       application.stop()
     }
