@@ -12,20 +12,6 @@ import models.{FullPeriod, PartialPeriod, Period, PeriodWithPaymentDate, Periods
 
 trait PeriodHelper {
 
-  def generatePeriodsFromEndDates(endDates: Seq[LocalDate]): Seq[Period] = {
-    def generate(acc: Seq[Period], list: Seq[LocalDate]): Seq[Period] = list match {
-      case Nil      => acc
-      case h :: Nil => acc
-      case h :: t   => generate(acc ++ Seq(Period(h.plusDays(1), t.head)), t)
-    }
-
-    if (endDates.length == 1) {
-      endDates.map(date => Period(date, date))
-    } else {
-      generate(Seq(), sortedEndDates(endDates))
-    }
-  }
-
   def generatePeriods(endDates: Seq[LocalDate], furloughPeriod: Period): Seq[Periods] = {
     PeriodWithPaymentDate
     def generate(acc: Seq[Period], list: Seq[LocalDate]): Seq[Period] = list match {

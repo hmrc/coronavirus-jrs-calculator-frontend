@@ -20,25 +20,36 @@ class PeriodHelperSpec extends SpecBase {
   "Returns a Pay Period with the same start and end date if only one date is supplied" in new PeriodHelper {
     //This is not a valid scenario, just testing for safety
     val endDates: List[LocalDate] = List(LocalDate.of(2020, 2, 20))
+    val furloughPeriod: Period = Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))
 
-    val expected: List[Period] = List(Period(LocalDate.of(2020, 2, 20), LocalDate.of(2020, 2, 20)))
+    val expected: List[Periods] = List(FullPeriod(Period(LocalDate.of(2020, 2, 20), LocalDate.of(2020, 2, 20))))
 
-    generatePeriodsFromEndDates(endDates) mustBe expected
+    generatePeriods(endDates, furloughPeriod) mustBe expected
   }
 
   "Returns a sorted List[PayPeriod] for a given List[LocalDate] that represents PayPeriod.end LocalDates" in new PeriodHelper {
     val endDates: List[LocalDate] = List(LocalDate.of(2020, 4, 20), LocalDate.of(2020, 3, 20), LocalDate.of(2020, 2, 20))
-    val endDatesTwo: List[LocalDate] = List(LocalDate.of(2020, 3, 20), LocalDate.of(2020, 2, 20))
+    val endDatesTwo: List[LocalDate] = List(LocalDate.of(2020, 3, 31), LocalDate.of(2020, 2, 29))
 
-    val expected: List[Period] =
-      List(Period(LocalDate.of(2020, 2, 21), LocalDate.of(2020, 3, 20)), Period(LocalDate.of(2020, 3, 21), LocalDate.of(2020, 4, 20)))
+    val furloughPeriod: Period = Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 4, 10))
+    val furloughPeriodTwo: Period = Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))
 
-    val expectedTwo: List[Period] = List(
-      Period(LocalDate.of(2020, 2, 21), LocalDate.of(2020, 3, 20))
+    val expected: List[Periods] =
+      List(
+        PartialPeriod(
+          Period(LocalDate.of(2020, 2, 21), LocalDate.of(2020, 3, 20)),
+          Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 20))),
+        PartialPeriod(
+          Period(LocalDate.of(2020, 3, 21), LocalDate.of(2020, 4, 20)),
+          Period(LocalDate.of(2020, 3, 21), LocalDate.of(2020, 4, 10)))
+      )
+
+    val expectedTwo: List[Periods] = List(
+      FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)))
     )
 
-    generatePeriodsFromEndDates(endDates) mustBe expected
-    generatePeriodsFromEndDates(endDatesTwo) mustBe expectedTwo
+    generatePeriods(endDates, furloughPeriod) mustBe expected
+    generatePeriods(endDatesTwo, furloughPeriodTwo) mustBe expectedTwo
   }
 
   "Return periods for a given List[LocalDate] and a furloughPeriod" in new PeriodHelper {
