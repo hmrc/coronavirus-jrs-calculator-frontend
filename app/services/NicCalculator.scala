@@ -49,38 +49,10 @@ trait NicCalculator extends TaxYearFinder with FurloughCapCalculator {
 
   protected def calculatePartialPeriodNic(
     frequency: PaymentFrequency,
-    grossPay: Amount,
-    furloughPayment: Amount,
-    period: PartialPeriod,
-    paymentDate: PaymentDate): PeriodBreakdown = {
-    val fullPeriodDays = periodDaysCount(period.original)
-    val furloughDays = periodDaysCount(period.partial)
-    val preFurloughDays = fullPeriodDays - furloughDays
-    val preFurloughPay = roundWithMode((grossPay.value / fullPeriodDays) * preFurloughDays, RoundingMode.HALF_UP)
-    val roundedTotalPay = (preFurloughPay + furloughPayment.value).setScale(0, RoundingMode.DOWN)
-    val threshold = FrequencyTaxYearThresholdMapping.findThreshold(frequency, taxYearAt(paymentDate), NiRate())
-
-    val grant = if (roundedTotalPay < threshold) {
-      BigDecimal(0).setScale(2)
-    } else {
-      val grossNi = roundWithMode((roundedTotalPay - threshold) * NiRate().value, RoundingMode.HALF_UP)
-      val dailyNi = grossNi / periodDaysCount(period.original)
-      roundWithMode(dailyNi * periodDaysCount(period.partial), RoundingMode.HALF_UP)
-    }
-
-    PeriodBreakdown(grossPay, Amount(grant), PeriodWithPaymentDate(period, paymentDate))
-  }
-
-  protected def calculatePartialPeriodNicTwo(
-    frequency: PaymentFrequency,
     nonFurloughPay: Amount,
     furloughPayment: Amount,
     period: PartialPeriod,
     paymentDate: PaymentDate): PeriodBreakdown = {
-//    val fullPeriodDays = periodDaysCount(period.original)
-//    val furloughDays = periodDaysCount(period.partial)
-//    val preFurloughDays = fullPeriodDays - furloughDays
-//    val preFurloughPay = roundWithMode((grossPay.value / fullPeriodDays) * preFurloughDays, RoundingMode.HALF_UP)
     val roundedTotalPay = (nonFurloughPay.value + furloughPayment.value).setScale(0, RoundingMode.DOWN)
     val threshold = FrequencyTaxYearThresholdMapping.findThreshold(frequency, taxYearAt(paymentDate), NiRate())
 

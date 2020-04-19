@@ -40,7 +40,7 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
     val expected = PeriodBreakdown(Amount(1124.23), Amount(39.30), PeriodWithPaymentDate(period, paymentDate))
 
-    calculatePartialPeriodNicTwo(FourWeekly, Amount(1124.23), Amount(426.02), period, paymentDate) mustBe expected
+    calculatePartialPeriodNic(FourWeekly, Amount(1124.23), Amount(426.02), period, paymentDate) mustBe expected
   }
 
 //  forAll(partialPeriodWithTopUpScenarios) { (frequency, totalPay, furloughPayment, partialPeriodWithPaymentDate, expectedGrant) =>
@@ -75,7 +75,7 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks {
     ("frequency", "grossPay", "furloughPayment", "period", "paymentDate", "expectedGrant"),
     (
       Monthly,
-      Amount(2400.0),
+      Amount(1200.0),
       Amount(960.00),
       PartialPeriod(
         Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)),
@@ -85,7 +85,7 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks {
     ),
     (
       Monthly,
-      Amount(3500.00),
+      Amount(1016.13),
       Amount(1774.30),
       PartialPeriod(
         Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)),
@@ -95,8 +95,8 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks {
     ),
     (
       Monthly,
-      Amount(630.00),
-      Amount(440.00),
+      Amount(180.0),
+      Amount(496.0),
       PartialPeriod(
         Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)),
         Period(LocalDate.of(2020, 3, 10), LocalDate.of(2020, 3, 31))),

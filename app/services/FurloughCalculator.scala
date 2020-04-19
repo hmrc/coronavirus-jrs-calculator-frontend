@@ -78,7 +78,10 @@ trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with P
 
     val amount: BigDecimal = if (eighty > cap) cap else eighty
 
-    val nonFurloughPay = payment.furloughPayment.value - payForPeriod.value
+    val fullPeriodDays = periodDaysCount(period.original)
+    val furloughDays = periodDaysCount(period.partial)
+    val preFurloughDays = fullPeriodDays - furloughDays
+    val nonFurloughPay = roundWithMode((payment.furloughPayment.value / fullPeriodDays) * preFurloughDays, RoundingMode.HALF_UP)
 
     PeriodBreakdown(Amount(nonFurloughPay), Amount(amount), PeriodWithPaymentDate(period, paymentDate))
   }

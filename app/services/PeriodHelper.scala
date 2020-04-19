@@ -8,7 +8,7 @@ package services
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-import models.{FullPeriod, PartialPeriod, Period, Periods}
+import models.{FullPeriod, PartialPeriod, Period, PeriodWithPaymentDate, Periods}
 
 trait PeriodHelper {
 
@@ -27,6 +27,7 @@ trait PeriodHelper {
   }
 
   def generatePeriods(endDates: Seq[LocalDate], furloughPeriod: Period): Seq[Periods] = {
+    PeriodWithPaymentDate
     def generate(acc: Seq[Period], list: Seq[LocalDate]): Seq[Period] = list match {
       case Nil      => acc
       case h :: Nil => acc
