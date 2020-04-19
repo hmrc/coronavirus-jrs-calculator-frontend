@@ -8,7 +8,7 @@ package services
 import java.time.LocalDate
 
 import base.SpecBase
-import models.PaymentFrequency.Monthly
+import models.PaymentFrequency.{FourWeekly, Monthly}
 import models.{Amount, FullPeriod, PartialPeriod, PaymentDate, Period, PeriodBreakdown, PeriodWithPaymentDate}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
@@ -30,6 +30,17 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
       calculatePartialPeriodNic(frequency, grossPay, furloughPayment, period, paymentDate) mustBe expected
     }
+  }
+
+  "For a partial period and variable pay calculate nic grant" in new NicCalculator {
+    val period = PartialPeriod(
+      Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 28)),
+      Period(LocalDate.of(2020, 3, 20), LocalDate.of(2020, 3, 28)))
+    val paymentDate: PaymentDate = PaymentDate(LocalDate.of(2020, 3, 28))
+
+    val expected = PeriodBreakdown(Amount(1124.23), Amount(39.30), PeriodWithPaymentDate(period, paymentDate))
+
+    calculatePartialPeriodNicTwo(FourWeekly, Amount(1124.23), Amount(426.02), period, paymentDate) mustBe expected
   }
 
 //  forAll(partialPeriodWithTopUpScenarios) { (frequency, totalPay, furloughPayment, partialPeriodWithPaymentDate, expectedGrant) =>

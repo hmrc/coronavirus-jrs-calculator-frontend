@@ -61,8 +61,8 @@ class DataExtractorSpec extends SpecBase with CoreTestData {
   "Extract payments for employees that are paid a regular amount each time" in new DataExtractor {
     val userAnswers = Json.parse(userAnswersJson()).as[UserAnswers]
     val expected = Seq(
-      PaymentWithPeriod(Amount(2000.0), FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)))),
-      PaymentWithPeriod(Amount(2000.0), FullPeriod(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30))))
+      PaymentWithPeriod(Amount(0.0), Amount(2000.0), FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)))),
+      PaymentWithPeriod(Amount(0.0), Amount(2000.0), FullPeriod(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30))))
     )
 
     val furloughPeriod: Period = Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 4, 30))

@@ -53,6 +53,12 @@ trait PeriodHelper {
     payPeriod.copy(end = newEnd)
   }
 
+  def isFurloughStart(period: PartialPeriod) =
+    period.original.start.isBefore(period.partial.start)
+
+  def isFurloughEnd(period: PartialPeriod) =
+    period.original.end.isAfter((period.partial.end))
+
   def fullOrPartialPeriod(period: Period, furloughPeriod: Period): Periods = {
     val start =
       if (furloughPeriod.start.isAfter(period.start) && furloughPeriod.start.isBefore(period.end)) furloughPeriod.start else period.start
