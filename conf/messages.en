@@ -412,3 +412,11 @@ FurloughPartialPay.error.required = Enter a valid amount
 FurloughPartialPay.error.invalid = Enter a valid amount
 FurloughPartialPay.error.negative = Salary can’t be negative
 FurloughPartialPay.p = This is for the time that employee was paid when they were not furloughed.
+
+lastPayDate.title = What's this employee's pay date for the pay period ending {0}?
+lastPayDate.heading = What's this employee's pay date for the pay period ending {0}?
+lastPayDate.checkYourAnswersLabel = LastPayDate
+lastPayDate.error.required.all = Enter the pay date
+lastPayDate.error.required.two = The pay date must include {0} and {1}
+lastPayDate.error.required = The pay date must include {0}
+lastPayDate.error.invalid = Enter a real date
