@@ -18,6 +18,9 @@ trait PeriodBuilder {
     Period(LocalDate.of(s(0), s(1), s(2)), LocalDate.of(e(0), e(1), e(2)))
   }
 
+  def partialPeriod(original: (String, String), partial: (String, String)) =
+    PartialPeriod(period(original._1, original._2), period(partial._1, partial._2))
+
   private val periodBuilder: String => Array[Int] =
-    date => date.split(",").map(_.toInt)
+    date => date.replace(" ", "").split(",").map(_.toInt)
 }
