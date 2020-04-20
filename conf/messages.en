@@ -269,9 +269,8 @@ pensionStatus.optedOut = No
 pensionAutoEnrolment.checkYourAnswersLabel = pensionAutoEnrolment
 pensionAutoEnrolment.error.required = Select yes if this employee opted out of pension auto-enrolment
 
-confirmation.title = Calculation result
-confirmation.heading = Calculation result
-confirmation.lede = What you can claim for this employee
+confirmation.title = What you can claim for this employee
+confirmation.heading = What you can claim for this employee
 confirmation.confirmation.p1 = Amount paid to this furloughed employee
 confirmation.confirmation.p2 = Employer National Insurance contributions
 confirmation.confirmation.p3 = Employer minimum pension contributions
