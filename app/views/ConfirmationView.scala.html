@@ -52,6 +52,10 @@
         <li>@messages(s"confirmation.pension.${cm.pension}")</li>
     </ul>
 
+    @h2(Html(messages("confirmation.breakdown.h2")), classes = Some("govuk-heading-m"))
+
+    @p(Html(messages("confirmation.breakdown.p")))
+
     <details class="govuk-details" data-module="govuk-details">
         <summary class="govuk-details__summary">
         <span class="govuk-details__summary-text">
@@ -93,5 +97,5 @@
 
     @button(messages("confirmation.startAgain"), href = Some(routes.ClaimPeriodStartController.onPageLoad(NormalMode)), classes = Some("govuk-button"))
 
-    @Html(messages("confirmation.webchat"))
+    @p(Html(messages("confirmation.webchat")))
 }
