@@ -6,7 +6,8 @@
 package services
 
 import models.PayQuestion.Varies
-import models.{Amount, FullPeriod, NonFurloughPay, PartialPeriod, PaymentDate, PaymentWithPeriod, Period, PeriodWithPaymentDate}
+import models.PaymentFrequency.Monthly
+import models.{Amount, CylbPayment, FullPeriod, NonFurloughPay, PartialPeriod, PaymentDate, PaymentFrequency, PaymentWithPeriod, Period, PeriodWithPaymentDate, Periods}
 import utils.AmountRounding._
 
 import scala.math.BigDecimal.RoundingMode._
@@ -33,11 +34,7 @@ trait ReferencePayCalculator extends PeriodHelper {
 
     val daily = periodDaysCount(period) * averageDailyCalculator(priorFurloughPeriod, amount)
 
-    val nfp = afterFurloughPayPeriod.period match {
-      case FullPeriod(p) => Amount(0.00)
-      case pp @ PartialPeriod(_, _) =>
-        if (isFurloughStart(pp)) nonFurloughPay.pre.fold(Amount(0.0))(v => v) else nonFurloughPay.post.fold(Amount(0.0))(v => v)
-    }
+    val nfp = determineNonFurloughPay(afterFurloughPayPeriod.period, nonFurloughPay)
 
     PaymentWithPeriod(nfp, Amount(daily), afterFurloughPayPeriod, Varies)
   }
@@ -52,6 +49,34 @@ trait ReferencePayCalculator extends PeriodHelper {
     res
   }
 
+  protected def calculateCylb(nonFurloughPay: NonFurloughPay,
+                              frequency: PaymentFrequency,
+                              cylbs: Seq[CylbPayment],
+                              periods: Seq[PeriodWithPaymentDate]): Seq[PaymentWithPeriod] = {
+    frequency match {
+      case Monthly => for {
+        period <- periods
+        cylb   <- cylbs
+        nfp     = determineNonFurloughPay(period.period, nonFurloughPay)
+      } yield PaymentWithPeriod(nfp, cylb.amount, period, Varies)
+      case _ => for {
+        period <- periods
+        cylb   <- cylbs.sliding(2, 1)
+        nfp     = determineNonFurloughPay(period.period, nonFurloughPay)
+      } yield {
+        val amount = Amount(cylb.map(_.amount.value).sum)
+        PaymentWithPeriod(nfp, amount, period, Varies)
+      }
+    }
+  }
+
   protected def averageDailyCalculator(period: Period, amount: Amount): BigDecimal =
     roundWithMode(amount.value / periodDaysCount(period), HALF_UP)
+
+  private def determineNonFurloughPay(period: Periods, nonFurloughPay: NonFurloughPay): Amount =
+    period match {
+      case FullPeriod(_)            => Amount(0.00)
+      case pp @ PartialPeriod(_, _) =>
+      if (isFurloughStart(pp)) nonFurloughPay.pre.fold(Amount(0.0))(v => v) else nonFurloughPay.post.fold(Amount(0.0))(v => v)
+  }
 }
