@@ -16,11 +16,12 @@ trait NicCalculator extends TaxYearFinder with FurloughCapCalculator with Common
 
   def calculateNicGrant(frequency: PaymentFrequency, furloughBreakdown: Seq[PeriodBreakdown]): CalculationResult = {
     val nicBreakdowns = furloughBreakdown.map { breakdown =>
+      import breakdown._
       breakdown.periodWithPaymentDate.period match {
         case fp @ FullPeriod(_) =>
-          calculateFullPeriodNic(frequency, breakdown.nonFurloughPay, breakdown.grant, fp, breakdown.periodWithPaymentDate.paymentDate)
+          calculateFullPeriodNic(frequency, nonFurloughPay, grant, fp, periodWithPaymentDate.paymentDate)
         case pp @ PartialPeriod(_, _) =>
-          calculatePartialPeriodNic(frequency, breakdown.nonFurloughPay, breakdown.grant, pp, breakdown.periodWithPaymentDate.paymentDate)
+          calculatePartialPeriodNic(frequency, nonFurloughPay, grant, pp, periodWithPaymentDate.paymentDate)
       }
     }
 
