@@ -34,15 +34,9 @@ trait NicCalculator extends FurloughCapCalculator with CommonCalculationService 
     paymentDate: PaymentDate): PeriodBreakdown = {
     val roundedTotalPay = (nonFurloughPay.value + furloughPayment.value).setScale(0, RoundingMode.DOWN)
     val threshold = FrequencyTaxYearThresholdMapping.findThreshold(frequency, taxYearAt(paymentDate), NiRate())
-
-    val grant =
-      if (roundedTotalPay < threshold) {
-        BigDecimal(0).setScale(2)
-      } else {
-        val grossNi = roundWithMode((roundedTotalPay - threshold) * NiRate().value, RoundingMode.HALF_UP)
-        val dailyNi = grossNi / periodDaysCount(period.original)
-        roundWithMode(dailyNi * periodDaysCount(period.partial), RoundingMode.HALF_UP)
-      }
+    val grossNi = greaterThanAllowance(roundedTotalPay, threshold, NiRate())
+    val dailyNi = grossNi / periodDaysCount(period.original)
+    val grant = roundWithMode(dailyNi * periodDaysCount(period.partial), RoundingMode.HALF_UP)
 
     PeriodBreakdown(nonFurloughPay, Amount(grant), PeriodWithPaymentDate(period, paymentDate))
   }
