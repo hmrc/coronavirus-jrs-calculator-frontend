@@ -44,8 +44,6 @@ class FurloughCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks {
     val paymentTwo: PaymentWithPeriod = PaymentWithPeriod(Amount(0.0), Amount(2000.00), periodTwo, Regularly)
     val payments: List[PaymentWithPeriod] = List(paymentOne, paymentTwo)
 
-    val furloughPeriod = Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 4, 30))
-
     val expected =
       CalculationResult(
         FurloughCalculationResult,
@@ -56,7 +54,7 @@ class FurloughCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks {
         )
       )
 
-    calculateFurloughGrant(Monthly, payments, furloughPeriod) mustBe expected
+    calculateFurloughGrant(Monthly, payments) mustBe expected
   }
 
   private lazy val fullPeriodScenarios = Table(

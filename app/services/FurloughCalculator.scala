@@ -14,10 +14,7 @@ import scala.math.BigDecimal.RoundingMode
 
 trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with PeriodHelper {
 
-  def calculateFurloughGrant(
-    paymentFrequency: PaymentFrequency,
-    payments: Seq[PaymentWithPeriod],
-    furloughPeriod: Period): CalculationResult = {
+  def calculateFurloughGrant(paymentFrequency: PaymentFrequency, payments: Seq[PaymentWithPeriod]): CalculationResult = {
     val paymentDateBreakdowns = payPeriodBreakdownFromRegularPayment(paymentFrequency, payments)
     CalculationResult(FurloughCalculationResult, paymentDateBreakdowns.map(_.grant.value).sum, paymentDateBreakdowns)
   }

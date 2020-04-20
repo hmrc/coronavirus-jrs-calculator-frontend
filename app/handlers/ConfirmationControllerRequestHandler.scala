@@ -17,22 +17,23 @@ trait ConfirmationControllerRequestHandler
 
   def loadResultData(userAnswers: UserAnswers): Option[ConfirmationDataResult] =
     for {
-      breakdown <- breakdown(userAnswers)
-      metadata  <- meta(userAnswers)
+      data      <- extract(userAnswers)
+      breakdown <- breakdown(userAnswers, data)
+      metadata  <- meta(userAnswers, data)
     } yield ConfirmationDataResult(metadata, breakdown)
 
-  private def breakdown(userAnswers: UserAnswers): Option[ConfirmationViewBreakdown] =
+  private def breakdown(userAnswers: UserAnswers, data: MandatoryData): Option[ConfirmationViewBreakdown] =
     for {
-      data     <- extract(userAnswers)
-      furlough <- handleCalculationFurlough(userAnswers)
+      furloughPeriod <- extractFurloughPeriod(data, userAnswers)
+      regulars       <- extractPayments(userAnswers, furloughPeriod)
+      furlough = calculateFurloughGrant(data.paymentFrequency, regulars)
       ni = calculateNi(furlough, data.nicCategory, data.paymentFrequency)
       pension = calculatePension(furlough, data.pensionStatus, data.paymentFrequency)
     } yield ConfirmationViewBreakdown(furlough, ni, pension)
 
-  private def meta(userAnswers: UserAnswers): Option[ConfirmationMetadata] =
+  private def meta(userAnswers: UserAnswers, data: MandatoryData): Option[ConfirmationMetadata] =
     for {
-      data           <- extract(userAnswers)
-      furloughPeriod <- extractFurloughPeriod(userAnswers)
+      furloughPeriod <- extractFurloughPeriod(data, userAnswers)
     } yield
       ConfirmationMetadata(
         Period(data.claimPeriod.start, data.claimPeriod.end),
@@ -40,13 +41,6 @@ trait ConfirmationControllerRequestHandler
         data.paymentFrequency,
         data.nicCategory,
         data.pensionStatus)
-
-  protected def handleCalculationFurlough(userAnswers: UserAnswers): Option[CalculationResult] =
-    for {
-      data           <- extract(userAnswers)
-      furloughPeriod <- extractFurloughPeriod(userAnswers)
-      regulars       <- extractPayments(userAnswers, furloughPeriod)
-    } yield calculateFurloughGrant(data.paymentFrequency, regulars, furloughPeriod)
 
   private def calculateNi(furloughResult: CalculationResult, nic: NicCategory, frequency: PaymentFrequency): CalculationResult =
     nic match {
