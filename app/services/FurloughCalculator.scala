@@ -6,7 +6,7 @@
 package services
 
 import models.Calculation.FurloughCalculationResult
-import models.{Amount, CalculationResult, FullPeriod, PartialPeriod, PaymentDate, PaymentFrequency, PaymentWithPeriod, Period, PeriodBreakdown, PeriodWithPaymentDate}
+import models.{Amount, CalculationResult, FullPeriod, PartialPeriod, PaymentDate, PaymentFrequency, PaymentWithPeriod, PeriodBreakdown, PeriodWithPaymentDate}
 import utils.AmountRounding._
 import utils.TaxYearFinder
 
@@ -24,10 +24,10 @@ trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with P
     paymentsWithPeriod: Seq[PaymentWithPeriod]): Seq[PeriodBreakdown] =
     paymentsWithPeriod.map { payment =>
       payment.period.period match {
-        case fp @ FullPeriod(p) =>
+        case fp: FullPeriod =>
           calculateFullPeriod(paymentFrequency, payment, fp, payment.period.paymentDate)
-        case pp @ PartialPeriod(o, _) =>
-          calculatePartialPeriod(paymentFrequency, payment, pp, payment.period.paymentDate)
+        case pp: PartialPeriod =>
+          calculatePartialPeriod(payment, pp, payment.period.paymentDate)
       }
     }
 
@@ -55,11 +55,7 @@ trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with P
     PeriodBreakdown(Amount(0.0), Amount(amount), PeriodWithPaymentDate(period, paymentDate))
   }
 
-  protected def calculatePartialPeriod(
-    paymentFrequency: PaymentFrequency,
-    payment: PaymentWithPeriod,
-    period: PartialPeriod,
-    paymentDate: PaymentDate): PeriodBreakdown = {
+  protected def calculatePartialPeriod(payment: PaymentWithPeriod, period: PartialPeriod, paymentDate: PaymentDate): PeriodBreakdown = {
     val payForPeriod = proRatePay(payment)
     val eighty = roundWithMode(payForPeriod.value * 0.8, RoundingMode.HALF_UP)
     val cap = partialFurloughCap(period.partial)
