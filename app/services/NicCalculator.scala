@@ -33,15 +33,8 @@ trait NicCalculator extends TaxYearFinder with FurloughCapCalculator with Common
     grossPay: Amount,
     furloughPayment: Amount,
     period: FullPeriod,
-    paymentDate: PaymentDate): PeriodBreakdown = {
-    val threshold = FrequencyTaxYearThresholdMapping.findThreshold(frequency, taxYearAt(paymentDate), NiRate())
-
-    val roundedFurloughPayment = furloughPayment.value.setScale(0, RoundingMode.DOWN)
-
-    val grant = greaterThanAllowance(roundedFurloughPayment, threshold, NiRate())
-
-    PeriodBreakdown(grossPay, Amount(grant), PeriodWithPaymentDate(period, paymentDate))
-  }
+    paymentDate: PaymentDate): PeriodBreakdown =
+    fullPeriodCalculation(frequency, grossPay, furloughPayment, period, paymentDate, NiRate())
 
   protected def calculatePartialPeriodNic(
     frequency: PaymentFrequency,

@@ -37,13 +37,8 @@ trait PensionCalculator extends TaxYearFinder with FurloughCapCalculator with Co
     grossPay: Amount,
     furloughPayment: Amount,
     period: FullPeriod,
-    paymentDate: PaymentDate): PeriodBreakdown = {
-    val threshold = FrequencyTaxYearThresholdMapping.findThreshold(frequency, taxYearAt(paymentDate), PensionRate())
-    val roundedFurloughPayment = furloughPayment.value.setScale(0, RoundingMode.DOWN)
-    val grant = greaterThanAllowance(roundedFurloughPayment, threshold, PensionRate())
-
-    PeriodBreakdown(grossPay, Amount(grant), PeriodWithPaymentDate(period, paymentDate))
-  }
+    paymentDate: PaymentDate): PeriodBreakdown =
+    fullPeriodCalculation(frequency, grossPay, furloughPayment, period, paymentDate, PensionRate())
 
   private def calculatePartialPeriodPension(
     frequency: PaymentFrequency,
