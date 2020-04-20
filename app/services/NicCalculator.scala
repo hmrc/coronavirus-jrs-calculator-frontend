@@ -8,11 +8,10 @@ package services
 import models.Calculation.NicCalculationResult
 import models.{Amount, CalculationResult, FullPeriod, PartialPeriod, PaymentDate, PaymentFrequency, PeriodBreakdown, PeriodWithPaymentDate}
 import utils.AmountRounding.roundWithMode
-import utils.TaxYearFinder
 
 import scala.math.BigDecimal.RoundingMode
 
-trait NicCalculator extends TaxYearFinder with FurloughCapCalculator with CommonCalculationService {
+trait NicCalculator extends FurloughCapCalculator with CommonCalculationService {
 
   def calculateNicGrant(frequency: PaymentFrequency, furloughBreakdown: Seq[PeriodBreakdown]): CalculationResult = {
     val nicBreakdowns = furloughBreakdown.map { breakdown =>

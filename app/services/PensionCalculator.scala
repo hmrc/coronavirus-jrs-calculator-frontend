@@ -8,11 +8,10 @@ package services
 import models.Calculation.PensionCalculationResult
 import models.{Amount, CalculationResult, FullPeriod, PartialPeriod, PaymentDate, PaymentFrequency, PeriodBreakdown, PeriodWithPaymentDate}
 import utils.AmountRounding._
-import utils.TaxYearFinder
 
 import scala.math.BigDecimal.RoundingMode
 
-trait PensionCalculator extends TaxYearFinder with FurloughCapCalculator with CommonCalculationService {
+trait PensionCalculator extends FurloughCapCalculator with CommonCalculationService {
 
   def calculatePensionGrant(frequency: PaymentFrequency, furloughBreakdown: Seq[PeriodBreakdown]): CalculationResult = {
     val pensionBreakdowns = furloughBreakdown.map { breakdown =>
