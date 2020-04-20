@@ -82,22 +82,22 @@
           cvb.pension.payPeriodBreakdowns).zipped.toList) { <h3 class="govuk-heading-s">@messages("confirmation.breakdown.dt")
           @messages("confirmation.breakdown.ending", dateToString(furlough.periodWithPaymentDate.period.period.end))</h3>
           <dl class="govuk-summary-list">
-            <dt class="govuk-heading-s govuk-!-margin-bottom-0">
+            <dt class="govuk-!-margin-bottom-0">
               @Html(messages("confirmation.breakdown.furlough"))
             </dt>
-            <dd class="govuk-!-margin-left-0">
+            <dd class="govuk-heading-s govuk-!-margin-left-0">
               &pound;@furlough.grant.value.setScale(2)
             </dd>
-            <dt class="govuk-heading-s govuk-!-margin-bottom-0">
+            <dt class="govuk-!-margin-bottom-0">
               @Html(messages("confirmation.breakdown.nic"))
             </dt>
-            <dd class="govuk-!-margin-left-0">
+            <dd class="govuk-heading-s govuk-!-margin-left-0">
               &pound;@nic.grant.value.setScale(2)
             </dd>
-            <dt class="govuk-heading-s govuk-!-margin-bottom-0">
+            <dt class="govuk-!-margin-bottom-0">
               @Html(messages("confirmation.breakdown.pension"))
             </dt>
-            <dd class="govuk-!-margin-left-0">
+            <dd class="govuk-heading-s govuk-!-margin-left-0">
               &pound;@pension.grant.value.setScale(2)
             </dd>
           </dl>
