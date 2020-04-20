@@ -12,7 +12,7 @@ import utils.TaxYearFinder
 
 import scala.math.BigDecimal.RoundingMode
 
-trait NicCalculator extends TaxYearFinder with FurloughCapCalculator {
+trait NicCalculator extends TaxYearFinder with FurloughCapCalculator with CommonCalculationService {
 
   def calculateNicGrant(frequency: PaymentFrequency, furloughBreakdown: Seq[PeriodBreakdown]): CalculationResult = {
     val nicBreakdowns = furloughBreakdown.map { breakdown =>
@@ -37,12 +37,7 @@ trait NicCalculator extends TaxYearFinder with FurloughCapCalculator {
 
     val roundedFurloughPayment = furloughPayment.value.setScale(0, RoundingMode.DOWN)
 
-    val grant =
-      if (roundedFurloughPayment < threshold) {
-        BigDecimal(0).setScale(2)
-      } else {
-        roundWithMode((roundedFurloughPayment - threshold) * NiRate().value, RoundingMode.HALF_UP)
-      }
+    val grant = greaterThanAllowance(roundedFurloughPayment, threshold, NiRate())
 
     PeriodBreakdown(grossPay, Amount(grant), PeriodWithPaymentDate(period, paymentDate))
   }
@@ -56,13 +51,14 @@ trait NicCalculator extends TaxYearFinder with FurloughCapCalculator {
     val roundedTotalPay = (nonFurloughPay.value + furloughPayment.value).setScale(0, RoundingMode.DOWN)
     val threshold = FrequencyTaxYearThresholdMapping.findThreshold(frequency, taxYearAt(paymentDate), NiRate())
 
-    val grant = if (roundedTotalPay < threshold) {
-      BigDecimal(0).setScale(2)
-    } else {
-      val grossNi = roundWithMode((roundedTotalPay - threshold) * NiRate().value, RoundingMode.HALF_UP)
-      val dailyNi = grossNi / periodDaysCount(period.original)
-      roundWithMode(dailyNi * periodDaysCount(period.partial), RoundingMode.HALF_UP)
-    }
+    val grant =
+      if (roundedTotalPay < threshold) {
+        BigDecimal(0).setScale(2)
+      } else {
+        val grossNi = roundWithMode((roundedTotalPay - threshold) * NiRate().value, RoundingMode.HALF_UP)
+        val dailyNi = grossNi / periodDaysCount(period.original)
+        roundWithMode(dailyNi * periodDaysCount(period.partial), RoundingMode.HALF_UP)
+      }
 
     PeriodBreakdown(nonFurloughPay, Amount(grant), PeriodWithPaymentDate(period, paymentDate))
   }
