@@ -43,7 +43,7 @@ trait DataExtractor extends ReferencePayCalculator {
   def extractFurloughPeriod(userAnswers: UserAnswers): Option[Period] =
     extract(userAnswers).flatMap { data =>
       data.furloughQuestion match {
-        case Yes => patchEndDate(userAnswers)
+        case Yes => patchEndDate(userAnswers, data)
         case No  => Some(Period(data.furloughStart, data.claimPeriod.end))
       }
     }
@@ -87,10 +87,9 @@ trait DataExtractor extends ReferencePayCalculator {
       calculateVariablePay(nonFurloughPay, priorFurloughPeriod, periods, grossPay)
     }
 
-  private def patchEndDate(userAnswers: UserAnswers): Option[Period] =
+  private def patchEndDate(userAnswers: UserAnswers, data: MandatoryData): Option[Period] =
     for {
-      data <- extract(userAnswers)
-      end  <- userAnswers.get(FurloughEndDatePage)
+      end <- userAnswers.get(FurloughEndDatePage)
     } yield Period(data.furloughStart, end)
 
 }

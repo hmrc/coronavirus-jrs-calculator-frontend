@@ -23,9 +23,10 @@ trait ConfirmationControllerRequestHandler
 
   private def breakdown(userAnswers: UserAnswers): Option[ConfirmationViewBreakdown] =
     for {
+      data     <- extract(userAnswers)
       furlough <- handleCalculationFurlough(userAnswers)
-      ni       <- handleCalculationNi(extract(userAnswers), furlough)
-      pension  <- handleCalculationPension(extract(userAnswers), furlough)
+      ni = calculateNi(furlough, data.nicCategory, data.paymentFrequency)
+      pension = calculatePension(furlough, data.pensionStatus, data.paymentFrequency)
     } yield ConfirmationViewBreakdown(furlough, ni, pension)
 
   private def meta(userAnswers: UserAnswers): Option[ConfirmationMetadata] =
@@ -47,24 +48,12 @@ trait ConfirmationControllerRequestHandler
       regulars       <- extractPayments(userAnswers, furloughPeriod)
     } yield calculateFurloughGrant(data.paymentFrequency, regulars, furloughPeriod)
 
-  private def handleCalculationNi(data: Option[MandatoryData], furloughResult: CalculationResult): Option[CalculationResult] =
-    for {
-      nic       <- data.map(_.nicCategory)
-      frequency <- data.map(_.paymentFrequency)
-    } yield calculateNi(furloughResult, nic, frequency)
-
   private def calculateNi(furloughResult: CalculationResult, nic: NicCategory, frequency: PaymentFrequency): CalculationResult =
     nic match {
       case Payable => calculateNicGrant(frequency, furloughResult.payPeriodBreakdowns)
       case Nonpayable =>
         CalculationResult(NicCalculationResult, 0.0, furloughResult.payPeriodBreakdowns.map(_.copy(grant = Amount(0.0))))
     }
-
-  private def handleCalculationPension(data: Option[MandatoryData], furloughResult: CalculationResult): Option[CalculationResult] =
-    for {
-      pension   <- data.map(_.pensionStatus)
-      frequency <- data.map(_.paymentFrequency)
-    } yield calculatePension(furloughResult, pension, frequency)
 
   private def calculatePension(
     furloughResult: CalculationResult,
