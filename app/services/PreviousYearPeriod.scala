@@ -7,14 +7,14 @@ package services
 
 import java.time.LocalDate
 
-import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
-import models.{FrequencyWithPreviousYearDaysCount, PaymentFrequency, Period}
+import models.PaymentFrequency.{FortNightly, FourWeekly, Weekly}
+import models.{FrequencyWithPreviousYearDaysCount, Period}
 
 trait PreviousYearPeriod {
 
   def previousYearPayDate(paymentFrequency: FrequencyWithPreviousYearDaysCount, thisYear: LocalDate): Period = {
     val lastYear = thisYear.minusDays(364)
-    val period = previousYear(paymentFrequency, thisYear, lastYear)
+    val period = previousYear(paymentFrequency, lastYear)
 
     if (isBeforeMarch(period)) period.copy(start = period.start.plusDays(1))
     else period
@@ -22,7 +22,7 @@ trait PreviousYearPeriod {
 
   def previousYearMonthly(thisYear: LocalDate): LocalDate = thisYear.minusYears(1)
 
-  private def previousYear(paymentFrequency: FrequencyWithPreviousYearDaysCount, thisYear: LocalDate, lastYear: LocalDate): Period =
+  private def previousYear(paymentFrequency: FrequencyWithPreviousYearDaysCount, lastYear: LocalDate): Period =
     paymentFrequency match {
       case Weekly      => Period(lastYear.minusDays(7), lastYear)
       case FortNightly => Period(lastYear.minusDays(14), lastYear)
