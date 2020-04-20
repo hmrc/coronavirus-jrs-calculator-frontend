@@ -15,9 +15,10 @@ trait PensionCalculator extends FurloughCapCalculator with CommonCalculationServ
 
   def calculatePensionGrant(frequency: PaymentFrequency, furloughBreakdown: Seq[PeriodBreakdown]): CalculationResult = {
     val pensionBreakdowns = furloughBreakdown.map { breakdown =>
+      import breakdown._
       breakdown.periodWithPaymentDate.period match {
         case fp @ FullPeriod(_) =>
-          calculateFullPeriodPension(frequency, breakdown.nonFurloughPay, breakdown.grant, fp, breakdown.periodWithPaymentDate.paymentDate)
+          fullPeriodCalculation(frequency, nonFurloughPay, grant, fp, periodWithPaymentDate.paymentDate, PensionRate())
         case pp @ PartialPeriod(_, _) =>
           calculatePartialPeriodPension(
             frequency,
@@ -30,14 +31,6 @@ trait PensionCalculator extends FurloughCapCalculator with CommonCalculationServ
 
     CalculationResult(PensionCalculationResult, pensionBreakdowns.map(_.grant.value).sum, pensionBreakdowns)
   }
-
-  protected def calculateFullPeriodPension(
-    frequency: PaymentFrequency,
-    grossPay: Amount,
-    furloughPayment: Amount,
-    period: FullPeriod,
-    paymentDate: PaymentDate): PeriodBreakdown =
-    fullPeriodCalculation(frequency, grossPay, furloughPayment, period, paymentDate, PensionRate())
 
   private def calculatePartialPeriodPension(
     frequency: PaymentFrequency,

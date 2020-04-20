@@ -18,22 +18,13 @@ trait NicCalculator extends FurloughCapCalculator with CommonCalculationService 
       import breakdown._
       breakdown.periodWithPaymentDate.period match {
         case fp @ FullPeriod(_) =>
-          calculateFullPeriodNic(frequency, nonFurloughPay, grant, fp, periodWithPaymentDate.paymentDate)
+          fullPeriodCalculation(frequency, nonFurloughPay, grant, fp, periodWithPaymentDate.paymentDate, NiRate())
         case pp @ PartialPeriod(_, _) =>
           calculatePartialPeriodNic(frequency, nonFurloughPay, grant, pp, periodWithPaymentDate.paymentDate)
       }
     }
-
     CalculationResult(NicCalculationResult, nicBreakdowns.map(_.grant.value).sum, nicBreakdowns)
   }
-
-  protected def calculateFullPeriodNic(
-    frequency: PaymentFrequency,
-    grossPay: Amount,
-    furloughPayment: Amount,
-    period: FullPeriod,
-    paymentDate: PaymentDate): PeriodBreakdown =
-    fullPeriodCalculation(frequency, grossPay, furloughPayment, period, paymentDate, NiRate())
 
   protected def calculatePartialPeriodNic(
     frequency: PaymentFrequency,
