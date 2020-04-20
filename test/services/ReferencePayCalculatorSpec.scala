@@ -9,7 +9,8 @@ import java.time.LocalDate
 
 import base.{PeriodBuilder, SpecBase}
 import models.PayQuestion.Varies
-import models.{Amount, FullPeriod, NonFurloughPay, PartialPeriod, PaymentDate, PaymentWithPeriod, Period, PeriodWithPaymentDate}
+import models.PaymentFrequency.{FortNightly, FourWeekly, Weekly}
+import models.{Amount, CylbPayment, FullPeriod, NonFurloughPay, PartialPeriod, PaymentDate, PaymentWithPeriod, Period, PeriodWithPaymentDate}
 
 import scala.collection.immutable
 
@@ -88,5 +89,95 @@ class ReferencePayCalculatorSpec extends SpecBase with PeriodBuilder {
     val expected: Seq[(PaymentDate, BigDecimal)] = List(dateOne -> 200.0, datetwo -> 250.0, datethree -> 100.0)
 
     payDateToDailyEarning(input) mustBe expected
+  }
+
+  "calculate cylb amounts for weekly" in new ReferencePayCalculator {
+    val cylbs = Seq(
+      CylbPayment(PaymentDate(LocalDate.of(2019, 3, 2)), Amount(700.00)),
+      CylbPayment(PaymentDate(LocalDate.of(2019, 3, 9)), Amount(350.00)),
+      CylbPayment(PaymentDate(LocalDate.of(2019, 3, 16)), Amount(140.00))
+    )
+
+    val periods = Seq(
+      PeriodWithPaymentDate(FullPeriod(period("2020,3,1", "2020,3,7")), PaymentDate(LocalDate.of(2020, 3, 7))),
+      PeriodWithPaymentDate(FullPeriod(period("2020,3,8", "2020,3,14")), PaymentDate(LocalDate.of(2020, 3, 14)))
+    )
+
+    val nonFurloughPay = NonFurloughPay(None, None)
+
+    val expected = Seq(
+      PaymentWithPeriod(
+        Amount(0.0),
+        Amount(450.00),
+        PeriodWithPaymentDate(FullPeriod(period("2020,3,1", "2020,3,7")), PaymentDate(LocalDate.of(2020, 3, 7))),
+        Varies),
+      PaymentWithPeriod(
+        Amount(0.0),
+        Amount(200.00),
+        PeriodWithPaymentDate(FullPeriod(period("2020,3,8", "2020,3,14")), PaymentDate(LocalDate.of(2020, 3, 14))),
+        Varies)
+    )
+
+    calculateCylb(nonFurloughPay, Weekly, cylbs, periods) mustBe expected
+  }
+
+  "calculate cylb amounts for fortnightly" in new ReferencePayCalculator {
+    val cylbs = Seq(
+      CylbPayment(PaymentDate(LocalDate.of(2019, 3, 2)), Amount(1400.00)),
+      CylbPayment(PaymentDate(LocalDate.of(2019, 3, 16)), Amount(700.00)),
+      CylbPayment(PaymentDate(LocalDate.of(2019, 3, 30)), Amount(280.00))
+    )
+
+    val periods = Seq(
+      PeriodWithPaymentDate(FullPeriod(period("2020,3,1", "2020,3,14")), PaymentDate(LocalDate.of(2020, 3, 14))),
+      PeriodWithPaymentDate(FullPeriod(period("2020,3,15", "2020,3,28")), PaymentDate(LocalDate.of(2020, 3, 28)))
+    )
+
+    val nonFurloughPay = NonFurloughPay(None, None)
+
+    val expected = Seq(
+      PaymentWithPeriod(
+        Amount(0.0),
+        Amount(450.00),
+        PeriodWithPaymentDate(FullPeriod(period("2020,3,1", "2020,3,14")), PaymentDate(LocalDate.of(2020, 3, 14))),
+        Varies),
+      PaymentWithPeriod(
+        Amount(0.0),
+        Amount(200.00),
+        PeriodWithPaymentDate(FullPeriod(period("2020,3,15", "2020,3,28")), PaymentDate(LocalDate.of(2020, 3, 28))),
+        Varies)
+    )
+
+    calculateCylb(nonFurloughPay, FortNightly, cylbs, periods) mustBe expected
+  }
+
+  "calculate cylb amounts for fourweekly" in new ReferencePayCalculator {
+    val cylbs = Seq(
+      CylbPayment(PaymentDate(LocalDate.of(2019, 3, 2)), Amount(2800.00)),
+      CylbPayment(PaymentDate(LocalDate.of(2019, 3, 30)), Amount(1400.00)),
+      CylbPayment(PaymentDate(LocalDate.of(2019, 4, 27)), Amount(560.00))
+    )
+
+    val periods = Seq(
+      PeriodWithPaymentDate(FullPeriod(period("2020,3,1", "2020,3,28")), PaymentDate(LocalDate.of(2020, 3, 28))),
+      PeriodWithPaymentDate(FullPeriod(period("2020,3,29", "2020,4,26")), PaymentDate(LocalDate.of(2020, 4, 26)))
+    )
+
+    val nonFurloughPay = NonFurloughPay(None, None)
+
+    val expected = Seq(
+      PaymentWithPeriod(
+        Amount(0.0),
+        Amount(450.00),
+        PeriodWithPaymentDate(FullPeriod(period("2020,3,1", "2020,3,28")), PaymentDate(LocalDate.of(2020, 3, 28))),
+        Varies),
+      PaymentWithPeriod(
+        Amount(0.0),
+        Amount(200.00),
+        PeriodWithPaymentDate(FullPeriod(period("2020,3,29", "2020,4,26")), PaymentDate(LocalDate.of(2020, 4, 26))),
+        Varies)
+    )
+
+    calculateCylb(nonFurloughPay, FourWeekly, cylbs, periods) mustBe expected
   }
 }
