@@ -7,11 +7,13 @@ package services
 
 import java.time.LocalDate
 
-import base.SpecBase
+import base.{PeriodBuilder, SpecBase}
 import models.PayQuestion.Varies
 import models.{Amount, FullPeriod, NonFurloughPay, PartialPeriod, PaymentDate, PaymentWithPeriod, Period, PeriodWithPaymentDate}
 
-class ReferencePayCalculatorSpec extends SpecBase {
+import scala.collection.immutable
+
+class ReferencePayCalculatorSpec extends SpecBase with PeriodBuilder {
 
   "calculates reference gross pay for an employee on variable pays" in new ReferencePayCalculator {
     val employeeStartDate = LocalDate.of(2019, 12, 1)
@@ -46,5 +48,17 @@ class ReferencePayCalculatorSpec extends SpecBase {
     val periodBeforeFurlough = Period(employeeStartDate, furloughStartDate.minusDays(1))
 
     averageDailyCalculator(periodBeforeFurlough, Amount(2400.0)) mustBe 26.37
+  }
+
+  "calculate previous year wage" in new ReferencePayCalculator {
+    val dateOne = PaymentDate(LocalDate.of(2020, 3, 2))
+    val datetwo = PaymentDate(LocalDate.of(2020, 3, 9))
+    val payForDateOne = Amount(700.00)
+    val payForDateTwo = Amount(350.00)
+    val input: Seq[(PaymentDate, Amount)] = List(dateOne -> payForDateOne, datetwo -> payForDateTwo)
+
+    val expected: Seq[(PaymentDate, Double)] = List(dateOne -> 200.0, datetwo -> 250.0)
+
+    payDateToDailyEarning(input) mustBe expected
   }
 }

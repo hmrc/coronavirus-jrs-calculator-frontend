@@ -6,7 +6,7 @@
 package services
 
 import models.PayQuestion.Varies
-import models.{Amount, FullPeriod, NonFurloughPay, PartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate}
+import models.{Amount, FullPeriod, NonFurloughPay, PartialPeriod, PaymentDate, PaymentWithPeriod, Period, PeriodWithPaymentDate}
 import utils.AmountRounding._
 
 import scala.math.BigDecimal.RoundingMode._
@@ -40,6 +40,16 @@ trait ReferencePayCalculator extends PeriodHelper {
     }
 
     PaymentWithPeriod(nfp, Amount(daily), afterFurloughPayPeriod, Varies)
+  }
+
+  protected def payDateToDailyEarning(datesWithAmount: Seq[(PaymentDate, Amount)]): Seq[(PaymentDate, BigDecimal)] = {
+    val indexed: Seq[((PaymentDate, Amount), Int)] = datesWithAmount.zipWithIndex
+
+    val res: Seq[(PaymentDate, BigDecimal)] = indexed.map {
+      case (k, v) if v % 2 == 0 => k._1 -> (k._2.value / 7) * 2
+      case (k, _) => k._1 -> (k._2.value / 7) * 5
+    }
+    res
   }
 
   protected def averageDailyCalculator(period: Period, amount: Amount): BigDecimal =
