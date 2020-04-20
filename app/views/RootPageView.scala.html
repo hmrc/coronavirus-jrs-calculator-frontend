@@ -9,7 +9,8 @@
         h2: components.h2,
         p: components.p,
         button: components.button,
-        link: components.link
+        link: components.link,
+        appConfig: config.FrontendAppConfig
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -31,7 +32,7 @@
     </ul>
 
     @p(Html(Messages("rootPage.p5")))
-    @p(Html(Messages("rootPage.p6", link("https://www.gov.uk/guidance/work-out-80-of-your-employees-wages-to-claim-through-the-coronavirus-job-retention-scheme","rootPage.p6.link"))))
+    @p(Html(Messages("rootPage.p6", link(appConfig.calculationGuidance,"rootPage.p6.link"))))
     @p(Html(Messages("rootPage.p7")))
 
     @h2("rootPage.howItWorks.header")
@@ -65,7 +66,7 @@
         <li>@messages("rootPage.beforeYouStart.p1.l4")</li>
         <li>@messages("rootPage.beforeYouStart.p1.l5")</li>
         <li>@messages("rootPage.beforeYouStart.p1.l6")</li>
-        <li>@Html(messages("rootPage.beforeYouStart.p1.l7", link("https://www.gov.uk/national-insurance-rates-letters/category-letters","rootPage.beforeYouStart.p1.l7.link")))</li>
+        <li>@Html(messages("rootPage.beforeYouStart.p1.l7", link(appConfig.ninoCatLetter,"rootPage.beforeYouStart.p1.l7.link")))</li>
     </ul>
 
 }
