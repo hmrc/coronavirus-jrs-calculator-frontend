@@ -5,8 +5,6 @@
 
 package services
 
-import java.time.LocalDate
-
 import models.Calculation.FurloughCalculationResult
 import models.{Amount, CalculationResult, FullPeriod, PartialPeriod, PaymentDate, PaymentFrequency, PaymentWithPeriod, Period, PeriodBreakdown, PeriodWithPaymentDate}
 import utils.AmountRounding._
@@ -20,14 +18,13 @@ trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with P
     paymentFrequency: PaymentFrequency,
     payments: Seq[PaymentWithPeriod],
     furloughPeriod: Period): CalculationResult = {
-    val paymentDateBreakdowns = payPeriodBreakdownFromRegularPayment(paymentFrequency, payments, furloughPeriod)
+    val paymentDateBreakdowns = payPeriodBreakdownFromRegularPayment(paymentFrequency, payments)
     CalculationResult(FurloughCalculationResult, paymentDateBreakdowns.map(_.grant.value).sum, paymentDateBreakdowns)
   }
 
   protected def payPeriodBreakdownFromRegularPayment(
     paymentFrequency: PaymentFrequency,
-    paymentsWithPeriod: Seq[PaymentWithPeriod],
-    furloughPeriod: Period): Seq[PeriodBreakdown] =
+    paymentsWithPeriod: Seq[PaymentWithPeriod]): Seq[PeriodBreakdown] =
     paymentsWithPeriod.map { payment =>
       payment.period.period match {
         case fp @ FullPeriod(p) =>

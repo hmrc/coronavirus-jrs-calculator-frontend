@@ -9,7 +9,6 @@ import models.Calculation.{NicCalculationResult, PensionCalculationResult}
 import models.NicCategory.{Nonpayable, Payable}
 import models.PensionStatus.{OptedIn, OptedOut}
 import models.{Amount, CalculationResult, NicCategory, PaymentFrequency, PensionStatus, Period, UserAnswers}
-import pages._
 import services._
 import viewmodels.{ConfirmationDataResult, ConfirmationMetadata, ConfirmationViewBreakdown}
 
