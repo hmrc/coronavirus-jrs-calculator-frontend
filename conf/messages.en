@@ -378,7 +378,7 @@ furloughStartDate.error.invalid = Enter a real furlough start date
 furloughStartDate.error.minimum = The furlough start date must be after {0}
 furloughStartDate.error.maximum = The furlough start date must be before {0}
 
-variableLengthEmployed.title = Was this employee working for you on or before 1 February 2019?
+c.title = Was this employee working for you on or before 1 February 2019?
 variableLengthEmployed.heading = Was this employee working for you on or before 1 February 2019?
 variableLengthEmployed.yes = Yes
 variableLengthEmployed.no = No

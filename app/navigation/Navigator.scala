@@ -52,8 +52,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig) extends LastYearPayContr
       _ =>
         routes.PartialPayAfterFurloughController.onPageLoad()
     case PartialPayAfterFurloughPage =>
-      _ =>
-        routes.NicCategoryController.onPageLoad(NormalMode)
+      partialPayAfterFurloughRoutes
     case VariableGrossPayPage =>
       _ =>
         routes.PayDateController.onPageLoad(1)
@@ -112,6 +111,18 @@ class Navigator @Inject()(appConfig: FrontendAppConfig) extends LastYearPayContr
       idx.fold(normalRoutes(page)(userAnswers))(idx => idxRoutes(page)(idx, userAnswers))
     case CheckMode =>
       checkRouteMap(page)(userAnswers)
+  }
+
+  private def partialPayAfterFurloughRoutes: UserAnswers => Call = { userAnswers =>
+    userAnswers.get(VariableLengthEmployedPage) match {
+      case Some(VariableLengthEmployed.Yes) => routes.LastYearPayController.onPageLoad(1)
+      case Some(VariableLengthEmployed.No) =>
+        userAnswers.get(EmployeeStartDatePage) match {
+          case Some(date) if date.isBefore(apr7th2019) => routes.LastYearPayController.onPageLoad(1)
+          case _                                       => routes.NicCategoryController.onPageLoad(NormalMode)
+        }
+      case None => routes.NicCategoryController.onPageLoad(NormalMode)
+    }
   }
 
   private def furloughQuestionRoutes: UserAnswers => Call = { userAnswers =>

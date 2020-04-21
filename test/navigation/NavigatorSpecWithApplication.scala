@@ -281,6 +281,78 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication {
 
         navigator.nextPage(LastYearPayPage, NormalMode, userAnswers, Some(2)) mustBe routes.NicCategoryController.onPageLoad(NormalMode)
       }
+
+      "go to correct page after PartialPayAfterFurloughPage" when {
+
+        "VariableLengthEmployed is Yes" in {
+          val userAnswers = emptyUserAnswers.set(VariableLengthEmployedPage, VariableLengthEmployed.Yes).success.value
+
+          navigator.nextPage(
+            PartialPayAfterFurloughPage,
+            NormalMode,
+            userAnswers
+          ) mustBe routes.LastYearPayController.onPageLoad(1)
+        }
+
+        "VariableLengthEmployed is No and date is before April 7th" in {
+          val userAnswers = emptyUserAnswers
+            .set(VariableLengthEmployedPage, VariableLengthEmployed.No)
+            .success
+            .value
+            .set(EmployeeStartDatePage, LocalDate.of(2019, 4, 6))
+            .success
+            .value
+
+          navigator.nextPage(
+            PartialPayAfterFurloughPage,
+            NormalMode,
+            userAnswers
+          ) mustBe routes.LastYearPayController.onPageLoad(1)
+        }
+
+        "VariableLengthEmployed is No and date is April 7th" in {
+          val userAnswers = emptyUserAnswers
+            .set(VariableLengthEmployedPage, VariableLengthEmployed.No)
+            .success
+            .value
+            .set(EmployeeStartDatePage, LocalDate.of(2020, 4, 7))
+            .success
+            .value
+
+          navigator.nextPage(
+            PartialPayAfterFurloughPage,
+            NormalMode,
+            userAnswers
+          ) mustBe routes.NicCategoryController.onPageLoad(NormalMode)
+        }
+
+        "VariableLengthEmployed is No and date is after April 7th" in {
+          val userAnswers = emptyUserAnswers
+            .set(VariableLengthEmployedPage, VariableLengthEmployed.No)
+            .success
+            .value
+            .set(EmployeeStartDatePage, LocalDate.of(2020, 4, 8))
+            .success
+            .value
+
+          navigator.nextPage(
+            PartialPayAfterFurloughPage,
+            NormalMode,
+            userAnswers
+          ) mustBe routes.NicCategoryController.onPageLoad(NormalMode)
+        }
+
+        "VariableLengthEmployed is missing" in {
+          val userAnswers = emptyUserAnswers
+
+          navigator.nextPage(
+            PartialPayAfterFurloughPage,
+            NormalMode,
+            userAnswers
+          ) mustBe routes.NicCategoryController.onPageLoad(NormalMode)
+        }
+
+      }
     }
 
     "in Check mode" must {
