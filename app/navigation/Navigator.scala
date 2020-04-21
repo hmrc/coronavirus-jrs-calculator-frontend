@@ -49,8 +49,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig) extends LastYearPayContr
     case EmployeeStartDatePage =>
       employeeStartDateRoutes
     case PartialPayBeforeFurloughPage =>
-      _ =>
-        routes.PartialPayAfterFurloughController.onPageLoad()
+      partialPayBeforeFurloughRoutes
     case PartialPayAfterFurloughPage =>
       partialPayAfterFurloughRoutes
     case VariableGrossPayPage =>
@@ -113,6 +112,14 @@ class Navigator @Inject()(appConfig: FrontendAppConfig) extends LastYearPayContr
       checkRouteMap(page)(userAnswers)
   }
 
+  private def partialPayBeforeFurloughRoutes: UserAnswers => Call = { userAnswers =>
+    if (hasPartialPayAfter(userAnswers)) {
+      routes.PartialPayAfterFurloughController.onPageLoad()
+    } else {
+      nextPage(PartialPayAfterFurloughPage, NormalMode, userAnswers)
+    }
+  }
+
   private def partialPayAfterFurloughRoutes: UserAnswers => Call = { userAnswers =>
     userAnswers.get(VariableLengthEmployedPage) match {
       case Some(VariableLengthEmployed.Yes) => routes.LastYearPayController.onPageLoad(1)
@@ -173,10 +180,33 @@ class Navigator @Inject()(appConfig: FrontendAppConfig) extends LastYearPayContr
   private def lastPayDateRoutes: UserAnswers => Call = { userAnswers =>
     userAnswers.get(PayQuestionPage) match {
       case Some(Regularly) => routes.NicCategoryController.onPageLoad(NormalMode)
-      case Some(Varies)    => routes.PartialPayBeforeFurloughController.onPageLoad()
-      case None            => routes.PayQuestionController.onPageLoad(NormalMode)
+      case Some(Varies) =>
+        if (hasPartialPayBefore(userAnswers)) {
+          routes.PartialPayBeforeFurloughController.onPageLoad()
+        } else if (hasPartialPayAfter(userAnswers)) {
+          routes.PartialPayAfterFurloughController.onPageLoad()
+        } else {
+          routes.LastYearPayController.onPageLoad(1)
+        }
+      case None => routes.PayQuestionController.onPageLoad(NormalMode)
     }
   }
+
+  private def hasPartialPayBefore(userAnswers: UserAnswers): Boolean =
+    (for {
+      startDate    <- userAnswers.get(FurloughStartDatePage)
+      firstPayDate <- userAnswers.getList(PayDatePage).headOption
+    } yield {
+      firstPayDate.isBefore(startDate)
+    }).getOrElse(false)
+
+  private def hasPartialPayAfter(userAnswers: UserAnswers): Boolean =
+    (for {
+      endDate     <- userAnswers.get(FurloughEndDatePage)
+      lastPayDate <- userAnswers.getList(PayDatePage).lastOption
+    } yield {
+      lastPayDate.isAfter(endDate)
+    }).getOrElse(false)
 
   private def shouldShowVariableGrossPayPage(date: LocalDate) =
     date.isAfter(apr7th2019) || (date.isBefore(apr7th2019) && appConfig.variableJourneyEnabled)

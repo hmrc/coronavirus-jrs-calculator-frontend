@@ -146,20 +146,34 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication {
         navigator.nextPage(LastPayDatePage, NormalMode, userAnswers) mustBe routes.NicCategoryController.onPageLoad(NormalMode)
       }
 
-      "go to PartialPayBeforeFurloughPage after LastPayDatePage if the pay-method is Varies" in {
+      "go to PartialPayBeforeFurloughPage after LastPayDatePage if the pay-method is Varies and first pay is before claim date" in {
         val userAnswers = UserAnswers("id")
           .set(PayQuestionPage, Varies)
+          .get
+          .set(FurloughStartDatePage, LocalDate.of(2020, 3, 15))
+          .get
+          .set(PayDatePage, LocalDate.of(2020, 3, 10), Some(1))
           .get
 
         navigator.nextPage(LastPayDatePage, NormalMode, userAnswers) mustBe routes.PartialPayBeforeFurloughController.onPageLoad()
       }
 
-      "go to PayQuestionPage after LastPayDatePage if the pay-method missing in UserAnswers" in {
+      "go to PartialPayAfterFurloughPage after LastPayDatePage if the pay-method is Varies and last pay is after claim date" in {
         val userAnswers = UserAnswers("id")
           .set(PayQuestionPage, Varies)
           .get
+          .set(FurloughEndDatePage, LocalDate.of(2020, 3, 15))
+          .get
+          .set(PayDatePage, LocalDate.of(2020, 3, 20), Some(1))
+          .get
 
-        navigator.nextPage(LastPayDatePage, NormalMode, userAnswers) mustBe routes.PartialPayBeforeFurloughController.onPageLoad()
+        navigator.nextPage(LastPayDatePage, NormalMode, userAnswers) mustBe routes.PartialPayAfterFurloughController.onPageLoad()
+      }
+
+      "go to PayQuestionPage after LastPayDatePage if the pay-method missing in UserAnswers" in {
+        val userAnswers = UserAnswers("id")
+
+        navigator.nextPage(LastPayDatePage, NormalMode, userAnswers) mustBe routes.PayQuestionController.onPageLoad(NormalMode)
       }
 
       "go from PensionAutoEnrolmentPage to FurloughCalculationsPage" in {
