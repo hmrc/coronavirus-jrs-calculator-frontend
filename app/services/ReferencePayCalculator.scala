@@ -57,17 +57,26 @@ trait ReferencePayCalculator extends PeriodHelper {
     cylbs: Seq[CylbPayment],
     periods: Seq[PeriodWithPaymentDate]) =
     for {
-      period <- periods.zip(cylbs.sliding(2, 1).toList)
+      period        <- periods.zip(cylbs.sliding(2, 1).toList)
+      firstPayment  <- period._2.headOption
+      secondPayment <- period._2.tail.headOption
       nfp = determineNonFurloughPay(period._1.period, nonFurloughPay)
-    } yield {
-      val divisor = cylbDivisor(frequency)
-      val amount =
-        Amount(
-          roundWithMode(
-            ((period._2.head.amount.value / divisor) * 2) + ((period._2.tail.head.amount.value / divisor) * 5),
-            RoundingMode.HALF_UP))
-      PaymentWithPeriod(nfp, amount, period._1, Varies)
-    }
+    } yield buildPayWithPeriod(frequency, period, nfp, firstPayment, secondPayment)
+
+  private def buildPayWithPeriod(
+    frequency: PaymentFrequency,
+    period: (PeriodWithPaymentDate, Seq[CylbPayment]),
+    nfp: Amount,
+    head: CylbPayment,
+    taildHead: CylbPayment) = {
+    val divisor = cylbDivisor(frequency)
+    val amount =
+      roundAmountWithMode(totalFromBothWeeks(head, taildHead, divisor), RoundingMode.HALF_UP)
+    PaymentWithPeriod(nfp, amount, period._1, Varies)
+  }
+
+  private def totalFromBothWeeks(head: CylbPayment, taildHead: CylbPayment, divisor: Int): Amount =
+    Amount(((head.amount.value / divisor) * 2) + ((taildHead.amount.value / divisor) * 5))
 
   private def monthlyCylb(nonFurloughPay: NonFurloughPay, cylbs: Seq[CylbPayment], periods: Seq[PeriodWithPaymentDate]) =
     for {

@@ -12,8 +12,6 @@ import models.PayQuestion.Varies
 import models.PaymentFrequency.{FortNightly, FourWeekly, Weekly}
 import models.{Amount, CylbPayment, FullPeriod, NonFurloughPay, PartialPeriod, PaymentDate, PaymentWithPeriod, Period, PeriodWithPaymentDate}
 
-import scala.collection.immutable
-
 class ReferencePayCalculatorSpec extends SpecBase with CoreDataBuilder {
 
   "calculates reference gross pay for an employee on variable pays" in new ReferencePayCalculator {
