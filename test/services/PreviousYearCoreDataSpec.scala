@@ -7,11 +7,11 @@ package services
 
 import java.time.LocalDate
 
-import base.{PeriodBuilder, SpecBase}
+import base.{CoreDataBuilder, SpecBase}
 import models.PaymentFrequency.{FortNightly, FourWeekly, Weekly}
 import models.Period
 
-class PreviousYearPeriodSpec extends SpecBase with PeriodBuilder {
+class PreviousYearCoreDataSpec extends SpecBase with CoreDataBuilder {
 
   "return previous year date for a given date of this year" in new PreviousYearPeriod {
     val thisYearPayDate = LocalDate.of(2020, 3, 7)

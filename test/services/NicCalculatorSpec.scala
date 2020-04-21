@@ -7,12 +7,12 @@ package services
 
 import java.time.LocalDate
 
-import base.{PeriodBuilder, SpecBase}
+import base.{CoreDataBuilder, SpecBase}
 import models.PaymentFrequency.{FourWeekly, Monthly}
 import models.{Amount, FullPeriod, PartialPeriod, PaymentDate, Period, PeriodBreakdown, PeriodWithPaymentDate}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with PeriodBuilder {
+class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with CoreDataBuilder {
 
   forAll(partialPeriodScenarios) { (frequency, grossPay, furloughPayment, period, paymentDate, expectedGrant) =>
     s"Calculate grant for a partial period with Payment Frequency: $frequency," +
