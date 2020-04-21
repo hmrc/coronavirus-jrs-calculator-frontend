@@ -90,8 +90,13 @@ class Navigator @Inject()(appConfig: FrontendAppConfig) {
     }).getOrElse(routes.ErrorController.internalServerError())
   }
 
+  private val lastYearPayRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
+    ???
+  }
+
   private val idxRoutes: Page => (Int, UserAnswers) => Call = {
-    case PayDatePage => payDateRoutes
+    case PayDatePage     => payDateRoutes
+    case LastYearPayPage => lastYearPayRoutes
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers, idx: Option[Int] = None): Call = mode match {

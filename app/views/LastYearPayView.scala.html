@@ -3,6 +3,8 @@
  *
  *@
 
+@import java.time.LocalDate
+
 @this(
         govukLayout: templates.GovukLayoutWrapper,
         formHelper: FormWithCSRF,
@@ -12,9 +14,9 @@
         button: components.button
 )
 
-@(form: Form[_], idx: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], idx: Int, payDate: LocalDate)(implicit request: Request[_], messages: Messages)
 
-@govukLayout(pageTitle = Some(title(form, "lastYearPay.title"))) {
+@govukLayout(pageTitle = Some(title(form, "lastYearPay.title", titleMessageArgs = Seq(dateToString(payDate))))) {
 
     @formHelper(action = LastYearPayController.onSubmit(idx), 'autoComplete -> "off") {
 
