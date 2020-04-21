@@ -195,13 +195,13 @@ class Navigator @Inject()(appConfig: FrontendAppConfig) extends LastYearPayContr
     }
   }
 
-  private def hasPartialPayBefore(userAnswers: UserAnswers): Boolean =
+  def hasPartialPayBefore(userAnswers: UserAnswers): Boolean =
     getPartialPeriods(userAnswers).exists(isFurloughStart)
 
   private def hasPartialPayAfter(userAnswers: UserAnswers): Boolean =
     getPartialPeriods(userAnswers).exists(isFurloughEnd)
 
-  private def getPartialPeriods(userAnswers: UserAnswers): Seq[PartialPeriod] = {
+  def getPartialPeriods(userAnswers: UserAnswers): Seq[PartialPeriod] = {
     for {
       furloughStart  <- userAnswers.get(FurloughStartDatePage)
       claimPeriodEnd <- userAnswers.get(ClaimPeriodEndPage)

@@ -146,7 +146,7 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication {
         navigator.nextPage(LastPayDatePage, NormalMode, userAnswers) mustBe routes.NicCategoryController.onPageLoad(NormalMode)
       }
 
-      "go to PartialPayBeforeFurloughPage after LastPayDatePage if the pay-method is Varies and first pay is before claim date" in {
+      "go to PartialPayBeforeFurloughPage after LastPayDatePage if the pay-method is Varies and first pay period is partial" in {
         val userAnswers = UserAnswers("id")
           .set(PayQuestionPage, Varies)
           .get
@@ -154,17 +154,33 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication {
           .get
           .set(PayDatePage, LocalDate.of(2020, 3, 10), Some(1))
           .get
+          .set(PayDatePage, LocalDate.of(2020, 4, 10), Some(2))
+          .get
+          .set(PayDatePage, LocalDate.of(2020, 5, 10), Some(3))
+          .get
+          .set(PayDatePage, LocalDate.of(2020, 6, 10), Some(4))
+          .get
+          .set(ClaimPeriodEndPage, LocalDate.of(2020, 5, 15))
+          .get
 
         navigator.nextPage(LastPayDatePage, NormalMode, userAnswers) mustBe routes.PartialPayBeforeFurloughController.onPageLoad()
       }
 
-      "go to PartialPayAfterFurloughPage after LastPayDatePage if the pay-method is Varies and last pay is after claim date" in {
+      "go to PartialPayAfterFurloughPage after LastPayDatePage if the pay-method is Varies and last pay period is partial" in {
         val userAnswers = UserAnswers("id")
           .set(PayQuestionPage, Varies)
           .get
-          .set(FurloughEndDatePage, LocalDate.of(2020, 3, 15))
+          .set(FurloughStartDatePage, LocalDate.of(2020, 3, 10))
           .get
-          .set(PayDatePage, LocalDate.of(2020, 3, 20), Some(1))
+          .set(PayDatePage, LocalDate.of(2020, 3, 9), Some(1))
+          .get
+          .set(PayDatePage, LocalDate.of(2020, 4, 10), Some(2))
+          .get
+          .set(PayDatePage, LocalDate.of(2020, 5, 10), Some(3))
+          .get
+          .set(PayDatePage, LocalDate.of(2020, 6, 10), Some(4))
+          .get
+          .set(ClaimPeriodEndPage, LocalDate.of(2020, 5, 15))
           .get
 
         navigator.nextPage(LastPayDatePage, NormalMode, userAnswers) mustBe routes.PartialPayAfterFurloughController.onPageLoad()
