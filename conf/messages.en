@@ -12,7 +12,7 @@ site.yes = Yes
 site.continue = Continue
 site.startNow = Start now
 site.confirm = Confirm
-site.saveAndContinue = Save and continue
+site.saveAndContinue = Continue
 site.submitAndContinue = Submit and continue
 site.textarea.char_limit = (Limit is {0} characters)
 site.govuk = GOV.UK
@@ -378,7 +378,7 @@ furloughStartDate.error.invalid = Enter a real furlough start date
 furloughStartDate.error.minimum = The furlough start date must be after {0}
 furloughStartDate.error.maximum = The furlough start date must be before {0}
 
-c.title = Was this employee working for you on or before 1 February 2019?
+variableLengthEmployed.title = Was this employee working for you on or before 1 February 2019?
 variableLengthEmployed.heading = Was this employee working for you on or before 1 February 2019?
 variableLengthEmployed.yes = Yes
 variableLengthEmployed.no = No
@@ -456,8 +456,8 @@ lastPayDate.details.p2 = A ‘pay period’ is the period of time that the emplo
 
 somethingWentWrong.button = Start again
 
-lastYearPay.title = LastYearPay
-lastYearPay.heading = LastYearPay
+lastYearPay.title = In 2019, what did this employee get paid on {0}?
+lastYearPay.heading = In 2019, what did this employee get paid on {0}?
 lastYearPay.checkYourAnswersLabel = LastYearPay
 lastYearPay.error.nonNumeric = Enter the salary using numbers
 lastYearPay.error.required = Enter the salary

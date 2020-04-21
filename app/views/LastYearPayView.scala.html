@@ -9,25 +9,27 @@
         govukLayout: templates.GovukLayoutWrapper,
         formHelper: FormWithCSRF,
         errorSummary: components.errorSummary,
-        inputNumber: components.inputNumber,
+        inputCurrency: components.inputCurrency,
         h1: components.h1,
         button: components.button
 )
 
 @(form: Form[_], idx: Int, payDate: LocalDate)(implicit request: Request[_], messages: Messages)
 
-@govukLayout(pageTitle = Some(title(form, "lastYearPay.title", titleMessageArgs = Seq(dateToString(payDate))))) {
+@govukLayout(pageTitle = Some(title(form, "lastYearPay.title", titleMessageArgs = Seq(dateToStringWithoutYear(payDate))))) {
 
     @formHelper(action = LastYearPayController.onSubmit(idx), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
-        @inputNumber(
+        @h1(messages("lastYearPay.heading", dateToStringWithoutYear(payDate)))
+
+        @inputCurrency(
             form,
             id = "value",
             name = "value",
-            label = "lastYearPay.heading",
-            isPageHeading = true,
+            label = "",
+            isPageHeading = false,
             classes = Some("govuk-input--width-10")
         )
 
