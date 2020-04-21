@@ -78,8 +78,8 @@ class PayDateController @Inject()(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, idx, messageDate))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(PayDatePage, value, Some(idx)))
-              _              <- sessionRepository.set(updatedAnswers)
+              updatedAnswers <- Future.fromTry(request.userAnswers.setListWithInvalidation(PayDatePage, value, idx))
+              _ <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(PayDatePage, NormalMode, updatedAnswers, Some(idx)))
         )
     }
