@@ -7,6 +7,7 @@ package controllers
 
 import controllers.actions._
 import forms.LastYearPayFormProvider
+import handlers.LastYearPayControllerRequestHandler
 import javax.inject.Inject
 import models.NormalMode
 import navigation.Navigator
@@ -30,7 +31,7 @@ class LastYearPayController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: LastYearPayView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport {
+    extends FrontendBaseController with I18nSupport with LastYearPayControllerRequestHandler {
 
   val form = formProvider()
 
