@@ -11,12 +11,13 @@ import config.FrontendAppConfig
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.Call
 import controllers.routes
+import handlers.LastYearPayControllerRequestHandler
 import models.PayQuestion.{Regularly, Varies}
 import pages.{PayDatePage, _}
 import models.{UserAnswers, _}
 
 @Singleton
-class Navigator @Inject()(appConfig: FrontendAppConfig) {
+class Navigator @Inject()(appConfig: FrontendAppConfig) extends LastYearPayControllerRequestHandler {
 
   val apr7th2019 = LocalDate.of(2019, 4, 7)
 
@@ -91,7 +92,14 @@ class Navigator @Inject()(appConfig: FrontendAppConfig) {
   }
 
   private val lastYearPayRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
-    ???
+    getPayDates(userAnswers).fold(
+      routes.ErrorController.somethingWentWrong()
+    ) { payDates =>
+      payDates.lift.apply(previousIdx) match {
+        case Some(_) => routes.LastYearPayController.onPageLoad(previousIdx + 1)
+        case None    => routes.NicCategoryController.onPageLoad(NormalMode)
+      }
+    }
   }
 
   private val idxRoutes: Page => (Int, UserAnswers) => Call = {

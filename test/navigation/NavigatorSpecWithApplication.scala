@@ -14,6 +14,7 @@ import models.PayQuestion.{Regularly, Varies}
 import models._
 import pages._
 import play.api.Configuration
+import play.api.libs.json.Json
 
 class NavigatorSpecWithApplication extends SpecBaseWithApplication {
 
@@ -267,6 +268,18 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication {
           NormalMode,
           emptyUserAnswers
         ) mustBe routes.PayDateController.onPageLoad(1)
+      }
+
+      "loop around last year pay if there are more years to ask" in {
+        val userAnswers = Json.parse(variableMonthlyPartial).as[UserAnswers]
+
+        navigator.nextPage(LastYearPayPage, NormalMode, userAnswers, Some(1)) mustBe routes.LastYearPayController.onPageLoad(2)
+      }
+
+      "stop loop around last year pay if there are no more years to ask" in {
+        val userAnswers = Json.parse(variableMonthlyPartial).as[UserAnswers]
+
+        navigator.nextPage(LastYearPayPage, NormalMode, userAnswers, Some(2)) mustBe routes.NicCategoryController.onPageLoad(NormalMode)
       }
     }
 
