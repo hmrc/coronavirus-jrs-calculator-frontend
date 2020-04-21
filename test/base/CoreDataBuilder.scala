@@ -7,7 +7,7 @@ package base
 
 import java.time.LocalDate
 
-import models.{FullPeriod, PartialPeriod, PaymentDate, PaymentWithPeriod, Period, PeriodWithPaymentDate}
+import models.{Amount, FullPeriod, PartialPeriod, PayQuestion, PaymentDate, PaymentWithPeriod, Period, PeriodWithPaymentDate}
 
 trait CoreDataBuilder {
 
@@ -17,7 +17,12 @@ trait CoreDataBuilder {
   def partialPeriod(original: (String, String), partial: (String, String)) =
     PartialPeriod(period(original._1, original._2), period(partial._1, partial._2))
 
-  def paymentWithPeriod(): PaymentWithPeriod = ???
+  def paymentWithPeriod(
+    nonFurloughPay: BigDecimal,
+    furloughPayment: BigDecimal,
+    period: PeriodWithPaymentDate,
+    payQuestion: PayQuestion): PaymentWithPeriod =
+    PaymentWithPeriod(Amount(nonFurloughPay), Amount(furloughPayment), period, payQuestion)
 
   def fullPeriodWithPaymentDate(start: String, end: String, paymentDate: String): PeriodWithPaymentDate =
     PeriodWithPaymentDate(FullPeriod(period(start, end)), PaymentDate(buildLocalDate(periodBuilder(paymentDate))))

@@ -106,8 +106,8 @@ class ReferencePayCalculatorSpec extends SpecBase with CoreDataBuilder {
     val nonFurloughPay = NonFurloughPay(None, None)
 
     val expected = Seq(
-      PaymentWithPeriod(Amount(0.0), Amount(450.00), fullPeriodWithPaymentDate("2020,3,1", "2020,3,7", "2020, 3, 7"), Varies),
-      PaymentWithPeriod(Amount(0.0), Amount(200.00), fullPeriodWithPaymentDate("2020,3,8", "2020,3,14", "2020, 3, 14"), Varies)
+      paymentWithPeriod(0.0, 450.00, fullPeriodWithPaymentDate("2020,3,1", "2020,3,7", "2020, 3, 7"), Varies),
+      paymentWithPeriod(0.0, 200.00, fullPeriodWithPaymentDate("2020,3,8", "2020,3,14", "2020, 3, 14"), Varies)
     )
 
     calculateCylb(nonFurloughPay, Weekly, cylbs, periods) mustBe expected
@@ -128,8 +128,8 @@ class ReferencePayCalculatorSpec extends SpecBase with CoreDataBuilder {
     val nonFurloughPay = NonFurloughPay(None, None)
 
     val expected = Seq(
-      PaymentWithPeriod(Amount(0.0), Amount(450.00), fullPeriodWithPaymentDate("2020,3,1", "2020,3,14", "2020, 3, 14"), Varies),
-      PaymentWithPeriod(Amount(0.0), Amount(200.00), fullPeriodWithPaymentDate("2020,3,15", "2020,3,28", "2020, 3, 28"), Varies)
+      paymentWithPeriod(0.0, 450.00, fullPeriodWithPaymentDate("2020,3,1", "2020,3,14", "2020, 3, 14"), Varies),
+      paymentWithPeriod(0.0, 200.00, fullPeriodWithPaymentDate("2020,3,15", "2020,3,28", "2020, 3, 28"), Varies)
     )
 
     calculateCylb(nonFurloughPay, FortNightly, cylbs, periods) mustBe expected
