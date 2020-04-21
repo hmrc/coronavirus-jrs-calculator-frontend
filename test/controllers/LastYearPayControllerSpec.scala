@@ -32,7 +32,7 @@ class LastYearPayControllerSpec extends SpecBaseWithApplication with MockitoSuga
 
   val validAnswer = Salary(BigDecimal(100))
 
-  lazy val lastYearPayRoute = routes.LastYearPayController.onPageLoad().url
+  lazy val lastYearPayRoute = routes.LastYearPayController.onPageLoad(1).url
 
   lazy val getRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, lastYearPayRoute).withCSRFToken
@@ -51,7 +51,7 @@ class LastYearPayControllerSpec extends SpecBaseWithApplication with MockitoSuga
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode)(getRequest, messages).toString
+        view(form, 1)(getRequest, messages).toString
 
       application.stop()
     }
@@ -69,7 +69,7 @@ class LastYearPayControllerSpec extends SpecBaseWithApplication with MockitoSuga
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), NormalMode)(getRequest, messages).toString
+        view(form.fill(validAnswer), 1)(getRequest, messages).toString
 
       application.stop()
     }
@@ -120,7 +120,7 @@ class LastYearPayControllerSpec extends SpecBaseWithApplication with MockitoSuga
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
+        view(boundForm, 1)(request, messages).toString
 
       application.stop()
     }

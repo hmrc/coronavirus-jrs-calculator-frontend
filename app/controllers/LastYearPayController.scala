@@ -8,7 +8,7 @@ package controllers
 import controllers.actions._
 import forms.LastYearPayFormProvider
 import javax.inject.Inject
-import models.Mode
+import models.NormalMode
 import navigation.Navigator
 import pages.LastYearPayPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -34,25 +34,25 @@ class LastYearPayController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers.get(LastYearPayPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
 
-    Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, idx))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, idx))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(LastYearPayPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(LastYearPayPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(LastYearPayPage, NormalMode, updatedAnswers, Some(idx)))
       )
   }
 }
