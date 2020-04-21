@@ -11,9 +11,9 @@ import controllers.actions._
 import forms.LastYearPayFormProvider
 import handlers.LastYearPayControllerRequestHandler
 import javax.inject.Inject
-import models.NormalMode
+import models.{NormalMode, PaymentFrequency}
 import navigation.Navigator
-import pages.LastYearPayPage
+import pages.{LastYearPayPage, PaymentFrequencyPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
@@ -47,7 +47,9 @@ class LastYearPayController @Inject()(
           case Some(value) => form.fill(value)
         }
 
-        Future.successful(Ok(view(preparedForm, idx, date)))
+        val isMonthlyFrequency = request.userAnswers.get(PaymentFrequencyPage).contains(PaymentFrequency.Monthly)
+
+        Future.successful(Ok(view(preparedForm, idx, date, isMonthlyFrequency)))
       }
     }
   }
@@ -63,10 +65,11 @@ class LastYearPayController @Inject()(
       Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
     ) { payDates =>
       withValidPayDate(payDates, idx) { date =>
+        val isMonthlyFrequency = request.userAnswers.get(PaymentFrequencyPage).contains(PaymentFrequency.Monthly)
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, idx, date))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, idx, date, isMonthlyFrequency))),
             value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(LastYearPayPage, value, Some(idx)))

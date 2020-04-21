@@ -458,6 +458,8 @@ somethingWentWrong.button = Start again
 
 lastYearPay.title = In 2019, what did this employee get paid on {0}?
 lastYearPay.heading = In 2019, what did this employee get paid on {0}?
+lastYearPay.title.monthly = In 2019, what did this employee get paid in {0}?
+lastYearPay.heading.monthly = In 2019, what did this employee get paid in {0}?
 lastYearPay.checkYourAnswersLabel = LastYearPay
 lastYearPay.error.nonNumeric = Enter the salary using numbers
 lastYearPay.error.required = Enter the salary

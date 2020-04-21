@@ -112,7 +112,7 @@ class LastYearPayControllerSpec extends SpecBaseWithApplication with MockitoSuga
 
       val view = application.injector.instanceOf[LastYearPayView]
 
-      val expectedView = view(form, 1, LocalDate.of(2019, 3, 20))(request, messages).toString
+      val expectedView = view(form, 1, LocalDate.of(2019, 3, 20), true)(request, messages).toString
 
       status(result) mustEqual OK
 
@@ -136,7 +136,7 @@ class LastYearPayControllerSpec extends SpecBaseWithApplication with MockitoSuga
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), 1, LocalDate.of(2019, 3, 20))(request, messages).toString
+        view(form.fill(validAnswer), 1, LocalDate.of(2019, 3, 20), true)(request, messages).toString
 
       application.stop()
     }
@@ -245,7 +245,7 @@ class LastYearPayControllerSpec extends SpecBaseWithApplication with MockitoSuga
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, 1, LocalDate.of(2019, 3, 1))(request, messages).toString
+        view(boundForm, 1, LocalDate.of(2019, 3, 20), true)(request, messages).toString
 
       application.stop()
     }
