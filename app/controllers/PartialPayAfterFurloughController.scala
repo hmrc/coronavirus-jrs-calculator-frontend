@@ -55,7 +55,7 @@ class PartialPayAfterFurloughController @Inject()(
                 routes.PartialPayAfterFurloughController.onSubmit()
               ))
 
-          case _ => Redirect(routes.NicCategoryController.onPageLoad(NormalMode))
+          case _ => Redirect(navigator.nextPage(PartialPayAfterFurloughPage, NormalMode, request.userAnswers))
         }
 
       case (_, None) =>
