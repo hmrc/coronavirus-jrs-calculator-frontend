@@ -48,8 +48,10 @@ class DataExtractorSpec extends SpecBase with CoreTestData with CoreDataBuilder 
   }
 
   "Extract prior furlough period from user answers" in new DataExtractor {
-    val userAnswers = Json.parse(userAnswersJson(employeeStartDate = "2020-12-1")).as[UserAnswers]
-    val expected = Period(LocalDate.of(2020, 12, 1), LocalDate.of(2020, 2, 29))
+    val userAnswers = Json.parse(userAnswersJson(employeeStartDate = "2020-12-01")).as[UserAnswers]
+    val expected = period("2020, 12, 1", "2020, 2, 29")
+
+    extractPriorFurloughPeriod(userAnswers) mustBe Some(expected)
   }
 
   "Extract variable gross pay when payQuestion answer is Varies" in new DataExtractor {

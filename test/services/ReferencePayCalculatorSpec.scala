@@ -11,7 +11,7 @@ import base.{CoreDataBuilder, SpecBase}
 import handlers.DataExtractor
 import models.PayQuestion.Varies
 import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
-import models.{Amount, FullPeriod, NonFurloughPay, PartialPeriod, PaymentDate, PaymentWithPeriod, Period, PeriodWithPaymentDate, VariableLengthEmployed}
+import models.{Amount, CylbEligibility, FullPeriod, NonFurloughPay, PartialPeriod, PaymentDate, PaymentWithPeriod, Period, PeriodWithPaymentDate, VariableLengthEmployed}
 
 class ReferencePayCalculatorSpec extends SpecBase with CoreDataBuilder {
 
@@ -140,8 +140,8 @@ class ReferencePayCalculatorSpec extends SpecBase with CoreDataBuilder {
   "defines a variable calculation that requires cylb" in new DataExtractor {
     import VariableLengthEmployed._
 
-    cylbCalculationPredicate(Yes, LocalDate.now) mustBe true
-    cylbCalculationPredicate(No, LocalDate.of(2019, 4, 5)) mustBe true
-    cylbCalculationPredicate(No, LocalDate.of(2019, 4, 6)) mustBe false
+    cylbCalculationPredicate(Yes, LocalDate.now) mustBe CylbEligibility(true)
+    cylbCalculationPredicate(No, LocalDate.of(2019, 4, 5)) mustBe CylbEligibility(true)
+    cylbCalculationPredicate(No, LocalDate.of(2019, 4, 6)) mustBe CylbEligibility(false)
   }
 }

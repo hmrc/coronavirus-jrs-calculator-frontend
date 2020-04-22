@@ -77,7 +77,7 @@ trait DataExtractor extends ReferencePayCalculator {
       cylbs = userAnswers.getList(LastYearPayPage).map(v => Amount(v.amount))
       empolyeeStartDate = priorFurloughPeriod.start
     } yield {
-      if (cylbCalculationPredicate(variableLength, empolyeeStartDate)) cylbs
+      if (cylbCalculationPredicate(variableLength, empolyeeStartDate).eligible) cylbs
       else Seq.empty
     }
     extractVariablePayments(userAnswers, periodsWithPayDay, res.fold(Seq.empty[Amount])(v => v), data.paymentFrequency)

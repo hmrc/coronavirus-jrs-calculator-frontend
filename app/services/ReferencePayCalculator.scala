@@ -9,7 +9,7 @@ import java.time.LocalDate
 
 import models.PayQuestion.Varies
 import models.PaymentFrequency.{Monthly, OperatorKey, _}
-import models.{Amount, Divider, FullPeriod, Multiplier, NonFurloughPay, PartialPeriod, PaymentFrequency, PaymentWithPeriod, Period, PeriodWithPaymentDate, Periods, VariableLengthEmployed}
+import models.{Amount, CylbEligibility, Divider, FullPeriod, Multiplier, NonFurloughPay, PartialPeriod, PaymentFrequency, PaymentWithPeriod, Period, PeriodWithPaymentDate, Periods, VariableLengthEmployed}
 import utils.AmountRounding._
 
 import scala.math.BigDecimal.RoundingMode
@@ -32,8 +32,8 @@ trait ReferencePayCalculator extends PeriodHelper {
       greaterGrossPay(calculateCylb(nonFurloughPay, frequency, cylbs, afterFurloughPayPeriod), avg)
   }
 
-  def cylbCalculationPredicate(variableLength: VariableLengthEmployed, employeeStartDate: LocalDate): Boolean =
-    variableLength == VariableLengthEmployed.Yes || employeeStartDate.isBefore(LocalDate.of(2019, 4, 6))
+  def cylbCalculationPredicate(variableLength: VariableLengthEmployed, employeeStartDate: LocalDate): CylbEligibility =
+    CylbEligibility(variableLength == VariableLengthEmployed.Yes || employeeStartDate.isBefore(LocalDate.of(2019, 4, 6)))
 
   private def calculateAveragePay(
     nonFurloughPay: NonFurloughPay,
