@@ -90,7 +90,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig) extends LastYearPayContr
         .fold(
           claimEndDate.minusDays(1)
         ) { furloughEndDate =>
-          earliestOf(claimEndDate.minusDays(1), furloughEndDate)
+          earliestOf(claimEndDate.minusDays(1), furloughEndDate.minusDays(1))
         }
 
       if (lastPayDate.isAfter(endDate)) {
