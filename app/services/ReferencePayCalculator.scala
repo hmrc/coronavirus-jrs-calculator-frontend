@@ -26,19 +26,10 @@ trait ReferencePayCalculator extends PeriodHelper {
     frequency: PaymentFrequency): Seq[PaymentWithPeriod] = {
     val avg: Seq[PaymentWithPeriod] =
       afterFurloughPayPeriod.map(period => calculateAveragePay(nonFurloughPay, priorFurloughPeriod, period, amount))
-    addCylbToCalculation(nonFurloughPay, frequency, cylbs, afterFurloughPayPeriod, avg)
-  }
 
-  def addCylbToCalculation(
-    nonFurloughPay: NonFurloughPay,
-    frequency: PaymentFrequency,
-    cylbs: Seq[Amount],
-    periods: Seq[PeriodWithPaymentDate],
-    avg: Seq[PaymentWithPeriod]): Seq[PaymentWithPeriod] = {
-
-    val cylb: Seq[PaymentWithPeriod] = calculateCylb(nonFurloughPay, frequency, cylbs, periods)
-
-    if (cylb.isEmpty) avg else greaterGrossPay(cylb, avg)
+    if (cylbs.isEmpty) avg
+    else
+      greaterGrossPay(calculateCylb(nonFurloughPay, frequency, cylbs, afterFurloughPayPeriod), avg)
   }
 
   def cylbCalculationPredicate(variableLength: VariableLengthEmployed, employeeStartDate: LocalDate): Boolean =
