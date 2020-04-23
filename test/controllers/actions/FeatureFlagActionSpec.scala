@@ -6,7 +6,7 @@
 package controllers.actions
 
 import base.SpecBaseWithApplication
-import controllers.actions.FeatureFlagKey.{TopupJourneyFlag, VariableJourneyFlag}
+import controllers.actions.FeatureFlag.{TopupJourneyFlag, VariableJourneyFlag}
 import controllers.routes
 import play.api.mvc.Results
 import play.api.test.Helpers._

@@ -6,7 +6,7 @@
 package controllers
 
 import config.FrontendAppConfig
-import controllers.actions.FeatureFlagKey.VariableJourneyFlag
+import controllers.actions.FeatureFlag.VariableJourneyFlag
 import controllers.actions._
 import forms.VariableGrossPayFormProvider
 import handlers.ErrorHandler

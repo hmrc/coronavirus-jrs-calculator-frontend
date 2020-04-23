@@ -9,13 +9,13 @@ import com.google.inject.Inject
 import controllers.routes
 import models.requests.IdentifierRequest
 import play.api.Configuration
-import play.api.mvc.Results.Redirect
+import play.api.mvc.Results.{Redirect, _}
 import play.api.mvc.{ActionFilter, Call, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class FeatureFlagAction(
-  maybeFlag: Option[FeatureFlagKey],
+  maybeFlag: Option[FeatureFlag],
   configuration: Configuration,
   implicit protected val executionContext: ExecutionContext
 ) extends ActionFilter[IdentifierRequest] {
@@ -25,37 +25,39 @@ class FeatureFlagAction(
         Future.successful(if (configuration.getOptional[Boolean](flag.key).getOrElse(false)) {
           None
         } else {
-          Some(Redirect(flag.redirectRoute))
+          flag match {
+            case FeatureFlagKeyWithRedirect(_, redirectRoute) => Some(Redirect(redirectRoute))
+            case FeatureFlagWith404(_)                        => Some(NotFound)
+          }
         }))
       .getOrElse(Future.successful(None))
 }
 
 trait FeatureFlagActionProvider {
-  def apply(flag: Option[FeatureFlagKey]): ActionFilter[IdentifierRequest]
+  def apply(flag: Option[FeatureFlag]): ActionFilter[IdentifierRequest]
   def apply(): ActionFilter[IdentifierRequest] = apply(None)
-  def apply(flag: FeatureFlagKey): ActionFilter[IdentifierRequest] = apply(Some(flag))
+  def apply(flag: FeatureFlag): ActionFilter[IdentifierRequest] = apply(Some(flag))
 }
 
 class FeatureFlagActionProviderImpl @Inject()(configuration: Configuration, ec: ExecutionContext) extends FeatureFlagActionProvider {
-  override def apply(flag: Option[FeatureFlagKey] = None): ActionFilter[IdentifierRequest] =
+  override def apply(flag: Option[FeatureFlag] = None): ActionFilter[IdentifierRequest] =
     new FeatureFlagAction(flag, configuration, ec)
 }
 
-sealed trait FeatureFlagKey {
+sealed trait FeatureFlag {
   def key: String
-  def redirectRoute: Call
 }
 
-object FeatureFlagKey {
+final case class FeatureFlagKeyWithRedirect(key: String, redirectRoute: Call) extends FeatureFlag
+final case class FeatureFlagWith404(key: String) extends FeatureFlag
 
-  case object VariableJourneyFlag extends FeatureFlagKey {
-    val key = "variable.journey.enabled"
-    val redirectRoute = routes.ComingSoonController.onPageLoad()
-  }
-
-  case object TopupJourneyFlag extends FeatureFlagKey {
-    val key = "topup.journey.enabled"
-    val redirectRoute = routes.ComingSoonController.onPageLoad(showCalculateTopupsLink = true)
-  }
-
+object FeatureFlag {
+  lazy val VariableJourneyFlag = FeatureFlagKeyWithRedirect(
+    "variable.journey.enabled",
+    routes.ComingSoonController.onPageLoad()
+  )
+  lazy val TopupJourneyFlag = FeatureFlagKeyWithRedirect(
+    "topup.journey.enabled",
+    routes.ComingSoonController.onPageLoad(showCalculateTopupsLink = true)
+  )
 }
