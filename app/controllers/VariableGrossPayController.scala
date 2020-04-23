@@ -26,7 +26,7 @@ class VariableGrossPayController @Inject()(
   sessionRepository: SessionRepository,
   navigator: Navigator,
   identify: IdentifierAction,
-  feature: FeatureFlagActionProviderImpl,
+  feature: FeatureFlagActionProvider,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   formProvider: VariableGrossPayFormProvider,
