@@ -20,7 +20,7 @@ trait PreviousYearPeriod extends PeriodHelper {
   private val dividers: Map[PaymentFrequency, Int] = Map(
     Weekly      -> 7,
     FortNightly -> 14,
-    FourWeekly  -> 28,
+    FourWeekly  -> 28
   )
 
   def operatorsEnhanced(paymentFrequency: PaymentFrequency, period: Periods): CylbOperators =
