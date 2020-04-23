@@ -5,7 +5,7 @@
 
 package controllers.actions
 
-import com.google.inject.Inject
+import com.google.inject.{Inject, Singleton}
 import controllers.routes
 import models.requests.IdentifierRequest
 import play.api.Configuration
@@ -22,7 +22,7 @@ class FeatureFlagAction(
   override protected def filter[A](request: IdentifierRequest[A]): Future[Option[Result]] =
     maybeFlag
       .map(flag =>
-        Future.successful(if (configuration.getOptional[Boolean](flag.key).getOrElse(false)) {
+        Future.successful(if (FeatureFlag.isEnabled(flag, configuration)) {
           None
         } else {
           flag match {
@@ -60,4 +60,14 @@ object FeatureFlag {
     "topup.journey.enabled",
     routes.ComingSoonController.onPageLoad(showCalculateTopupsLink = true)
   )
+
+  def isEnabled(flag: FeatureFlag, configuration: Configuration): Boolean =
+    configuration.getOptional[Boolean](flag.key).getOrElse(false)
+}
+
+@Singleton
+class FeatureFlagHelper @Inject()(configuration: Configuration) {
+
+  def apply(flag: FeatureFlag): Boolean = FeatureFlag.isEnabled(flag, configuration)
+
 }
