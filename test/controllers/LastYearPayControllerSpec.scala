@@ -60,7 +60,7 @@ class LastYearPayControllerSpec extends SpecBaseWithApplication with MockitoSuga
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result) mustEqual Some(routes.ErrorController.somethingWentWrong().url)
+      redirectLocation(result).value mustEqual routes.ErrorController.somethingWentWrong().url
 
       application.stop()
     }
@@ -74,7 +74,7 @@ class LastYearPayControllerSpec extends SpecBaseWithApplication with MockitoSuga
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result) mustEqual Some(routes.ErrorController.somethingWentWrong().url)
+        redirectLocation(result).value mustEqual routes.ErrorController.somethingWentWrong().url
 
         application.stop()
       }
@@ -86,7 +86,7 @@ class LastYearPayControllerSpec extends SpecBaseWithApplication with MockitoSuga
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result) mustEqual Some(routes.ErrorController.somethingWentWrong().url)
+        redirectLocation(result).value mustEqual routes.ErrorController.somethingWentWrong().url
 
         application.stop()
       }
@@ -98,7 +98,7 @@ class LastYearPayControllerSpec extends SpecBaseWithApplication with MockitoSuga
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result) mustEqual Some(routes.ErrorController.somethingWentWrong().url)
+        redirectLocation(result).value mustEqual routes.ErrorController.somethingWentWrong().url
 
         application.stop()
       }
