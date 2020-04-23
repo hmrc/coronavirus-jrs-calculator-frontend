@@ -34,11 +34,14 @@ trait PeriodHelper {
   def periodDaysCount(period: Period): Int =
     (ChronoUnit.DAYS.between(period.start, period.end) + 1).toInt
 
-  def endDateOrTaxYearEnd(payPeriod: Period): Period = {
-    val taxYearEnd = payPeriod.end.withMonth(4).withDayOfMonth(5)
-    val newEnd = if (taxYearEnd.isBefore(payPeriod.end)) taxYearEnd else payPeriod.end
+  def endDateOrTaxYearEnd(period: Period): Period = {
+    val taxYearStart = LocalDate.of(2019, 4, 6)
+    val start = if (period.start.isBefore(taxYearStart)) taxYearStart else period.start
 
-    payPeriod.copy(end = newEnd)
+    val taxYearEnd = LocalDate.of(2020, 4, 5)
+    val end = if (taxYearEnd.isBefore(period.end)) taxYearEnd else period.end
+
+    Period(start, end)
   }
 
   def isFurloughStart(period: PartialPeriod) =
