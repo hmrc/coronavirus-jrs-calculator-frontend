@@ -7,14 +7,19 @@ package services
 
 import java.time.LocalDate
 
-import models.{CylbOperators, FullPeriod, PartialPeriod, PaymentFrequency, Periods}
+import models.{CylbOperators, FullPeriod, PartialPeriod, PaymentFrequency, PeriodWithPaymentDate, Periods}
 import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
 
 trait PreviousYearPeriod extends PeriodHelper {
 
-  def previousYearPayDate(paymentFrequency: PaymentFrequency, payDateThisYear: LocalDate): Seq[LocalDate] = paymentFrequency match {
-    case Monthly => Seq(payDateThisYear.minusYears(1))
-    case _       => calculateDatesForPreviousYear(paymentFrequency, payDateThisYear)
+  def previousYearPayDate(paymentFrequency: PaymentFrequency, withPaymentDate: PeriodWithPaymentDate): Seq[LocalDate] = {
+    val cylbOperators = operatorsEnhanced(paymentFrequency, withPaymentDate.period)
+
+    cylbOperators match {
+      case CylbOperators(_, 0, _) => Seq(lastYear(paymentFrequency, withPaymentDate.paymentDate.value))
+      case CylbOperators(_, _, 0) => Seq(dateBefore(paymentFrequency, lastYear(paymentFrequency, withPaymentDate.paymentDate.value)))
+      case _                      => calculateDatesForPreviousYear(paymentFrequency, withPaymentDate.paymentDate.value)
+    }
   }
 
   private val dividers: Map[PaymentFrequency, Int] = Map(
@@ -51,16 +56,23 @@ trait PreviousYearPeriod extends PeriodHelper {
       CylbOperators(dividers(frequency), 1, periodDaysCount(p.partial) - 1)
 
   private def calculateDatesForPreviousYear(paymentFrequency: PaymentFrequency, payDateThisYear: LocalDate): Seq[LocalDate] = {
-    val dateAfter = payDateThisYear.minusDays(364)
+    val payDateTwo = lastYear(paymentFrequency, payDateThisYear)
+    val payDateOne = dateBefore(paymentFrequency, payDateTwo)
 
-    val dateBefore = paymentFrequency match {
+    Seq(payDateOne, payDateTwo)
+  }
+
+  private def dateBefore(paymentFrequency: PaymentFrequency, dateAfter: LocalDate) =
+    paymentFrequency match {
       case Weekly      => dateAfter.minusDays(7)
       case FortNightly => dateAfter.minusDays(14)
       case FourWeekly  => dateAfter.minusDays(28)
     }
 
-    val dateBeforeAdjusted = if (dateBefore.isBefore(LocalDate.of(2019, 3, 1))) dateBefore.plusDays(1) else dateBefore
-
-    Seq(dateBeforeAdjusted, dateAfter)
+  private def lastYear(paymentFrequency: PaymentFrequency, payDateThisYear: LocalDate): LocalDate = paymentFrequency match {
+    case Monthly => payDateThisYear.minusYears(1)
+    case _ =>
+      val date = payDateThisYear.minusDays(364)
+      if (date.isBefore(LocalDate.of(2019, 3, 1))) date.plusDays(1) else date
   }
 }
