@@ -93,7 +93,7 @@ class VariableGrossPayControllerSpec extends SpecBaseWithApplication with Mockit
 
     "return Not_Found if the feature is disabled" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), false)
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), Map("variable.journey.enabled" -> false))
         .build()
 
       val result = route(application, getRequest).value
@@ -132,7 +132,7 @@ class VariableGrossPayControllerSpec extends SpecBaseWithApplication with Mockit
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers), false)
+        applicationBuilder(userAnswers = Some(userAnswers), Map("variable.journey.enabled" -> false))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
