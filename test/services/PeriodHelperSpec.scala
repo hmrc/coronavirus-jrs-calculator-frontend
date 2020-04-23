@@ -7,12 +7,12 @@ package services
 
 import java.time.LocalDate
 
-import base.SpecBase
+import base.{CoreDataBuilder, SpecBase}
 import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
 import models.{FullPeriod, PartialPeriod, PaymentDate, Period, PeriodWithPaymentDate, Periods}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks {
+class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreDataBuilder {
 
   "For a given list of pay period end dates, should return a List[LocalDate] in ascending order" in new PeriodHelper {
     val unsortedEndDates: List[LocalDate] = List(LocalDate.of(2020, 3, 20), LocalDate.of(2020, 3, 18), LocalDate.of(2020, 3, 19))
@@ -125,6 +125,14 @@ class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks {
 
       assignPayDates(frequency, periods, lastPeriodPayDate) map (_.paymentDate) mustBe expected
     }
+  }
+
+  "Determine the full or partial period" in new PeriodHelper {
+    val furloughPeriod = period("2020,3,1", "2020,3,31")
+    val aPeriod = period("2020,2,20", "2020,3,20")
+
+    fullOrPartialPeriod(aPeriod, furloughPeriod) mustBe partialPeriod("2020,2,20" -> "2020,3,20", "2020,3,1" -> "2020,3,20")
+    fullOrPartialPeriod(furloughPeriod, furloughPeriod) mustBe fullPeriod("2020,3,1", "2020,3,31")
   }
 
   private lazy val payDateScenarios = Table(
