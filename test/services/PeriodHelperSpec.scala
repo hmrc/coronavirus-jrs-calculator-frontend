@@ -132,7 +132,7 @@ class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreD
     val periodOne = period("2020,2,20", "2020,3,20")
     val periodTwo = period("2020,3,20", "2020,4,20")
 
-    fullOrPartialPeriod(periodOne, furloughPeriod) mustBe partialPeriod("2020,2,20" -> "2020,3,20", "2020,3,1" -> "2020,3,20")
+    fullOrPartialPeriod(periodOne, furloughPeriod) mustBe partialPeriod("2020,2,20" -> "2020,3,20", "2020,3,1"  -> "2020,3,20")
     fullOrPartialPeriod(periodTwo, furloughPeriod) mustBe partialPeriod("2020,3,20" -> "2020,4,20", "2020,3,20" -> "2020,3,31")
     fullOrPartialPeriod(furloughPeriod, furloughPeriod) mustBe fullPeriod("2020,3,1", "2020,3,31")
   }
