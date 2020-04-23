@@ -18,6 +18,10 @@ class PreviousYearPeriodSpec extends SpecBase with CoreDataBuilder {
     operatorsEnhanced(Weekly, partialPeriod("2020,3,1" -> "2020,3,7", "2020,3,4" -> "2020,3,7")) mustBe CylbOperators(7, 0, 4)
     operatorsEnhanced(Weekly, partialPeriod("2020,3,1" -> "2020,3,7", "2020,3,2" -> "2020,3,7")) mustBe CylbOperators(7, 1, 5)
 
+    //Furlough ends
+    operatorsEnhanced(Weekly, partialPeriod("2020,3,1" -> "2020,3,7", "2020,3,1" -> "2020,3,6")) mustBe CylbOperators(7, 2, 4)
+    operatorsEnhanced(Weekly, partialPeriod("2020,3,1" -> "2020,3,7", "2020,3,1" -> "2020,3,2")) mustBe CylbOperators(7, 2, 0)
+
     operatorsEnhanced(FortNightly, fullPeriod("2020,3,1", "2020,3,14")) mustBe CylbOperators(14, 2, 12)
     operatorsEnhanced(FortNightly, partialPeriod("2020,3,1" -> "2020,3,14", "2020,3,3" -> "2020,3,14")) mustBe CylbOperators(14, 0, 12)
     operatorsEnhanced(FortNightly, partialPeriod("2020,3,1" -> "2020,3,14", "2020,3,5" -> "2020,3,14")) mustBe CylbOperators(14, 0, 10)
