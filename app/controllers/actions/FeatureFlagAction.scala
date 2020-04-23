@@ -32,6 +32,8 @@ class FeatureFlagAction(
 
 trait FeatureFlagActionProvider {
   def apply(flag: Option[FeatureFlagKey]): ActionFilter[IdentifierRequest]
+  def apply(): ActionFilter[IdentifierRequest] = apply(None)
+  def apply(flag: FeatureFlagKey): ActionFilter[IdentifierRequest] = apply(Some(flag))
 }
 
 class FeatureFlagActionProviderImpl @Inject()(configuration: Configuration, ec: ExecutionContext) extends FeatureFlagActionProvider {
