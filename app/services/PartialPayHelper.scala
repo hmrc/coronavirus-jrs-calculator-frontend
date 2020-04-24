@@ -33,4 +33,15 @@ trait PartialPayHelper extends PeriodHelper {
     }
   }.getOrElse(Seq.empty)
 
+  def getPeriodRemainder(partialPeriod: PartialPeriod): Period = {
+    val original = partialPeriod.original
+    val partial = partialPeriod.partial
+
+    if (partial.start.isAfter(original.start)) {
+      Period(original.start, partial.start.minusDays(1))
+    } else {
+      Period(partial.end.plusDays(1), original.end)
+    }
+  }
+
 }

@@ -88,7 +88,7 @@ class PartialPayBeforeFurloughControllerSpec extends SpecBaseWithApplication wit
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, LocalDate.of(2020, 3, 27), LocalDate.of(2020, 3, 29), routes.PartialPayBeforeFurloughController.onSubmit())(r, messages).toString
+        view(form, LocalDate.of(2020, 3, 23), LocalDate.of(2020, 3, 26), routes.PartialPayBeforeFurloughController.onSubmit())(r, messages).toString
 
       application.stop()
     }
@@ -110,8 +110,8 @@ class PartialPayBeforeFurloughControllerSpec extends SpecBaseWithApplication wit
       contentAsString(result) mustEqual
         view(
           form.fill(FurloughPartialPay(111)),
-          LocalDate.of(2020, 3, 27),
-          LocalDate.of(2020, 3, 29),
+          LocalDate.of(2020, 3, 23),
+          LocalDate.of(2020, 3, 26),
           routes.PartialPayBeforeFurloughController.onSubmit()
         )(r, messages).toString
 
@@ -254,7 +254,7 @@ class PartialPayBeforeFurloughControllerSpec extends SpecBaseWithApplication wit
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, LocalDate.of(2020, 3, 27), LocalDate.of(2020, 3, 29), routes.PartialPayBeforeFurloughController.onSubmit())(
+        view(boundForm, LocalDate.of(2020, 3, 23), LocalDate.of(2020, 3, 26), routes.PartialPayBeforeFurloughController.onSubmit())(
           request,
           messages).toString
 

@@ -42,9 +42,10 @@ class PartialPayBeforeFurloughController @Inject()(
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     getPartialPeriods(request.userAnswers)
       .find(isFurloughStart)
+      .map(getPeriodRemainder)
       .fold(
         Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-      ) { partialPeriodBefore =>
+      ) { beforeFurlough =>
         val preparedForm = request.userAnswers.get(PartialPayBeforeFurloughPage) match {
           case None        => form
           case Some(value) => form.fill(value)
@@ -54,8 +55,8 @@ class PartialPayBeforeFurloughController @Inject()(
           Ok(
             view(
               preparedForm,
-              partialPeriodBefore.partial.start,
-              partialPeriodBefore.partial.end,
+              beforeFurlough.start,
+              beforeFurlough.end,
               routes.PartialPayBeforeFurloughController.onSubmit()
             )))
       }
@@ -64,6 +65,7 @@ class PartialPayBeforeFurloughController @Inject()(
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     getPartialPeriods(request.userAnswers)
       .find(isFurloughStart)
+      .map(getPeriodRemainder)
       .fold(
         Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
       ) { partialPeriodBefore =>
@@ -75,8 +77,8 @@ class PartialPayBeforeFurloughController @Inject()(
                 BadRequest(
                   view(
                     formWithErrors,
-                    partialPeriodBefore.partial.start,
-                    partialPeriodBefore.partial.end,
+                    partialPeriodBefore.start,
+                    partialPeriodBefore.end,
                     routes.PartialPayBeforeFurloughController.onSubmit()
                   ))), { value =>
               for {
