@@ -9,7 +9,7 @@ import java.time.LocalDate
 
 import base.{CoreDataBuilder, SpecBase}
 import models.{Period, UserAnswers}
-import pages.{ClaimPeriodEndPage, FurloughEndDatePage, FurloughStartDatePage}
+import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage, FurloughEndDatePage, FurloughStartDatePage}
 
 class FurloughPeriodHelperSpec extends SpecBase with CoreDataBuilder {
 
@@ -101,6 +101,28 @@ class FurloughPeriodHelperSpec extends SpecBase with CoreDataBuilder {
       val claimEnd = LocalDate.of(2020, 5, 1)
 
       extractRelevantFurloughPeriod(furloughStart, Some(furloughEnd), claimStart, claimEnd) mustBe Period(furloughStart, furloughEnd)
+    }
+
+    "pull values from user answers" when {
+
+      "furlough end is not set" in new FurloughPeriodHelper {
+        val userAnswers = UserAnswers("id")
+          .setValue(FurloughStartDatePage, LocalDate.of(2020, 4, 2))
+          .setValue(ClaimPeriodStartPage, LocalDate.of(2020, 4, 1))
+          .setValue(ClaimPeriodEndPage, LocalDate.of(2020, 5, 1))
+
+        extractFurloughPeriod(userAnswers).value mustBe Period(LocalDate.of(2020, 4, 2), LocalDate.of(2020, 5, 1))
+      }
+
+      "furlough end is set" in new FurloughPeriodHelper {
+        val userAnswers = UserAnswers("id")
+          .setValue(FurloughStartDatePage, LocalDate.of(2020, 4, 2))
+          .setValue(FurloughEndDatePage, LocalDate.of(2020, 4, 25))
+          .setValue(ClaimPeriodStartPage, LocalDate.of(2020, 4, 1))
+          .setValue(ClaimPeriodEndPage, LocalDate.of(2020, 5, 1))
+
+        extractFurloughPeriod(userAnswers).value mustBe Period(LocalDate.of(2020, 4, 2), LocalDate.of(2020, 4, 25))
+      }
     }
 
   }
