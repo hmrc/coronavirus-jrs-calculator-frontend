@@ -166,6 +166,13 @@ payFrequency.monthly = Monthly
 payFrequency.checkYourAnswersLabel = How often do you pay this employee?
 payFrequency.error.required = Select one of the options below
 
+# payments made at the discretion of the employer or a client - where the employer or client was under no contractual obligation to pay, including:
+# any tips, including those distributed through troncs
+# discretionary bonuses
+# discretionary commission payments
+# non-cash payments
+# non-monetary benefits like benefits in kind (such as a company car) and salary sacrifice schemes (including pension contributions) that reduce an employees’ taxable pay
+
 rootPage.title = Coronavirus Job Retention Scheme calculator
 rootPage.heading = Coronavirus Job Retention Scheme calculator
 rootPage.p1 = Employers can make a claim through the Job Retention Scheme if they have put their employees on temporary leave (furlough) because of the coronavirus (COVID-19) outbreak.
@@ -180,6 +187,11 @@ rootPage.p4.l4 = have been transferred under TUPE
 rootPage.p4.l5 = have been employed at separate times throughout the year
 rootPage.p4.l6 = have had an irregular pattern of pay periods
 rootPage.p4.l7 = receive employer pension contributions outside of an auto-enrolment pension scheme
+rootPage.p4.l8 = receive payments made at the discretion of the employer or a client - where the employer or client was under no contractual obligation to pay, including:
+rootPage.p4.l8.l1 = any tips, including those distributed through troncs
+rootPage.p4.l8.l2 = discretionary bonuses
+rootPage.p4.l8.l3 = discretionary commission payments
+
 rootPage.p5 = We’re working to enhance the calculator to include these scenarios as soon as possible.
 rootPage.p6 = If you cannot use this calculator, work out what you can claim manually using the {0} or seek professional advice.
 rootPage.p6.link = calculation guidance
