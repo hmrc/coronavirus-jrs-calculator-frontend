@@ -9,7 +9,6 @@ import controllers.actions.FeatureFlag.VariableJourneyFlag
 import controllers.actions._
 import forms.FurloughPartialPayFormProvider
 import javax.inject.Inject
-import models.NormalMode
 import navigation.Navigator
 import pages._
 import play.api.i18n.{I18nSupport, MessagesApi}

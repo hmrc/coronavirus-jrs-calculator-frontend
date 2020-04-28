@@ -8,7 +8,7 @@ package controllers
 import controllers.actions._
 import forms.ClaimPeriodStartFormProvider
 import javax.inject.Inject
-import models.{Mode, UserAnswers}
+import models.UserAnswers
 import navigation.Navigator
 import pages.ClaimPeriodStartPage
 import play.api.i18n.{I18nSupport, MessagesApi}

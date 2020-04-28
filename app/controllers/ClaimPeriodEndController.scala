@@ -10,7 +10,6 @@ import java.time.LocalDate
 import controllers.actions._
 import forms.ClaimPeriodEndFormProvider
 import javax.inject.Inject
-import models.{Mode}
 import navigation.Navigator
 import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage}
 import play.api.i18n.{I18nSupport, MessagesApi}

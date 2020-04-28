@@ -9,7 +9,6 @@ import controllers.actions._
 import forms.FurloughCalculationsFormProvider
 import handlers.FurloughCalculationControllerRequestHandler
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.FurloughCalculationsPage
 import play.api.Logger

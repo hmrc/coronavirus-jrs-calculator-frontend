@@ -8,7 +8,6 @@ package controllers
 import controllers.actions._
 import forms.PensionContributionFormProvider
 import javax.inject.Inject
-import models.NormalMode
 import navigation.Navigator
 import pages.PensionContributionPage
 import play.api.i18n.{I18nSupport, MessagesApi}

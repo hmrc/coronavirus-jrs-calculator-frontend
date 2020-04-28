@@ -9,7 +9,6 @@ import controllers.actions.FeatureFlag.VariableJourneyFlag
 import controllers.actions._
 import forms.EmployeeStartDateFormProvider
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.EmployeeStartDatePage
 import play.api.i18n.{I18nSupport, MessagesApi}

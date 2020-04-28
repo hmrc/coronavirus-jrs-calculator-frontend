@@ -8,7 +8,6 @@ package controllers
 import controllers.actions._
 import forms.FurloughOngoingFormProvider
 import javax.inject.Inject
-import models.{Mode}
 import navigation.Navigator
 import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage, FurloughOngoingPage}
 import play.api.i18n.MessagesApi

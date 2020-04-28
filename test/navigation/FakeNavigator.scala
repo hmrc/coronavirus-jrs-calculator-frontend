@@ -6,9 +6,9 @@
 package navigation
 
 import config.FrontendAppConfig
-import play.api.mvc.Call
+import models.UserAnswers
 import pages._
-import models.{Mode, UserAnswers}
+import play.api.mvc.Call
 
 class FakeNavigator(desiredRoute: Call)(implicit appConfig: FrontendAppConfig) extends Navigator(appConfig) {
 

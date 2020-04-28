@@ -14,10 +14,9 @@ import javax.inject.{Inject, Singleton}
 import models.PayQuestion.{Regularly, Varies}
 import models.{UserAnswers, _}
 import pages.{PayDatePage, _}
-import models.{UserAnswers, _}
-import utils.LocalDateHelpers
 import play.api.mvc.Call
 import services.PartialPayHelper
+import utils.LocalDateHelpers
 
 @Singleton
 class Navigator @Inject()(appConfig: FrontendAppConfig)
@@ -75,12 +74,6 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     case _ =>
       _ =>
         routes.RootPageController.onPageLoad()
-  }
-
-  private val checkRouteMap: Page => UserAnswers => Call = {
-    case _ =>
-      _ =>
-        routes.CheckYourAnswersController.onPageLoad()
   }
 
   private val payDateRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>

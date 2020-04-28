@@ -8,7 +8,6 @@ package controllers
 import controllers.actions._
 import forms.NicCategoryFormProvider
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.NicCategoryPage
 import play.api.i18n.{I18nSupport, MessagesApi}

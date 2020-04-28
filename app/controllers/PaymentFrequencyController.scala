@@ -8,7 +8,6 @@ package controllers
 import controllers.actions._
 import forms.PaymentFrequencyFormProvider
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.PaymentFrequencyPage
 import play.api.i18n.{I18nSupport, MessagesApi}

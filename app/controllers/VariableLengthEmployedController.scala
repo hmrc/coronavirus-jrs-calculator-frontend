@@ -10,7 +10,6 @@ import controllers.actions.FeatureFlag.VariableJourneyFlag
 import controllers.actions._
 import forms.VariableLengthEmployedFormProvider
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.VariableLengthEmployedPage
 import play.api.i18n.{I18nSupport, MessagesApi}

@@ -11,7 +11,6 @@ import controllers.actions._
 import forms.FurloughEndDateFormProvider
 import handlers.ErrorHandler
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.{ClaimPeriodEndPage, FurloughEndDatePage, FurloughStartDatePage}
 import play.api.i18n.{I18nSupport, MessagesApi}

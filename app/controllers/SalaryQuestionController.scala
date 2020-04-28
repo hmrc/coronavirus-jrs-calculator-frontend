@@ -8,7 +8,7 @@ package controllers
 import controllers.actions._
 import forms.SalaryQuestionFormProvider
 import javax.inject.Inject
-import models.{Mode, PaymentFrequency}
+import models.PaymentFrequency
 import navigation.Navigator
 import pages.{PaymentFrequencyPage, SalaryQuestionPage}
 import play.api.i18n.{I18nSupport, MessagesApi}

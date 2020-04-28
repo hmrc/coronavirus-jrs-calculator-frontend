@@ -10,7 +10,6 @@ import controllers.actions._
 import forms.FurloughPartialPayFormProvider
 import handlers.ErrorHandler
 import javax.inject.Inject
-import models.NormalMode
 import navigation.Navigator
 import pages._
 import play.api.i18n.{I18nSupport, MessagesApi}

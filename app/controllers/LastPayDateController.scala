@@ -10,7 +10,6 @@ import java.time.LocalDate
 import controllers.actions._
 import forms.LastPayDateFormProvider
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.{LastPayDatePage, PayDatePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
