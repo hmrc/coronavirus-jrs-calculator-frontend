@@ -10,7 +10,7 @@ import models.PayQuestion.{Regularly, Varies}
 import models.{Amount, CalculationResult, FullPeriod, PartialPeriod, PaymentDate, PaymentFrequency, PaymentWithPeriod, PeriodBreakdown, PeriodWithPaymentDate}
 import utils.TaxYearFinder
 
-trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with PeriodHelper with Calculators {
+trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with Calculators {
 
   def calculateFurloughGrant(paymentFrequency: PaymentFrequency, payments: Seq[PaymentWithPeriod]): CalculationResult = {
     val paymentDateBreakdowns = payPeriodBreakdownFromRegularPayment(paymentFrequency, payments)
