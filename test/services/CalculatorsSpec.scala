@@ -14,9 +14,13 @@ class CalculatorsSpec extends SpecBase {
     eightyPercent(Amount(1000.0)) mustBe Amount(800.0)
   }
 
+  "return 80% of an amount if lesser than cap allowance unrounded or cap otherwise" in new Calculators {
+    claimableAmount(Amount(100.15), 99) mustBe Amount(80.120)
+    claimableAmount(Amount(100.00), 79) mustBe Amount(79)
+  }
+
   "Round an amount HALF_UP" in new Calculators {
     Amount(1000.5111).halfUp mustBe Amount(1000.51)
     Amount(1000.4999).halfUp mustBe Amount(1000.50)
   }
-
 }

@@ -12,6 +12,12 @@ import scala.math.BigDecimal.RoundingMode
 
 trait Calculators {
 
+  def claimableAmount(amount: Amount, cap: BigDecimal): Amount = {
+    val eighty = eightyPercent(amount).value
+    val eightyOrCap = if (eighty > cap) cap else eighty
+    Amount(eightyOrCap)
+  }
+
   def eightyPercent(amount: Amount): Amount = Amount(amount.value * 0.8)
 
   implicit class AmountRounding(amount: Amount) {
