@@ -9,12 +9,13 @@ import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBaseWithApplication
 import forms.PayDateFormProvider
+import models.PaymentFrequency.Weekly
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{ClaimPeriodStartPage, FurloughStartDatePage, PayDatePage}
+import pages.{ClaimPeriodStartPage, FurloughStartDatePage, PayDatePage, PaymentFrequencyPage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.CSRFTokenHelper._
@@ -42,6 +43,10 @@ class PayDateControllerSpec extends SpecBaseWithApplication with MockitoSugar {
     .set(FurloughStartDatePage, furloughStartDate)
     .success
     .value
+    .set(PaymentFrequencyPage, Weekly)
+    .success
+    .value
+
   val validAnswer = LocalDate.of(2020, 3, 3)
 
   def onwardRoute = Call("GET", "/foo")
@@ -154,6 +159,29 @@ class PayDateControllerSpec extends SpecBaseWithApplication with MockitoSugar {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual onwardRoute.url
+
+      application.stop()
+    }
+
+    "redirect to the /payment-frequency page if its not already stored in cache" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswersWithStartDate.remove(PaymentFrequencyPage).success.value))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      val result = route(application, postRequest(validAnswer)).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual routes.PaymentFrequencyController.onPageLoad(NormalMode).url
 
       application.stop()
     }

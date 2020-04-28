@@ -8,8 +8,11 @@ package forms
 import java.time.{LocalDate, ZoneOffset}
 
 import forms.behaviours.DateBehaviours
+import models.PaymentFrequency
+import models.PaymentFrequency.Weekly
 import org.scalacheck.Gen
 import play.api.data.FormError
+import play.api.libs.json.JsString
 import reactivemongo.play.json.ValidationError
 import views.ViewUtils
 
@@ -145,6 +148,53 @@ class PayDateFormProviderSpec extends DateBehaviours {
       }
     }
 
-  }
+    "with paymentFrequency" must {
 
+      "accept valid date as per paymentFrequency" in {
+        val formProvider = new PayDateFormProvider()
+        val latestPayDate = LocalDate.now().minusDays(50)
+        val gen = Gen.oneOf(PaymentFrequency.values.toSeq)
+
+        forAll(gen) { paymentFrequency =>
+          val validFormData = formProvider.expectedPayDate(latestPayDate, paymentFrequency)
+
+          val data = Map(
+            "value.day"   -> validFormData.getDayOfMonth.toString,
+            "value.month" -> validFormData.getMonthValue.toString,
+            "value.year"  -> validFormData.getYear.toString
+          )
+
+          val result = formProvider
+            .apply(latestPayDate = Some(latestPayDate), paymentFrequency = Some(paymentFrequency))
+            .bind(data)
+
+          result.errors shouldBe empty
+          result.value.value shouldEqual validFormData
+        }
+      }
+
+      "reject date if its NOT as per paymentFrequency" in {
+        val formProvider = new PayDateFormProvider()
+        val latestPayDate = LocalDate.now().minusDays(50)
+        val gen = Gen.oneOf(PaymentFrequency.values.toSeq)
+
+        forAll(gen) { paymentFrequency =>
+          val invalidData = latestPayDate.plusDays(10)
+
+          val data = Map(
+            "value.day"   -> invalidData.getDayOfMonth.toString,
+            "value.month" -> invalidData.getMonthValue.toString,
+            "value.year"  -> invalidData.getYear.toString
+          )
+
+          val result = formProvider
+            .apply(latestPayDate = Some(latestPayDate), paymentFrequency = Some(paymentFrequency))
+            .bind(data)
+
+          result.errors.head.key shouldBe "value"
+          result.errors.head.message shouldBe "payDate.error.invalid.as.per.paymentFrequency"
+        }
+      }
+    }
+  }
 }

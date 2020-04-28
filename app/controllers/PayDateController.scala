@@ -11,9 +11,10 @@ import controllers.actions._
 import forms.PayDateFormProvider
 import handlers.ErrorHandler
 import javax.inject.Inject
-import models.{NormalMode, UserAnswers}
+import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
+import models.{NormalMode, PaymentDate, PaymentFrequency, PeriodWithPaymentDate, UserAnswers}
 import navigation.Navigator
-import pages.{ClaimPeriodStartPage, FurloughStartDatePage, PayDatePage}
+import pages.{ClaimPeriodStartPage, FurloughStartDatePage, PayDatePage, PaymentFrequencyPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -62,34 +63,36 @@ class PayDateController @Inject()(
 
       val messageDate = messageDateFrom(effectiveStartDate, request.userAnswers, idx)
       val dayBeforeClaimStart = effectiveStartDate.minusDays(1)
-      val latestDate = request.userAnswers
-        .getList(PayDatePage)
-        .lift(idx - 2)
-        .map(
-          lastDate => latestOf(lastDate, dayBeforeClaimStart)
-        )
-        .getOrElse(dayBeforeClaimStart)
+      val latestPayDate = request.userAnswers.getList(PayDatePage).lift(idx - 2)
+      val latestDate = latestPayDate.map(latestOf(_, dayBeforeClaimStart)).getOrElse(dayBeforeClaimStart)
 
-      formProvider(
-        beforeDate = if (idx == 1) Some(effectiveStartDate) else None,
-        afterDate = if (idx != 1) Some(latestDate) else None
-      ).bindFromRequest()
-        .fold(
-          formWithErrors => {
-            messageDate.fold {
-              Logger.warn(s"onSubmit messageDateFrom returned none for claimStartDate=$claimStartDate, payDates=${request.userAnswers
-                .getList(PayDatePage)}, idx=$idx")
-              Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-            } { messageDate =>
-              Future.successful(BadRequest(view(formWithErrors, idx, messageDate)))
-            }
-          },
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.setListWithInvalidation(PayDatePage, value, idx))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(PayDatePage, NormalMode, updatedAnswers, Some(idx)))
-        )
+      request.userAnswers.get(PaymentFrequencyPage) match {
+        case Some(pf) =>
+          formProvider(
+            beforeDate = if (idx == 1) Some(effectiveStartDate) else None,
+            afterDate = if (idx != 1) Some(latestDate) else None,
+            latestPayDate = latestPayDate,
+            paymentFrequency = Some(pf)
+          ).bindFromRequest()
+            .fold(
+              formWithErrors => {
+                messageDate.fold {
+                  Logger.warn(s"onSubmit messageDateFrom returned none for claimStartDate=$claimStartDate, payDates=${request.userAnswers
+                    .getList(PayDatePage)}, idx=$idx")
+                  Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+                } { messageDate =>
+                  Future.successful(BadRequest(view(formWithErrors, idx, messageDate)))
+                }
+              },
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.setListWithInvalidation(PayDatePage, value, idx))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(PayDatePage, NormalMode, updatedAnswers, Some(idx)))
+            )
+        case None =>
+          Future.successful(Redirect(routes.PaymentFrequencyController.onPageLoad(NormalMode)))
+      }
     }
   }
 
