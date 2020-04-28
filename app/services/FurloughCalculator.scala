@@ -32,7 +32,7 @@ trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with P
   protected def proRatePay(paymentWithPeriod: PaymentWithPeriod): Amount =
     (paymentWithPeriod.period.period, paymentWithPeriod.payQuestion) match {
       case (PartialPeriod(o, p), Regularly) =>
-        Amount((paymentWithPeriod.furloughPayment.value / periodDaysCount(o)) * periodDaysCount(p)).halfUp
+        partialPeriodDailyCalculation(paymentWithPeriod.furloughPayment, o, p)
       case _ => paymentWithPeriod.furloughPayment
     }
 

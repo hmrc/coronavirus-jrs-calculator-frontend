@@ -14,6 +14,10 @@ class CalculatorsSpec extends SpecBase {
     eightyPercent(Amount(1000.0)) mustBe Amount(800.0)
   }
 
+  "Daily calculation rounded half up" in new Calculators {
+    dailyCalculation(Amount(3000.155), 30, 10) mustBe Amount(1000.05)
+  }
+
   "return 80% of an amount if lesser than cap allowance unrounded or cap otherwise" in new Calculators {
     claimableAmount(Amount(100.15), 99) mustBe Amount(80.120)
     claimableAmount(Amount(100.00), 79) mustBe Amount(79)
