@@ -34,25 +34,25 @@ class ClaimPeriodStartController @Inject()(
 
   def form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData) { implicit request =>
     val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.internalId)).get(ClaimPeriodStartPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
 
-    Ok(view(preparedForm, mode))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
+  def onSubmit(): Action[AnyContent] = (identify andThen getData).async { implicit request =>
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(UserAnswers(request.internalId).set(ClaimPeriodStartPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ClaimPeriodStartPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ClaimPeriodStartPage, updatedAnswers))
       )
   }
 }

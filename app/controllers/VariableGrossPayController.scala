@@ -37,7 +37,7 @@ class VariableGrossPayController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] =
+  def onPageLoad(): Action[AnyContent] =
     (identify andThen feature(VariableJourneyFlag) andThen getData andThen requireData).async { implicit request =>
       request.userAnswers.get(FurloughStartDatePage) match {
         case Some(furloughStart) =>
@@ -46,28 +46,28 @@ class VariableGrossPayController @Inject()(
             case Some(value) => form.fill(value)
           }
 
-          Future.successful(Ok(view(preparedForm, mode, furloughStart)))
+          Future.successful(Ok(view(preparedForm, furloughStart)))
 
-        case None => Future.successful(Redirect(routes.FurloughStartDateController.onPageLoad(mode)))
+        case None => Future.successful(Redirect(routes.FurloughStartDateController.onPageLoad()))
       }
     }
 
-  def onSubmit(mode: Mode): Action[AnyContent] =
+  def onSubmit(): Action[AnyContent] =
     (identify andThen feature(VariableJourneyFlag) andThen getData andThen requireData).async { implicit request =>
       request.userAnswers.get(FurloughStartDatePage) match {
         case Some(furloughStart) =>
           form
             .bindFromRequest()
             .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, furloughStart))),
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, furloughStart))),
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(VariableGrossPayPage, value))
                   _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(VariableGrossPayPage, mode, updatedAnswers))
+                } yield Redirect(navigator.nextPage(VariableGrossPayPage, updatedAnswers))
             )
 
-        case None => Future.successful(Redirect(routes.FurloughStartDateController.onPageLoad(mode)))
+        case None => Future.successful(Redirect(routes.FurloughStartDateController.onPageLoad()))
       }
     }
 }

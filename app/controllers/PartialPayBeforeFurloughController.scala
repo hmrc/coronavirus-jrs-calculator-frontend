@@ -86,7 +86,7 @@ class PartialPayBeforeFurloughController @Inject()(
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(PartialPayBeforeFurloughPage, value))
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield {
-                  Redirect(navigator.nextPage(PartialPayBeforeFurloughPage, NormalMode, updatedAnswers))
+                  Redirect(navigator.nextPage(PartialPayBeforeFurloughPage, updatedAnswers))
                 }
               }
             )

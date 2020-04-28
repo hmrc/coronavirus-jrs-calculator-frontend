@@ -36,35 +36,35 @@ class FurloughCalculationsController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     handleCalculationFurlough(request.userAnswers).fold {
       Logger.warn("couldn't calculate Furlough out of UserAnswers, restarting the journey")
-      Redirect(routes.ClaimPeriodStartController.onPageLoad(mode))
+      Redirect(routes.ClaimPeriodStartController.onPageLoad())
     } { data =>
       val preparedForm = request.userAnswers.get(FurloughCalculationsPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, data))
+      Ok(view(preparedForm, data))
     }
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     handleCalculationFurlough(request.userAnswers)
       .fold {
         Logger.warn("couldn't calculate Furlough out of UserAnswers, restarting the journey")
-        Future.successful(Redirect(routes.ClaimPeriodStartController.onPageLoad(mode)))
+        Future.successful(Redirect(routes.ClaimPeriodStartController.onPageLoad()))
       } { data =>
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, data))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, data))),
             value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(FurloughCalculationsPage, value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(FurloughCalculationsPage, mode, updatedAnswers))
+              } yield Redirect(navigator.nextPage(FurloughCalculationsPage, updatedAnswers))
           )
       }
 

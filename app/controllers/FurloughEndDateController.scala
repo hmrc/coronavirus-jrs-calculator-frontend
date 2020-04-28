@@ -34,31 +34,31 @@ class FurloughEndDateController @Inject()(
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
     extends BaseController with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     getRequiredAnswers(ClaimPeriodEndPage, FurloughStartDatePage) { (claimEndDate, furloughStart) =>
       val preparedForm = request.userAnswers.get(FurloughEndDatePage) match {
         case None        => form(claimEndDate, furloughStart)
         case Some(value) => form(claimEndDate, furloughStart).fill(value)
       }
 
-      Future.successful(Ok(view(preparedForm, mode)))
+      Future.successful(Ok(view(preparedForm)))
     }
   }
 
   def form(claimEndDate: LocalDate, furloughStartDate: LocalDate) =
     formProvider(claimEndDate, furloughStartDate)
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     getRequiredAnswers(ClaimPeriodEndPage, FurloughStartDatePage) { (claimEndDate, furloughStart) =>
       form(claimEndDate, furloughStart)
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(FurloughEndDatePage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(FurloughEndDatePage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(FurloughEndDatePage, updatedAnswers))
         )
     }
   }

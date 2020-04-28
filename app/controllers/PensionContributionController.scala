@@ -52,7 +52,7 @@ class PensionContributionController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PensionContributionPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PensionContributionPage, NormalMode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PensionContributionPage, updatedAnswers))
       )
   }
 }
