@@ -55,7 +55,7 @@ trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with C
     val furloughDays = periodDaysCount(period.partial)
     val preFurloughDays = fullPeriodDays - furloughDays
     val nonFurloughPay = payment.payQuestion match {
-      case Regularly => Amount((payment.furloughPayment.value / fullPeriodDays) * preFurloughDays).halfUp
+      case Regularly => dailyCalculation(payment.furloughPayment, fullPeriodDays, preFurloughDays)
       case Varies    => payment.nonFurloughPay
     }
 
