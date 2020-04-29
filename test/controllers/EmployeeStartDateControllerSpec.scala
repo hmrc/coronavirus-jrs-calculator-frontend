@@ -88,7 +88,7 @@ class EmployeeStartDateControllerSpec extends SpecBaseWithApplication with Mocki
       application.stop()
     }
 
-    "redirect to /furlough-start if its already not found in cache" in {
+    "redirect to /furlough-start if its already not found in userAnswers" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -165,7 +165,7 @@ class EmployeeStartDateControllerSpec extends SpecBaseWithApplication with Mocki
       application.stop()
     }
 
-    "redirect POST to /furlough-start if its already not found in cache" in {
+    "redirect POST to /furlough-start if its already not found in userAnswers" in {
 
       val mockSessionRepository = mock[SessionRepository]
 

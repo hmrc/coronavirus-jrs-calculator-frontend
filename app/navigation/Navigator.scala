@@ -14,6 +14,7 @@ import javax.inject.{Inject, Singleton}
 import models.PayQuestion.{Regularly, Varies}
 import models.{UserAnswers, _}
 import pages.{PayDatePage, _}
+import play.api.Logger
 import play.api.mvc.Call
 import services.PartialPayHelper
 import utils.LocalDateHelpers
@@ -127,7 +128,9 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
   def routeFor(page: Page): Call =
     page match {
       case FurloughStartDatePage => routes.FurloughStartDateController.onPageLoad()
-      //TODO: add as necessary
+      case p =>
+        Logger.warn(s"can't find the route for the page: $p")
+        routes.ErrorController.internalServerError()
     }
 
   private def partialPayAfterFurloughRoutes: UserAnswers => Call = { userAnswers =>

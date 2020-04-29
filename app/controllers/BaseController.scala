@@ -40,7 +40,7 @@ trait BaseController extends FrontendBaseController with I18nSupport {
         Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
     }
 
-  def getRequiredAnswerNoFail[A](page: QuestionPage[A], idx: Option[Int] = None)(
+  def getRequiredAnswerOrRedirect[A](page: QuestionPage[A], idx: Option[Int] = None)(
     f: A => Future[Result])(implicit request: DataRequest[_], reads: Reads[A], errorHandler: ErrorHandler): Future[Result] =
     getAnswer(page, idx) match {
       case Some(ans) => f(ans)

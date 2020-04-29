@@ -40,7 +40,7 @@ class EmployeeStartDateController @Inject()(
 
   def onPageLoad(): Action[AnyContent] = (identify andThen feature(VariableJourneyFlag) andThen getData andThen requireData).async {
     implicit request =>
-      getRequiredAnswerNoFail(FurloughStartDatePage) { furloughStart =>
+      getRequiredAnswerOrRedirect(FurloughStartDatePage) { furloughStart =>
         val preparedForm = request.userAnswers.get(EmployeeStartDatePage) match {
           case None        => form(furloughStart)
           case Some(value) => form(furloughStart).fill(value)
@@ -51,7 +51,7 @@ class EmployeeStartDateController @Inject()(
 
   def onSubmit(): Action[AnyContent] = (identify andThen feature(VariableJourneyFlag) andThen getData andThen requireData).async {
     implicit request =>
-      getRequiredAnswerNoFail(FurloughStartDatePage) { furloughStart =>
+      getRequiredAnswerOrRedirect(FurloughStartDatePage) { furloughStart =>
         form(furloughStart)
           .bindFromRequest()
           .fold(
