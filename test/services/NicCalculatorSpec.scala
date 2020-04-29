@@ -9,7 +9,7 @@ import java.time.LocalDate
 
 import base.{CoreDataBuilder, SpecBase}
 import models.PaymentFrequency.{FourWeekly, Monthly}
-import models.{Amount, FullPeriodBreakdown, PartialPeriod, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentDate, Period, PeriodWithPaymentDate}
+import models.{Amount, PartialPeriod, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentDate, Period}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with CoreDataBuilder {

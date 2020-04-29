@@ -10,7 +10,7 @@ import java.time.LocalDate
 import base.SpecBaseWithApplication
 import forms.FurloughCalculationsFormProvider
 import models.Calculation.FurloughCalculationResult
-import models.{Amount, CalculationResult, FullPeriod, FullPeriodBreakdown, FullPeriodWithPaymentDate, FurloughCalculations, NormalMode, PaymentDate, Period}
+import models.{Amount, CalculationResult, FullPeriod, FullPeriodBreakdown, FullPeriodWithPaymentDate, FurloughCalculations, PaymentDate, Period}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -30,7 +30,7 @@ class FurloughCalculationsControllerSpec extends SpecBaseWithApplication with Mo
 
   def onwardRoute = Call("GET", "/foo")
 
-  val furloughCalculationsRoute = routes.FurloughCalculationsController.onPageLoad(NormalMode).url
+  val furloughCalculationsRoute = routes.FurloughCalculationsController.onPageLoad().url
 
   val formProvider = new FurloughCalculationsFormProvider()
   val form = formProvider()
@@ -69,7 +69,7 @@ class FurloughCalculationsControllerSpec extends SpecBaseWithApplication with Mo
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, furlough)(getRequest, messages).toString
+        view(form, furlough)(getRequest, messages).toString
 
       application.stop()
     }
@@ -87,7 +87,7 @@ class FurloughCalculationsControllerSpec extends SpecBaseWithApplication with Mo
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(FurloughCalculations.values.head), NormalMode, furlough)(getRequest, messages).toString
+        view(form.fill(FurloughCalculations.values.head), furlough)(getRequest, messages).toString
 
       application.stop()
     }
@@ -137,7 +137,7 @@ class FurloughCalculationsControllerSpec extends SpecBaseWithApplication with Mo
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, furlough)(request, messages).toString
+        view(boundForm, furlough)(request, messages).toString
 
       application.stop()
     }
