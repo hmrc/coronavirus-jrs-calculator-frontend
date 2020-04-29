@@ -124,6 +124,12 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
   def nextPage(page: Page, userAnswers: UserAnswers, idx: Option[Int] = None): Call =
     idx.fold(normalRoutes(page)(userAnswers))(idx => idxRoutes(page)(idx, userAnswers))
 
+  def routeFor(page: Page): Call =
+    page match {
+      case FurloughStartDatePage => routes.FurloughStartDateController.onPageLoad()
+      //TODO: add as necessary
+    }
+
   private def partialPayAfterFurloughRoutes: UserAnswers => Call = { userAnswers =>
     userAnswers.get(VariableLengthEmployedPage) match {
       case Some(VariableLengthEmployed.Yes) => routes.LastYearPayController.onPageLoad(1)

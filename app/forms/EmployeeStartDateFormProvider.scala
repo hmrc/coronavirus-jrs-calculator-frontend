@@ -18,7 +18,7 @@ class EmployeeStartDateFormProvider @Inject() extends Mappings with ImplicitDate
   val validStart = LocalDate.of(2019, 2, 2)
   val validEnd = LocalDate.of(2020, 3, 19)
 
-  def apply(): Form[LocalDate] =
+  def apply(furloughStart: LocalDate): Form[LocalDate] =
     Form(
       "value" -> localDate(
         invalidKey = "employeeStartDate.error.invalid",
@@ -26,6 +26,7 @@ class EmployeeStartDateFormProvider @Inject() extends Mappings with ImplicitDate
         twoRequiredKey = "employeeStartDate.error.required.two",
         requiredKey = "employeeStartDate.error.required"
       ).verifying(validStartDate)
+        .verifying(beforeFurloughStart(furloughStart))
     )
 
   private def validStartDate: Constraint[LocalDate] = Constraint { date =>
@@ -34,6 +35,14 @@ class EmployeeStartDateFormProvider @Inject() extends Mappings with ImplicitDate
       Valid
     } else {
       Invalid("employeeStartDate.error.outofrange", dateToString(validStart), dateToString(validEnd))
+    }
+  }
+
+  private def beforeFurloughStart(furloughStart: LocalDate): Constraint[LocalDate] = Constraint { date =>
+    if (date.isBefore(furloughStart)) {
+      Valid
+    } else {
+      Invalid("employeeStartDate.error.on.or.after.furlough")
     }
   }
 }

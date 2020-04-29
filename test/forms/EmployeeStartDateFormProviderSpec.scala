@@ -15,8 +15,9 @@ class EmployeeStartDateFormProviderSpec extends DateBehaviours {
 
   val validStart = LocalDate.of(2019, 2, 2)
   val validEnd = LocalDate.of(2020, 3, 19)
+  val furloughStart = LocalDate.of(2020, 3, 18)
 
-  val form = new EmployeeStartDateFormProvider()()
+  val form = new EmployeeStartDateFormProvider()(furloughStart)
 
   ".value" should {
 
@@ -40,5 +41,7 @@ class EmployeeStartDateFormProviderSpec extends DateBehaviours {
       FormError("value", "employeeStartDate.error.outofrange", Array(dateToString(validStart), dateToString(validEnd))))
 
     behave like mandatoryDateField(form, "value", "employeeStartDate.error.required.all")
+
+    behave like dateFieldWithMax(form, "value", furloughStart, FormError("value", "employeeStartDate.error.on.or.after.furlough"))
   }
 }

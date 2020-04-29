@@ -43,7 +43,7 @@ class DateBehaviours extends FieldBehaviours {
 
         val result = form.bind(data)
 
-        result.errors should contain only formError
+        result.errors should contain(formError)
       }
     }
 
@@ -61,7 +61,7 @@ class DateBehaviours extends FieldBehaviours {
 
         val result = form.bind(data)
 
-        result.errors should contain only formError
+        result.errors should contain(formError)
       }
     }
 
