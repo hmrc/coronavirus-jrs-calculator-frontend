@@ -56,11 +56,11 @@
 
 @inputSnippet(describedBy: String) = {
 @defining {
-    id="@id" name="@name" type="decimal"@form("value").value.map { value => value="@value" }@if(describedBy.nonEmpty) { aria-describedby="@describedBy"}
+    id="@id" name="@name" @form("value").value.map { value => value="@value" }@if(describedBy.nonEmpty) { aria-describedby="@describedBy"} pattern="^\d+(?:\.\d{1,2})?$"
 } { attrs =>
     <div class="hmrc-currency-input__wrapper">
         <span class="hmrc-currency-input__unit" aria-hidden="true">£</span>
-        <input class="@govukToClasses("govuk-input", "govuk-currency-input__inner__input", classes.fold("")(x => x), if(form.hasErrors) "govuk-input--error" else "")" type="text" inputmode="decimal" @attrs>
+        <input class="@govukToClasses("govuk-input", "govuk-currency-input__inner__input", classes.fold("")(x => x), if(form.hasErrors) "govuk-input--error" else "")" type="number" inputmode="decimal" @attrs>
     </div>
     }
 }
