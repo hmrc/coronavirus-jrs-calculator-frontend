@@ -9,7 +9,7 @@ import cats.data.NonEmptyList
 import models.NonFurloughPay._
 import models.{Amount, CylbPayment, NonFurloughPay, PaymentFrequency, PaymentWithPeriod, Period, PeriodWithPaymentDate}
 
-trait ReferencePayCalculator extends PreviousYearPeriod with CylbCalculator with AverageCalculator {
+trait ReferencePayCalculator extends CylbCalculator with AverageCalculator {
 
   def calculateVariablePay(
     nonFurloughPay: NonFurloughPay,
