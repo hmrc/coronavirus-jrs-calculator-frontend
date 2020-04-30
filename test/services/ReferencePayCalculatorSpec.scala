@@ -9,7 +9,7 @@ import java.time.LocalDate
 
 import base.{CoreDataBuilder, SpecBase}
 import models.PayQuestion.Varies
-import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
+import models.PaymentFrequency.Monthly
 import models.{Amount, CylbPayment, FullPeriod, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriod, PartialPeriodWithPaymentDate, PaymentDate, PaymentWithPeriod, Period}
 
 class ReferencePayCalculatorSpec extends SpecBase with CoreDataBuilder {
@@ -50,73 +50,7 @@ class ReferencePayCalculatorSpec extends SpecBase with CoreDataBuilder {
     val furloughStartDate = LocalDate.of(2020, 3, 1)
     val periodBeforeFurlough = Period(employeeStartDate, furloughStartDate.minusDays(1))
 
-    averageDailyCalculator(periodBeforeFurlough, Amount(2400.0)) mustBe 26.37
-  }
-
-  "calculate cylb amounts for weekly" in new ReferencePayCalculator {
-    val cylbs = Seq(
-      CylbPayment(LocalDate.of(2019, 3, 2), Amount(700.00)),
-      CylbPayment(LocalDate.of(2019, 3, 9), Amount(350.00)),
-      CylbPayment(LocalDate.of(2019, 3, 16), Amount(140.00))
-    )
-
-    val periods = Seq(
-      fullPeriodWithPaymentDate("2020,3,1", "2020,3,7", "2020, 3, 7"),
-      fullPeriodWithPaymentDate("2020,3,8", "2020,3,14", "2020, 3, 14")
-    )
-
-    val nonFurloughPay = NonFurloughPay(None, None)
-
-    val expected = Seq(
-      paymentWithFullPeriod(450.00, fullPeriodWithPaymentDate("2020,3,1", "2020,3,7", "2020, 3, 7"), Varies),
-      paymentWithFullPeriod(200.00, fullPeriodWithPaymentDate("2020,3,8", "2020,3,14", "2020, 3, 14"), Varies)
-    )
-
-    calculateCylb(nonFurloughPay, Weekly, cylbs, periods) mustBe expected
-  }
-
-  "calculate cylb amounts for fortnightly" in new ReferencePayCalculator {
-    val cylbs = Seq(
-      CylbPayment(LocalDate.of(2019, 3, 2), Amount(1400.00)),
-      CylbPayment(LocalDate.of(2019, 3, 16), Amount(700.00)),
-      CylbPayment(LocalDate.of(2019, 3, 30), Amount(280.00))
-    )
-
-    val periods = Seq(
-      fullPeriodWithPaymentDate("2020,3,1", "2020,3,14", "2020, 3, 14"),
-      fullPeriodWithPaymentDate("2020,3,15", "2020,3,28", "2020, 3, 28")
-    )
-
-    val nonFurloughPay = NonFurloughPay(None, None)
-
-    val expected = Seq(
-      paymentWithFullPeriod(800.00, fullPeriodWithPaymentDate("2020,3,1", "2020,3,14", "2020, 3, 14"), Varies),
-      paymentWithFullPeriod(340.00, fullPeriodWithPaymentDate("2020,3,15", "2020,3,28", "2020, 3, 28"), Varies)
-    )
-
-    calculateCylb(nonFurloughPay, FortNightly, cylbs, periods) mustBe expected
-  }
-
-  "calculate cylb amounts for fourweekly" in new ReferencePayCalculator {
-    val cylbs = Seq(
-      CylbPayment(LocalDate.of(2019, 3, 2), Amount(2800.00)),
-      CylbPayment(LocalDate.of(2019, 3, 30), Amount(1400.00)),
-      CylbPayment(LocalDate.of(2019, 4, 27), Amount(560.00))
-    )
-
-    val periods = Seq(
-      fullPeriodWithPaymentDate("2020,3,1", "2020,3,28", "2020, 3, 28"),
-      fullPeriodWithPaymentDate("2020,3,29", "2020,4,25", "2020, 4, 25")
-    )
-
-    val nonFurloughPay = NonFurloughPay(None, None)
-
-    val expected = Seq(
-      paymentWithFullPeriod(1500.00, fullPeriodWithPaymentDate("2020,3,1", "2020,3,28", "2020, 3, 28"), Varies),
-      paymentWithFullPeriod(620.00, fullPeriodWithPaymentDate("2020,3,29", "2020,4,25", "2020, 4, 25"), Varies)
-    )
-
-    calculateCylb(nonFurloughPay, FourWeekly, cylbs, periods) mustBe expected
+    averageDailyCalculator(periodBeforeFurlough, Amount(2400.0)) mustBe Amount(26.37)
   }
 
   "compare cylb and avg gross pay amount taking the greater" in new ReferencePayCalculator {
