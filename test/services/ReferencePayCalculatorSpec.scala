@@ -7,12 +7,14 @@ package services
 
 import java.time.LocalDate
 
-import base.{CoreDataBuilder, SpecBase}
+import base.{CoreTestDataBuilder, SpecBase}
+import models.PayQuestion.Varies
+import base.SpecBase
 import models.PayMethod.Variable
 import models.PaymentFrequency.Monthly
 import models.{Amount, CylbPayment, FullPeriod, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriod, PartialPeriodWithPaymentDate, PaymentDate, PaymentWithPeriod, Period}
 
-class ReferencePayCalculatorSpec extends SpecBase with CoreDataBuilder {
+class ReferencePayCalculatorSpec extends SpecBase with CoreTestDataBuilder {
 
   "calculates reference gross pay for an employee on variable pays not including cylb when empty" in new ReferencePayCalculator {
     val employeeStartDate = LocalDate.of(2019, 12, 1)

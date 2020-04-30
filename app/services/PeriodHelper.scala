@@ -74,7 +74,7 @@ trait PeriodHelper {
 
   protected def periodSpansMonth(period: Period): Boolean = period.start.getMonth != period.end.getMonth
 
-  protected def assignPayDates(
+  def assignPayDates(
     frequency: PaymentFrequency,
     sortedPeriods: Seq[Periods],
     lastPayDay: LocalDate): Seq[PeriodWithPaymentDate] =

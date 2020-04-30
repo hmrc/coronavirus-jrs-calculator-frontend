@@ -36,7 +36,7 @@ trait DataExtractor extends ReferencePayCalculator with FurloughPeriodExtractor 
       data     <- extract(userAnswers)
       grossPay <- extractGrossPay(userAnswers)
       periods: Seq[Periods] = generatePeriods(data.payDates, furloughPeriod)
-      periodsWithPayDay = assignPayDates(data.paymentFrequency, periods, data.lastPayDay)
+      periodsWithPayDay: Seq[PeriodWithPaymentDate] = assignPayDates(data.paymentFrequency, periods, data.lastPayDay)
     } yield processPayAnswer(userAnswers, data, grossPay, periodsWithPayDay)
 
   protected def extractGrossPay(userAnswers: UserAnswers): Option[Amount] =
