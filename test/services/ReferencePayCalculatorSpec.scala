@@ -8,10 +8,9 @@ package services
 import java.time.LocalDate
 
 import base.{CoreDataBuilder, SpecBase}
-import handlers.DataExtractor
 import models.PayQuestion.Varies
 import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
-import models.{Amount, CylbEligibility, CylbPayment, FullPeriod, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriod, PartialPeriodWithPaymentDate, PaymentDate, PaymentWithPeriod, Period, PeriodWithPaymentDate, VariableLengthEmployed}
+import models.{Amount, CylbPayment, FullPeriod, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriod, PartialPeriodWithPaymentDate, PaymentDate, PaymentWithPeriod, Period}
 
 class ReferencePayCalculatorSpec extends SpecBase with CoreDataBuilder {
 
@@ -136,7 +135,7 @@ class ReferencePayCalculatorSpec extends SpecBase with CoreDataBuilder {
       paymentWithFullPeriod(450.00, fullPeriodWithPaymentDate("2020,3,29", "2020,4,26", "2020, 4, 26"), Varies)
     )
 
-    greaterGrossPay(cylb, avg) mustBe expected
+    takeGreaterGrossPay(cylb, avg) mustBe expected
   }
 
   "calculate avg and cylb and return the greater" in new ReferencePayCalculator {
@@ -152,13 +151,5 @@ class ReferencePayCalculatorSpec extends SpecBase with CoreDataBuilder {
     )
 
     calculateVariablePay(nonFurloughPay, priorFurloughPeriod, Seq(afterFurloughPeriod), Amount(2400.0), cylbs, Monthly) mustBe expected
-  }
-
-  "defines a variable calculation that requires cylb" in new DataExtractor {
-    import VariableLengthEmployed._
-
-    cylbCalculationPredicate(Yes, LocalDate.now) mustBe CylbEligibility(true)
-    cylbCalculationPredicate(No, LocalDate.of(2019, 4, 5)) mustBe CylbEligibility(true)
-    cylbCalculationPredicate(No, LocalDate.of(2019, 4, 6)) mustBe CylbEligibility(false)
   }
 }

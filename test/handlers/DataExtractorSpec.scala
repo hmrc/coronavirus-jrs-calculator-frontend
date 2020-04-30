@@ -14,7 +14,7 @@ import java.time.LocalDate
 
 import base.{CoreDataBuilder, SpecBase}
 import models.PayQuestion.{Regularly, Varies}
-import models.{Amount, FullPeriod, FullPeriodWithPaymentDate, MandatoryData, PaymentDate, Period, UserAnswers}
+import models.{Amount, CylbEligibility, FullPeriod, FullPeriodWithPaymentDate, MandatoryData, PaymentDate, Period, UserAnswers}
 import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage, FurloughEndDatePage, FurloughStartDatePage}
 import play.api.libs.json.Json
 import utils.CoreTestData
@@ -158,6 +158,14 @@ class DataExtractorSpec extends SpecBase with CoreTestData with CoreDataBuilder 
       )
 
     extractPayments(userAnswers, extractRelevantFurloughPeriod(extract(userAnswers).get, userAnswers).get) mustBe Some(expected)
+  }
+
+  "defines a variable calculation that requires cylb" in new DataExtractor {
+    import models.VariableLengthEmployed._
+
+    cylbCalculationPredicate(Yes, LocalDate.now) mustBe CylbEligibility(true)
+    cylbCalculationPredicate(No, LocalDate.of(2019, 4, 5)) mustBe CylbEligibility(true)
+    cylbCalculationPredicate(No, LocalDate.of(2019, 4, 6)) mustBe CylbEligibility(false)
   }
 
 }

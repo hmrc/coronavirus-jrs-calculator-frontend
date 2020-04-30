@@ -8,7 +8,7 @@ package handlers
 import java.time.LocalDate
 
 import models.PayQuestion.{Regularly, Varies}
-import models.{Amount, CylbEligibility, CylbPayment, FullPeriodWithPaymentDate, MandatoryData, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate, Periods, UserAnswers}
+import models.{Amount, CylbEligibility, CylbPayment, FullPeriodWithPaymentDate, MandatoryData, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate, Periods, UserAnswers, VariableLengthEmployed}
 import pages._
 import services.{FurloughPeriodHelper, ReferencePayCalculator}
 import utils.LocalDateHelpers
@@ -102,4 +102,6 @@ trait DataExtractor extends ReferencePayCalculator with LocalDateHelpers with Fu
       nonFurloughPay = NonFurloughPay(preFurloughPay.map(v => Amount(v.value)), postFurloughPay.map(v => Amount(v.value)))
     } yield calculateVariablePay(nonFurloughPay, priorFurloughPeriod, periods, grossPay, cylbs, frequency)
 
+  protected def cylbCalculationPredicate(variableLength: VariableLengthEmployed, employeeStartDate: LocalDate): CylbEligibility =
+    CylbEligibility(variableLength == VariableLengthEmployed.Yes || employeeStartDate.isBefore(LocalDate.of(2019, 4, 6)))
 }

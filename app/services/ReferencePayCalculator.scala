@@ -7,11 +7,12 @@ package services
 
 import java.time.LocalDate
 
+import cats.data.NonEmptyList
 import models.PayQuestion.Varies
-import models.{Amount, CylbEligibility, CylbOperators, CylbPayment, FullPeriod, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriod, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate, Periods, VariableLengthEmployed}
+import models.{Amount, CylbOperators, CylbPayment, FullPeriod, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriod, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate, Periods}
+import services.Calculators._
 import utils.AmountRounding._
 
-import scala.math.BigDecimal.RoundingMode
 import scala.math.BigDecimal.RoundingMode._
 
 trait ReferencePayCalculator extends PreviousYearPeriod {
@@ -26,13 +27,10 @@ trait ReferencePayCalculator extends PreviousYearPeriod {
     val avg: Seq[PaymentWithPeriod] =
       afterFurloughPayPeriod.map(period => calculateAveragePay(nonFurloughPay, priorFurloughPeriod, period, amount))
 
-    if (cylbs.isEmpty) avg
-    else
-      greaterGrossPay(calculateCylb(nonFurloughPay, frequency, cylbs, afterFurloughPayPeriod), avg)
+    NonEmptyList
+      .fromList(cylbs.toList)
+      .fold(avg)(_ => takeGreaterGrossPay(calculateCylb(nonFurloughPay, frequency, cylbs, afterFurloughPayPeriod), avg))
   }
-
-  def cylbCalculationPredicate(variableLength: VariableLengthEmployed, employeeStartDate: LocalDate): CylbEligibility =
-    CylbEligibility(variableLength == VariableLengthEmployed.Yes || employeeStartDate.isBefore(LocalDate.of(2019, 4, 6)))
 
   private def calculateAveragePay(
     nonFurloughPay: NonFurloughPay,
@@ -50,7 +48,7 @@ trait ReferencePayCalculator extends PreviousYearPeriod {
         PaymentWithPartialPeriod(nfp, Amount(daily), pp, Varies)
     }
 
-  protected def greaterGrossPay(cylb: Seq[PaymentWithPeriod], avg: Seq[PaymentWithPeriod]): Seq[PaymentWithPeriod] =
+  protected def takeGreaterGrossPay(cylb: Seq[PaymentWithPeriod], avg: Seq[PaymentWithPeriod]): Seq[PaymentWithPeriod] =
     cylb.zip(avg) map {
       case (cylbPayment, avgPayment) =>
         if (cylbPayment.furloughPayment.value > avgPayment.furloughPayment.value)
@@ -67,23 +65,36 @@ trait ReferencePayCalculator extends PreviousYearPeriod {
       period: PeriodWithPaymentDate <- periods
       datesRequired = previousYearPayDate(frequency, period)
       nfp = determineNonFurloughPay(period.period, nonFurloughPay)
-    } yield {
-      val cylbOps = operators(frequency, period.period)
-      val previousPayments: Seq[CylbPayment] = datesRequired.flatMap(date => cylbs.find(_.date == date))
+    } yield cylbsAmount(frequency, period, datesRequired, nfp, cylbs)
 
-      val amount =
-        if (previousPayments.length == 1)
-          totalOneToOne(previousPayments.head.amount, cylbOps)
-        else
-          totalTwoToOne(previousPayments.head.amount, previousPayments.tail.head.amount, cylbOps)
+  private def cylbsAmount(
+    frequency: PaymentFrequency,
+    period: PeriodWithPaymentDate,
+    datesRequired: Seq[LocalDate],
+    nfp: Amount,
+    cylbs: Seq[CylbPayment]): PaymentWithPeriod = {
+    val cylbOps = operators(frequency, period.period)
+    val furlough: Amount = previousYearFurlough(cylbOps, previousPayments(datesRequired, cylbs).toList)
 
-      val furlough = roundAmountWithMode(amount, RoundingMode.HALF_UP)
-
-      period match {
-        case fp: FullPeriodWithPaymentDate    => PaymentWithFullPeriod(furlough, fp, Varies)
-        case pp: PartialPeriodWithPaymentDate => PaymentWithPartialPeriod(nfp, furlough, pp, Varies)
-      }
+    period match {
+      case fp: FullPeriodWithPaymentDate    => PaymentWithFullPeriod(furlough, fp, Varies)
+      case pp: PartialPeriodWithPaymentDate => PaymentWithPartialPeriod(nfp, furlough, pp, Varies)
     }
+  }
+
+  private def previousYearFurlough(cylbOps: CylbOperators, previous: List[Amount]): Amount =
+    (for {
+      oneOrTwo <- NonEmptyList.fromList(previous)
+      two      <- oneOrTwo.tail.headOption
+    } yield two)
+      .fold(totalOneToOne(previous.head, cylbOps))(two => totalTwoToOne(previous.head, two, cylbOps))
+      .halfUp
+
+  private def previousPayments(datesRequired: Seq[LocalDate], cylbs: Seq[CylbPayment]): Seq[Amount] =
+    for {
+      date     <- datesRequired
+      previous <- cylbs.find(_.date == date)
+    } yield previous.amount
 
   private def totalTwoToOne(payOne: Amount, payTwo: Amount, operator: CylbOperators): Amount = {
     import operator._
