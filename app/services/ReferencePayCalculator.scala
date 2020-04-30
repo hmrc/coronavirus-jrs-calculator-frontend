@@ -6,12 +6,10 @@
 package services
 
 import cats.data.NonEmptyList
-import models.PayQuestion.Varies
-import models.{Amount, CylbPayment, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate}
-import services.Calculators._
-import NonFurloughPay._
+import models.NonFurloughPay._
+import models.{Amount, CylbPayment, NonFurloughPay, PaymentFrequency, PaymentWithPeriod, Period, PeriodWithPaymentDate}
 
-trait ReferencePayCalculator extends PreviousYearPeriod with CylbCalculator {
+trait ReferencePayCalculator extends PreviousYearPeriod with CylbCalculator with AverageCalculator {
 
   def calculateVariablePay(
     nonFurloughPay: NonFurloughPay,
@@ -29,22 +27,6 @@ trait ReferencePayCalculator extends PreviousYearPeriod with CylbCalculator {
         takeGreaterGrossPay(calculateCylb(nonFurloughPay, frequency, cylbs, furloughPayPeriods, determineNonFurloughPay), avg))
   }
 
-  private def calculateAveragePay(
-    nonFurloughPay: NonFurloughPay,
-    priorFurloughPeriod: Period,
-    afterFurloughPayPeriod: PeriodWithPaymentDate,
-    amount: Amount): PaymentWithPeriod =
-    afterFurloughPayPeriod match {
-      case fp: FullPeriodWithPaymentDate =>
-        val daily = periodDaysCount(fp.period.period) * averageDailyCalculator(priorFurloughPeriod, amount).value
-        PaymentWithFullPeriod(Amount(daily), fp, Varies)
-      case pp: PartialPeriodWithPaymentDate =>
-        val nfp = determineNonFurloughPay(afterFurloughPayPeriod.period, nonFurloughPay)
-        val daily = periodDaysCount(pp.period.partial) * averageDailyCalculator(priorFurloughPeriod, amount).value
-
-        PaymentWithPartialPeriod(nfp, Amount(daily), pp, Varies)
-    }
-
   protected def takeGreaterGrossPay(cylb: Seq[PaymentWithPeriod], avg: Seq[PaymentWithPeriod]): Seq[PaymentWithPeriod] =
     cylb.zip(avg) map {
       case (cylbPayment, avgPayment) =>
@@ -53,6 +35,4 @@ trait ReferencePayCalculator extends PreviousYearPeriod with CylbCalculator {
         else avgPayment
     }
 
-  protected def averageDailyCalculator(period: Period, amount: Amount): Amount =
-    Amount(amount.value / periodDaysCount(period)).halfUp
 }

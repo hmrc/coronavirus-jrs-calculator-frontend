@@ -45,14 +45,6 @@ class ReferencePayCalculatorSpec extends SpecBase with CoreDataBuilder {
     calculateVariablePay(nonFurloughPay, priorFurloughPeriod, payPeriods, grossPay, Seq.empty, Monthly) mustBe expected
   }
 
-  "calculate daily average gross earning for a given pay period" in new ReferencePayCalculator {
-    val employeeStartDate = LocalDate.of(2019, 12, 1)
-    val furloughStartDate = LocalDate.of(2020, 3, 1)
-    val periodBeforeFurlough = Period(employeeStartDate, furloughStartDate.minusDays(1))
-
-    averageDailyCalculator(periodBeforeFurlough, Amount(2400.0)) mustBe Amount(26.37)
-  }
-
   "compare cylb and avg gross pay amount taking the greater" in new ReferencePayCalculator {
     val cylb = Seq(
       paymentWithFullPeriod(500.00, fullPeriodWithPaymentDate("2020,3,1", "2020,3,28", "2020, 3, 28"), Varies),
