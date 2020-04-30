@@ -7,8 +7,9 @@ package services
 
 import cats.data.NonEmptyList
 import models.PayQuestion.Varies
-import models.{Amount, CylbPayment, FullPeriod, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriod, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate, Periods}
-import Calculators._
+import models.{Amount, CylbPayment, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate}
+import services.Calculators._
+import NonFurloughPay._
 
 trait ReferencePayCalculator extends PreviousYearPeriod with CylbCalculator {
 
@@ -54,13 +55,4 @@ trait ReferencePayCalculator extends PreviousYearPeriod with CylbCalculator {
 
   protected def averageDailyCalculator(period: Period, amount: Amount): Amount =
     Amount(amount.value / periodDaysCount(period)).halfUp
-
-  def determineNonFurloughPay(period: Periods, nonFurloughPay: NonFurloughPay): Amount =
-    period match {
-      case _: FullPeriod => Amount(0.00)
-      case pp: PartialPeriod =>
-        val pre = if (isFurloughStart(pp)) nonFurloughPay.preAmount else Amount(0.00)
-        val post = if (isFurloughEnd(pp)) nonFurloughPay.postAmount else Amount(0.00)
-        Amount(pre.value + post.value)
-    }
 }

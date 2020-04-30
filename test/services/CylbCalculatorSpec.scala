@@ -14,7 +14,7 @@ import models.{Amount, CylbPayment, NonFurloughPay, Periods}
 
 class CylbCalculatorSpec extends SpecBase with CoreDataBuilder {
 
-  val determineNonFurloughPay: (Periods, NonFurloughPay) => Amount = new ReferencePayCalculator {}.determineNonFurloughPay _
+  val determineNonFurloughPay: (Periods, NonFurloughPay) => Amount = NonFurloughPay.determineNonFurloughPay
 
   "calculate cylb amounts for weekly" in new CylbCalculator {
     val cylbs = Seq(
