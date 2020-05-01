@@ -8,10 +8,7 @@ package services
 import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBase}
-import models.PayQuestion.{Regularly, Varies}
-import models.PayQuestion.Varies
-import base.SpecBase
-import models.PayMethod.Variable
+import models.PayMethod.{Regular, Variable}
 import models.PaymentFrequency.Monthly
 import models.{Amount, CylbPayment, FullPeriod, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriod, PartialPeriodWithPaymentDate, PaymentDate, PaymentWithPeriod, Period}
 
@@ -92,8 +89,8 @@ class ReferencePayCalculatorSpec extends SpecBase with CoreTestDataBuilder {
     )
 
     val expected = Seq(
-      paymentWithFullPeriod(2000.0, fullPeriodWithPaymentDate("2020,3,1", "2020,3,31", "2020, 3, 31"), Regularly),
-      paymentWithPartialPeriod(1000.0, 1000.0, afterFurlough, Regularly)
+      paymentWithFullPeriod(2000.0, fullPeriodWithPaymentDate("2020,3,1", "2020,3,31", "2020, 3, 31"), Regular),
+      paymentWithPartialPeriod(1000.0, 1000.0, afterFurlough, Regular)
     )
 
     calculateRegularPay(salary, periods) mustBe expected

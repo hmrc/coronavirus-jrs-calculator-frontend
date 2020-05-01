@@ -20,12 +20,7 @@ trait JourneyCoreDataBuilder {
 
     val generatedPeriods: Seq[Periods] = generatePeriods(payDates, furloughPeriod)
 
-    JourneyCoreData(
-      furloughPeriod,
-      assign(paymentFrequency, generatedPeriods, lastPayDay),
-      paymentFrequency,
-      nicCategory,
-      pensionContribution)
+    JourneyCoreData(furloughPeriod, assign(paymentFrequency, generatedPeriods, lastPayDay), paymentFrequency, nicCategory, pensionStatus)
   }
 
 }

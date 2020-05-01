@@ -10,34 +10,33 @@ import java.time.LocalDate
 import base.{CoreTestDataBuilder, SpecBase}
 import com.softwaremill.quicklens._
 import models.NicCategory.Payable
-import models.PayQuestion.{Regularly, Varies}
+import models.PayMethod.{Regular, Variable}
 import models.PaymentFrequency.Monthly
-import models.VariableLengthEmployed.{No, Yes}
-import models.{Amount, BranchingQuestion, JourneyCoreData, NonFurloughPay, PensionContribution, PeriodWithPaymentDate, RegularPay, RegularPayData, Salary, UserAnswers, VariableGrossPay, VariablePay, VariablePayData, VariablePayWithCylb}
-import pages.{EmployeeStartDatePage, PayQuestionPage, SalaryQuestionPage, VariableGrossPayPage}
+import models.{Amount, BranchingQuestion, EmployeeStarted, JourneyCoreData, NonFurloughPay, PensionStatus, PeriodWithPaymentDate, RegularPay, RegularPayData, Salary, UserAnswers, VariableGrossPay, VariablePay, VariablePayData, VariablePayWithCylb}
+import pages.{EmployeeStartDatePage, PayMethodPage, SalaryQuestionPage, VariableGrossPayPage}
 
 class JourneyBuilderSpec extends SpecBase with CoreTestDataBuilder {
 
   "return regular journey if pay question is Regularly" in new JourneyBuilder {
-    val branchData = BranchingQuestion(Regularly, None, None)
+    val branchData = BranchingQuestion(Regular, None, None)
 
     define(branchData) mustBe RegularPay
   }
 
   "return variable journey if pay question is Varies and no Cylb eligible" in new JourneyBuilder {
-    val branchData = BranchingQuestion(Varies, Some(No), Some(LocalDate.of(2019, 4, 6)))
+    val branchData = BranchingQuestion(Variable, Some(EmployeeStarted.After1Feb2019), Some(LocalDate.of(2019, 4, 6)))
 
     define(branchData) mustBe VariablePay
   }
 
-  "return variable journey if pay question is Varies and Cylb eligible" in new JourneyBuilder {
-    val branchData = BranchingQuestion(Varies, Some(Yes), None)
+  "return variable journey if pay question is Variable and Cylb eligible" in new JourneyBuilder {
+    val branchData = BranchingQuestion(Variable, Some(EmployeeStarted.OnOrBefore1Feb2019), None)
 
     define(branchData) mustBe VariablePayWithCylb
     define(
       branchData
         .modify(_.variableLengthEmployed.each)
-        .setTo(No)
+        .setTo(EmployeeStarted.After1Feb2019)
         .modify(_.employeeStartDate)
         .setTo(Some(LocalDate.of(2019, 4, 5)))) mustBe VariablePayWithCylb
   }
@@ -47,7 +46,7 @@ class JourneyBuilderSpec extends SpecBase with CoreTestDataBuilder {
       .set(SalaryQuestionPage, Salary(1000.0))
       .get
     val periods: Seq[PeriodWithPaymentDate] = defaultJourneyCoreData.periods
-    val expectedCoreData = JourneyCoreData(period("2020-03-01", "2020-03-31"), periods, Monthly, Payable, PensionContribution.Yes)
+    val expectedCoreData = JourneyCoreData(period("2020-03-01", "2020-03-31"), periods, Monthly, Payable, PensionStatus.DoesContribute)
 
     val actual = journeyData(RegularPay, initialAnswers)
 
@@ -58,13 +57,13 @@ class JourneyBuilderSpec extends SpecBase with CoreTestDataBuilder {
     val initialAnswers: UserAnswers = mandatoryAnswer
       .set(VariableGrossPayPage, VariableGrossPay(1000.0))
       .get
-      .set(PayQuestionPage, Varies)
+      .set(PayMethodPage, Variable)
       .get
       .set(EmployeeStartDatePage, LocalDate.of(2019, 12, 1))
       .get
 
     val periods: Seq[PeriodWithPaymentDate] = defaultJourneyCoreData.periods
-    val expectedCoreData = JourneyCoreData(period("2020-03-01", "2020-03-31"), periods, Monthly, Payable, PensionContribution.Yes)
+    val expectedCoreData = JourneyCoreData(period("2020-03-01", "2020-03-31"), periods, Monthly, Payable, PensionStatus.DoesContribute)
 
     val actual = journeyData(VariablePay, initialAnswers)
 

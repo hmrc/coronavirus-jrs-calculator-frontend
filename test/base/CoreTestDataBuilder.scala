@@ -7,13 +7,11 @@ package base
 
 import java.time.LocalDate
 
+import models.FurloughStatus.FurloughOngoing
 import models.NicCategory.Payable
-import models.PayQuestion.Regularly
+import models.PayMethod.Regular
 import models.PaymentFrequency.Monthly
-import models.PensionContribution.Yes
-import models.{Amount, BranchingQuestion, FullPeriod, FullPeriodWithPaymentDate, FurloughOngoing, JourneyCoreData, MandatoryData, PartialPeriod, PartialPeriodWithPaymentDate, PayQuestion, PaymentDate, PaymentWithFullPeriod, PaymentWithPartialPeriod, Period}
-import models.{Amount, FullPeriod, FullPeriodWithPaymentDate, PartialPeriod, PartialPeriodWithPaymentDate, PayMethod, PaymentDate, PaymentWithFullPeriod, PaymentWithPartialPeriod, Period}
-import models.{Amount, FullPeriod, FullPeriodWithPaymentDate, FurloughOngoing, JourneyCoreData, MandatoryData, PartialPeriod, PartialPeriodWithPaymentDate, PayQuestion, PaymentDate, PaymentWithFullPeriod, PaymentWithPartialPeriod, Period, UserAnswers}
+import models.{Amount, FullPeriod, FullPeriodWithPaymentDate, JourneyCoreData, MandatoryData, PartialPeriod, PartialPeriodWithPaymentDate, PayMethod, PaymentDate, PaymentWithFullPeriod, PaymentWithPartialPeriod, PensionStatus, Period, UserAnswers}
 import pages._
 
 trait CoreTestDataBuilder {
@@ -60,10 +58,24 @@ trait CoreTestDataBuilder {
   private val furloughStart = buildLocalDate(periodBuilder("2020-3-1"))
   private val lastPayDate = buildLocalDate(periodBuilder("2020-3-31"))
   val defaultedMandatoryData =
-    MandatoryData(claimPeriod, Monthly, Payable, Yes, Regularly, FurloughOngoing.Yes, Seq.empty, furloughStart, lastPayDate)
+    MandatoryData(
+      claimPeriod,
+      Monthly,
+      Payable,
+      PensionStatus.DoesContribute,
+      Regular,
+      FurloughOngoing,
+      Seq.empty,
+      furloughStart,
+      lastPayDate)
 
   val defaultJourneyCoreData =
-    JourneyCoreData(claimPeriod, Seq(fullPeriodWithPaymentDate("2020-3-1", "2020-3-31", "2020-3-31")), Monthly, Payable, Yes)
+    JourneyCoreData(
+      claimPeriod,
+      Seq(fullPeriodWithPaymentDate("2020-3-1", "2020-3-31", "2020-3-31")),
+      Monthly,
+      Payable,
+      PensionStatus.DoesContribute)
 
   val mandatoryAnswer = UserAnswers("id")
     .set(ClaimPeriodStartPage, LocalDate.of(2020, 3, 1))
@@ -74,11 +86,11 @@ trait CoreTestDataBuilder {
     .get
     .set(NicCategoryPage, Payable)
     .get
-    .set(PensionContributionPage, Yes)
+    .set(PensionStatusPage, PensionStatus.DoesContribute)
     .get
-    .set(PayQuestionPage, Regularly)
+    .set(PayMethodPage, Regular)
     .get
-    .set(FurloughOngoingPage, FurloughOngoing.Yes)
+    .set(FurloughStatusPage, FurloughOngoing)
     .get
     .set(FurloughStartDatePage, LocalDate.of(2020, 3, 1))
     .get

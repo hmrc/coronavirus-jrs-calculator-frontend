@@ -7,10 +7,8 @@ package handlers
 
 import java.time.LocalDate
 
-import models.PayQuestion.{Regularly, Varies}
-import models.{Amount, CylbEligibility, CylbPayment, FullPeriodWithPaymentDate, JourneyCoreData, MandatoryData, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate, Periods, UserAnswers, VariableLengthEmployed}
 import models.PayMethod.{Regular, Variable}
-import models.{Amount, CylbEligibility, CylbPayment, EmployeeStarted, FullPeriodWithPaymentDate, MandatoryData, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate, Periods, UserAnswers}
+import models.{Amount, CylbEligibility, CylbPayment, EmployeeStarted, FullPeriodWithPaymentDate, JourneyCoreData, MandatoryData, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate, Periods, UserAnswers}
 import pages._
 import services.{FurloughPeriodExtractor, ReferencePayCalculator}
 
@@ -100,8 +98,8 @@ trait DataExtractor extends ReferencePayCalculator with FurloughPeriodExtractor 
       nonFurloughPay = extractNonFurlough(userAnswers)
     } yield calculateVariablePay(nonFurloughPay, priorFurloughPeriod, periods, grossPay, cylbs, frequency)
 
-  protected def cylbCalculationPredicate(variableLength: VariableLengthEmployed, employeeStartDate: LocalDate): CylbEligibility =
-    CylbEligibility(variableLength == VariableLengthEmployed.Yes || employeeStartDate.isBefore(LocalDate.of(2019, 4, 6)))
+  protected def cylbCalculationPredicate(employeeStarted: EmployeeStarted, employeeStartDate: LocalDate): CylbEligibility =
+    CylbEligibility(employeeStarted == EmployeeStarted.OnOrBefore1Feb2019 || employeeStartDate.isBefore(LocalDate.of(2019, 4, 6)))
 
   def extractNonFurlough(userAnswers: UserAnswers): NonFurloughPay = {
     val preFurloughPay = userAnswers.get(PartialPayBeforeFurloughPage)
@@ -122,6 +120,6 @@ trait DataExtractor extends ReferencePayCalculator with FurloughPeriodExtractor 
       furloughPeriod <- extractRelevantFurloughPeriod(userAnswers)
       periods = generatePeriods(data.payDates, furloughPeriod)
       assigned = assignPayDates(data.paymentFrequency, periods, data.lastPayDay)
-    } yield JourneyCoreData(furloughPeriod, assigned, data.paymentFrequency, data.nicCategory, data.pensionContribution)
+    } yield JourneyCoreData(furloughPeriod, assigned, data.paymentFrequency, data.nicCategory, data.pensionStatus)
 
 }

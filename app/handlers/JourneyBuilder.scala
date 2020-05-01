@@ -7,18 +7,17 @@ package handlers
 
 import java.time.LocalDate
 
-import models.PayQuestion.{Regularly, Varies}
-import models.VariableLengthEmployed.{No, Yes}
-import models.{Amount, BranchingQuestion, Journey, JourneyCoreData, JourneyData, RegularPay, RegularPayData, UserAnswers, VariablePay, VariablePayData, VariablePayWithCylb}
-import services.ReferencePayCalculator
+import models.EmployeeStarted.{After1Feb2019, OnOrBefore1Feb2019}
+import models.PayMethod.{Regular, Variable}
+import models.{BranchingQuestion, Journey, JourneyData, RegularPay, RegularPayData, UserAnswers, VariablePay, VariablePayData, VariablePayWithCylb}
 
 trait JourneyBuilder extends DataExtractor {
 
   def define(data: BranchingQuestion): Journey = data match {
-    case BranchingQuestion(Regularly, _, _)                                                   => RegularPay
-    case BranchingQuestion(Varies, Some(No), Some(d)) if d.isAfter(LocalDate.of(2019, 4, 5))  => VariablePay
-    case BranchingQuestion(Varies, Some(No), Some(d)) if d.isBefore(LocalDate.of(2019, 4, 6)) => VariablePayWithCylb
-    case BranchingQuestion(Varies, Some(Yes), _)                                              => VariablePayWithCylb
+    case BranchingQuestion(Regular, _, _)                                                                  => RegularPay
+    case BranchingQuestion(Variable, Some(After1Feb2019), Some(d)) if d.isAfter(LocalDate.of(2019, 4, 5))  => VariablePay
+    case BranchingQuestion(Variable, Some(After1Feb2019), Some(d)) if d.isBefore(LocalDate.of(2019, 4, 6)) => VariablePayWithCylb
+    case BranchingQuestion(Variable, Some(OnOrBefore1Feb2019), _)                                          => VariablePayWithCylb
   }
 
   def journeyData(journey: Journey, userAnswers: UserAnswers): Option[JourneyData] = journey match {

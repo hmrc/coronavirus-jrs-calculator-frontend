@@ -8,7 +8,7 @@ package services
 import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBase}
-import models.PayQuestion.Varies
+import models.PayMethod.Variable
 import models.{Amount, FullPeriod, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriod, PartialPeriodWithPaymentDate, PaymentDate, Period, PeriodWithPaymentDate}
 
 class AverageCalculatorSpec extends SpecBase with CoreTestDataBuilder {

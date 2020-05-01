@@ -13,8 +13,6 @@ package handlers
 import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBase}
-import models.PayQuestion.{Regularly, Varies}
-import base.SpecBase
 import models.PayMethod.{Regular, Variable}
 import models.{Amount, CylbEligibility, FullPeriod, FullPeriodWithPaymentDate, MandatoryData, PaymentDate, Period, UserAnswers}
 import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage, FurloughEndDatePage, FurloughStartDatePage}

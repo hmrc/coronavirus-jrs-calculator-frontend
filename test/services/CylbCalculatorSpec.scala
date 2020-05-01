@@ -8,8 +8,6 @@ package services
 import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBase}
-import models.PayQuestion.Varies
-import base.SpecBase
 import models.PayMethod.Variable
 import models.PaymentFrequency.{FortNightly, FourWeekly, Weekly}
 import models.{Amount, CylbPayment, NonFurloughPay, Periods}
