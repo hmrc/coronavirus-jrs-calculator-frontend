@@ -8,6 +8,7 @@ package services
 import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBase}
+import models.PayQuestion.{Regularly, Varies}
 import models.PayQuestion.Varies
 import base.SpecBase
 import models.PayMethod.Variable
@@ -79,5 +80,22 @@ class ReferencePayCalculatorSpec extends SpecBase with CoreTestDataBuilder {
     )
 
     calculateVariablePay(nonFurloughPay, priorFurloughPeriod, Seq(afterFurloughPeriod), Amount(2400.0), cylbs, Monthly) mustBe expected
+  }
+
+  "calculates regular pay" in new ReferencePayCalculator {
+    val salary = Amount(2000)
+    val afterFurlough = partialPeriodWithPaymentDate("2020, 4, 1", "2020, 4, 30", "2020, 4, 1", "2020, 4, 15", "2020, 4, 30")
+
+    val periods = Seq(
+      fullPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 31"),
+      afterFurlough
+    )
+
+    val expected = Seq(
+      paymentWithFullPeriod(2000.0, fullPeriodWithPaymentDate("2020,3,1", "2020,3,31", "2020, 3, 31"), Regularly),
+      paymentWithPartialPeriod(1000.0, 1000.0, afterFurlough, Regularly)
+    )
+
+    calculateRegularPay(salary, periods) mustBe expected
   }
 }

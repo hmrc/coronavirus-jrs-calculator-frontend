@@ -7,6 +7,8 @@ package handlers
 
 import java.time.LocalDate
 
+import models.PayQuestion.{Regularly, Varies}
+import models.{Amount, CylbEligibility, CylbPayment, FullPeriodWithPaymentDate, JourneyCoreData, MandatoryData, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate, Periods, UserAnswers, VariableLengthEmployed}
 import models.PayMethod.{Regular, Variable}
 import models.{Amount, CylbEligibility, CylbPayment, EmployeeStarted, FullPeriodWithPaymentDate, MandatoryData, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate, Periods, UserAnswers}
 import pages._
@@ -47,7 +49,7 @@ trait DataExtractor extends ReferencePayCalculator with FurloughPeriodExtractor 
       }
     }
 
-  protected def extractPriorFurloughPeriod(userAnswers: UserAnswers): Option[Period] =
+  def extractPriorFurloughPeriod(userAnswers: UserAnswers): Option[Period] =
     for {
       data <- extract(userAnswers)
       employeeStartDate = userAnswers.get(EmployeeStartDatePage).fold(LocalDate.of(2019, 4, 6))(v => v)
@@ -95,11 +97,31 @@ trait DataExtractor extends ReferencePayCalculator with FurloughPeriodExtractor 
     for {
       grossPay            <- extractGrossPay(userAnswers)
       priorFurloughPeriod <- extractPriorFurloughPeriod(userAnswers)
-      preFurloughPay = userAnswers.get(PartialPayBeforeFurloughPage)
-      postFurloughPay = userAnswers.get(PartialPayAfterFurloughPage)
-      nonFurloughPay = NonFurloughPay(preFurloughPay.map(v => Amount(v.value)), postFurloughPay.map(v => Amount(v.value)))
+      nonFurloughPay = extractNonFurlough(userAnswers)
     } yield calculateVariablePay(nonFurloughPay, priorFurloughPeriod, periods, grossPay, cylbs, frequency)
 
-  protected def cylbCalculationPredicate(employeeStarted: EmployeeStarted, employeeStartDate: LocalDate): CylbEligibility =
-    CylbEligibility(employeeStarted == EmployeeStarted.OnOrBefore1Feb2019 || employeeStartDate.isBefore(LocalDate.of(2019, 4, 6)))
+  protected def cylbCalculationPredicate(variableLength: VariableLengthEmployed, employeeStartDate: LocalDate): CylbEligibility =
+    CylbEligibility(variableLength == VariableLengthEmployed.Yes || employeeStartDate.isBefore(LocalDate.of(2019, 4, 6)))
+
+  def extractNonFurlough(userAnswers: UserAnswers): NonFurloughPay = {
+    val preFurloughPay = userAnswers.get(PartialPayBeforeFurloughPage)
+    val postFurloughPay = userAnswers.get(PartialPayAfterFurloughPage)
+
+    NonFurloughPay(preFurloughPay.map(v => Amount(v.value)), postFurloughPay.map(v => Amount(v.value)))
+  }
+
+  def extractSalary(userAnswers: UserAnswers): Option[Amount] =
+    userAnswers.get(SalaryQuestionPage).map(v => Amount(v.amount))
+
+  def extractVariableGrossPay(userAnswers: UserAnswers): Option[Amount] =
+    userAnswers.get(VariableGrossPayPage).map(v => Amount(v.amount))
+
+  def extractJourneyCoreData(userAnswers: UserAnswers): Option[JourneyCoreData] =
+    for {
+      data           <- extract(userAnswers)
+      furloughPeriod <- extractRelevantFurloughPeriod(userAnswers)
+      periods = generatePeriods(data.payDates, furloughPeriod)
+      assigned = assignPayDates(data.paymentFrequency, periods, data.lastPayDay)
+    } yield JourneyCoreData(furloughPeriod, assigned, data.paymentFrequency, data.nicCategory, data.pensionContribution)
+
 }

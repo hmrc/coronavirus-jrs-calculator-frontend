@@ -13,6 +13,8 @@ import models.PaymentFrequency.Monthly
 import models.PensionContribution.Yes
 import models.{Amount, BranchingQuestion, FullPeriod, FullPeriodWithPaymentDate, FurloughOngoing, JourneyCoreData, MandatoryData, PartialPeriod, PartialPeriodWithPaymentDate, PayQuestion, PaymentDate, PaymentWithFullPeriod, PaymentWithPartialPeriod, Period}
 import models.{Amount, FullPeriod, FullPeriodWithPaymentDate, PartialPeriod, PartialPeriodWithPaymentDate, PayMethod, PaymentDate, PaymentWithFullPeriod, PaymentWithPartialPeriod, Period}
+import models.{Amount, FullPeriod, FullPeriodWithPaymentDate, FurloughOngoing, JourneyCoreData, MandatoryData, PartialPeriod, PartialPeriodWithPaymentDate, PayQuestion, PaymentDate, PaymentWithFullPeriod, PaymentWithPartialPeriod, Period, UserAnswers}
+import pages._
 
 trait CoreTestDataBuilder {
 
@@ -54,15 +56,36 @@ trait CoreTestDataBuilder {
 
   private val buildLocalDate: Array[Int] => LocalDate = array => LocalDate.of(array(0), array(1), array(2))
 
-
   private val claimPeriod: Period = period("2020-3-1", "2020-3-31")
   private val furloughStart = buildLocalDate(periodBuilder("2020-3-1"))
   private val lastPayDate = buildLocalDate(periodBuilder("2020-3-31"))
-  val defaultedMandatoryData = MandatoryData(claimPeriod, Monthly, Payable, Yes,
-    Regularly, FurloughOngoing.Yes, Seq.empty, furloughStart, lastPayDate)
+  val defaultedMandatoryData =
+    MandatoryData(claimPeriod, Monthly, Payable, Yes, Regularly, FurloughOngoing.Yes, Seq.empty, furloughStart, lastPayDate)
 
-  val defaultJourneyCoreData = JourneyCoreData(claimPeriod,
-    Seq(fullPeriodWithPaymentDate("2020-3-1", "2020-3-31", "2020-3-31")),
-    Monthly, Payable, Yes)
+  val defaultJourneyCoreData =
+    JourneyCoreData(claimPeriod, Seq(fullPeriodWithPaymentDate("2020-3-1", "2020-3-31", "2020-3-31")), Monthly, Payable, Yes)
 
+  val mandatoryAnswer = UserAnswers("id")
+    .set(ClaimPeriodStartPage, LocalDate.of(2020, 3, 1))
+    .get
+    .set(ClaimPeriodEndPage, LocalDate.of(2020, 3, 31))
+    .get
+    .set(PaymentFrequencyPage, Monthly)
+    .get
+    .set(NicCategoryPage, Payable)
+    .get
+    .set(PensionContributionPage, Yes)
+    .get
+    .set(PayQuestionPage, Regularly)
+    .get
+    .set(FurloughOngoingPage, FurloughOngoing.Yes)
+    .get
+    .set(FurloughStartDatePage, LocalDate.of(2020, 3, 1))
+    .get
+    .set(LastPayDatePage, LocalDate.of(2020, 3, 31))
+    .get
+    .setListWithInvalidation(PayDatePage, LocalDate.of(2020, 2, 29), 1)
+    .get
+    .setListWithInvalidation(PayDatePage, LocalDate.of(2020, 3, 31), 2)
+    .get
 }
