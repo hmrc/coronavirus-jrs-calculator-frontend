@@ -13,6 +13,7 @@ import utils.LocalDateHelpers
 
 trait FurloughPeriodExtractor extends LocalDateHelpers {
 
+  // TODO: Equivalent to extractFurloughPeriod - rename after that is removed
   def extractFurloughPeriod2(userAnswers: UserAnswers): Option[FurloughDates] =
     for {
       furloughStart <- userAnswers.get(FurloughStartDatePage)
@@ -20,23 +21,21 @@ trait FurloughPeriodExtractor extends LocalDateHelpers {
       FurloughDates(furloughStart, userAnswers.get(FurloughEndDatePage))
     }
 
-  def extractFurloughWithinClaim(userAnswers: UserAnswers): Option[FurloughWithinClaim] = {
+  def extractFurloughWithinClaim(userAnswers: UserAnswers): Option[FurloughWithinClaim] =
     for {
       claimPeriodStart <- userAnswers.get(ClaimPeriodStartPage)
       claimPeriodEnd   <- userAnswers.get(ClaimPeriodEndPage)
-      furloughDates <- extractFurloughPeriod2(userAnswers)
+      furloughDates    <- extractFurloughPeriod2(userAnswers)
     } yield {
       val startDate = latestOf(claimPeriodStart, furloughDates.start)
       val endDate = furloughDates match {
-        case FurloughOngoing(_) => claimPeriodEnd
-        case FurloughEnded(_, furloughEnd) => furloughEnd
+        case FurloughOngoing(_)            => claimPeriodEnd
+        case FurloughEnded(_, furloughEnd) => earliestOf(claimPeriodEnd, furloughEnd)
       }
-      FurloughWithinClaim(Period(startDate, endDate))
+      FurloughWithinClaim(startDate, endDate)
     }
-  }
 
-
-
+  // TODO: Remove after refactor
   def extractFurloughPeriod(userAnswers: UserAnswers): Option[Period] =
     for {
       furloughStart  <- userAnswers.get(FurloughStartDatePage)
@@ -46,6 +45,7 @@ trait FurloughPeriodExtractor extends LocalDateHelpers {
         .get(FurloughEndDatePage)
         .fold(Period(furloughStart, claimPeriodEnd))(furloughEnd => Period(furloughStart, furloughEnd))
 
+  // TODO: Remove after refactor
   def extractRelevantFurloughPeriod(userAnswers: UserAnswers): Option[Period] =
     for {
       furloughStart    <- userAnswers.get(FurloughStartDatePage)
@@ -53,6 +53,7 @@ trait FurloughPeriodExtractor extends LocalDateHelpers {
       claimPeriodEnd   <- userAnswers.get(ClaimPeriodEndPage)
     } yield extractRelevantFurloughPeriod(furloughStart, userAnswers.get(FurloughEndDatePage), claimPeriodStart, claimPeriodEnd)
 
+  // TODO: Remove after refactor
   def extractRelevantFurloughPeriod(
     furloughStart: LocalDate,
     furloughEnd: Option[LocalDate],

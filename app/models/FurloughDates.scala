@@ -14,7 +14,11 @@ sealed trait FurloughDates {
 final case class FurloughOngoing(start: LocalDate) extends FurloughDates
 final case class FurloughEnded(start: LocalDate, end: LocalDate) extends FurloughDates
 
-final case class FurloughWithinClaim(period: Period)
+final case class FurloughWithinClaim(start: LocalDate, end: LocalDate)
+
+object FurloughWithinClaim {
+  def apply(period: Period): FurloughWithinClaim = FurloughWithinClaim(period.start, period.end)
+}
 
 object FurloughDates {
   def apply(start: LocalDate, end: Option[LocalDate] = None): FurloughDates =
