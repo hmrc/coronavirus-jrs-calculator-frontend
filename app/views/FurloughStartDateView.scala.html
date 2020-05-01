@@ -22,16 +22,12 @@
         @errorSummary(form.errors)
 
         <fieldset class="govuk-fieldset" role="group" aria-describedby="furlough-heading-hint">
-            <legend class="govuk-fieldset__legend--l">
-                <h1 class="govuk-heading-xl">
-                @messages("furloughStartDate.heading")
-                </h1>
+            <legend class="govuk-fieldset__legend--xl">
+                <h1 class="govuk-heading-xl">@messages("furloughStartDate.heading")</h1>
             </legend>
 
             <span id="furlough-heading-hint" class="govuk-body">messages("furloughStartDate.hint")</span>
         </fieldset>
-
-
 
 
         @inputDate(
