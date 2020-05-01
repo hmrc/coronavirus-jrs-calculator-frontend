@@ -72,7 +72,7 @@ class AuditService @Inject()(auditConnector: AuditConnector, config: FrontendApp
       "employeePayFrequency"               -> JsString(userAnswers.get(PaymentFrequencyPage).fold("")(_.toString)),
       "employeePayMethod"                  -> JsString(userAnswers.get(PayMethodPage).fold("")(_.toString)),
       "employeeSalary"                     -> JsString(userAnswers.get(SalaryQuestionPage).fold("")(_.amount.toString)),
-      "employeeEmployedOnOrBefore1Feb2019" -> JsString(userAnswers.get(VariableLengthEmployedPage).fold("")(_.toString)),
+      "employeeEmployedOnOrBefore1Feb2019" -> JsString(userAnswers.get(EmployedStartedPage).fold("")(_.toString)),
       "employeeStartDate"                  -> JsString(userAnswers.get(EmployeeStartDatePage).fold("")(_.toString)),
       "employeeGrossPayForYear"            -> JsString(userAnswers.get(VariableGrossPayPage).fold("")(_.amount.toString)),
       "employeePayPeriodEndDates"          -> Json.toJson(userAnswers.getList(PayDatePage)),
@@ -81,7 +81,7 @@ class AuditService @Inject()(auditConnector: AuditConnector, config: FrontendApp
       "employeePartialPayBeforeFurlough"   -> JsString(userAnswers.get(PartialPayBeforeFurloughPage).fold("")(_.value.toString)),
       "employeePartialPayAfterFurlough"    -> JsString(userAnswers.get(PartialPayAfterFurloughPage).fold("")(_.value.toString)),
       "employeeNationalInsuranceCategory"  -> JsString(userAnswers.get(NicCategoryPage).fold("")(_.toString)),
-      "employerPensionContributions"       -> JsString(userAnswers.get(PensionContributionPage).fold("")(_.toString))
+      "employerPensionStatus"              -> JsString(userAnswers.get(PensionStatusPage).fold("")(_.toString))
     )
 
   private def breakdownTransformer(breakdown: ConfirmationViewBreakdown) = {

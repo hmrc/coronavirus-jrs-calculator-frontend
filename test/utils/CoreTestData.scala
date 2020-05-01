@@ -35,7 +35,7 @@ trait CoreTestData {
        |            "amount" : "$variableGrossPay"
        |        },
        |        "employeeStartDate": "$employeeStartDate",
-       |        "pensionContribution" : "yes",
+       |        "pensionStatus" : "doesContribute",
        |        "claimPeriodEnd" : "2020-04-30",
        |        "paymentFrequency" : "monthly",
        |        "salary" : {
@@ -63,7 +63,7 @@ trait CoreTestData {
       |    "furloughStatus": "ongoing",
       |    "furloughStartDate" : "2020-03-01",
       |    "payMethod": "regular",
-      |    "pensionContribution": "no",
+      |    "pensionStatus": "doesNotContribute",
       |    "claimPeriodEnd": "2020-04-30",
       |    "paymentFrequency": "monthly",
       |    "salary": {
@@ -90,7 +90,7 @@ trait CoreTestData {
       |        "furloughStatus" : "ongoing",
       |        "furloughStartDate" : "2020-03-10",
       |        "payMethod" : "regular",
-      |        "pensionContribution" : "yes",
+      |        "pensionStatus" : "doesContribute",
       |        "claimPeriodEnd" : "2020-03-31",
       |        "paymentFrequency" : "monthly",
       |        "salary" : {
@@ -117,7 +117,7 @@ trait CoreTestData {
       |        "variableGrossPay" : {
       |            "amount" : 10000
       |        },
-      |        "variableLengthEmployed" : "no",
+      |        "employeeStarted" : "after1Feb2019",
       |        "employeeStartDate" : "2019-12-01",
       |        "furloughEndDate" : "2020-04-20",
       |        "paymentFrequency" : "monthly",
@@ -132,7 +132,7 @@ trait CoreTestData {
       |        },
       |        "furloughStartDate" : "2020-03-10",
       |        "payMethod" : "variable",
-      |        "pensionContribution" : "yes",
+      |        "pensionStatus" : "doesContribute",
       |        "claimPeriodEnd" : "2020-04-30",
       |        "nicCategory" : "payable",
       |        "payDate" : [
@@ -156,7 +156,7 @@ trait CoreTestData {
       |        "variableGrossPay" : {
       |            "amount" : 12960
       |        },
-      |        "variableLengthEmployed" : "no",
+      |        "employeeStarted" : "after1Feb2019",
       |        "employeeStartDate" : "2019-08-01",
       |        "paymentFrequency" : "monthly",
       |        "claimPeriodStart" : "2020-03-01",
@@ -167,7 +167,7 @@ trait CoreTestData {
       |        },
       |        "furloughStartDate" : "2020-03-05",
       |        "payMethod" : "variable",
-      |        "pensionContribution" : "yes",
+      |        "pensionStatus" : "doesContribute",
       |        "claimPeriodEnd" : "2020-03-31",
       |        "nicCategory" : "payable",
       |        "payDate" : [
@@ -190,7 +190,7 @@ trait CoreTestData {
        |        "variableGrossPay" : {
        |            "amount" : 10000
        |        },
-       |        "variableLengthEmployed" : "no",
+       |        "employeeStarted" : "after1Feb2019",
        |        "employeeStartDate" : "2019-12-01",
        |        "furloughEndDate" : "2020-03-21",
        |        "paymentFrequency" : "weekly",
@@ -199,7 +199,7 @@ trait CoreTestData {
        |        "lastPayDate" : "$lastPayDate",
        |        "furloughStartDate" : "2020-03-10",
        |        "payMethod" : "variable",
-       |        "pensionContribution" : "yes",
+       |        "pensionStatus" : "doesContribute",
        |        "claimPeriodEnd" : "2020-03-21",
        |        "nicCategory" : "payable",
        |        "payDate" : [
@@ -224,7 +224,7 @@ trait CoreTestData {
       |        "variableGrossPay" : {
       |            "amount" : 10000
       |        },
-      |        "variableLengthEmployed" : "no",
+      |        "employeeStarted" : "after1Feb2019",
       |        "employeeStartDate" : "2019-12-01",
       |        "furloughEndDate" : "2020-03-21",
       |        "paymentFrequency" : "fortnightly",
@@ -233,7 +233,7 @@ trait CoreTestData {
       |        "lastPayDate" : "2020-03-28",
       |        "furloughStartDate" : "2020-03-10",
       |        "payMethod" : "variable",
-      |        "pensionContribution" : "yes",
+      |        "pensionStatus" : "doesContribute",
       |        "claimPeriodEnd" : "2020-03-21",
       |        "nicCategory" : "payable",
       |        "payDate" : [
@@ -257,7 +257,7 @@ trait CoreTestData {
       |        "variableGrossPay" : {
       |            "amount" : 10000
       |        },
-      |        "variableLengthEmployed" : "no",
+      |        "employeeStarted" : "after1Feb2019",
       |        "employeeStartDate" : "2019-12-01",
       |        "furloughEndDate" : "2020-04-26",
       |        "paymentFrequency" : "fourweekly",
@@ -266,7 +266,7 @@ trait CoreTestData {
       |        "lastPayDate" : "2020-04-25",
       |        "furloughStartDate" : "2020-03-10",
       |        "payMethod" : "variable",
-      |        "pensionContribution" : "yes",
+      |        "pensionStatus" : "doesContribute",
       |        "claimPeriodEnd" : "2020-03-21",
       |        "nicCategory" : "payable",
       |        "payDate" : [
@@ -290,7 +290,7 @@ trait CoreTestData {
       |        "variableGrossPay" : {
       |            "amount" : 20000.0
       |        },
-      |        "variableLengthEmployed" : "no",
+      |        "employeeStarted" : "after1Feb2019",
       |        "employeeStartDate" : "2019-04-03",
       |        "paymentFrequency" : "monthly",
       |        "claimPeriodStart" : "2020-03-01",
@@ -311,7 +311,7 @@ trait CoreTestData {
       |        },
       |        "furloughStartDate" : "2020-03-15",
       |        "payMethod" : "variable",
-      |        "pensionContribution" : "yes",
+      |        "pensionStatus" : "doesContribute",
       |        "claimPeriodEnd" : "2020-04-30",
       |        "nicCategory" : "payable",
       |        "payDate" : [
@@ -335,7 +335,7 @@ trait CoreTestData {
       |        "variableGrossPay" : {
       |            "amount" : 31970
       |        },
-      |        "variableLengthEmployed" : "yes",
+      |        "employeeStarted" : "onOrBefore1Feb2019",
       |        "furloughEndDate" : "2020-03-28",
       |        "paymentFrequency" : "fourweekly",
       |        "claimPeriodStart" : "2020-03-01",
@@ -356,7 +356,7 @@ trait CoreTestData {
       |        },
       |        "furloughStartDate" : "2020-03-02",
       |        "payMethod" : "variable",
-      |        "pensionContribution" : "yes",
+      |        "pensionStatus" : "doesContribute",
       |        "claimPeriodEnd" : "2020-03-28",
       |        "nicCategory" : "payable",
       |        "payDate" : [
@@ -379,7 +379,7 @@ trait CoreTestData {
       |        "variableGrossPay" : {
       |            "amount" : 31970
       |        },
-      |        "variableLengthEmployed" : "yes",
+      |        "employeeStarted" : "onOrBefore1Feb2019",
       |        "furloughEndDate" : "2020-03-31",
       |        "paymentFrequency" : "weekly",
       |        "claimPeriodStart" : "2020-03-01",
@@ -412,7 +412,7 @@ trait CoreTestData {
       |        },
       |        "furloughStartDate" : "2020-03-01",
       |        "payMethod" : "variable",
-      |        "pensionContribution" : "yes",
+      |        "pensionStatus" : "doesContribute",
       |        "claimPeriodEnd" : "2020-03-31",
       |        "nicCategory" : "payable",
       |        "payDate" : [

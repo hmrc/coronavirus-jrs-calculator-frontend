@@ -31,8 +31,8 @@ trait PageGenerators {
   implicit lazy val arbitraryEmployeeStartDatePage: Arbitrary[EmployeeStartDatePage.type] =
     Arbitrary(EmployeeStartDatePage)
 
-  implicit lazy val arbitraryVariableLengthEmployedPage: Arbitrary[VariableLengthEmployedPage.type] =
-    Arbitrary(VariableLengthEmployedPage)
+  implicit lazy val arbitraryEmployeeStartedPage: Arbitrary[EmployedStartedPage.type] =
+    Arbitrary(EmployedStartedPage)
 
   implicit lazy val arbitraryFurloughStartDatePage: Arbitrary[FurloughStartDatePage.type] =
     Arbitrary(FurloughStartDatePage)
@@ -46,11 +46,11 @@ trait PageGenerators {
   implicit lazy val arbitraryClaimPeriodEndPage: Arbitrary[ClaimPeriodEndPage.type] =
     Arbitrary(ClaimPeriodEndPage)
 
-  implicit lazy val arbitraryfurloughOngoingPage: Arbitrary[FurloughStatusPage.type] =
+  implicit lazy val arbitraryFurloughOngoingPage: Arbitrary[FurloughStatusPage.type] =
     Arbitrary(FurloughStatusPage)
 
-  implicit lazy val arbitraryPensionAutoEnrolmentPage: Arbitrary[PensionContributionPage.type] =
-    Arbitrary(PensionContributionPage)
+  implicit lazy val arbitraryPensionStatusPage: Arbitrary[PensionStatusPage.type] =
+    Arbitrary(PensionStatusPage)
 
   implicit lazy val arbitraryNicCategoryPage: Arbitrary[NicCategoryPage.type] =
     Arbitrary(NicCategoryPage)

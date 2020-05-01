@@ -260,8 +260,8 @@ nicCategory.details.category.z = Employees under 21 who can defer National Insur
 
 pensionContribution.title = Do you pay pension contributions for this employee?
 pensionContribution.heading = Do you pay pension contributions for this employee?
-pensionContribution.yes = Yes
-pensionContribution.no = No
+pensionContribution.doesContribute = Yes
+pensionContribution.doesNotContribute = No
 pensionContribution.error.required = Select yes if you pay pension contributions for this employee
 
 confirmation.title = What you can claim for this employee
@@ -370,8 +370,8 @@ furloughStartDate.error.maximum = The furlough start date must be before {0}
 
 variableLengthEmployed.title = Was this employee working for you on or before 1 February 2019?
 variableLengthEmployed.heading = Was this employee working for you on or before 1 February 2019?
-variableLengthEmployed.yes = Yes
-variableLengthEmployed.no = No
+variableLengthEmployed.onOrBefore1Feb2019 = Yes
+variableLengthEmployed.after1Feb2019 = No
 variableLengthEmployed.error.required = Select one of the options below
 variableLengthEmployed.hint = This is needed to calculate average pay based on when the employee started work.
 

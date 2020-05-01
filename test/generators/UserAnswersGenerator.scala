@@ -24,13 +24,13 @@ trait UserAnswersGenerator extends TryValues {
       arbitrary[(PartialPayAfterFurloughPage.type, JsValue)] ::
       arbitrary[(VariableGrossPayPage.type, JsValue)] ::
       arbitrary[(EmployeeStartDatePage.type, JsValue)] ::
-      arbitrary[(VariableLengthEmployedPage.type, JsValue)] ::
+      arbitrary[(EmployedStartedPage.type, JsValue)] ::
       arbitrary[(FurloughStartDatePage.type, JsValue)] ::
       arbitrary[(FurloughEndDatePage.type, JsValue)] ::
       arbitrary[(FurloughStatusPage.type, JsValue)] ::
       arbitrary[(ClaimPeriodEndPage.type, JsValue)] ::
       arbitrary[(ClaimPeriodStartPage.type, JsValue)] ::
-      arbitrary[(PensionContributionPage.type, JsValue)] ::
+      arbitrary[(PensionStatusPage.type, JsValue)] ::
       arbitrary[(NicCategoryPage.type, JsValue)] ::
       arbitrary[(SalaryQuestionPage.type, JsValue)] ::
       arbitrary[(PaymentFrequencyPage.type, JsValue)] ::
