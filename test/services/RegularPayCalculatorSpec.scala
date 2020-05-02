@@ -7,7 +7,6 @@ package services
 
 import base.{CoreTestDataBuilder, SpecBase}
 import models.Amount
-import models.PayMethod.Regular
 
 class RegularPayCalculatorSpec extends SpecBase with CoreTestDataBuilder {
 
@@ -16,7 +15,7 @@ class RegularPayCalculatorSpec extends SpecBase with CoreTestDataBuilder {
     val periods = defaultJourneyCoreData.periods
 
     val expected = Seq(
-      paymentWithFullPeriod(1000.0, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"), Regular)
+      paymentWithFullPeriod(1000.0, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"))
     )
 
     calculateRegularPay(wage, periods) mustBe expected
@@ -28,8 +27,8 @@ class RegularPayCalculatorSpec extends SpecBase with CoreTestDataBuilder {
     val periods = defaultJourneyCoreData.periods :+ partial
 
     val expected = Seq(
-      paymentWithFullPeriod(2000.0, fullPeriodWithPaymentDate("2020,3,1", "2020,3,31", "2020, 3, 31"), Regular),
-      paymentWithPartialPeriod(1000.0, 1000.0, partial, Regular)
+      paymentWithFullPeriod(2000.0, fullPeriodWithPaymentDate("2020,3,1", "2020,3,31", "2020, 3, 31")),
+      paymentWithPartialPeriod(1000.0, 1000.0, partial)
     )
 
     calculateRegularPay(wage, periods) mustBe expected

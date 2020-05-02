@@ -6,10 +6,9 @@
 package services
 
 import models.Calculation.FurloughCalculationResult
-import models.PayMethod.{Regular, Variable}
 import models.{Amount, CalculationResult, FullPeriodBreakdown, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, PeriodBreakdown}
+import services.Calculators._
 import utils.TaxYearFinder
-import Calculators._
 
 trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with Calculators {
 

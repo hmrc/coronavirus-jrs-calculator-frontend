@@ -8,25 +8,24 @@ package services
 import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBase}
-import models.PayMethod.{Regular, Variable}
 import models.{Amount, CylbPayment, NonFurloughPay, RegularPayData, VariablePayData, VariablePayWithCylbData}
 
 class ReferencePayCalculatorSpec extends SpecBase with CoreTestDataBuilder {
 
   "compare cylb and avg gross pay amount taking the greater" in new ReferencePayCalculator {
     val cylb = Seq(
-      paymentWithFullPeriod(500.00, fullPeriodWithPaymentDate("2020,3,1", "2020,3,28", "2020, 3, 28"), Variable),
-      paymentWithFullPeriod(200.00, fullPeriodWithPaymentDate("2020,3,29", "2020,4,26", "2020, 4, 26"), Variable)
+      paymentWithFullPeriod(500.00, fullPeriodWithPaymentDate("2020,3,1", "2020,3,28", "2020, 3, 28")),
+      paymentWithFullPeriod(200.00, fullPeriodWithPaymentDate("2020,3,29", "2020,4,26", "2020, 4, 26"))
     )
 
     val avg = Seq(
-      paymentWithFullPeriod(450.0, fullPeriodWithPaymentDate("2020,3,1", "2020,3,28", "2020, 3, 28"), Variable),
-      paymentWithFullPeriod(450.0, fullPeriodWithPaymentDate("2020,3,29", "2020,4,26", "2020, 4, 26"), Variable)
+      paymentWithFullPeriod(450.0, fullPeriodWithPaymentDate("2020,3,1", "2020,3,28", "2020, 3, 28")),
+      paymentWithFullPeriod(450.0, fullPeriodWithPaymentDate("2020,3,29", "2020,4,26", "2020, 4, 26"))
     )
 
     val expected = Seq(
-      paymentWithFullPeriod(500.00, fullPeriodWithPaymentDate("2020,3,1", "2020,3,28", "2020, 3, 28"), Variable),
-      paymentWithFullPeriod(450.00, fullPeriodWithPaymentDate("2020,3,29", "2020,4,26", "2020, 4, 26"), Variable)
+      paymentWithFullPeriod(500.00, fullPeriodWithPaymentDate("2020,3,1", "2020,3,28", "2020, 3, 28")),
+      paymentWithFullPeriod(450.00, fullPeriodWithPaymentDate("2020,3,29", "2020,4,26", "2020, 4, 26"))
     )
 
     takeGreaterGrossPay(cylb, avg) mustBe expected
@@ -36,7 +35,7 @@ class ReferencePayCalculatorSpec extends SpecBase with CoreTestDataBuilder {
     val input = RegularPayData(defaultJourneyCoreData, Amount(1000.0))
 
     val expected = Seq(
-      paymentWithFullPeriod(1000.0, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"), Regular)
+      paymentWithFullPeriod(1000.0, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"))
     )
 
     calculateReferencePay(input) mustBe expected
@@ -46,7 +45,7 @@ class ReferencePayCalculatorSpec extends SpecBase with CoreTestDataBuilder {
     val input = VariablePayData(defaultJourneyCoreData, Amount(10000.0), NonFurloughPay(None, None), period("2019-12-01", "2020-02-29"))
 
     val expected = Seq(
-      paymentWithFullPeriod(3406.59, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"), Variable)
+      paymentWithFullPeriod(3406.59, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"))
     )
 
     calculateReferencePay(input) mustBe expected
@@ -70,11 +69,11 @@ class ReferencePayCalculatorSpec extends SpecBase with CoreTestDataBuilder {
       cylbPaymentsTwo)
 
     val expectedAvgGreater = Seq(
-      paymentWithFullPeriod(3406.59, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"), Variable)
+      paymentWithFullPeriod(3406.59, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"))
     )
 
     val expectedCylbGreater = Seq(
-      paymentWithFullPeriod(5000.0, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"), Variable)
+      paymentWithFullPeriod(5000.0, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"))
     )
 
     calculateReferencePay(inputAvgGreater) mustBe expectedAvgGreater

@@ -8,7 +8,7 @@ package services
 import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBase}
-import models.{FurloughEnded, FurloughOngoing, FurloughWithinClaim, Period, UserAnswers}
+import models.{FurloughEnded, FurloughOngoing, FurloughWithinClaim, UserAnswers}
 import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage, FurloughEndDatePage, FurloughStartDatePage}
 
 class FurloughPeriodExtractorSpec extends SpecBase with CoreTestDataBuilder {
