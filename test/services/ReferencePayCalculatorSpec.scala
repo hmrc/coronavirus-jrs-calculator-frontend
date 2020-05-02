@@ -10,7 +10,7 @@ import java.time.LocalDate
 import base.{CoreTestDataBuilder, SpecBase}
 import models.PayMethod.{Regular, Variable}
 import models.PaymentFrequency.Monthly
-import models.{Amount, CylbPayment, FullPeriod, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriod, PartialPeriodWithPaymentDate, PaymentDate, PaymentWithPeriod, Period}
+import models.{Amount, CylbPayment, FullPeriod, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriod, PartialPeriodWithPaymentDate, PaymentDate, PaymentWithPeriod, Period, RegularPayData, VariablePayData, VariablePayWithCylbData}
 
 class ReferencePayCalculatorSpec extends SpecBase with CoreTestDataBuilder {
 
@@ -79,20 +79,52 @@ class ReferencePayCalculatorSpec extends SpecBase with CoreTestDataBuilder {
     calculateVariablePay(nonFurloughPay, priorFurloughPeriod, Seq(afterFurloughPeriod), Amount(2400.0), cylbs, Monthly) mustBe expected
   }
 
-  "calculates regular pay" in new ReferencePayCalculator {
-    val salary = Amount(2000)
-    val afterFurlough = partialPeriodWithPaymentDate("2020, 4, 1", "2020, 4, 30", "2020, 4, 1", "2020, 4, 15", "2020, 4, 30")
-
-    val periods = Seq(
-      fullPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 31"),
-      afterFurlough
-    )
+  "calculate reference pay for a given RegularPayData" in new ReferencePayCalculator {
+    val input = RegularPayData(defaultJourneyCoreData, Amount(1000.0))
 
     val expected = Seq(
-      paymentWithFullPeriod(2000.0, fullPeriodWithPaymentDate("2020,3,1", "2020,3,31", "2020, 3, 31"), Regular),
-      paymentWithPartialPeriod(1000.0, 1000.0, afterFurlough, Regular)
+      paymentWithFullPeriod(1000.0, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"), Regular)
     )
 
-    calculateRegularPay(salary, periods) mustBe expected
+    calculateReferencePay(input) mustBe expected
+  }
+
+  "calculate reference pay for a given VariablePayData" in new ReferencePayCalculator {
+    val input = VariablePayData(defaultJourneyCoreData, Amount(10000.0), NonFurloughPay(None, None), period("2019-12-01", "2020-02-29"))
+
+    val expected = Seq(
+      paymentWithFullPeriod(3406.59, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"), Variable)
+    )
+
+    calculateReferencePay(input) mustBe expected
+  }
+
+  "calculate reference pay for a given VariablePayWithCylbData" in new ReferencePayCalculator {
+    val cylbPaymentsOne = Seq(CylbPayment(LocalDate.of(2019, 3, 31), Amount(1000.0)))
+    val cylbPaymentsTwo = Seq(CylbPayment(LocalDate.of(2019, 3, 31), Amount(5000.0)))
+
+    val inputAvgGreater = VariablePayWithCylbData(
+      defaultJourneyCoreData,
+      Amount(10000.0),
+      NonFurloughPay(None, None),
+      period("2019-12-01", "2020-02-29"),
+      cylbPaymentsOne)
+    val inputCylbGreater = VariablePayWithCylbData(
+      defaultJourneyCoreData,
+      Amount(10000.0),
+      NonFurloughPay(None, None),
+      period("2019-12-01", "2020-02-29"),
+      cylbPaymentsTwo)
+
+    val expectedAvgGreater = Seq(
+      paymentWithFullPeriod(3406.59, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"), Variable)
+    )
+
+    val expectedCylbGreater = Seq(
+      paymentWithFullPeriod(5000.0, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"), Variable)
+    )
+
+    calculateReferencePay(inputAvgGreater) mustBe expectedAvgGreater
+    calculateReferencePay(inputCylbGreater) mustBe expectedCylbGreater
   }
 }

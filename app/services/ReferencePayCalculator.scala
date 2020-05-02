@@ -7,19 +7,20 @@ package services
 
 import cats.data.NonEmptyList
 import models.NonFurloughPay._
-import models.PayMethod.Regular
-import models.{Amount, CylbPayment, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate}
+import models.{Amount, CylbPayment, JourneyData, NonFurloughPay, PaymentFrequency, PaymentWithPeriod, Period, PeriodWithPaymentDate, RegularPayData, VariablePayData, VariablePayWithCylbData}
 
-trait ReferencePayCalculator extends CylbCalculator with AverageCalculator with Calculators {
+trait ReferencePayCalculator extends RegularPayCalculator with AveragePayCalculator with CylbCalculator with Calculators {
 
-  def calculateRegularPay(wage: Amount, periods: Seq[PeriodWithPaymentDate]): Seq[PaymentWithPeriod] =
-    periods.map {
-      case fp: FullPeriodWithPaymentDate => PaymentWithFullPeriod(wage, fp, Regular)
-      case pp: PartialPeriodWithPaymentDate =>
-        val furloughAmount = partialPeriodDailyCalculation(wage, pp.period)
-        val nonFurlough = Amount(wage.value - furloughAmount.value)
-        PaymentWithPartialPeriod(nonFurlough, furloughAmount, pp, Regular)
+  def calculateReferencePay(journeyData: JourneyData): Seq[PaymentWithPeriod] = journeyData match {
+    case rpd: RegularPayData  => calculateRegularPay(rpd.wage, rpd.data.periods)
+    case vpd: VariablePayData => calculateAveragePay(vpd.nonFurloughPay, vpd.priorFurlough, vpd.data.periods, vpd.grossPay)
+    case lbd: VariablePayWithCylbData => {
+      val avg = calculateAveragePay(lbd.nonFurloughPay, lbd.priorFurlough, lbd.data.periods, lbd.grossPay)
+      val cylb = calculateCylb(lbd.nonFurloughPay, lbd.data.frequency, lbd.cylbPayments, lbd.data.periods)
+
+      takeGreaterGrossPay(cylb, avg)
     }
+  }
 
   def calculateVariablePay(
     nonFurloughPay: NonFurloughPay,

@@ -10,7 +10,23 @@ import models.PayMethod.Variable
 import models.{Amount, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, Period, PeriodWithPaymentDate}
 import Calculators._
 
-trait AverageCalculator extends PeriodHelper {
+trait AveragePayCalculator extends PeriodHelper {
+
+  def calculateAveragePay(
+    nonFurloughPay: NonFurloughPay,
+    priorFurloughPeriod: Period,
+    periods: Seq[PeriodWithPaymentDate],
+    grossPay: Amount): Seq[PaymentWithPeriod] =
+    periods map {
+      case fp: FullPeriodWithPaymentDate =>
+        val daily = periodDaysCount(fp.period.period) * averageDailyCalculator(priorFurloughPeriod, grossPay).value
+        PaymentWithFullPeriod(Amount(daily), fp, Variable)
+      case pp: PartialPeriodWithPaymentDate =>
+        val nfp = determineNonFurloughPay(pp.period, nonFurloughPay)
+        val daily = periodDaysCount(pp.period.partial) * averageDailyCalculator(priorFurloughPeriod, grossPay).value
+
+        PaymentWithPartialPeriod(nfp, Amount(daily), pp, Variable)
+    }
 
   def calculateAveragePay(
     nonFurloughPay: NonFurloughPay,

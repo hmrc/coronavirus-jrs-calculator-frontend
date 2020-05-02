@@ -6,13 +6,25 @@
 package services
 
 import java.time.LocalDate
-
+import models.NonFurloughPay.determineNonFurloughPay
 import models.PayMethod.Variable
 import models.{Amount, CylbOperators, CylbPayment, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, PeriodWithPaymentDate, Periods}
 import Calculators.AmountRounding
 
 trait CylbCalculator extends PreviousYearPeriod {
 
+  def calculateCylb(
+    nonFurloughPay: NonFurloughPay,
+    frequency: PaymentFrequency,
+    cylbs: Seq[CylbPayment],
+    periods: Seq[PeriodWithPaymentDate]): Seq[PaymentWithPeriod] =
+    for {
+      period: PeriodWithPaymentDate <- periods
+      datesRequired = previousYearPayDate(frequency, period)
+      nfp = determineNonFurloughPay(period.period, nonFurloughPay)
+    } yield cylbsAmount(frequency, period, datesRequired, nfp, cylbs)
+
+  //TODO delete this one
   def calculateCylb(
     nonFurloughPay: NonFurloughPay,
     frequency: PaymentFrequency,
