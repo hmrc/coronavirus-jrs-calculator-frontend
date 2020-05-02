@@ -18,11 +18,11 @@ trait ConfirmationControllerRequestHandler
   def loadResultData(userAnswers: UserAnswers): Option[ConfirmationDataResult] =
     for {
       data      <- extract(userAnswers)
-      breakdown <- breakdown2(userAnswers)
+      breakdown <- breakdown(userAnswers)
       metadata  <- meta(userAnswers, data)
     } yield ConfirmationDataResult(metadata, breakdown)
 
-  private def breakdown2(userAnswers: UserAnswers): Option[ConfirmationViewBreakdown] =
+  private def breakdown(userAnswers: UserAnswers): Option[ConfirmationViewBreakdown] =
     for {
       questions <- extractBranchingQuestions(userAnswers)
       data      <- journeyData(define(questions), userAnswers)
