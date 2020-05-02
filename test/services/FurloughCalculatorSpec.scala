@@ -155,7 +155,7 @@ class FurloughCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with
     (
       paymentWithPartialPeriod(
         677.42,
-        1500.00,
+        822.58,
         PartialPeriodWithPaymentDate(
           PartialPeriod(
             Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)),
@@ -168,7 +168,7 @@ class FurloughCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with
     (
       paymentWithPartialPeriod(
         1580.65,
-        3500.00,
+        1919.35,
         PartialPeriodWithPaymentDate(
           PartialPeriod(
             Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)),
@@ -181,7 +181,7 @@ class FurloughCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with
     (
       paymentWithPartialPeriod(
         1096.77,
-        2000.00,
+        903.23,
         PartialPeriodWithPaymentDate(
           PartialPeriod(
             Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)),
