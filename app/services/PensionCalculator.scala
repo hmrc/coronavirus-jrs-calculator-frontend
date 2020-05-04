@@ -7,9 +7,7 @@ package services
 
 import models.Calculation.PensionCalculationResult
 import models.{Amount, CalculationResult, FullPeriodBreakdown, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentFrequency, PeriodBreakdown}
-import utils.AmountRounding._
-
-import scala.math.BigDecimal.RoundingMode
+import services.Calculators._
 
 trait PensionCalculator extends FurloughCapCalculator with CommonCalculationService {
 
@@ -33,11 +31,11 @@ trait PensionCalculator extends FurloughCapCalculator with CommonCalculationServ
     val furloughDays = periodDaysCount(period.period.partial)
     val threshold = FrequencyTaxYearThresholdMapping.findThreshold(frequency, taxYearAt(period.paymentDate), PensionRate())
 
-    val allowance = roundWithMode((threshold / fullPeriodDays) * furloughDays, RoundingMode.HALF_UP)
-    val roundedFurloughPayment = furloughPayment.value.setScale(0, RoundingMode.DOWN)
-    val grant = greaterThanAllowance(roundedFurloughPayment, allowance, PensionRate())
+    val allowance = Amount((threshold / fullPeriodDays) * furloughDays).halfUp
+    val roundedFurloughPayment = furloughPayment.down
+    val grant = greaterThanAllowance(roundedFurloughPayment, allowance.value, PensionRate())
 
-    PartialPeriodBreakdown(grossPay, Amount(grant), PartialPeriodWithPaymentDate(period.period, period.paymentDate))
+    PartialPeriodBreakdown(grossPay, grant, PartialPeriodWithPaymentDate(period.period, period.paymentDate))
   }
 
 }

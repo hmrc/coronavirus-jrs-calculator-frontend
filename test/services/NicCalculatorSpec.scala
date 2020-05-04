@@ -34,7 +34,7 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with Core
     calculatePartialPeriodNic(FourWeekly, Amount(1124.23), Amount(426.02), period, paymentDate) mustBe expected
   }
 
-  "calculates Nic with additional payment and 0.0 top up" in new NicCalculator {
+  "calculates Nic with additional payment and 0.0 top up for a partial period" in new NicCalculator {
     val additionalPayment = Some(Amount(300))
     val topUp = None
     val nonFurlough = Amount(2200.0)
@@ -45,7 +45,7 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with Core
       100.20)
   }
 
-  "calculates Nic with top up and 0.0 additional payment" in new NicCalculator {
+  "calculates Nic with top up and 0.0 additional payment for a partial period" in new NicCalculator {
     val additionalPayment = None
     val topUp = Some(Amount(200.0))
     val nonFurlough = Amount(2200.0)
@@ -56,7 +56,7 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with Core
       75.28)
   }
 
-  "calculates Nic with additional payment plus top up" in new NicCalculator {
+  "calculates Nic with additional payment plus top up for a partial period" in new NicCalculator {
     val additionalPayment = Some(Amount(300))
     val topUp = Some(Amount(200))
     val nonFurlough = Amount(2200.0)
@@ -65,6 +65,16 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with Core
 
     calculatePartialPeriodNic(Monthly, nonFurlough, furlough, pp, PaymentDate(LocalDate.of(2020, 3, 31)), additionalPayment, topUp).grant mustBe Amount(
       84.69)
+  }
+
+  "calculates Nic plus top up for a full period" in new NicCalculator {
+    val additionalPayment = None
+    val topUp = Some(Amount(300))
+    val furlough = Amount(2200.0)
+    val fp = fullPeriod("2020,3,1", "2020, 3, 31")
+
+    calculateFullPeriodNic(Monthly, furlough, fp, PaymentDate(LocalDate.of(2020, 3, 31)), additionalPayment, topUp).grant mustBe Amount(
+      216.29)
   }
 
   private lazy val partialPeriodScenarios = Table(

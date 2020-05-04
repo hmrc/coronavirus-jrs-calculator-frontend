@@ -11,6 +11,7 @@ import base.SpecBase
 import models.PaymentFrequency.Monthly
 import models.{Amount, FullPeriod, FullPeriodBreakdown, FullPeriodWithPaymentDate, PaymentDate, Period}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import Amount._
 
 class CommonCalculationServiceSpec extends SpecBase with ScalaCheckPropertyChecks {
 
@@ -24,13 +25,13 @@ class CommonCalculationServiceSpec extends SpecBase with ScalaCheckPropertyCheck
   }
 
   "Returns zero for an amount lesser than threshold" in new CommonCalculationService {
-    greaterThanAllowance(100.0, 101.0, NiRate()) mustBe 0.0
-    greaterThanAllowance(99.0, 100.0, PensionRate()) mustBe 0.0
+    greaterThanAllowance(100.0.toAmount, 101.0, NiRate()) mustBe 0.0.toAmount
+    greaterThanAllowance(99.0.toAmount, 100.0, PensionRate()) mustBe 0.0.toAmount
   }
 
   "Returns an ((amount - threshold) * rate) rounded half_up if greater than threshold" in new CommonCalculationService {
-    greaterThanAllowance(1000.0, 100.0, NiRate()) mustBe 124.20
-    greaterThanAllowance(1000.0, 100.0, PensionRate()) mustBe 27.0
+    greaterThanAllowance(1000.0.toAmount, 100.0, NiRate()) mustBe 124.20.toAmount
+    greaterThanAllowance(1000.0.toAmount, 100.0, PensionRate()) mustBe 27.0.toAmount
   }
 
   private lazy val fullPeriodScenarios = Table(
