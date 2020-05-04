@@ -15,9 +15,16 @@ trait NicCalculator extends FurloughCapCalculator with CommonCalculationService 
   def calculateNicGrant(frequency: PaymentFrequency, furloughBreakdown: Seq[PeriodBreakdown]): CalculationResult = {
     val nicBreakdowns = furloughBreakdown.map {
       case FullPeriodBreakdown(grant, periodWithPaymentDate) =>
-        calculateFullPeriodNic(frequency, grant, periodWithPaymentDate.period, periodWithPaymentDate.paymentDate)
+        calculateFullPeriodNic(frequency, grant, periodWithPaymentDate.period, periodWithPaymentDate.paymentDate, None, None) //TODO to be wired
       case PartialPeriodBreakdown(nonFurloughPay, grant, periodWithPaymentDate) =>
-        calculatePartialPeriodNic(frequency, nonFurloughPay, grant, periodWithPaymentDate.period, periodWithPaymentDate.paymentDate)
+        calculatePartialPeriodNic(
+          frequency,
+          nonFurloughPay,
+          grant,
+          periodWithPaymentDate.period,
+          periodWithPaymentDate.paymentDate,
+          None,
+          None)
     }
     CalculationResult(NicCalculationResult, nicBreakdowns.map(_.grant.value).sum, nicBreakdowns)
   }
@@ -28,8 +35,8 @@ trait NicCalculator extends FurloughCapCalculator with CommonCalculationService 
     furloughPayment: Amount,
     period: PartialPeriod,
     paymentDate: PaymentDate,
-    additionalPayment: Option[Amount] = None,
-    topUp: Option[Amount] = None): PartialPeriodBreakdown = { //TODO remove defaulted None
+    additionalPayment: Option[Amount],
+    topUp: Option[Amount]): PartialPeriodBreakdown = {
 
     val total = nonFurloughPay.value + furloughPayment.value + additionalPayment.defaulted.value + topUp.defaulted.value
     val roundedTotalPay = Amount(total).down
@@ -47,8 +54,8 @@ trait NicCalculator extends FurloughCapCalculator with CommonCalculationService 
     furloughPayment: Amount,
     period: FullPeriod,
     paymentDate: PaymentDate,
-    additionalPayment: Option[Amount] = None,
-    topUp: Option[Amount] = None): FullPeriodBreakdown = { //TODO remove defaulted
+    additionalPayment: Option[Amount],
+    topUp: Option[Amount]): FullPeriodBreakdown = {
 
     val total = furloughPayment.value + additionalPayment.defaulted.value + topUp.defaulted.value
     val roundedTotalPay = Amount(total).down

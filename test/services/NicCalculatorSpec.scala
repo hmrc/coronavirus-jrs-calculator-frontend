@@ -19,7 +19,7 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with Core
       s"a PaymentDate: $paymentDate and a Gross Pay: ${grossPay.value}" in new NicCalculator {
       val expected = PartialPeriodBreakdown(grossPay, expectedGrant, PartialPeriodWithPaymentDate(period, paymentDate))
 
-      calculatePartialPeriodNic(frequency, grossPay, furloughPayment, period, paymentDate) mustBe expected
+      calculatePartialPeriodNic(frequency, grossPay, furloughPayment, period, paymentDate, None, None) mustBe expected
     }
   }
 
@@ -31,7 +31,7 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with Core
 
     val expected = PartialPeriodBreakdown(Amount(1124.23), Amount(39.30), PartialPeriodWithPaymentDate(period, paymentDate))
 
-    calculatePartialPeriodNic(FourWeekly, Amount(1124.23), Amount(426.02), period, paymentDate) mustBe expected
+    calculatePartialPeriodNic(FourWeekly, Amount(1124.23), Amount(426.02), period, paymentDate, None, None) mustBe expected
   }
 
   "calculates Nic with additional payment and 0.0 top up for a partial period" in new NicCalculator {
