@@ -9,10 +9,31 @@ import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBase}
 import models.PaymentFrequency.{FourWeekly, Monthly}
-import models.{Amount, PartialPeriod, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentDate, Period}
+import models.{AdditionalPayment, Amount, FullPeriodBreakdown, PartialPeriod, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentDate, Period, TopUpPayment}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import Amount._
 
 class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with CoreTestDataBuilder {
+
+  "Calculate Nic including additional and top up payments" in new NicCalculator {
+    val breakDowns = Seq(
+      FullPeriodBreakdown(2500.0.toAmount, fullPeriodWithPaymentDate("2020,3,1", "2020, 3, 31", "2020, 3, 31")),
+      PartialPeriodBreakdown(
+        1250.0.toAmount,
+        1250.0.toAmount,
+        partialPeriodWithPaymentDate("2020,4,1", "2020, 4, 30", "2020,4,1", "2020, 4, 15", "2020, 4, 30"))
+    )
+    val additionals = Seq(
+      AdditionalPayment(LocalDate.of(2020, 3, 31), 200.0.toAmount),
+      AdditionalPayment(LocalDate.of(2020, 4, 30), 200.0.toAmount)
+    )
+    val topUps = Seq(
+      TopUpPayment(LocalDate.of(2020, 3, 31), 300.0.toAmount),
+      TopUpPayment(LocalDate.of(2020, 4, 30), 300.0.toAmount)
+    )
+
+    calculateNicGrant(Monthly, breakDowns, additionals, topUps).total mustBe 407.25
+  }
 
   forAll(partialPeriodScenarios) { (frequency, grossPay, furloughPayment, period, paymentDate, expectedGrant) =>
     s"Calculate grant for a partial period with Payment Frequency: $frequency," +

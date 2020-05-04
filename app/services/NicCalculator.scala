@@ -7,24 +7,38 @@ package services
 
 import models.Amount._
 import models.Calculation.NicCalculationResult
-import models.{Amount, CalculationResult, FullPeriod, FullPeriodBreakdown, FullPeriodWithPaymentDate, PartialPeriod, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentDate, PaymentFrequency, PeriodBreakdown}
+import models.{AdditionalPayment, Amount, CalculationResult, FullPeriod, FullPeriodBreakdown, FullPeriodWithPaymentDate, PartialPeriod, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentDate, PaymentFrequency, PeriodBreakdown, TopUpPayment}
 import services.Calculators._
 
 trait NicCalculator extends FurloughCapCalculator with CommonCalculationService {
 
-  def calculateNicGrant(frequency: PaymentFrequency, furloughBreakdown: Seq[PeriodBreakdown]): CalculationResult = {
+  def calculateNicGrant(
+    frequency: PaymentFrequency,
+    furloughBreakdown: Seq[PeriodBreakdown],
+    additionals: Seq[AdditionalPayment] = Seq.empty,
+    topUps: Seq[TopUpPayment] = Seq.empty): CalculationResult = { //TODO remove dafaulted
     val nicBreakdowns = furloughBreakdown.map {
       case FullPeriodBreakdown(grant, periodWithPaymentDate) =>
-        calculateFullPeriodNic(frequency, grant, periodWithPaymentDate.period, periodWithPaymentDate.paymentDate, None, None) //TODO to be wired
+        val additionalPayment = additionals.find(_.date == periodWithPaymentDate.period.period.end).map(_.amount)
+        val topUpPayment = topUps.find(_.date == periodWithPaymentDate.period.period.end).map(_.amount)
+        calculateFullPeriodNic(
+          frequency,
+          grant,
+          periodWithPaymentDate.period,
+          periodWithPaymentDate.paymentDate,
+          additionalPayment,
+          topUpPayment) //TODO to be wired
       case PartialPeriodBreakdown(nonFurloughPay, grant, periodWithPaymentDate) =>
+        val additionalPayment = additionals.find(_.date == periodWithPaymentDate.period.period.end).map(_.amount)
+        val topUpPayment = topUps.find(_.date == periodWithPaymentDate.period.period.end).map(_.amount)
         calculatePartialPeriodNic(
           frequency,
           nonFurloughPay,
           grant,
           periodWithPaymentDate.period,
           periodWithPaymentDate.paymentDate,
-          None,
-          None)
+          additionalPayment,
+          topUpPayment)
     }
     CalculationResult(NicCalculationResult, nicBreakdowns.map(_.grant.value).sum, nicBreakdowns)
   }
