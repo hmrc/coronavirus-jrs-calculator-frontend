@@ -42,9 +42,8 @@ trait CylbCalculator extends PreviousYearPeriod {
     val amounts: Seq[Amount] = datesRequired.flatMap(date => cylbs.find(_.date == date)).map(_.amount)
 
     amounts match {
-      case x :: Nil => previousOrCurrent(x, ops)
-      case x :: y :: Nil =>
-        Amount(((x.value / ops.fullPeriodLength) * ops.daysFromPrevious) + ((y.value / ops.fullPeriodLength) * ops.daysFromCurrent))
+      case amount :: Nil                          => previousOrCurrent(amount, ops)
+      case previousAmount :: currentAmount :: Nil => previousAndCurrent(ops, previousAmount, currentAmount)
     }
   }
 
@@ -52,5 +51,9 @@ trait CylbCalculator extends PreviousYearPeriod {
     if (ops.daysFromCurrent == 0)
       Amount((amount.value / ops.fullPeriodLength) * ops.daysFromPrevious)
     else Amount((amount.value / ops.fullPeriodLength) * ops.daysFromCurrent)
+
+  private def previousAndCurrent(ops: CylbOperators, previousAmount: Amount, currentAmount: Amount): Amount =
+    Amount(
+      ((previousAmount.value / ops.fullPeriodLength) * ops.daysFromPrevious) + ((currentAmount.value / ops.fullPeriodLength) * ops.daysFromCurrent))
 
 }
