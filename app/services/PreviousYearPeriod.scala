@@ -8,22 +8,23 @@ package services
 import java.time.LocalDate
 
 import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
-import models.{CylbOperators, FullPeriod, PartialPeriod, PaymentFrequency, PeriodWithPaymentDate, Periods}
+import models.{CylbDuration, CylbOperators, FullPeriod, PartialPeriod, PaymentFrequency, PeriodWithPaymentDate, Periods}
 import PaymentFrequency._
 
 trait PreviousYearPeriod extends PeriodHelper {
 
   def previousYearPayDate(paymentFrequency: PaymentFrequency, withPaymentDate: PeriodWithPaymentDate): Seq[LocalDate] = {
-    val cylbOperators = operators(paymentFrequency, withPaymentDate.period)
+    val cylbDuration = CylbDuration(paymentFrequency, withPaymentDate.period)
 
-    cylbOperators match {
-      case CylbOperators(_, 0, _) => Seq(lastYear(paymentFrequency, withPaymentDate.paymentDate.value))
-      case CylbOperators(_, _, 0) =>
+    (cylbDuration.previousPeriodDays, cylbDuration.equivalentPeriodDays) match {
+      case (0, _) => Seq(lastYear(paymentFrequency, withPaymentDate.paymentDate.value))
+      case (_, 0) =>
         Seq(lastYear(paymentFrequency, withPaymentDate.paymentDate.value).minusDays(paymentFrequencyDays(paymentFrequency)))
       case _ => calculateDatesForPreviousYear(paymentFrequency, withPaymentDate.paymentDate.value)
     }
   }
 
+  //TODO remove this
   def operators(paymentFrequency: PaymentFrequency, period: Periods): CylbOperators =
     (paymentFrequency, period) match {
       case (Monthly, FullPeriod(p))                 => CylbOperators(periodDaysCount(p), 0, periodDaysCount(p))
