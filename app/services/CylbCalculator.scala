@@ -8,7 +8,7 @@ package services
 import java.time.LocalDate
 
 import models.NonFurloughPay.determineNonFurloughPay
-import models.{Amount, CylbOperators, CylbPayment, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, PeriodWithPaymentDate}
+import models.{Amount, CylbDuration, CylbOperators, CylbPayment, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, PeriodWithPaymentDate}
 
 trait CylbCalculator extends PreviousYearPeriod {
 
@@ -29,7 +29,7 @@ trait CylbCalculator extends PreviousYearPeriod {
     datesRequired: Seq[LocalDate],
     nfp: Amount,
     cylbs: Seq[CylbPayment]): PaymentWithPeriod = {
-    val cylbOps = operators(frequency, period.period)
+    val cylbOps: CylbDuration = CylbDuration(frequency, period.period)
     val furlough: Amount = previousYearFurlough(datesRequired, cylbs, cylbOps)
 
     period match {
@@ -38,7 +38,7 @@ trait CylbCalculator extends PreviousYearPeriod {
     }
   }
 
-  private def previousYearFurlough(datesRequired: Seq[LocalDate], cylbs: Seq[CylbPayment], ops: CylbOperators): Amount = {
+  private def previousYearFurlough(datesRequired: Seq[LocalDate], cylbs: Seq[CylbPayment], ops: CylbDuration): Amount = {
     val amounts: Seq[Amount] = datesRequired.flatMap(date => cylbs.find(_.date == date)).map(_.amount)
 
     amounts match {
@@ -47,13 +47,13 @@ trait CylbCalculator extends PreviousYearPeriod {
     }
   }
 
-  private def previousOrCurrent(amount: Amount, ops: CylbOperators) =
-    if (ops.daysFromCurrent == 0)
-      Amount((amount.value / ops.fullPeriodLength) * ops.daysFromPrevious)
-    else Amount((amount.value / ops.fullPeriodLength) * ops.daysFromCurrent)
+  private def previousOrCurrent(amount: Amount, ops: CylbDuration) =
+    if (ops.equivalentPeriodDays == 0)
+      Amount((amount.value / ops.fullPeriodLength) * ops.previousPeriodDays)
+    else Amount((amount.value / ops.fullPeriodLength) * ops.equivalentPeriodDays)
 
-  private def previousAndCurrent(ops: CylbOperators, previousAmount: Amount, currentAmount: Amount): Amount =
+  private def previousAndCurrent(ops: CylbDuration, previousAmount: Amount, currentAmount: Amount): Amount =
     Amount(
-      ((previousAmount.value / ops.fullPeriodLength) * ops.daysFromPrevious) + ((currentAmount.value / ops.fullPeriodLength) * ops.daysFromCurrent))
+      ((previousAmount.value / ops.fullPeriodLength) * ops.previousPeriodDays) + ((currentAmount.value / ops.fullPeriodLength) * ops.equivalentPeriodDays))
 
 }
