@@ -9,6 +9,7 @@ import java.time.LocalDate
 
 import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
 import models.{CylbOperators, FullPeriod, PartialPeriod, PaymentFrequency, PeriodWithPaymentDate, Periods}
+import PaymentFrequency._
 
 trait PreviousYearPeriod extends PeriodHelper {
 
@@ -18,16 +19,10 @@ trait PreviousYearPeriod extends PeriodHelper {
     cylbOperators match {
       case CylbOperators(_, 0, _) => Seq(lastYear(paymentFrequency, withPaymentDate.paymentDate.value))
       case CylbOperators(_, _, 0) =>
-        Seq(lastYear(paymentFrequency, withPaymentDate.paymentDate.value).minusDays(dividers(paymentFrequency)))
+        Seq(lastYear(paymentFrequency, withPaymentDate.paymentDate.value).minusDays(paymentFrequencyDays(paymentFrequency)))
       case _ => calculateDatesForPreviousYear(paymentFrequency, withPaymentDate.paymentDate.value)
     }
   }
-
-  private val dividers: Map[PaymentFrequency, Int] = Map(
-    Weekly      -> 7,
-    FortNightly -> 14,
-    FourWeekly  -> 28
-  )
 
   def operators(paymentFrequency: PaymentFrequency, period: Periods): CylbOperators =
     (paymentFrequency, period) match {
@@ -48,17 +43,17 @@ trait PreviousYearPeriod extends PeriodHelper {
     if (isFurloughStart(p))
       handleFurloughStart(frequency, p)
     else
-      CylbOperators(dividers(frequency), 2, periodDaysCount(p.partial) - 2)
+      CylbOperators(paymentFrequencyDays(frequency), 2, periodDaysCount(p.partial) - 2)
 
   private def handleFurloughStart(frequency: PaymentFrequency, p: PartialPeriod): CylbOperators =
     if (predicateStart(p))
-      CylbOperators(dividers(frequency), 0, periodDaysCount(p.partial))
+      CylbOperators(paymentFrequencyDays(frequency), 0, periodDaysCount(p.partial))
     else
-      CylbOperators(dividers(frequency), 1, periodDaysCount(p.partial) - 1)
+      CylbOperators(paymentFrequencyDays(frequency), 1, periodDaysCount(p.partial) - 1)
 
   private def calculateDatesForPreviousYear(paymentFrequency: PaymentFrequency, payDateThisYear: LocalDate): Seq[LocalDate] = {
     val payDateTwo = lastYear(paymentFrequency, payDateThisYear)
-    val payDateOne = payDateTwo.minusDays(dividers(paymentFrequency))
+    val payDateOne = payDateTwo.minusDays(paymentFrequencyDays(paymentFrequency))
 
     Seq(payDateOne, payDateTwo)
   }
