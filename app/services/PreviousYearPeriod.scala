@@ -17,8 +17,9 @@ trait PreviousYearPeriod extends PeriodHelper {
 
     cylbOperators match {
       case CylbOperators(_, 0, _) => Seq(lastYear(paymentFrequency, withPaymentDate.paymentDate.value))
-      case CylbOperators(_, _, 0) => Seq(dateBefore(paymentFrequency, lastYear(paymentFrequency, withPaymentDate.paymentDate.value)))
-      case _                      => calculateDatesForPreviousYear(paymentFrequency, withPaymentDate.paymentDate.value)
+      case CylbOperators(_, _, 0) =>
+        Seq(lastYear(paymentFrequency, withPaymentDate.paymentDate.value).minusDays(dividers(paymentFrequency)))
+      case _ => calculateDatesForPreviousYear(paymentFrequency, withPaymentDate.paymentDate.value)
     }
   }
 
@@ -57,17 +58,10 @@ trait PreviousYearPeriod extends PeriodHelper {
 
   private def calculateDatesForPreviousYear(paymentFrequency: PaymentFrequency, payDateThisYear: LocalDate): Seq[LocalDate] = {
     val payDateTwo = lastYear(paymentFrequency, payDateThisYear)
-    val payDateOne = dateBefore(paymentFrequency, payDateTwo)
+    val payDateOne = payDateTwo.minusDays(dividers(paymentFrequency))
 
     Seq(payDateOne, payDateTwo)
   }
-
-  private def dateBefore(paymentFrequency: PaymentFrequency, dateAfter: LocalDate) =
-    paymentFrequency match {
-      case Weekly      => dateAfter.minusDays(7)
-      case FortNightly => dateAfter.minusDays(14)
-      case FourWeekly  => dateAfter.minusDays(28)
-    }
 
   private def lastYear(paymentFrequency: PaymentFrequency, payDateThisYear: LocalDate): LocalDate = paymentFrequency match {
     case Monthly => payDateThisYear.minusYears(1)
