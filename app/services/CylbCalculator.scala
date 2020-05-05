@@ -9,7 +9,6 @@ import java.time.LocalDate
 
 import models.NonFurloughPay.determineNonFurloughPay
 import models.{Amount, CylbOperators, CylbPayment, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriodWithPaymentDate, PaymentFrequency, PaymentWithFullPeriod, PaymentWithPartialPeriod, PaymentWithPeriod, PeriodWithPaymentDate}
-import services.Calculators.AmountRounding
 
 trait CylbCalculator extends PreviousYearPeriod {
 
@@ -39,28 +38,15 @@ trait CylbCalculator extends PreviousYearPeriod {
     }
   }
 
-  sealed trait PreviousYearAmount {
-    def total: Amount
-  }
+  private def previousYearFurlough(datesRequired: Seq[LocalDate], cylbs: Seq[CylbPayment], ops: CylbOperators): Amount = {
+    val amounts: Seq[Amount] = datesRequired.flatMap(date => cylbs.find(_.date == date)).map(_.amount)
 
-  final case class OnePreviousAmount(amount: Amount, ops: CylbOperators) extends PreviousYearAmount {
-    def total: Amount = ops match {
-      case CylbOperators(div, 0, multiplier) => Amount((amount.value / div) * multiplier)
-      case CylbOperators(div, multiplier, 0) => Amount((amount.value / div) * multiplier)
+    (amounts, ops) match {
+      case (x :: Nil, c: CylbOperators) if c.daysFromCurrent == 0  => Amount((x.value / ops.fullPeriodLength) * c.daysFromPrevious)
+      case (x :: Nil, c: CylbOperators) if c.daysFromPrevious == 0 => Amount((x.value / ops.fullPeriodLength) * c.daysFromCurrent)
+      case (x :: y :: Nil, c: CylbOperators) =>
+        Amount(((x.value / c.fullPeriodLength) * c.daysFromPrevious) + ((y.value / c.fullPeriodLength) * c.daysFromCurrent))
     }
   }
-
-  final case class TwoPreviousAmounts(firstAmount: Amount, secondAmount: Amount, ops: CylbOperators) extends PreviousYearAmount {
-    def total: Amount = ops match {
-      case CylbOperators(divider, daysFromPrevious, daysFromCurrent) =>
-        Amount(((firstAmount.value / divider) * daysFromPrevious) + ((secondAmount.value / divider) * daysFromCurrent))
-    }
-  }
-
-  private def previousYearFurlough(datesRequired: Seq[LocalDate], cylbs: Seq[CylbPayment], ops: CylbOperators): Amount =
-    (datesRequired.flatMap(date => cylbs.find(_.date == date)).map(_.amount) match {
-      case x :: Nil      => OnePreviousAmount(x, ops)
-      case x :: y :: Nil => TwoPreviousAmounts(x, y, ops)
-    }).total.halfUp
 
 }
