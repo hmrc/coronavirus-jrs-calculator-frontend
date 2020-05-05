@@ -41,12 +41,16 @@ trait CylbCalculator extends PreviousYearPeriod {
   private def previousYearFurlough(datesRequired: Seq[LocalDate], cylbs: Seq[CylbPayment], ops: CylbOperators): Amount = {
     val amounts: Seq[Amount] = datesRequired.flatMap(date => cylbs.find(_.date == date)).map(_.amount)
 
-    (amounts, ops) match {
-      case (x :: Nil, c: CylbOperators) if c.daysFromCurrent == 0  => Amount((x.value / ops.fullPeriodLength) * c.daysFromPrevious)
-      case (x :: Nil, c: CylbOperators) if c.daysFromPrevious == 0 => Amount((x.value / ops.fullPeriodLength) * c.daysFromCurrent)
-      case (x :: y :: Nil, c: CylbOperators) =>
-        Amount(((x.value / c.fullPeriodLength) * c.daysFromPrevious) + ((y.value / c.fullPeriodLength) * c.daysFromCurrent))
+    amounts match {
+      case x :: Nil => previousOrCurrent(x, ops)
+      case x :: y :: Nil =>
+        Amount(((x.value / ops.fullPeriodLength) * ops.daysFromPrevious) + ((y.value / ops.fullPeriodLength) * ops.daysFromCurrent))
     }
   }
+
+  private def previousOrCurrent(amount: Amount, ops: CylbOperators) =
+    if (ops.daysFromCurrent == 0)
+      Amount((amount.value / ops.fullPeriodLength) * ops.daysFromPrevious)
+    else Amount((amount.value / ops.fullPeriodLength) * ops.daysFromCurrent)
 
 }
