@@ -27,8 +27,8 @@ trait PensionCalculator extends FurloughCapCalculator with CommonCalculationServ
     grossPay: Amount,
     furloughPayment: Amount,
     period: PartialPeriodWithPaymentDate): PartialPeriodBreakdown = {
-    val fullPeriodDays = periodDaysCount(period.period.original)
-    val furloughDays = periodDaysCount(period.period.partial)
+    val fullPeriodDays = period.period.original.countDays
+    val furloughDays = period.period.partial.countDays
     val threshold = thresholdFinder(frequency, period.paymentDate, PensionRate())
 
     val allowance = Amount((threshold / fullPeriodDays) * furloughDays).halfUp

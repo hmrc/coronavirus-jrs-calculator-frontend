@@ -10,7 +10,7 @@ import java.time.LocalDate
 import models.PaymentFrequency.{Monthly, _}
 import models.{CylbDuration, PaymentFrequency, PeriodWithPaymentDate}
 
-trait PreviousYearPeriod extends PeriodHelper {
+trait PreviousYearPeriod {
 
   def previousYearPayDate(paymentFrequency: PaymentFrequency, withPaymentDate: PeriodWithPaymentDate): Seq[LocalDate] = {
     val cylbDuration = CylbDuration(paymentFrequency, withPaymentDate.period)

@@ -13,7 +13,7 @@ import services._
 import viewmodels.{ConfirmationDataResult, ConfirmationMetadata, ConfirmationViewBreakdown}
 
 trait ConfirmationControllerRequestHandler
-    extends FurloughCalculator with PeriodHelper with NicCalculator with PensionCalculator with JourneyBuilder with ReferencePayCalculator {
+    extends FurloughCalculator with NicCalculator with PensionCalculator with JourneyBuilder with ReferencePayCalculator {
 
   def loadResultData(userAnswers: UserAnswers): Option[ConfirmationDataResult] =
     for {

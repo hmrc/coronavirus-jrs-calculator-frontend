@@ -9,6 +9,7 @@ import models.Amount._
 import models.Calculation.NicCalculationResult
 import models.{AdditionalPayment, Amount, CalculationResult, FullPeriod, FullPeriodBreakdown, FullPeriodWithPaymentDate, PartialPeriod, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentDate, PaymentFrequency, PeriodBreakdown, PeriodWithPaymentDate, TopUpPayment}
 import services.Calculators._
+import models.Period._
 
 trait NicCalculator extends FurloughCapCalculator with CommonCalculationService {
 
@@ -54,8 +55,8 @@ trait NicCalculator extends FurloughCapCalculator with CommonCalculationService 
     val calculationParameters = periodCalculation(total, frequency, paymentDate, furloughPayment, topUp)
     import calculationParameters._
 
-    val dailyNi = grossNi.value / periodDaysCount(period.original)
-    val grant = niGrant(Amount(dailyNi * periodDaysCount(period.partial)), apportion)
+    val dailyNi = grossNi.value / period.original.countDays
+    val grant = niGrant(Amount(dailyNi * period.partial.countDays), apportion)
 
     PartialPeriodBreakdown(nonFurloughPay, grant, PartialPeriodWithPaymentDate(period, paymentDate))
   }
