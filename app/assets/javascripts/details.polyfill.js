@@ -1,3 +1,12 @@
+// ===========================
+// UPDATE MAY 2020
+// A bug with Voiceover is currently hiding details elements from the Rotor when using the native details element
+// The Elements polyfill is being used to by-pass this bug and add in additional aria information missing in the current GOVUK Frontend version
+// ===========================
+
+// This is the Elements details polyfill updated to ensure focussable elements inside it are not exposed
+// This is accomplished by adding display none to the internal content wrapper.
+
 // <details> polyfill
 // http://caniuse.com/#feat=details
 
@@ -160,9 +169,10 @@
         } else {
           details.__summary.setAttribute('aria-expanded', 'false')
           details.__content.setAttribute('aria-hidden', 'true')
-          if (!GOVUK.details.NATIVE_DETAILS) {
-            details.__content.style.display = 'none'
-          }
+          // UPDATE MAY 2020 removed NATIVE_DETAILS check for style update
+          // if (!GOVUK.details.NATIVE_DETAILS) {
+              details.__content.style.display = 'none'
+          // }
         }
 
         // Create a circular reference from the summary back to its
@@ -205,8 +215,10 @@
       summary.__details.__summary.setAttribute('aria-expanded', (expanded ? 'false' : 'true'))
       summary.__details.__content.setAttribute('aria-hidden', (hidden ? 'false' : 'true'))
 
+      // UPDATE MAY 2020 - moved style update out of NATIVE_DETAILS check
+      summary.__details.__content.style.display = (expanded ? 'none' : '')
       if (!GOVUK.details.NATIVE_DETAILS) {
-        summary.__details.__content.style.display = (expanded ? 'none' : '')
+
 
         var hasOpenAttr = summary.__details.getAttribute('open') !== null
         if (!hasOpenAttr) {
