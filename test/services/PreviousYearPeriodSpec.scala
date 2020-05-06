@@ -35,6 +35,10 @@ class PreviousYearPeriodSpec extends SpecBase with CoreTestDataBuilder {
       LocalDate.of(2019, 3, 2),
       LocalDate.of(2019, 3, 30))
 
+    previousYearPayDate(FourWeekly, partialPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 28", "2020, 3, 1", "2020, 3, 10", "2020, 3, 28")) mustBe Seq(
+      LocalDate.of(2019, 3, 2),
+      LocalDate.of(2019, 3, 30))
+
     previousYearPayDate(Monthly, fullPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 31")) mustBe Seq(
       LocalDate.of(2019, 3, 31))
   }
