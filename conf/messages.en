@@ -456,4 +456,4 @@ topupPeriods.hint = Select all that apply.
 topupPeriods.period = Pay period end: {0}
 topupPeriods.amount = Amount before top-up: £{0}
 topupPeriods.checkYourAnswersLabel = Which of these are you topping up?
-topupPeriods.error.required = Select at least one period that you topped up
+topupPeriods.error.required = Select the pay periods you are topping up
