@@ -7,7 +7,7 @@ package services
 
 import models.Amount._
 import models.Calculation.NicCalculationResult
-import models.{AdditionalPayment, Amount, CalculationResult, FullPeriod, FullPeriodBreakdown, FullPeriodWithPaymentDate, PartialPeriod, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentDate, PaymentFrequency, PeriodBreakdown, TopUpPayment}
+import models.{AdditionalPayment, Amount, CalculationResult, FullPeriod, FullPeriodBreakdown, FullPeriodWithPaymentDate, PartialPeriod, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentDate, PaymentFrequency, PeriodBreakdown, PeriodWithPaymentDate, TopUpPayment}
 import services.Calculators._
 
 trait NicCalculator extends FurloughCapCalculator with CommonCalculationService {
@@ -19,26 +19,22 @@ trait NicCalculator extends FurloughCapCalculator with CommonCalculationService 
     topUps: Seq[TopUpPayment]): CalculationResult = { //TODO remove dafaulted
     val nicBreakdowns = furloughBreakdown.map {
       case FullPeriodBreakdown(grant, periodWithPaymentDate) =>
-        val additionalPayment = additionals.find(_.date == periodWithPaymentDate.period.period.end).map(_.amount)
-        val topUpPayment = topUps.find(_.date == periodWithPaymentDate.period.period.end).map(_.amount)
         calculateFullPeriodNic(
           frequency,
           grant,
           periodWithPaymentDate.period,
           periodWithPaymentDate.paymentDate,
-          additionalPayment,
-          topUpPayment) //TODO to be wired
+          additionalPayments(additionals, periodWithPaymentDate),
+          topUpPayments(topUps, periodWithPaymentDate)) //TODO to be wired
       case PartialPeriodBreakdown(nonFurloughPay, grant, periodWithPaymentDate) =>
-        val additionalPayment = additionals.find(_.date == periodWithPaymentDate.period.period.end).map(_.amount)
-        val topUpPayment = topUps.find(_.date == periodWithPaymentDate.period.period.end).map(_.amount)
         calculatePartialPeriodNic(
           frequency,
           nonFurloughPay,
           grant,
           periodWithPaymentDate.period,
           periodWithPaymentDate.paymentDate,
-          additionalPayment,
-          topUpPayment)
+          additionalPayments(additionals, periodWithPaymentDate),
+          topUpPayments(topUps, periodWithPaymentDate))
     }
     CalculationResult(NicCalculationResult, nicBreakdowns.map(_.grant.value).sum, nicBreakdowns)
   }
@@ -81,5 +77,12 @@ trait NicCalculator extends FurloughCapCalculator with CommonCalculationService 
 
     FullPeriodBreakdown(grant, FullPeriodWithPaymentDate(period, paymentDate))
   }
+
+
+  private def topUpPayments(topUps: Seq[TopUpPayment], periodWithPaymentDate: PeriodWithPaymentDate): Option[Amount] =
+    topUps.find(_.date == periodWithPaymentDate.period.period.end).map(_.amount)
+
+  private def additionalPayments(additionals: Seq[AdditionalPayment], periodWithPaymentDate: PeriodWithPaymentDate): Option[Amount] =
+    additionals.find(_.date == periodWithPaymentDate.period.period.end).map(_.amount)
 
 }
