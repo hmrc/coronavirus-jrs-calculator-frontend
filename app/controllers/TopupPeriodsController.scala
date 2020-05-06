@@ -7,8 +7,8 @@ package controllers
 
 import controllers.actions._
 import forms.TopupPeriodsFormProvider
+import handlers.FurloughCalculationHandler
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.TopupPeriodsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -30,29 +30,42 @@ class TopupPeriodsController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: TopupPeriodsView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport {
+    extends FrontendBaseController with I18nSupport with FurloughCalculationHandler {
 
   val form = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.get(TopupPeriodsPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
+    handleCalculationFurlough(request.userAnswers)
+      .map { furlough =>
+        val preparedForm = request.userAnswers.get(TopupPeriodsPage) match {
+          case None => form
+          case Some(selectedDates) =>
+            form.fill(selectedDates)
+        }
 
-    Ok(view(preparedForm))
+        Ok(view(preparedForm, furlough.payPeriodBreakdowns))
+      }
+      .getOrElse(
+        Redirect(routes.ErrorController.somethingWentWrong())
+      )
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TopupPeriodsPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TopupPeriodsPage, updatedAnswers))
+    handleCalculationFurlough(request.userAnswers)
+      .map { furlough =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, furlough.payPeriodBreakdowns))), { dates =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(TopupPeriodsPage, dates))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Ok(dates.toString())
+            }
+          )
+      }
+      .getOrElse(
+        Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
       )
   }
 }

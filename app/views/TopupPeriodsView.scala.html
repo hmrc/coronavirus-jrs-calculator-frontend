@@ -5,6 +5,8 @@
 
 @import controllers.routes.TopupPeriodsController
 @import models.TopupPeriods
+@import models.PeriodBreakdown
+@import java.time.LocalDate
 
 @this(
     govukLayout: templates.GovukLayoutWrapper,
@@ -14,7 +16,7 @@
     checkboxes: components.inputCheckboxes
 )
 
-@(form: Form[Set[TopupPeriods]])(implicit request: Request[_], messages: Messages)
+@(form: Form[List[LocalDate]], payDates: Seq[PeriodBreakdown])(implicit request: Request[_], messages: Messages)
 
 @govukLayout(pageTitle = Some(title(form, "topupPeriods.title"))) {
 
@@ -26,7 +28,8 @@
             form = form,
             legend = messages("topupPeriods.heading"),
             legendAsHeading = true,
-            items = TopupPeriods.options(form)
+            items = TopupPeriods.options(form, payDates),
+            hint = Some(Html(messages("topupPeriods.hint")))
         )
 
         @button("site.saveAndContinue")

@@ -5,17 +5,18 @@
 
 package forms
 
-import javax.inject.Inject
+import java.time.LocalDate
 
+import javax.inject.Inject
 import forms.mappings.Mappings
 import play.api.data.Form
-import play.api.data.Forms.set
-import models.TopupPeriods
+import play.api.data.Forms._
+import play.api.data.format.Formats._
 
 class TopupPeriodsFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Set[TopupPeriods]] =
+  def apply(): Form[List[LocalDate]] =
     Form(
-      "value" -> set(enumerable[TopupPeriods]("topupPeriods.error.required")).verifying(nonEmptySet("topupPeriods.error.required"))
+      "value" -> list(of(localDateFormat)).verifying("topupPeriods.error.required", _.nonEmpty)
     )
 }

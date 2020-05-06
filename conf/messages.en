@@ -452,7 +452,8 @@ amount.error.negative = The amount can’t be negative
 
 topupPeriods.title = Which of these are you topping up?
 topupPeriods.heading = Which of these are you topping up?
-topupPeriods.period1 = Pay period end:
-topupPeriods.period2 = Pay period end:
+topupPeriods.hint = Select all that apply.
+topupPeriods.period = Pay period end: {0}
+topupPeriods.amount = Amount before top-up: £{0}
 topupPeriods.checkYourAnswersLabel = Which of these are you topping up?
-topupPeriods.error.required = Select topupPeriods
+topupPeriods.error.required = Select at least one period that you topped up

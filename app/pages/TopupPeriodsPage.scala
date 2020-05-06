@@ -5,10 +5,11 @@
 
 package pages
 
-import models.TopupPeriods
+import java.time.LocalDate
+
 import play.api.libs.json.JsPath
 
-case object TopupPeriodsPage extends QuestionPage[Set[TopupPeriods]] {
+case object TopupPeriodsPage extends QuestionPage[List[LocalDate]] {
 
   override def path: JsPath = JsPath \ toString
 
