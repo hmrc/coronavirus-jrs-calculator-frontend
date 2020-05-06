@@ -33,6 +33,9 @@ object FurloughStatus extends Enumerable.Implicits {
     FurloughOngoing
   )
 
+
+  Console.println("We are just testing Jenkins, this PR will be closed.")
+
   def options(form: Form[_])(implicit messages: Messages): Seq[RadioItem] = values.map { value =>
     RadioItem(
       value = Some(value.toString),
