@@ -16,6 +16,8 @@
 
 package generators
 
+import java.time.LocalDate
+
 import models._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
@@ -28,7 +30,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[TopupPeriodsPage.type]
-        value <- arbitrary[TopupPeriods].map(Json.toJson(_))
+        value <- arbitrary[List[LocalDate]].map(Json.toJson(_))
       } yield (page, value)
     }
 

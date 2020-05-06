@@ -23,11 +23,6 @@ import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
-  implicit lazy val arbitraryTopupPeriods: Arbitrary[TopupPeriods] =
-    Arbitrary {
-      Gen.oneOf(TopupPeriods.values.toSeq)
-    }
-
   implicit lazy val arbitraryFurloughTopUpStatus: Arbitrary[FurloughTopUpStatus] =
     Arbitrary {
       Gen.oneOf(FurloughTopUpStatus.values.toSeq)

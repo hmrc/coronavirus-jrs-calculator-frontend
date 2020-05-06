@@ -5,14 +5,16 @@
 
 package controllers
 
-import base.SpecBaseWithApplication
+import java.time.LocalDate
+
+import base.{CoreTestDataBuilder, SpecBaseWithApplication}
 import forms.TopupPeriodsFormProvider
-import models.{TopupPeriods, UserAnswers}
+import models.{Amount, FullPeriodBreakdown, PeriodBreakdown, Salary}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.TopupPeriodsPage
+import pages.{SalaryQuestionPage, TopupPeriodsPage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, Call}
 import play.api.test.CSRFTokenHelper._
@@ -23,7 +25,7 @@ import views.html.TopupPeriodsView
 
 import scala.concurrent.Future
 
-class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSugar {
+class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSugar with CoreTestDataBuilder {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -34,11 +36,20 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
   val formProvider = new TopupPeriodsFormProvider()
   val form = formProvider()
 
+  val dates = List(LocalDate.of(2020, 3, 31))
+  val periodBreakdowns: Seq[PeriodBreakdown] = Seq(
+    FullPeriodBreakdown(Amount(1600.00), fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"))
+  )
+
   "TopupPeriods Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val userAnswers = mandatoryAnswers
+        .set(SalaryQuestionPage, Salary(2000))
+        .get
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val result = route(application, getRequest).value
 
@@ -47,14 +58,18 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form)(getRequest, messages).toString
+        view(form, periodBreakdowns)(getRequest, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(TopupPeriodsPage, TopupPeriods.values.toSet).success.value
+      val userAnswers = mandatoryAnswers
+        .set(SalaryQuestionPage, Salary(2000))
+        .get
+        .set(TopupPeriodsPage, dates)
+        .get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -65,7 +80,7 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(TopupPeriods.values.toSet))(getRequest, messages).toString
+        view(form.fill(dates), periodBreakdowns)(getRequest, messages).toString
 
       application.stop()
     }
@@ -86,7 +101,7 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
 
       val request =
         FakeRequest(POST, topupPeriodsRoute)
-          .withFormUrlEncodedBody(("value[0]", TopupPeriods.values.head.toString))
+          .withFormUrlEncodedBody(("value[0]", dates.head.toString()))
 
       val result = route(application, request).value
 
@@ -115,7 +130,7 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm)(request, messages).toString
+        view(boundForm, periodBreakdowns)(request, messages).toString
 
       application.stop()
     }
@@ -140,7 +155,7 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
 
       val request =
         FakeRequest(POST, topupPeriodsRoute)
-          .withFormUrlEncodedBody(("value[0]", TopupPeriods.values.head.toString))
+          .withFormUrlEncodedBody(("value[0]", dates.head.toString))
 
       val result = route(application, request).value
 
