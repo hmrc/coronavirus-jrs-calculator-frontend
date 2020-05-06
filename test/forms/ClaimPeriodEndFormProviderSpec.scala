@@ -83,11 +83,12 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseWithApplication {
 
       val result = form.bind(data)
 
-      result.errors shouldBe List(FormError(
-        "endDate",
-        "claimPeriodEnd.cannot.be.after.policyEnd",
-        ViewUtils.dateToString(LocalDate.of(2020, 8, 1))
-      ))
+      result.errors shouldBe List(
+        FormError(
+          "endDate",
+          "claimPeriodEnd.cannot.be.after.policyEnd",
+          Seq(ViewUtils.dateToString(frontendAppConfig.schemeEndDate))
+        ))
     }
 
     "fail with invalid dates -  more than today + 14 days" in {
