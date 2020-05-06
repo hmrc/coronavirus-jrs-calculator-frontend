@@ -17,14 +17,16 @@
 package controllers.actions
 
 import base.SpecBaseWithApplication
+import com.google.inject.Inject
 import controllers.actions.FeatureFlag.{TopupJourneyFlag, VariableJourneyFlag}
 import controllers.routes
+import handlers.ErrorHandler
 import play.api.mvc.Results
 import play.api.test.Helpers._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class FeatureFlagActionSpec extends SpecBaseWithApplication {
+class FeatureFlagActionSpec @Inject()(eh: ErrorHandler) extends SpecBaseWithApplication {
 
   class Harness(identify: IdentifierAction, flagAction: FeatureFlagAction) {
     def onPageLoad() = (identify andThen flagAction) {
@@ -37,7 +39,7 @@ class FeatureFlagActionSpec extends SpecBaseWithApplication {
     "Allow requests when no feature flag is provided" in {
       val application = applicationBuilder().build()
 
-      val action = new FeatureFlagAction(None, application.configuration, implicitly)
+      val action = new FeatureFlagAction(None, application.configuration, eh, implicitly)
 
       val identify = application.injector.instanceOf[IdentifierAction]
 
@@ -51,7 +53,7 @@ class FeatureFlagActionSpec extends SpecBaseWithApplication {
     "Allow requests when feature flag is true" in {
       val application = applicationBuilder(config = Map(VariableJourneyFlag.key -> true)).build()
 
-      val action = new FeatureFlagAction(Some(VariableJourneyFlag), application.configuration, implicitly)
+      val action = new FeatureFlagAction(Some(VariableJourneyFlag), application.configuration, eh, implicitly)
 
       val identify = application.injector.instanceOf[IdentifierAction]
 
@@ -65,7 +67,7 @@ class FeatureFlagActionSpec extends SpecBaseWithApplication {
     "Redirect to coming soon when feature flag is false" in {
       val application = applicationBuilder(config = Map(VariableJourneyFlag.key -> false)).build()
 
-      val action = new FeatureFlagAction(Some(VariableJourneyFlag), application.configuration, implicitly)
+      val action = new FeatureFlagAction(Some(VariableJourneyFlag), application.configuration, eh, implicitly)
 
       val identify = application.injector.instanceOf[IdentifierAction]
 
@@ -81,7 +83,7 @@ class FeatureFlagActionSpec extends SpecBaseWithApplication {
     "Redirect to coming soon with topups when topup flag is false" in {
       val application = applicationBuilder(config = Map(TopupJourneyFlag.key -> false)).build()
 
-      val action = new FeatureFlagAction(Some(TopupJourneyFlag), application.configuration, implicitly)
+      val action = new FeatureFlagAction(Some(TopupJourneyFlag), application.configuration, eh, implicitly)
 
       val identify = application.injector.instanceOf[IdentifierAction]
 

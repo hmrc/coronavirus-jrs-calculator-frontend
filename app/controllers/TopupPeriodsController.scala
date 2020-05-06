@@ -5,6 +5,7 @@
 
 package controllers
 
+import controllers.actions.FeatureFlag.TopupJourneyFlag
 import controllers.actions._
 import forms.TopupPeriodsFormProvider
 import handlers.FurloughCalculationHandler
@@ -24,6 +25,7 @@ class TopupPeriodsController @Inject()(
   sessionRepository: SessionRepository,
   navigator: Navigator,
   identify: IdentifierAction,
+  feature: FeatureFlagActionProvider,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   formProvider: TopupPeriodsFormProvider,
@@ -34,38 +36,40 @@ class TopupPeriodsController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    handleCalculationFurlough(request.userAnswers)
-      .map { furlough =>
-        val preparedForm = request.userAnswers.get(TopupPeriodsPage) match {
-          case None => form
-          case Some(selectedDates) =>
-            form.fill(selectedDates)
-        }
+  def onPageLoad(): Action[AnyContent] = (identify andThen feature(TopupJourneyFlag) andThen getData andThen requireData) {
+    implicit request =>
+      handleCalculationFurlough(request.userAnswers)
+        .map { furlough =>
+          val preparedForm = request.userAnswers.get(TopupPeriodsPage) match {
+            case None => form
+            case Some(selectedDates) =>
+              form.fill(selectedDates)
+          }
 
-        Ok(view(preparedForm, furlough.payPeriodBreakdowns))
-      }
-      .getOrElse(
-        Redirect(routes.ErrorController.somethingWentWrong())
-      )
+          Ok(view(preparedForm, furlough.payPeriodBreakdowns))
+        }
+        .getOrElse(
+          Redirect(routes.ErrorController.somethingWentWrong())
+        )
   }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    handleCalculationFurlough(request.userAnswers)
-      .map { furlough =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, furlough.payPeriodBreakdowns))), { dates =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(TopupPeriodsPage, dates))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(TopupPeriodsPage, updatedAnswers))
-            }
-          )
-      }
-      .getOrElse(
-        Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-      )
+  def onSubmit(): Action[AnyContent] = (identify andThen feature(TopupJourneyFlag) andThen getData andThen requireData).async {
+    implicit request =>
+      handleCalculationFurlough(request.userAnswers)
+        .map { furlough =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, furlough.payPeriodBreakdowns))), { dates =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(TopupPeriodsPage, dates))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(TopupPeriodsPage, updatedAnswers))
+              }
+            )
+        }
+        .getOrElse(
+          Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+        )
   }
 }

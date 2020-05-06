@@ -8,6 +8,7 @@ package controllers
 import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBaseWithApplication}
+import controllers.actions.FeatureFlag._
 import forms.TopupPeriodsFormProvider
 import models.{Amount, FullPeriodBreakdown, PeriodBreakdown, Salary, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -143,15 +144,46 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
       application.stop()
     }
 
-    "redirect to error page for a GET if missing values for furlough pay calculation" in {
+    "redirect to 404 page for a GET if topups flag is disabled" in {
 
-      val application = applicationBuilder(userAnswers = Some(UserAnswers("id"))).build()
+      val application = applicationBuilder(config = Map(TopupJourneyFlag.key -> false), userAnswers = Some(UserAnswers("id"))).build()
 
       val request = FakeRequest(GET, topupPeriodsRoute)
 
       val result = route(application, request).value
 
+      status(result) mustEqual NOT_FOUND
+
+      application.stop()
+    }
+
+    "redirect to 404 page for a POST if topups flag is disabled" in {
+
+      val application = applicationBuilder(config = Map(TopupJourneyFlag.key -> false), userAnswers = Some(UserAnswers("id"))).build()
+
+      val request =
+        FakeRequest(POST, topupPeriodsRoute)
+          .withFormUrlEncodedBody(("value[0]", dates.head.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual NOT_FOUND
+
+      application.stop()
+    }
+
+    "redirect to error page for a GET if missing values for furlough pay calculation" in {
+
+      val application = applicationBuilder(userAnswers = Some(UserAnswers("id"))).build()
+
+      val request =
+        FakeRequest(POST, topupPeriodsRoute)
+          .withFormUrlEncodedBody(("value[0]", dates.head.toString))
+
+      val result = route(application, request).value
+
       status(result) mustEqual SEE_OTHER
+
       redirectLocation(result).value mustEqual routes.ErrorController.somethingWentWrong().url
 
       application.stop()
