@@ -9,7 +9,7 @@ import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBaseWithApplication}
 import forms.TopupPeriodsFormProvider
-import models.{Amount, FullPeriodBreakdown, PeriodBreakdown, Salary}
+import models.{Amount, FullPeriodBreakdown, PeriodBreakdown, Salary, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -31,7 +31,7 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
 
   lazy val topupPeriodsRoute = routes.TopupPeriodsController.onPageLoad().url
 
-  val getRequest = FakeRequest(GET, topupPeriodsRoute).withCSRFToken
+  lazy val getRequest = FakeRequest(GET, topupPeriodsRoute).withCSRFToken
     .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
   val formProvider = new TopupPeriodsFormProvider()
   val form = formProvider()
@@ -87,12 +87,16 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
 
     "redirect to the next page when valid data is submitted" in {
 
+      val userAnswers = mandatoryAnswers
+        .set(SalaryQuestionPage, Salary(2000))
+        .get
+
       val mockSessionRepository = mock[SessionRepository]
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -101,7 +105,7 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
 
       val request =
         FakeRequest(POST, topupPeriodsRoute)
-          .withFormUrlEncodedBody(("value[0]", dates.head.toString()))
+          .withFormUrlEncodedBody(("value[0]" -> dates.head.toString()))
 
       val result = route(application, request).value
 
@@ -114,14 +118,18 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val userAnswers = mandatoryAnswers
+        .set(SalaryQuestionPage, Salary(2000))
+        .get
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
         FakeRequest(POST, topupPeriodsRoute).withCSRFToken
           .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
-          .withFormUrlEncodedBody(("value", "invalid value"))
+          .withFormUrlEncodedBody(("value[0]", "invalid value"))
 
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+      val boundForm = form.bind(Map("value[0]" -> "invalid value"))
 
       val view = application.injector.instanceOf[TopupPeriodsView]
 
@@ -131,6 +139,37 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
 
       contentAsString(result) mustEqual
         view(boundForm, periodBreakdowns)(request, messages).toString
+
+      application.stop()
+    }
+
+    "redirect to error page for a GET if missing values for furlough pay calculation" in {
+
+      val application = applicationBuilder(userAnswers = Some(UserAnswers("id"))).build()
+
+      val request = FakeRequest(GET, topupPeriodsRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustEqual routes.ErrorController.somethingWentWrong().url
+
+      application.stop()
+    }
+
+    "redirect to error page for a POST if missing values for furlough pay calculation" in {
+
+      val application = applicationBuilder(userAnswers = Some(UserAnswers("id"))).build()
+
+      val request =
+        FakeRequest(POST, topupPeriodsRoute)
+          .withFormUrlEncodedBody(("value[0]", dates.head.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual routes.ErrorController.somethingWentWrong().url
 
       application.stop()
     }

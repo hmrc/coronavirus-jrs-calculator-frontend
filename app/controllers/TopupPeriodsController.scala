@@ -60,7 +60,7 @@ class TopupPeriodsController @Inject()(
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(TopupPeriodsPage, dates))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Ok(dates.toString())
+              } yield Redirect(navigator.nextPage(TopupPeriodsPage, updatedAnswers))
             }
           )
       }
