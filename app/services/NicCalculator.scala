@@ -38,7 +38,7 @@ trait NicCalculator extends FurloughCapCalculator with CommonCalculationService 
           periodWithPaymentDate.paymentDate,
           additionalPayments(additionals, periodWithPaymentDate),
           topUpPayments(topUps, periodWithPaymentDate)
-        ) //TODO to be wired
+        )
       case PartialPeriodBreakdown(nonFurloughPay, grant, periodWithPaymentDate) =>
         calculatePartialPeriodNic(
           frequency,
