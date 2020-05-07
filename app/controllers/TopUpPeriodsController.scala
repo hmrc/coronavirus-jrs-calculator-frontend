@@ -22,12 +22,12 @@ import forms.TopUpPeriodsFormProvider
 import handlers.FurloughCalculationHandler
 import javax.inject.Inject
 import navigation.Navigator
-import pages.TopupPeriodsPage
+import pages.TopUpPeriodsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.TopupPeriodsView
+import views.html.TopUpPeriodsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,7 +41,7 @@ class TopUpPeriodsController @Inject()(
   requireData: DataRequiredAction,
   formProvider: TopUpPeriodsFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: TopupPeriodsView
+  view: TopUpPeriodsView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with FurloughCalculationHandler {
 
@@ -51,7 +51,7 @@ class TopUpPeriodsController @Inject()(
     implicit request =>
       handleCalculationFurlough(request.userAnswers)
         .map { furlough =>
-          val preparedForm = request.userAnswers.get(TopupPeriodsPage) match {
+          val preparedForm = request.userAnswers.get(TopUpPeriodsPage) match {
             case None => form
             case Some(selectedDates) =>
               form.fill(selectedDates)
@@ -73,9 +73,9 @@ class TopUpPeriodsController @Inject()(
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, furlough.payPeriodBreakdowns))), { dates =>
                 for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(TopupPeriodsPage, dates))
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(TopUpPeriodsPage, dates))
                   _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(TopupPeriodsPage, updatedAnswers))
+                } yield Redirect(navigator.nextPage(TopUpPeriodsPage, updatedAnswers))
               }
             )
         }

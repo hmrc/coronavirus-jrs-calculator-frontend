@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import play.api.libs.json.JsPath
 
-case object TopupPeriodsPage extends QuestionPage[List[LocalDate]] {
+case object TopUpPeriodsPage extends QuestionPage[List[LocalDate]] {
 
   override def path: JsPath = JsPath \ toString
 

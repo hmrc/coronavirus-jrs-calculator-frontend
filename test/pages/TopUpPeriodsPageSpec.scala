@@ -24,10 +24,10 @@ class TopUpPeriodsPageSpec extends PageBehaviours {
 
   "TopupPeriodsPage" must {
 
-    beRetrievable[List[LocalDate]](TopupPeriodsPage)
+    beRetrievable[List[LocalDate]](TopUpPeriodsPage)
 
-    beSettable[List[LocalDate]](TopupPeriodsPage)
+    beSettable[List[LocalDate]](TopUpPeriodsPage)
 
-    beRemovable[List[LocalDate]](TopupPeriodsPage)
+    beRemovable[List[LocalDate]](TopUpPeriodsPage)
   }
 }
