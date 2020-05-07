@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import pages.behaviours.PageBehaviours
 
-class TopupPeriodsPageSpec extends PageBehaviours {
+class TopUpPeriodsPageSpec extends PageBehaviours {
 
   "TopupPeriodsPage" must {
 

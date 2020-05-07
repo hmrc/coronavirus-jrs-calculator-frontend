@@ -16,9 +16,9 @@
 
 package controllers
 
-import controllers.actions.FeatureFlag.TopupJourneyFlag
+import controllers.actions.FeatureFlag.TopUpJourneyFlag
 import controllers.actions._
-import forms.TopupPeriodsFormProvider
+import forms.TopUpPeriodsFormProvider
 import handlers.FurloughCalculationHandler
 import javax.inject.Inject
 import navigation.Navigator
@@ -31,7 +31,7 @@ import views.html.TopupPeriodsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TopupPeriodsController @Inject()(
+class TopUpPeriodsController @Inject()(
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -39,7 +39,7 @@ class TopupPeriodsController @Inject()(
   feature: FeatureFlagActionProvider,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  formProvider: TopupPeriodsFormProvider,
+  formProvider: TopUpPeriodsFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: TopupPeriodsView
 )(implicit ec: ExecutionContext)
@@ -47,7 +47,7 @@ class TopupPeriodsController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen feature(TopupJourneyFlag) andThen getData andThen requireData) {
+  def onPageLoad(): Action[AnyContent] = (identify andThen feature(TopUpJourneyFlag) andThen getData andThen requireData) {
     implicit request =>
       handleCalculationFurlough(request.userAnswers)
         .map { furlough =>
@@ -64,7 +64,7 @@ class TopupPeriodsController @Inject()(
         )
   }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen feature(TopupJourneyFlag) andThen getData andThen requireData).async {
+  def onSubmit(): Action[AnyContent] = (identify andThen feature(TopUpJourneyFlag) andThen getData andThen requireData).async {
     implicit request =>
       handleCalculationFurlough(request.userAnswers)
         .map { furlough =>

@@ -14,8 +14,8 @@
  * limitations under the License.
  *@
 
-@import controllers.routes.TopupPeriodsController
-@import models.TopupPeriods
+@import controllers.routes.TopUpPeriodsController
+@import models.TopUpPeriods
 @import models.PeriodBreakdown
 @import java.time.LocalDate
 
@@ -31,7 +31,7 @@
 
 @govukLayout(pageTitle = Some(title(form, "topupPeriods.title"))) {
 
-    @formHelper(action = TopupPeriodsController.onSubmit()) {
+    @formHelper(action = TopUpPeriodsController.onSubmit()) {
 
         @errorSummary(form.errors)
 
@@ -39,10 +39,10 @@
             form = form,
             legend = messages("topupPeriods.heading"),
             legendAsHeading = true,
-            items = TopupPeriods.options(form, payDates),
+            items = TopUpPeriods.options(form, payDates),
             hint = Some(Html(messages("topupPeriods.hint")))
         )
 
-        @button("site.saveAndContinue")
+        @button("site.continue")
     }
 }

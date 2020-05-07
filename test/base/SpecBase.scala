@@ -16,9 +16,6 @@
 
 package base
 
-import models.UserAnswers
 import org.scalatest.{MustMatchers, OptionValues, TryValues, WordSpec}
-import play.api.libs.json.Writes
-import queries.Settable
 
 trait SpecBase extends WordSpec with MustMatchers with TryValues with OptionValues

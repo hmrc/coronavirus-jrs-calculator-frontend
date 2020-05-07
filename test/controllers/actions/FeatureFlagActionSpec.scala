@@ -17,7 +17,7 @@
 package controllers.actions
 
 import base.SpecBaseWithApplication
-import controllers.actions.FeatureFlag.{TopupJourneyFlag, VariableJourneyFlag}
+import controllers.actions.FeatureFlag.{TopUpJourneyFlag, VariableJourneyFlag}
 import controllers.routes
 import handlers.ErrorHandler
 import play.api.mvc.Results
@@ -82,9 +82,9 @@ class FeatureFlagActionSpec extends SpecBaseWithApplication {
     }
 
     "Return 404 when topup flag is false" in {
-      val application = applicationBuilder(config = Map(TopupJourneyFlag.key -> false)).build()
+      val application = applicationBuilder(config = Map(TopUpJourneyFlag.key -> false)).build()
 
-      val action = new FeatureFlagAction(Some(TopupJourneyFlag), application.configuration, eh, implicitly)
+      val action = new FeatureFlagAction(Some(TopUpJourneyFlag), application.configuration, eh, implicitly)
 
       val identify = application.injector.instanceOf[IdentifierAction]
 

@@ -70,7 +70,7 @@ object FeatureFlag {
     "variable.journey.enabled",
     routes.ComingSoonController.onPageLoad()
   )
-  lazy val TopupJourneyFlag = FeatureFlagWith404("topup.journey.enabled")
+  lazy val TopUpJourneyFlag = FeatureFlagWith404("topup.journey.enabled")
 
   def isEnabled(flag: FeatureFlag, configuration: Configuration): Boolean =
     configuration.getOptional[Boolean](flag.key).getOrElse(false)

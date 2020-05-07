@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBaseWithApplication}
 import controllers.actions.FeatureFlag._
-import forms.TopupPeriodsFormProvider
+import forms.TopUpPeriodsFormProvider
 import models.{Amount, FullPeriodBreakdown, PeriodBreakdown, Salary, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -37,15 +37,15 @@ import views.html.TopupPeriodsView
 
 import scala.concurrent.Future
 
-class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSugar with CoreTestDataBuilder {
+class TopUpPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSugar with CoreTestDataBuilder {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val topupPeriodsRoute = routes.TopupPeriodsController.onPageLoad().url
+  lazy val topupPeriodsRoute = routes.TopUpPeriodsController.onPageLoad().url
 
   lazy val getRequest = FakeRequest(GET, topupPeriodsRoute).withCSRFToken
     .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
-  val formProvider = new TopupPeriodsFormProvider()
+  val formProvider = new TopUpPeriodsFormProvider()
   val form = formProvider()
 
   val dates = List(LocalDate.of(2020, 3, 31))
@@ -152,7 +152,7 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
 
     "redirect to 404 page for a GET if topups flag is disabled" in {
 
-      val application = applicationBuilder(config = Map(TopupJourneyFlag.key -> false), userAnswers = Some(UserAnswers("id"))).build()
+      val application = applicationBuilder(config = Map(TopUpJourneyFlag.key -> false), userAnswers = Some(UserAnswers("id"))).build()
 
       val request = FakeRequest(GET, topupPeriodsRoute)
 
@@ -165,7 +165,7 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
 
     "redirect to 404 page for a POST if topups flag is disabled" in {
 
-      val application = applicationBuilder(config = Map(TopupJourneyFlag.key -> false), userAnswers = Some(UserAnswers("id"))).build()
+      val application = applicationBuilder(config = Map(TopUpJourneyFlag.key -> false), userAnswers = Some(UserAnswers("id"))).build()
 
       val request =
         FakeRequest(POST, topupPeriodsRoute)

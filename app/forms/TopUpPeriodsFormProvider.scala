@@ -24,7 +24,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.format.Formats._
 
-class TopupPeriodsFormProvider @Inject() extends Mappings {
+class TopUpPeriodsFormProvider @Inject() extends Mappings {
 
   def apply(): Form[List[LocalDate]] =
     Form(

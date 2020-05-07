@@ -23,7 +23,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.CheckboxItem
 import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 import views.ViewUtils._
 
-object TopupPeriods {
+object TopUpPeriods {
 
   def options(form: Form[_], payDates: Seq[PeriodBreakdown])(implicit messages: Messages): Seq[CheckboxItem] = payDates.zipWithIndex.map {
     value =>

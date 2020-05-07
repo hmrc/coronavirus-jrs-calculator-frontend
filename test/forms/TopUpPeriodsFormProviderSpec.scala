@@ -24,9 +24,9 @@ import generators.Generators
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.data.FormError
 
-class TopupPeriodsFormProviderSpec extends CheckboxFieldBehaviours with Generators with ScalaCheckPropertyChecks {
+class TopUpPeriodsFormProviderSpec extends CheckboxFieldBehaviours with Generators with ScalaCheckPropertyChecks {
 
-  val form = new TopupPeriodsFormProvider()()
+  val form = new TopUpPeriodsFormProvider()()
 
   implicit val noShrink: Shrink[Int] = Shrink.shrinkAny
 
