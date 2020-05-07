@@ -21,8 +21,7 @@ import java.time.LocalDate
 import base.{CoreTestDataBuilder, SpecBaseWithApplication}
 import controllers.actions.FeatureFlag._
 import forms.TopUpPeriodsFormProvider
-import models.TopUpPeriods.TopUpPeriod
-import models.{Amount, FullPeriodBreakdown, PeriodBreakdown, Salary, TopUpPayment, UserAnswers}
+import models.{Amount, FullPeriodBreakdown, PeriodBreakdown, Salary, TopUpPeriod, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -186,7 +185,7 @@ class TopUpPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
       val application = applicationBuilder(userAnswers = Some(UserAnswers("id"))).build()
 
       val request =
-        FakeRequest(POST, topupPeriodsRoute)
+        FakeRequest(GET, topupPeriodsRoute)
           .withFormUrlEncodedBody(("value[0]", dates.head.toString))
 
       val result = route(application, request).value
@@ -205,6 +204,26 @@ class TopUpPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
       val request =
         FakeRequest(POST, topupPeriodsRoute)
           .withFormUrlEncodedBody(("value[0]", dates.head.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual routes.ErrorController.somethingWentWrong().url
+
+      application.stop()
+    }
+
+    "redirect to error page for a POST if dates in furlough and input do not align" in {
+
+      val userAnswers = mandatoryAnswers
+        .setValue(SalaryQuestionPage, Salary(2000))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request =
+        FakeRequest(POST, topupPeriodsRoute)
+          .withFormUrlEncodedBody(("value[0]", dates.head.toString), ("value[1]", "2020-04-30"))
 
       val result = route(application, request).value
 

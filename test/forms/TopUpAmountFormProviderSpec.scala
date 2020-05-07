@@ -16,32 +16,23 @@
 
 package forms
 
-import forms.behaviours.StringFieldBehaviours
+import forms.behaviours.BigDecimalFieldBehaviours
 import play.api.data.FormError
 
-class TopUpAmountFormProviderSpec extends StringFieldBehaviours {
+class TopUpAmountFormProviderSpec extends BigDecimalFieldBehaviours {
 
+  val fieldName = "value"
   val requiredKey = "topUpAmount.error.required"
-  val lengthKey = "topUpAmount.error.length"
-  val maxLength = 1
+  val invalidKey = "topUpAmount.error.nonNumeric"
 
   val form = new TopUpAmountFormProvider()()
 
   ".value" must {
 
-    val fieldName = "value"
-
-    behave like fieldThatBindsValidData(
+    behave like bigDecimalField(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      error = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(

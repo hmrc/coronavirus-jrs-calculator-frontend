@@ -16,9 +16,7 @@
 
 package pages
 
-import java.time.LocalDate
-
-import models.TopUpPeriods.TopUpPeriod
+import models.TopUpPeriod
 import pages.behaviours.PageBehaviours
 
 class TopUpPeriodsPageSpec extends PageBehaviours {

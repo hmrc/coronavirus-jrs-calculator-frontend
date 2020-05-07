@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBaseWithApplication}
 import forms.TopUpAmountFormProvider
-import models.{Amount, NormalMode, TopUpPayment, TopUpPeriod, UserAnswers}
+import models.{Amount, TopUpPayment, TopUpPeriod}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -28,8 +28,8 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.{TopUpAmountPage, TopUpPeriodsPage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, Call}
-import play.api.test.FakeRequest
 import play.api.test.CSRFTokenHelper._
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.TopUpAmountView
@@ -44,7 +44,8 @@ class TopUpAmountControllerSpec extends SpecBaseWithApplication with MockitoSuga
   val form = formProvider()
 
   def topUpAmountRoute(idx: Int) = routes.TopUpAmountController.onPageLoad(idx).url
-  def getRequest(idx: Int) = FakeRequest(GET, topUpAmountRoute(idx)).withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
+  def getRequest(method: String, idx: Int) =
+    FakeRequest(method, topUpAmountRoute(idx)).withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
   "TopUpAmount Controller" must {
 
@@ -55,9 +56,9 @@ class TopUpAmountControllerSpec extends SpecBaseWithApplication with MockitoSuga
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = getRequest(1)
+      val request = getRequest(GET, 1)
 
-      val result = route(application, getRequest(1)).value
+      val result = route(application, request).value
 
       val view = application.injector.instanceOf[TopUpAmountView]
 
@@ -67,6 +68,57 @@ class TopUpAmountControllerSpec extends SpecBaseWithApplication with MockitoSuga
         view(form, topUpPeriod, 1)(request, messages).toString
 
       application.stop()
+    }
+
+    "redirect to error page for GET when index is not valid" when {
+
+      "index is negative" in {
+        val topUpPeriod = TopUpPeriod(LocalDate.of(2020, 3, 31), Amount(100))
+
+        val userAnswers = mandatoryAnswers.setValue(TopUpPeriodsPage, List(topUpPeriod))
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val result = route(application, getRequest(GET, -1)).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.ErrorController.somethingWentWrong().url
+
+        application.stop()
+      }
+
+      "index is 0" in {
+        val topUpPeriod = TopUpPeriod(LocalDate.of(2020, 3, 31), Amount(100))
+
+        val userAnswers = mandatoryAnswers.setValue(TopUpPeriodsPage, List(topUpPeriod))
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val result = route(application, getRequest(GET, 0)).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.ErrorController.somethingWentWrong().url
+
+        application.stop()
+      }
+
+      "index is too high" in {
+        val topUpPeriod = TopUpPeriod(LocalDate.of(2020, 3, 31), Amount(100))
+
+        val userAnswers = mandatoryAnswers.setValue(TopUpPeriodsPage, List(topUpPeriod))
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val result = route(application, getRequest(GET, 3)).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.ErrorController.somethingWentWrong().url
+
+        application.stop()
+      }
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
@@ -80,9 +132,9 @@ class TopUpAmountControllerSpec extends SpecBaseWithApplication with MockitoSuga
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = getRequest(1)
+      val request = getRequest(GET, 1)
 
-      val result = route(application, getRequest(1)).value
+      val result = route(application, request).value
 
       val view = application.injector.instanceOf[TopUpAmountView]
 
@@ -96,12 +148,16 @@ class TopUpAmountControllerSpec extends SpecBaseWithApplication with MockitoSuga
 
     "redirect to the next page when valid data is submitted" in {
 
+      val topUpPeriod = TopUpPeriod(LocalDate.of(2020, 3, 31), Amount(100))
+
+      val userAnswers = mandatoryAnswers.setValue(TopUpPeriodsPage, List(topUpPeriod))
+
       val mockSessionRepository = mock[SessionRepository]
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -109,8 +165,8 @@ class TopUpAmountControllerSpec extends SpecBaseWithApplication with MockitoSuga
           .build()
 
       val request =
-        FakeRequest(POST, topUpAmountRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+        getRequest(POST, 1)
+          .withFormUrlEncodedBody(("value", "100.00"))
 
       val result = route(application, request).value
 
@@ -122,10 +178,14 @@ class TopUpAmountControllerSpec extends SpecBaseWithApplication with MockitoSuga
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val topUpPeriod = TopUpPeriod(LocalDate.of(2020, 3, 31), Amount(100))
+
+      val userAnswers = mandatoryAnswers.setValue(TopUpPeriodsPage, List(topUpPeriod))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, topUpAmountRoute).withCSRFToken
+        getRequest(POST, 1).withCSRFToken
           .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
           .withFormUrlEncodedBody(("value", ""))
 
@@ -138,7 +198,7 @@ class TopUpAmountControllerSpec extends SpecBaseWithApplication with MockitoSuga
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
+        view(boundForm, topUpPeriod, 1)(request, messages).toString
 
       application.stop()
     }
@@ -147,7 +207,7 @@ class TopUpAmountControllerSpec extends SpecBaseWithApplication with MockitoSuga
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, topUpAmountRoute)
+      val request = getRequest(GET, 1)
 
       val result = route(application, request).value
 
@@ -163,8 +223,8 @@ class TopUpAmountControllerSpec extends SpecBaseWithApplication with MockitoSuga
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, topUpAmountRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+        getRequest(POST, 1)
+          .withFormUrlEncodedBody(("value", "100.00"))
 
       val result = route(application, request).value
 
@@ -173,6 +233,6 @@ class TopUpAmountControllerSpec extends SpecBaseWithApplication with MockitoSuga
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
-//    }
+    }
   }
 }

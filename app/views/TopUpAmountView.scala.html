@@ -22,7 +22,8 @@
         errorSummary: components.errorSummary,
         button: components.button,
         inputCurrency: components.inputCurrency,
-        h1: components.h1
+        h1: components.h1,
+        p: components.p
 )
 
 @(form: Form[_], topUpPeriod: TopUpPeriod, idx: Int)(implicit request: Request[_], messages: Messages)
@@ -30,16 +31,22 @@
 @govukLayout(pageTitle = Some(title(form, "topUpAmount.title"))) {
 
 
-    @formHelper(action = TopUpAmountController.onSubmit(idx)) {
+    @formHelper(action = TopUpAmountController.onSubmit(idx), 'autoComplete -> "off", 'novalidate -> "novalidate") {
 
         @errorSummary(form.errors)
+
+        @h1(messages("topUpAmount.heading", dateToString(topUpPeriod.date)))
+
+        @p(Html(messages("topUpAmount.p1", topUpPeriod.furloughGrant.value.formatted("%.2f"))))
+
+        @p(Html(messages("topUpAmount.p2")))
 
         @inputCurrency(
             form,
             id = "value",
             name = "value",
-            label = "topUpAmount.heading",
-            isPageHeading = true,
+            label = messages(s"topUpAmount.heading", dateToString(topUpPeriod.date)),
+            labelClasses = Some("govuk-visually-hidden"),
             classes = Some("govuk-input--width-10")
         )
 
