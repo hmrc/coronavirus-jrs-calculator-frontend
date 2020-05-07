@@ -73,7 +73,7 @@ class TopUpAmountController @Inject()(
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(TopUpAmountPage, topUpAmount, Some(idx)))
                   _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(TopUpAmountPage, updatedAnswers))
+                } yield Redirect(navigator.nextPage(TopUpAmountPage, updatedAnswers, Some(idx)))
               }
             )
         }
