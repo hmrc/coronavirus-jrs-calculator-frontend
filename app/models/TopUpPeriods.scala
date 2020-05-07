@@ -26,13 +26,13 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.CheckboxItem
 import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 import views.ViewUtils._
 
+case class TopUpPeriod(date: LocalDate, furloughGrant: Amount)
+
+object TopUpPeriod {
+  implicit val defaultFormat: Format[TopUpPeriod] = Json.format
+}
+
 object TopUpPeriods {
-
-  case class TopUpPeriod(date: LocalDate, furloughGrant: Amount)
-
-  object TopUpPeriod {
-    implicit val defaultFormat: Format[TopUpPeriod] = Json.format
-  }
 
   def options(form: Form[_], payDates: Seq[PeriodBreakdown])(implicit messages: Messages): Seq[CheckboxItem] = payDates.zipWithIndex.map {
     value =>

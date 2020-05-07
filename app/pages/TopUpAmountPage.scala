@@ -16,12 +16,12 @@
 
 package pages
 
-import models.TopUpPeriod
+import models.TopUpPayment
 import play.api.libs.json.JsPath
 
-case object TopUpPeriodsPage extends QuestionPage[List[TopUpPeriod]] {
+case object TopUpAmountPage extends QuestionPage[TopUpPayment] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "topupPeriods"
+  override def toString: String = "topUpAmount"
 }

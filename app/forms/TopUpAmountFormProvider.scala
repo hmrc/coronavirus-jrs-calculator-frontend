@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import models.TopUpPeriod
-import play.api.libs.json.JsPath
+import javax.inject.Inject
+import forms.mappings.Mappings
+import models.Amount
+import play.api.data.Form
+import play.api.data.Forms.mapping
 
-case object TopUpPeriodsPage extends QuestionPage[List[TopUpPeriod]] {
+class TopUpAmountFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "topupPeriods"
+  def apply(): Form[Amount] =
+    Form(
+      mapping(
+        "value" -> bigDecimal(
+          requiredKey = "topUpAmount.error.required",
+          nonNumericKey = "topUpAmount.error.nonNumeric"
+        ).verifying(minimumValue(BigDecimal(0.0), "amount.error.negative"))
+          .verifying(maxTwoDecimals())
+      )(Amount.apply)(Amount.unapply))
 }

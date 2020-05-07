@@ -139,6 +139,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
   def routeFor(page: Page): Call =
     page match {
       case FurloughStartDatePage => routes.FurloughStartDateController.onPageLoad()
+      case TopUpPeriodsPage      => routes.TopUpPeriodsController.onPageLoad()
       case p =>
         Logger.warn(s"can't find the route for the page: $p")
         routes.ErrorController.internalServerError()

@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.TopUpPeriodsFormProvider
 import handlers.FurloughCalculationHandler
 import javax.inject.Inject
-import models.TopUpPeriods.TopUpPeriod
+import models.TopUpPeriod
 import navigation.Navigator
 import pages.TopUpPeriodsPage
 import play.Logger
