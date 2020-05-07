@@ -16,10 +16,11 @@
 
 package controllers
 
+import controllers.actions.FeatureFlag.TopUpJourneyFlag
 import controllers.actions._
 import forms.TopUpAmountFormProvider
 import javax.inject.Inject
-import models.{Amount, TopUpPayment, TopUpPeriod}
+import models.{TopUpPayment, TopUpPeriod}
 import navigation.Navigator
 import pages.{TopUpAmountPage, TopUpPeriodsPage}
 import play.api.i18n.MessagesApi
@@ -34,6 +35,7 @@ class TopUpAmountController @Inject()(
   sessionRepository: SessionRepository,
   val navigator: Navigator,
   identify: IdentifierAction,
+  feature: FeatureFlagActionProvider,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   formProvider: TopUpAmountFormProvider,
@@ -44,36 +46,38 @@ class TopUpAmountController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswerOrRedirect(TopUpPeriodsPage) { topUpPeriods =>
-      withValidTopUpDate(topUpPeriods, idx) { topUpPeriod =>
-        val preparedForm = request.userAnswers.get(TopUpAmountPage, Some(idx)) match {
-          case None        => form
-          case Some(value) => form.fill(value.amount)
-        }
+  def onPageLoad(idx: Int): Action[AnyContent] = (identify andThen feature(TopUpJourneyFlag) andThen getData andThen requireData).async {
+    implicit request =>
+      getRequiredAnswerOrRedirect(TopUpPeriodsPage) { topUpPeriods =>
+        withValidTopUpDate(topUpPeriods, idx) { topUpPeriod =>
+          val preparedForm = request.userAnswers.get(TopUpAmountPage, Some(idx)) match {
+            case None        => form
+            case Some(value) => form.fill(value.amount)
+          }
 
-        Future.successful(Ok(view(preparedForm, topUpPeriod, idx)))
+          Future.successful(Ok(view(preparedForm, topUpPeriod, idx)))
+        }
       }
-    }
   }
 
-  def onSubmit(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswerOrRedirect(TopUpPeriodsPage) { topUpPeriods =>
-      withValidTopUpDate(topUpPeriods, idx) { topUpPeriod =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, topUpPeriod, idx))),
-            value => {
-              val topUpAmount = TopUpPayment(topUpPeriod.date, value)
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(TopUpAmountPage, topUpAmount, Some(idx)))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(TopUpAmountPage, updatedAnswers))
-            }
-          )
+  def onSubmit(idx: Int): Action[AnyContent] = (identify andThen feature(TopUpJourneyFlag) andThen getData andThen requireData).async {
+    implicit request =>
+      getRequiredAnswerOrRedirect(TopUpPeriodsPage) { topUpPeriods =>
+        withValidTopUpDate(topUpPeriods, idx) { topUpPeriod =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, topUpPeriod, idx))),
+              value => {
+                val topUpAmount = TopUpPayment(topUpPeriod.date, value)
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(TopUpAmountPage, topUpAmount, Some(idx)))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(TopUpAmountPage, updatedAnswers))
+              }
+            )
+        }
       }
-    }
   }
 
   private def withValidTopUpDate(topUpPeriods: Seq[TopUpPeriod], idx: Int)(f: TopUpPeriod => Future[Result]): Future[Result] =
