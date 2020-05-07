@@ -17,7 +17,6 @@
 package controllers.actions
 
 import base.SpecBaseWithApplication
-import com.google.inject.Inject
 import controllers.actions.FeatureFlag.{TopupJourneyFlag, VariableJourneyFlag}
 import controllers.routes
 import handlers.ErrorHandler
@@ -26,13 +25,15 @@ import play.api.test.Helpers._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class FeatureFlagActionSpec @Inject()(eh: ErrorHandler) extends SpecBaseWithApplication {
+class FeatureFlagActionSpec extends SpecBaseWithApplication {
 
   class Harness(identify: IdentifierAction, flagAction: FeatureFlagAction) {
     def onPageLoad() = (identify andThen flagAction) {
       Results.Ok
     }
   }
+
+  val eh = injector.instanceOf[ErrorHandler]
 
   "FeatureFlagAction" must {
 
@@ -80,7 +81,7 @@ class FeatureFlagActionSpec @Inject()(eh: ErrorHandler) extends SpecBaseWithAppl
       redirectLocation(result).get mustBe routes.ComingSoonController.onPageLoad().url
     }
 
-    "Redirect to coming soon with topups when topup flag is false" in {
+    "Return 404 when topup flag is false" in {
       val application = applicationBuilder(config = Map(TopupJourneyFlag.key -> false)).build()
 
       val action = new FeatureFlagAction(Some(TopupJourneyFlag), application.configuration, eh, implicitly)
@@ -91,9 +92,7 @@ class FeatureFlagActionSpec @Inject()(eh: ErrorHandler) extends SpecBaseWithAppl
 
       val result = controller.onPageLoad()(fakeRequest)
 
-      status(result) mustBe SEE_OTHER
-
-      redirectLocation(result).get mustBe routes.ComingSoonController.onPageLoad(showCalculateTopupsLink = true).url
+      status(result) mustBe NOT_FOUND
     }
 
   }

@@ -58,8 +58,7 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
     "return OK and the correct view for a GET" in {
 
       val userAnswers = mandatoryAnswers
-        .set(SalaryQuestionPage, Salary(2000))
-        .get
+        .setValue(SalaryQuestionPage, Salary(2000))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -78,10 +77,8 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = mandatoryAnswers
-        .set(SalaryQuestionPage, Salary(2000))
-        .get
-        .set(TopupPeriodsPage, dates)
-        .get
+        .setValue(SalaryQuestionPage, Salary(2000))
+        .setValue(TopupPeriodsPage, dates)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -100,8 +97,7 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = mandatoryAnswers
-        .set(SalaryQuestionPage, Salary(2000))
-        .get
+        .setValue(SalaryQuestionPage, Salary(2000))
 
       val mockSessionRepository = mock[SessionRepository]
 
@@ -131,8 +127,7 @@ class TopupPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = mandatoryAnswers
-        .set(SalaryQuestionPage, Salary(2000))
-        .get
+        .setValue(SalaryQuestionPage, Salary(2000))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
