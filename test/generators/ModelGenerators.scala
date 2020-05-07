@@ -18,10 +18,19 @@ package generators
 
 import java.time.{Instant, LocalDate, ZoneOffset}
 
+import models.TopUpPeriods.TopUpPeriod
 import models._
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
+
+  implicit lazy val arbitraryTopUpPeriod: Arbitrary[TopUpPeriod] =
+    Arbitrary {
+      for {
+        date  <- Arbitrary.arbitrary[LocalDate]
+        value <- Arbitrary.arbitrary[BigDecimal]
+      } yield TopUpPeriod(date, Amount(value))
+    }
 
   implicit lazy val arbitraryFurloughTopUpStatus: Arbitrary[FurloughTopUpStatus] =
     Arbitrary {

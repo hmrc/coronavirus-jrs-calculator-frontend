@@ -18,16 +18,17 @@ package pages
 
 import java.time.LocalDate
 
+import models.TopUpPeriods.TopUpPeriod
 import pages.behaviours.PageBehaviours
 
 class TopUpPeriodsPageSpec extends PageBehaviours {
 
   "TopupPeriodsPage" must {
 
-    beRetrievable[List[LocalDate]](TopUpPeriodsPage)
+    beRetrievable[List[TopUpPeriod]](TopUpPeriodsPage)
 
-    beSettable[List[LocalDate]](TopUpPeriodsPage)
+    beSettable[List[TopUpPeriod]](TopUpPeriodsPage)
 
-    beRemovable[List[LocalDate]](TopUpPeriodsPage)
+    beRemovable[List[TopUpPeriod]](TopUpPeriodsPage)
   }
 }

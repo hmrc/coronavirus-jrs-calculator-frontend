@@ -21,7 +21,8 @@ import java.time.LocalDate
 import base.{CoreTestDataBuilder, SpecBaseWithApplication}
 import controllers.actions.FeatureFlag._
 import forms.TopUpPeriodsFormProvider
-import models.{Amount, FullPeriodBreakdown, PeriodBreakdown, Salary, UserAnswers}
+import models.TopUpPeriods.TopUpPeriod
+import models.{Amount, FullPeriodBreakdown, PeriodBreakdown, Salary, TopUpPayment, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -76,9 +77,11 @@ class TopUpPeriodsControllerSpec extends SpecBaseWithApplication with MockitoSug
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
+      val topUpPeriod = dates.map(TopUpPeriod(_, furloughGrant = Amount(100)))
+
       val userAnswers = mandatoryAnswers
         .setValue(SalaryQuestionPage, Salary(2000))
-        .setValue(TopUpPeriodsPage, dates)
+        .setValue(TopUpPeriodsPage, topUpPeriod)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
