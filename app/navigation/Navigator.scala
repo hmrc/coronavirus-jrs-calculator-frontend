@@ -130,7 +130,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
         if (topUpPeriods.isDefinedAt(previousIdx)) {
           routes.TopUpAmountController.onPageLoad(previousIdx + 1)
         } else {
-          routes.NicCategoryController.onPageLoad()
+          routes.AdditionalPaymentController.onPageLoad()
         }
       }
       .getOrElse(routes.TopUpPeriodsController.onPageLoad())
@@ -203,7 +203,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
 
   private def furloughTopUpStatusRoutes: UserAnswers => Call = { userAnswers =>
     userAnswers.get(FurloughTopUpStatusPage) match {
-      case Some(FurloughTopUpStatus.ToppedUp)    => routes.ComingSoonController.onPageLoad(true)
+      case Some(FurloughTopUpStatus.ToppedUp)    => routes.TopUpPeriodsController.onPageLoad()
       case Some(FurloughTopUpStatus.NotToppedUp) => routes.ConfirmationController.onPageLoad()
       case _                                     => routes.FurloughTopUpController.onPageLoad()
     }

@@ -297,7 +297,7 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication with CoreTest
             .set(FurloughTopUpStatusPage, FurloughTopUpStatus.ToppedUp)
             .success
             .value
-        ) mustBe routes.ComingSoonController.onPageLoad(true)
+        ) mustBe routes.TopUpPeriodsController.onPageLoad()
         navigator.nextPage(
           FurloughTopUpStatusPage,
           UserAnswers("id")
@@ -367,7 +367,14 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication with CoreTest
           TopUpAmountPage,
           userAnswers,
           Some(2)
-        ) mustBe routes.NicCategoryController.onPageLoad()
+        ) mustBe routes.AdditionalPaymentController.onPageLoad()
+      }
+
+      "go to correct page after AdditionalPaymentStatusPage" in {
+        navigator.nextPage(
+          AdditionalPaymentStatusPage,
+          emptyUserAnswers
+        ) mustBe routes.RootPageController.onPageLoad() //TODO: fix this routing after next page implementation
       }
 
       "go to correct page after PartialPayAfterFurloughPage" when {

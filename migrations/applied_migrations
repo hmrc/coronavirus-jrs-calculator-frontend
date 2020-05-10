@@ -1,34 +1,33 @@
 #!/bin/bash
 
 echo ""
-echo "Applying migration TopUpAmount"
+echo "Applying migration AdditionalPay"
 
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /topUpAmount                        controllers.TopUpAmountController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /topUpAmount                        controllers.TopUpAmountController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /additionalPay                        controllers.AdditionalPayController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /additionalPay                        controllers.AdditionalPayController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /changeTopUpAmount                  controllers.TopUpAmountController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /changeTopUpAmount                  controllers.TopUpAmountController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /changeAdditionalPay                  controllers.AdditionalPayController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changeAdditionalPay                  controllers.AdditionalPayController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
-echo "topUpAmount.title = topUpAmount" >> ../conf/messages.en
-echo "topUpAmount.heading = topUpAmount" >> ../conf/messages.en
-echo "topUpAmount.checkYourAnswersLabel = topUpAmount" >> ../conf/messages.en
-echo "topUpAmount.error.required = Enter topUpAmount" >> ../conf/messages.en
-echo "topUpAmount.error.length = TopUpAmount must be 1 characters or less" >> ../conf/messages.en
+echo "additionalPay.title = additionalPay" >> ../conf/messages.en
+echo "additionalPay.heading = additionalPay" >> ../conf/messages.en
+echo "additionalPay.checkYourAnswersLabel = additionalPay" >> ../conf/messages.en
+echo "additionalPay.error.required = Select yes if additionalPay" >> ../conf/messages.en
 
 echo "Adding to UserAnswersEntryGenerators"
 awk '/trait UserAnswersEntryGenerators/ {\
     print;\
     print "";\
-    print "  implicit lazy val arbitraryTopUpAmountUserAnswersEntry: Arbitrary[(TopUpAmountPage.type, JsValue)] =";\
+    print "  implicit lazy val arbitraryAdditionalPayUserAnswersEntry: Arbitrary[(AdditionalPayPage.type, JsValue)] =";\
     print "    Arbitrary {";\
     print "      for {";\
-    print "        page  <- arbitrary[TopUpAmountPage.type]";\
-    print "        value <- arbitrary[String].suchThat(_.nonEmpty).map(Json.toJson(_))";\
+    print "        page  <- arbitrary[AdditionalPayPage.type]";\
+    print "        value <- arbitrary[Boolean].map(Json.toJson(_))";\
     print "      } yield (page, value)";\
     print "    }";\
     next }1' ../test/generators/UserAnswersEntryGenerators.scala > tmp && mv tmp ../test/generators/UserAnswersEntryGenerators.scala
@@ -37,14 +36,14 @@ echo "Adding to PageGenerators"
 awk '/trait PageGenerators/ {\
     print;\
     print "";\
-    print "  implicit lazy val arbitraryTopUpAmountPage: Arbitrary[TopUpAmountPage.type] =";\
-    print "    Arbitrary(TopUpAmountPage)";\
+    print "  implicit lazy val arbitraryAdditionalPayPage: Arbitrary[AdditionalPayPage.type] =";\
+    print "    Arbitrary(AdditionalPayPage)";\
     next }1' ../test/generators/PageGenerators.scala > tmp && mv tmp ../test/generators/PageGenerators.scala
 
 echo "Adding to UserAnswersGenerator"
 awk '/val generators/ {\
     print;\
-    print "    arbitrary[(TopUpAmountPage.type, JsValue)] ::";\
+    print "    arbitrary[(AdditionalPayPage.type, JsValue)] ::";\
     next }1' ../test/generators/UserAnswersGenerator.scala > tmp && mv tmp ../test/generators/UserAnswersGenerator.scala
 
-echo "Migration TopUpAmount completed"
+echo "Migration AdditionalPay completed"
