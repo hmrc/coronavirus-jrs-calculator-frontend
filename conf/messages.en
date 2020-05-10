@@ -472,3 +472,12 @@ additionalPaymentStatus.p2 = We’re asking because it affects National Insuranc
 additionalPaymentStatus.yesAdditionalPayments = Yes
 additionalPaymentStatus.noAdditionalPayments = No
 additionalPaymentStatus.error.required = Select 'Yes' if this employee got additional payments
+
+additionalPaymentsDetails.summary = Examples of additional payments
+additionalPaymentsDetails.p1 = Additional payments include:
+additionalPaymentsDetails.l1 = discretionary payments you’re not contractually obliged to pay, including:
+additionalPaymentsDetails.l1.l1 = tips
+additionalPaymentsDetails.l1.l2 = discretionary bonuses
+additionalPaymentsDetails.l1.l3 = discretionary commission payments
+additionalPaymentsDetails.l2 = non-cash payments
+additionalPaymentsDetails.l3 = non-monetary benefits like benefits in kind (such as a company car) and salary sacrifice schemes that reduce taxable pay

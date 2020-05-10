@@ -24,7 +24,8 @@
         inputRadio: components.inputRadio,
         button: components.button,
         h1: components.h1,
-        p: components.p
+        p: components.p,
+        detail: components.additionalPayments
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
@@ -40,6 +41,8 @@
         @p(Html(messages("additionalPaymentStatus.p1")))
 
         @p(Html(messages("additionalPaymentStatus.p2")))
+
+        @detail()
 
         @inputRadio(
             form = form,
