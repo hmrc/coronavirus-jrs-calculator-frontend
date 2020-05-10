@@ -47,7 +47,7 @@ class AdditionalPaymentStatusControllerSpec extends SpecBaseWithApplication with
     FakeRequest(GET, additionalPaymentStatusRoute).withCSRFToken
       .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
-  val validAnswer = AdditionalPaymentStatus.values.head
+  val validAnswer = AdditionalPaymentStatus.values.headOption.value
 
   "furloughOngoing Controller" must {
 
