@@ -481,3 +481,9 @@ additionalPaymentsDetails.l1.l2 = discretionary bonuses
 additionalPaymentsDetails.l1.l3 = discretionary commission payments
 additionalPaymentsDetails.l2 = non-cash payments
 additionalPaymentsDetails.l3 = non-monetary benefits like benefits in kind (such as a company car) and salary sacrifice schemes that reduce taxable pay
+
+additionalPaymentPeriods.title = When did this employee get additional payments?
+additionalPaymentPeriods.heading = When did this employee get additional payments?
+additionalPaymentPeriods.hint = Select all that apply.
+additionalPaymentPeriods.period = Pay period end: {0}
+additionalPaymentPeriods.error.required = Select the pay periods when there were additional payments

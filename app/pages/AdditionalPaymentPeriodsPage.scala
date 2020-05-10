@@ -16,23 +16,13 @@
 
 package pages
 
-import models.{AdditionalPaymentStatus, FurloughStatus, UserAnswers}
+import java.time.LocalDate
+
 import play.api.libs.json.JsPath
 
-import scala.util.Try
-
-case object AdditionalPaymentStatusPage extends QuestionPage[AdditionalPaymentStatus] {
+case object AdditionalPaymentPeriodsPage extends QuestionPage[List[LocalDate]] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "additionalPaymentStatus"
-
-  override def cleanup(value: Option[AdditionalPaymentStatus], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(AdditionalPaymentStatus.NoAdditionalPayments) =>
-        userAnswers
-          .remove(AdditionalPaymentPeriodsPage)
-      case _ =>
-        super.cleanup(value, userAnswers)
-    }
+  override def toString: String = "additionalPaymentPeriods"
 }
