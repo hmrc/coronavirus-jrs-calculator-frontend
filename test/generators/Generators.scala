@@ -20,7 +20,7 @@ import java.time.{Instant, LocalDate, ZoneOffset}
 
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Gen._
-import org.scalacheck.{Gen, Shrink}
+import org.scalacheck.{Arbitrary, Gen, Shrink}
 
 import scala.math.BigDecimal.RoundingMode
 
@@ -60,6 +60,30 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
     alphaStr suchThat (_.size > 0)
 
   def positveDoubles: Gen[Double] = arbitrary[Double] suchThat (_ >= 0)
+
+  implicit val arbBigDecimal: Arbitrary[BigDecimal] = Arbitrary {
+    import java.math.MathContext, MathContext._
+    val genMathContext0: Gen[MathContext] =
+      Gen.oneOf(DECIMAL32, DECIMAL64, DECIMAL128)
+
+    val long: Gen[Long] =
+      Gen.choose(1, Long.MaxValue)
+
+    val genWholeBigDecimal: Gen[BigDecimal] =
+      long.map(BigDecimal(_))
+
+    val genSmallBigDecimal: Gen[BigDecimal] =
+      for {
+        mc <- genMathContext0
+        n  <- long
+        d  <- long
+      } yield BigDecimal(n, 0, mc) / d.toDouble
+
+    Gen.frequency(
+      (10, genWholeBigDecimal),
+      (10, genSmallBigDecimal),
+    )
+  }
 
   def positiveBigDecimals: Gen[BigDecimal] = arbitrary[BigDecimal] suchThat (_ >= 0)
 
