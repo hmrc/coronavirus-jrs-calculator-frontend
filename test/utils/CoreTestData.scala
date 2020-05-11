@@ -32,7 +32,9 @@ trait CoreTestData {
     payMethod: String = "regular",
     variableGrossPay: String = "",
     employeeStartDate: String = "",
-    claimStartDate: String = "2020-03-01"): String =
+    claimStartDate: String = "2020-03-01",
+    nicCategory: String = "payable",
+    pensionStatus: String = "doesContribute"): String =
     s"""
        |{
        |    "_id" : "session-3fdd2682-dad1-48e1-80d6-8c1480696811",
@@ -46,13 +48,13 @@ trait CoreTestData {
        |            "amount" : "$variableGrossPay"
        |        },
        |        "employeeStartDate": "$employeeStartDate",
-       |        "pensionStatus" : "doesContribute",
+       |        "pensionStatus" : "$pensionStatus",
        |        "claimPeriodEnd" : "2020-04-30",
        |        "paymentFrequency" : "monthly",
        |        "salary" : {
        |            "amount" : 2000.0
        |        },
-       |        "nicCategory" : "payable",
+       |        "nicCategory" : "$nicCategory",
        |        "claimPeriodStart" : "$claimStartDate",
        |        "payDate" : [
        |            "2020-02-29",
@@ -65,33 +67,6 @@ trait CoreTestData {
        |    }
        |}
        |""".stripMargin
-
-  val jsStringWithNoNiNoPension: String =
-    """{
-      |  "_id": "session-9dee1ca2-1378-479b-92f8-748de7f363d5",
-      |  "data": {
-      |    "lastPayDate" : "2020-04-20",
-      |    "furloughStatus": "ongoing",
-      |    "furloughStartDate" : "2020-03-01",
-      |    "payMethod": "regular",
-      |    "pensionStatus": "doesNotContribute",
-      |    "claimPeriodEnd": "2020-04-30",
-      |    "paymentFrequency": "monthly",
-      |    "salary": {
-      |      "amount": 2000
-      |    },
-      |    "nicCategory": "nonPayable",
-      |    "claimPeriodStart": "2020-03-01",
-      |    "payDate": [
-      |      "2020-02-29",
-      |      "2020-03-31",
-      |      "2020-04-30"
-      |    ]
-      |  },
-      |  "lastUpdated": {
-      |    "$date": 1586873457650
-      |  }
-      |}""".stripMargin
 
   val tempTest: String =
     """{
