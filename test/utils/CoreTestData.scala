@@ -30,9 +30,11 @@ trait CoreTestData {
     furloughStartDate: String = "2020-03-01",
     furloughEndDate: String = "",
     payMethod: String = "regular",
-    annualPayAmount: String = "",
+    variableGrossPay: String = "",
     employeeStartDate: String = "",
-    claimStartDate: String = "2020-03-01"): String =
+    claimStartDate: String = "2020-03-01",
+    nicCategory: String = "payable",
+    pensionStatus: String = "doesContribute"): String =
     s"""
        |{
        |    "_id" : "session-3fdd2682-dad1-48e1-80d6-8c1480696811",
@@ -42,17 +44,17 @@ trait CoreTestData {
        |        "furloughStartDate" : "$furloughStartDate",
        |        "furloughEndDate" : "$furloughEndDate",
        |        "payMethod" : "$payMethod",
-       |        "annualPayAmount": {
-       |            "amount" : "$annualPayAmount"
+       |        "variableGrossPay": {
+       |            "amount" : "$variableGrossPay"
        |        },
        |        "employeeStartDate": "$employeeStartDate",
-       |        "pensionStatus" : "doesContribute",
+       |        "pensionStatus" : "$pensionStatus",
        |        "claimPeriodEnd" : "2020-04-30",
        |        "paymentFrequency" : "monthly",
-       |        "regularPayAmount" : {
+       |        "salary" : {
        |            "amount" : 2000.0
        |        },
-       |        "nicCategory" : "payable",
+       |        "nicCategory" : "$nicCategory",
        |        "claimPeriodStart" : "$claimStartDate",
        |        "payDate" : [
        |            "2020-02-29",
@@ -66,33 +68,6 @@ trait CoreTestData {
        |}
        |""".stripMargin
 
-  val jsStringWithNoNiNoPension: String =
-    """{
-      |  "_id": "session-9dee1ca2-1378-479b-92f8-748de7f363d5",
-      |  "data": {
-      |    "lastPayDate" : "2020-04-20",
-      |    "furloughStatus": "ongoing",
-      |    "furloughStartDate" : "2020-03-01",
-      |    "payMethod": "regular",
-      |    "pensionStatus": "doesNotContribute",
-      |    "claimPeriodEnd": "2020-04-30",
-      |    "paymentFrequency": "monthly",
-      |    "regularPayAmount": {
-      |      "amount": 2000
-      |    },
-      |    "nicCategory": "nonPayable",
-      |    "claimPeriodStart": "2020-03-01",
-      |    "payDate": [
-      |      "2020-02-29",
-      |      "2020-03-31",
-      |      "2020-04-30"
-      |    ]
-      |  },
-      |  "lastUpdated": {
-      |    "$date": 1586873457650
-      |  }
-      |}""".stripMargin
-
   val tempTest: String =
     """{
       |    "_id" : "session-4f8fa4d9-b46c-466f-ae9b-424cfffd841f",
@@ -104,7 +79,7 @@ trait CoreTestData {
       |        "pensionStatus" : "doesContribute",
       |        "claimPeriodEnd" : "2020-03-31",
       |        "paymentFrequency" : "monthly",
-      |        "regularPayAmount" : {
+      |        "salary" : {
       |            "amount" : 3500
       |        },
       |        "nicCategory" : "payable",
@@ -125,7 +100,7 @@ trait CoreTestData {
       |    "_id" : "session-08e14c4d-8956-4d3a-b457-1b76e3922dd6",
       |    "data" : {
       |        "furloughStatus" : "ended",
-      |        "annualPayAmount" : {
+      |        "variableGrossPay" : {
       |            "amount" : 10000
       |        },
       |        "employeeStarted" : "after1Feb2019",
@@ -133,7 +108,7 @@ trait CoreTestData {
       |        "furloughEndDate" : "2020-04-20",
       |        "paymentFrequency" : "monthly",
       |        "claimPeriodStart" : "2020-03-01",
-      |        "topUpStatus" : "notToppedUp",
+      |        "furloughTopUpStatus" : "notToppedUp",
       |        "PartialPayAfterFurlough" : {
       |            "value" : 800
       |        },
@@ -164,14 +139,14 @@ trait CoreTestData {
       |    "_id" : "session-a33fd288-bafb-475b-9767-84df4315d230",
       |    "data" : {
       |        "furloughStatus" : "ongoing",
-      |        "annualPayAmount" : {
+      |        "variableGrossPay" : {
       |            "amount" : 12960
       |        },
       |        "employeeStarted" : "after1Feb2019",
       |        "employeeStartDate" : "2019-08-01",
       |        "paymentFrequency" : "monthly",
       |        "claimPeriodStart" : "2020-03-01",
-      |        "topUpStatus" : "notToppedUp",
+      |        "furloughTopUpStatus" : "notToppedUp",
       |        "lastPayDate" : "2020-03-31",
       |        "PartialPayBeforeFurlough" : {
       |            "value" : 280
@@ -198,7 +173,7 @@ trait CoreTestData {
        |    "_id" : "session-08e14c4d-8956-4d3a-b457-1b76e3922dd6",
        |    "data" : {
        |        "furloughStatus" : "ended",
-       |        "annualPayAmount" : {
+       |        "variableGrossPay" : {
        |            "amount" : 10000
        |        },
        |        "employeeStarted" : "after1Feb2019",
@@ -206,7 +181,7 @@ trait CoreTestData {
        |        "furloughEndDate" : "2020-03-21",
        |        "paymentFrequency" : "weekly",
        |        "claimPeriodStart" : "2020-03-01",
-       |        "topUpStatus" : "notToppedUp",
+       |        "furloughTopUpStatus" : "notToppedUp",
        |        "lastPayDate" : "$lastPayDate",
        |        "furloughStartDate" : "2020-03-10",
        |        "payMethod" : "variable",
@@ -232,7 +207,7 @@ trait CoreTestData {
       |    "_id" : "session-08e14c4d-8956-4d3a-b457-1b76e3922dd6",
       |    "data" : {
       |        "furloughStatus" : "ended",
-      |        "annualPayAmount" : {
+      |        "variableGrossPay" : {
       |            "amount" : 10000
       |        },
       |        "employeeStarted" : "after1Feb2019",
@@ -240,7 +215,7 @@ trait CoreTestData {
       |        "furloughEndDate" : "2020-03-21",
       |        "paymentFrequency" : "fortnightly",
       |        "claimPeriodStart" : "2020-03-01",
-      |        "topUpStatus" : "notToppedUp",
+      |        "furloughTopUpStatus" : "notToppedUp",
       |        "lastPayDate" : "2020-03-28",
       |        "furloughStartDate" : "2020-03-10",
       |        "payMethod" : "variable",
@@ -265,7 +240,7 @@ trait CoreTestData {
       |    "_id" : "session-08e14c4d-8956-4d3a-b457-1b76e3922dd6",
       |    "data" : {
       |        "furloughStatus" : "ended",
-      |        "annualPayAmount" : {
+      |        "variableGrossPay" : {
       |            "amount" : 10000
       |        },
       |        "employeeStarted" : "after1Feb2019",
@@ -273,7 +248,7 @@ trait CoreTestData {
       |        "furloughEndDate" : "2020-04-26",
       |        "paymentFrequency" : "fourweekly",
       |        "claimPeriodStart" : "2020-03-01",
-      |        "topUpStatus" : "notToppedUp",
+      |        "furloughTopUpStatus" : "notToppedUp",
       |        "lastPayDate" : "2020-04-25",
       |        "furloughStartDate" : "2020-03-10",
       |        "payMethod" : "variable",
@@ -298,14 +273,14 @@ trait CoreTestData {
       |    "_id" : "session-559ffcf7-de7b-49e6-bf4d-bbc248698ae1",
       |    "data" : {
       |        "furloughStatus" : "ongoing",
-      |        "annualPayAmount" : {
+      |        "variableGrossPay" : {
       |            "amount" : 20000.0
       |        },
       |        "employeeStarted" : "after1Feb2019",
       |        "employeeStartDate" : "2019-04-03",
       |        "paymentFrequency" : "monthly",
       |        "claimPeriodStart" : "2020-03-01",
-      |        "topUpStatus" : "notToppedUp",
+      |        "furloughTopUpStatus" : "notToppedUp",
       |        "lastYearPay" : [
       |            {
       |                "date" : "2019-03-30",
@@ -343,14 +318,14 @@ trait CoreTestData {
       |    "_id" : "session-559ffcf7-de7b-49e6-bf4d-bbc248698ae1",
       |    "data" : {
       |        "furloughStatus" : "ended",
-      |        "annualPayAmount" : {
+      |        "variableGrossPay" : {
       |            "amount" : 31970
       |        },
       |        "employeeStarted" : "onOrBefore1Feb2019",
       |        "furloughEndDate" : "2020-03-28",
       |        "paymentFrequency" : "fourweekly",
       |        "claimPeriodStart" : "2020-03-01",
-      |        "topUpStatus" : "notToppedUp",
+      |        "furloughTopUpStatus" : "notToppedUp",
       |        "lastYearPay" : [
       |            {
       |                "date" : "2019-03-02",
@@ -387,14 +362,14 @@ trait CoreTestData {
       |    "_id" : "session-7f38466c-1922-4cf8-9be2-9e9d3de9bdc2",
       |    "data" : {
       |        "furloughStatus" : "ended",
-      |        "annualPayAmount" : {
+      |        "variableGrossPay" : {
       |            "amount" : 31970
       |        },
       |        "employeeStarted" : "onOrBefore1Feb2019",
       |        "furloughEndDate" : "2020-03-31",
       |        "paymentFrequency" : "weekly",
       |        "claimPeriodStart" : "2020-03-01",
-      |        "topUpStatus" : "notToppedUp",
+      |        "furloughTopUpStatus" : "notToppedUp",
       |        "lastYearPay" : [
       |            {
       |                "date" : "2019-03-05",
