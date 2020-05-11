@@ -16,7 +16,6 @@
 
 package utils
 
-import java.time.LocalDate
 import java.util.UUID
 
 import base.CoreTestDataBuilder
@@ -24,12 +23,10 @@ import models.UserAnswers
 import pages.PayDatePage
 import play.api.libs.json.Json
 
-import scala.collection.immutable
-
 trait CoreTestData {
 
   val userAnswersId = "id"
-  def dummyUserAnswers = Json.parse(userAnswersJson()).as[UserAnswers]
+  def dummyUserAnswers = userAnswersJson()
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 
   def userAnswersJson(
@@ -41,7 +38,7 @@ trait CoreTestData {
     employeeStartDate: String = "",
     claimStartDate: String = "2020-03-01",
     nicCategory: String = "payable",
-    pensionStatus: String = "doesContribute"): String =
+    pensionStatus: String = "doesContribute"): UserAnswers =
     builder(s"""
                |    "data" : {
                |        "lastPayDate" : "2020-04-20",
@@ -68,7 +65,7 @@ trait CoreTestData {
                |        ]
                |    }""".stripMargin)
 
-  val tempTest: String =
+  val answersWithPartialPeriod: UserAnswers =
     builder("""
               |    "data" : {
               |        "lastPayDate" : "2020-03-31",
@@ -89,7 +86,7 @@ trait CoreTestData {
               |        ]
               |    }""".stripMargin)
 
-  val variableMonthlyPartial: String =
+  val variableMonthlyPartial: UserAnswers =
     builder("""
               |    "data" : {
               |        "furloughStatus" : "ended",
@@ -121,7 +118,7 @@ trait CoreTestData {
               |        ]
               |    }""".stripMargin)
 
-  val variableAveragePartial: String =
+  val variableAveragePartial: UserAnswers =
     builder("""
               |    "data" : {
               |        "furloughStatus" : "ongoing",
@@ -148,7 +145,7 @@ trait CoreTestData {
               |        ]
               |    }""".stripMargin)
 
-  def variableWeekly(lastPayDate: String = "2020-03-21"): String =
+  def variableWeekly(lastPayDate: String = "2020-03-21"): UserAnswers =
     builder(s"""
                |    "data" : {
                |        "furloughStatus" : "ended",
@@ -175,7 +172,7 @@ trait CoreTestData {
                |        ]
                |    }""".stripMargin)
 
-  val variableFortnightly: String =
+  val variableFortnightly: UserAnswers =
     builder("""
               |    "data" : {
               |        "furloughStatus" : "ended",
@@ -201,7 +198,7 @@ trait CoreTestData {
               |        ]
               |    }""".stripMargin)
 
-  val variableFourweekly: String =
+  val variableFourweekly: UserAnswers =
     builder("""
               |    "data" : {
               |        "furloughStatus" : "ended",
@@ -227,45 +224,7 @@ trait CoreTestData {
               |        ]
               |    }""".stripMargin)
 
-  val jsonCylb =
-    builder("""
-              |    "data" : {
-              |        "furloughStatus" : "ongoing",
-              |        "variableGrossPay" : {
-              |            "amount" : 20000.0
-              |        },
-              |        "employeeStarted" : "after1Feb2019",
-              |        "employeeStartDate" : "2019-04-03",
-              |        "paymentFrequency" : "monthly",
-              |        "claimPeriodStart" : "2020-03-01",
-              |        "furloughTopUpStatus" : "notToppedUp",
-              |        "lastYearPay" : [
-              |            {
-              |                "date" : "2019-03-30",
-              |                "amount" : 1200
-              |            },
-              |            {
-              |                "date" : "2019-04-30",
-              |                "amount" : 1200
-              |            }
-              |        ],
-              |        "lastPayDate" : "2020-04-30",
-              |        "PartialPayBeforeFurlough" : {
-              |            "value" : 150
-              |        },
-              |        "furloughStartDate" : "2020-03-15",
-              |        "payMethod" : "variable",
-              |        "pensionStatus" : "doesContribute",
-              |        "claimPeriodEnd" : "2020-04-30",
-              |        "nicCategory" : "payable",
-              |        "payDate" : [
-              |            "2020-02-29",
-              |            "2020-03-31",
-              |            "2020-04-30"
-              |        ]
-              |    }""".stripMargin)
-
-  val jsonCylbWithoutEmployeeStartDate =
+  val manyPeriods =
     builder("""
               |    "data" : {
               |        "furloughStatus" : "ended",
@@ -273,83 +232,42 @@ trait CoreTestData {
               |            "amount" : 31970
               |        },
               |        "employeeStarted" : "onOrBefore1Feb2019",
-              |        "furloughEndDate" : "2020-03-28",
-              |        "paymentFrequency" : "fourweekly",
+              |        "furloughEndDate" : "2020-03-31",
+              |        "paymentFrequency" : "weekly",
               |        "claimPeriodStart" : "2020-03-01",
               |        "furloughTopUpStatus" : "notToppedUp",
               |        "lastYearPay" : [
               |            {
-              |                "date" : "2019-03-02",
-              |                "amount" : "3200"
+              |                "date" : "2019-03-05",
+              |                "amount" : "500"
               |            },
               |            {
-              |                "date" : "2019-03-30",
-              |                "amount" : "3400"
+              |                "date" : "2019-03-12",
+              |                "amount" : "450"
+              |            },
+              |            {
+              |                "date" : "2019-03-19",
+              |                "amount" : "500"
+              |            },
+              |            {
+              |                "date" : "2019-03-26",
+              |                "amount" : "550"
+              |            },
+              |            {
+              |                "date" : "2019-04-02",
+              |                "amount" : "600"
               |            }
               |        ],
-              |        "lastPayDate" : "2020-03-28",
+              |        "lastPayDate" : "2020-03-31",
               |        "PartialPayBeforeFurlough" : {
-              |            "value" : 100
+              |            "value" : 200
               |        },
-              |        "furloughStartDate" : "2020-03-02",
+              |        "furloughStartDate" : "2020-03-01",
               |        "payMethod" : "variable",
               |        "pensionStatus" : "doesContribute",
-              |        "claimPeriodEnd" : "2020-03-28",
-              |        "nicCategory" : "payable",
-              |        "payDate" : [
-              |            "2020-02-29",
-              |            "2020-03-28"
-              |        ]
+              |        "claimPeriodEnd" : "2020-03-31",
+              |        "nicCategory" : "payable"
               |    }""".stripMargin)
-
-  val manyPeriods =
-    Json
-      .parse(
-        builder("""
-                  |    "data" : {
-                  |        "furloughStatus" : "ended",
-                  |        "variableGrossPay" : {
-                  |            "amount" : 31970
-                  |        },
-                  |        "employeeStarted" : "onOrBefore1Feb2019",
-                  |        "furloughEndDate" : "2020-03-31",
-                  |        "paymentFrequency" : "weekly",
-                  |        "claimPeriodStart" : "2020-03-01",
-                  |        "furloughTopUpStatus" : "notToppedUp",
-                  |        "lastYearPay" : [
-                  |            {
-                  |                "date" : "2019-03-05",
-                  |                "amount" : "500"
-                  |            },
-                  |            {
-                  |                "date" : "2019-03-12",
-                  |                "amount" : "450"
-                  |            },
-                  |            {
-                  |                "date" : "2019-03-19",
-                  |                "amount" : "500"
-                  |            },
-                  |            {
-                  |                "date" : "2019-03-26",
-                  |                "amount" : "550"
-                  |            },
-                  |            {
-                  |                "date" : "2019-04-02",
-                  |                "amount" : "600"
-                  |            }
-                  |        ],
-                  |        "lastPayDate" : "2020-03-31",
-                  |        "PartialPayBeforeFurlough" : {
-                  |            "value" : 200
-                  |        },
-                  |        "furloughStartDate" : "2020-03-01",
-                  |        "payMethod" : "variable",
-                  |        "pensionStatus" : "doesContribute",
-                  |        "claimPeriodEnd" : "2020-03-31",
-                  |        "nicCategory" : "payable"
-                  |    }""".stripMargin)
-      )
-      .as[UserAnswers]
 
   val coreDataBuilder = new CoreTestDataBuilder {}
   import coreDataBuilder._
@@ -372,12 +290,12 @@ trait CoreTestData {
     }
   }
 
-  private def builder(data: String): String =
-    s"""{
-       |    "_id" : "session-${UUID.randomUUID().toString}",
-       |    $data,
-       |  "lastUpdated": {
-       |    "$$date": 1586873457650
-       |  }
-       |}""".stripMargin
+  private def builder(data: String): UserAnswers =
+    Json.parse(s"""{
+                  |    "_id" : "session-${UUID.randomUUID().toString}",
+                  |    $data,
+                  |  "lastUpdated": {
+                  |    "$$date": 1586873457650
+                  |  }
+                  |}""".stripMargin).as[UserAnswers]
 }
