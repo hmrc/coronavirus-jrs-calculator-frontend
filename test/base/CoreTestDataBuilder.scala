@@ -62,10 +62,10 @@ trait CoreTestDataBuilder extends TryValues {
 
   def paymentDate(date: String): PaymentDate = PaymentDate(buildLocalDate(periodBuilder(date)))
 
-  private val periodBuilder: String => Array[Int] =
+  val periodBuilder: String => Array[Int] =
     date => date.replace(" ", "").replace("-", ",").split(",").map(_.toInt)
 
-  private val buildLocalDate: Array[Int] => LocalDate = array => LocalDate.of(array(0), array(1), array(2))
+  val buildLocalDate: Array[Int] => LocalDate = array => LocalDate.of(array(0), array(1), array(2))
 
   private val claimPeriod: Period = period("2020-3-1", "2020-3-31")
 
