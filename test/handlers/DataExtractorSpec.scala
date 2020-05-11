@@ -24,8 +24,8 @@ package handlers
 import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBase}
-import models.UserAnswers
-import pages.TopUpPeriodsPage
+import models.{Amount, TopUpPayment, UserAnswers}
+import pages.TopUpAmountPage
 import play.api.libs.json.Json
 import utils.CoreTestData
 
@@ -48,10 +48,10 @@ class DataExtractorSpec extends SpecBase with CoreTestData with CoreTestDataBuil
     }
 
     "extract top up payments" in new DataExtractor {
-      val dates = List(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 4, 1))
-      val userAnswers = UserAnswers("123").set(TopUpPeriodsPage, dates).success.get
+      val payments = TopUpPayment(LocalDate.of(2020, 3, 1), Amount(100.0))
+      val userAnswers = UserAnswers("123").set(TopUpAmountPage, payments).success.get
 
-      extractTopUpPayment(userAnswers) mustBe Some(dates)
+      extractTopUpPayment(userAnswers) mustBe Some(payments)
     }
   }
 }

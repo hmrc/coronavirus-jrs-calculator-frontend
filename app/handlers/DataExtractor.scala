@@ -68,8 +68,8 @@ trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
   def extractPaymentFrequency(userAnswers: UserAnswers): Option[PaymentFrequency] =
     userAnswers.get(PaymentFrequencyPage)
 
-  def extractTopUpPayment(userAnswers: UserAnswers): Option[List[LocalDate]] =
-    userAnswers.get(TopUpPeriodsPage)
+  def extractTopUpPayment(userAnswers: UserAnswers): Option[TopUpPayment] =
+    userAnswers.get(TopUpAmountPage)
 
   def extractReferencePayData(userAnswers: UserAnswers): Option[ReferencePayData] =
     for {
