@@ -78,8 +78,8 @@ trait PageGenerators {
   implicit lazy val arbitraryNicCategoryPage: Arbitrary[NicCategoryPage.type] =
     Arbitrary(NicCategoryPage)
 
-  implicit lazy val arbitrarySalaryQuestionPage: Arbitrary[SalaryQuestionPage.type] =
-    Arbitrary(SalaryQuestionPage)
+  implicit lazy val arbitraryRegularPayAmountPage: Arbitrary[RegularPayAmountPage.type] =
+    Arbitrary(RegularPayAmountPage)
 
   implicit lazy val arbitraryPaymentFrequencyPage: Arbitrary[PaymentFrequencyPage.type] =
     Arbitrary(PaymentFrequencyPage)
