@@ -54,9 +54,15 @@ class DataExtractorSpec extends SpecBase with CoreTestData with CoreTestDataBuil
         TopUpPayment(LocalDate.of(2020, 5, 1), Amount(50.0))
       )
       val userAnswers = UserAnswers("123")
-        .setListWithInvalidation(TopUpAmountPage, payments.head, 1).success.get
-        .setListWithInvalidation(TopUpAmountPage, payments.tail.head, 2).success.get
-        .setListWithInvalidation(TopUpAmountPage, payments.drop(2).head, 3).success.get
+        .setListWithInvalidation(TopUpAmountPage, payments.head, 1)
+        .success
+        .get
+        .setListWithInvalidation(TopUpAmountPage, payments.tail.head, 2)
+        .success
+        .get
+        .setListWithInvalidation(TopUpAmountPage, payments.drop(2).head, 3)
+        .success
+        .get
 
       extractTopUpPayment(userAnswers) mustBe payments
     }

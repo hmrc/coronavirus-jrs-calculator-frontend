@@ -39,7 +39,7 @@ trait ConfirmationControllerRequestHandler
       payments = calculateReferencePay(data)
       furlough = calculateFurloughGrant(data.frequency, payments)
       niAnswer <- extractNicCategory(userAnswers)
-      ni = calculateNi(furlough, niAnswer, data.frequency, Seq.empty, Seq.empty)
+      ni = calculateNi(furlough, niAnswer, data.frequency, Seq.empty, extractTopUpPayment(userAnswers))
       pensionAnswer <- extractPensionStatus(userAnswers)
       pension = calculatePension(furlough, pensionAnswer, data.frequency)
     } yield ConfirmationViewBreakdown(furlough, ni, pension)
