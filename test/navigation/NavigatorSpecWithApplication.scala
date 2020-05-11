@@ -286,7 +286,7 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication with CoreTest
         ) mustBe routes.PartialPayAfterFurloughController.onPageLoad()
       }
 
-      "go to TopUpStatusPage loop after variable gross pay page if there are no partial furloughs" in {
+      "go to TopUpStatusPage after variable gross pay page if there are no partial furloughs" in {
         val userAnswers = UserAnswers("id")
           .set(FurloughStartDatePage, LocalDate.of(2020, 3, 1))
           .get
