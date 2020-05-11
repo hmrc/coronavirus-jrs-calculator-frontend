@@ -19,7 +19,7 @@ package handlers
 import models.Calculation.{NicCalculationResult, PensionCalculationResult}
 import models.NicCategory.{Nonpayable, Payable}
 import models.PensionStatus.{DoesContribute, DoesNotContribute}
-import models.{AdditionalPayment, Amount, CalculationResult, FullPeriodBreakdown, NicCategory, PartialPeriodBreakdown, PaymentFrequency, PensionStatus, Period, TopUpPayment, UserAnswers}
+import models.{AdditionalPayment, Amount, Calculation, CalculationResult, FullPeriodBreakdown, NicCategory, PartialPeriodBreakdown, PaymentFrequency, PensionStatus, Period, PeriodBreakdown, TopUpPayment, UserAnswers}
 import services._
 import viewmodels.{ConfirmationDataResult, ConfirmationMetadata, ConfirmationViewBreakdown}
 
@@ -61,16 +61,8 @@ trait ConfirmationControllerRequestHandler
     additionals: Seq[AdditionalPayment],
     topUps: Seq[TopUpPayment]): CalculationResult =
     nic match {
-      case Payable => calculateNicGrant(frequency, furloughResult.payPeriodBreakdowns, additionals, topUps)
-      case Nonpayable =>
-        CalculationResult(
-          NicCalculationResult,
-          0.0,
-          furloughResult.payPeriodBreakdowns.map {
-            case FullPeriodBreakdown(_, withPaymentDate)       => FullPeriodBreakdown(Amount(0.0), withPaymentDate)
-            case PartialPeriodBreakdown(_, _, withPaymentDate) => PartialPeriodBreakdown(Amount(0.0), Amount(0.0), withPaymentDate)
-          }
-        )
+      case Payable    => calculateNicGrant(frequency, furloughResult.payPeriodBreakdowns, additionals, topUps)
+      case Nonpayable => buildZeroAmountResult(furloughResult.payPeriodBreakdowns)(NicCalculationResult)
     }
 
   private def calculatePension(
@@ -78,15 +70,16 @@ trait ConfirmationControllerRequestHandler
     payStatus: PensionStatus,
     frequency: PaymentFrequency): CalculationResult =
     payStatus match {
-      case DoesContribute => calculatePensionGrant(frequency, furloughResult.payPeriodBreakdowns)
-      case DoesNotContribute =>
-        CalculationResult(
-          PensionCalculationResult,
-          0.0,
-          furloughResult.payPeriodBreakdowns.map {
-            case FullPeriodBreakdown(_, withPaymentDate)       => FullPeriodBreakdown(Amount(0.0), withPaymentDate)
-            case PartialPeriodBreakdown(_, _, withPaymentDate) => PartialPeriodBreakdown(Amount(0.0), Amount(0.0), withPaymentDate)
-          }
-        )
+      case DoesContribute    => calculatePensionGrant(frequency, furloughResult.payPeriodBreakdowns)
+      case DoesNotContribute => buildZeroAmountResult(furloughResult.payPeriodBreakdowns)(PensionCalculationResult)
+    }
+
+  private def buildZeroAmountResult(periodBreakdowns: Seq[PeriodBreakdown]): Calculation => CalculationResult =
+    CalculationResult(_, 0.0, buildZeroAmountBreakdown(periodBreakdowns))
+
+  private def buildZeroAmountBreakdown(periodBreakdowns: Seq[PeriodBreakdown]) =
+    periodBreakdowns.map {
+      case FullPeriodBreakdown(_, withPaymentDate)       => FullPeriodBreakdown(Amount(0.0), withPaymentDate)
+      case PartialPeriodBreakdown(_, _, withPaymentDate) => PartialPeriodBreakdown(Amount(0.0), Amount(0.0), withPaymentDate)
     }
 }
