@@ -25,7 +25,7 @@ import models.FurloughStatus.{FurloughEnded, FurloughOngoing}
 import models.FurloughTopUpStatus.{NotToppedUp, ToppedUp}
 import models.NicCategory.{Nonpayable, Payable}
 import models.PayMethod.{Regular, Variable}
-import models.PaymentFrequency.Monthly
+import models.PaymentFrequency.{FortNightly, Monthly, Weekly}
 import models.PensionStatus.{DoesContribute, DoesNotContribute}
 import models.{CylbPayment, FurloughPartialPay, PaymentFrequency, Salary, UserAnswers, VariableGrossPay}
 import pages._
@@ -107,57 +107,36 @@ trait CoreTestData {
       .withPayDate(List("2020-02-29", "2020-03-31"))
 
   def variableWeekly(lastPayDate: String = "2020-03-21"): UserAnswers =
-    template(s"""
-                |    "data" : {
-                |        "furloughStatus" : "ended",
-                |        "variableGrossPay" : {
-                |            "amount" : 10000
-                |        },
-                |        "employeeStarted" : "after1Feb2019",
-                |        "employeeStartDate" : "2019-12-01",
-                |        "furloughEndDate" : "2020-03-21",
-                |        "paymentFrequency" : "weekly",
-                |        "claimPeriodStart" : "2020-03-01",
-                |        "furloughTopUpStatus" : "notToppedUp",
-                |        "lastPayDate" : "$lastPayDate",
-                |        "furloughStartDate" : "2020-03-10",
-                |        "payMethod" : "variable",
-                |        "pensionStatus" : "doesContribute",
-                |        "claimPeriodEnd" : "2020-03-21",
-                |        "nicCategory" : "payable",
-                |        "payDate" : [
-                |            "2020-02-29",
-                |            "2020-03-07",
-                |            "2020-03-14",
-                |            "2020-03-21"
-                |        ]
-                |    }""".stripMargin)
+    emptyUserAnswers.withEndedFurlough.withVariablePayMethod
+      .withVariableGrossPay(10000.0)
+      .withEmployeeStartedAfter1Feb2019
+      .withEmployeeStartDate("2019-12-01")
+      .withFurloughStartDate("2020-03-10")
+      .withFurloughEndDate("2020-03-21")
+      .withPaymentFrequency(Weekly)
+      .withClaimPeriodStart("2020-03-01")
+      .withClaimPeriodEnd("2020-03-21")
+      .withFurloughNotToppedUp()
+      .withNi
+      .withPension
+      .withLastPayDate(lastPayDate)
+      .withPayDate(List("2020-02-29", "2020-03-07", "2020-03-14", "2020-03-21"))
 
-  val variableFortnightly: UserAnswers =
-    template("""
-               |    "data" : {
-               |        "furloughStatus" : "ended",
-               |        "variableGrossPay" : {
-               |            "amount" : 10000
-               |        },
-               |        "employeeStarted" : "after1Feb2019",
-               |        "employeeStartDate" : "2019-12-01",
-               |        "furloughEndDate" : "2020-03-21",
-               |        "paymentFrequency" : "fortnightly",
-               |        "claimPeriodStart" : "2020-03-01",
-               |        "furloughTopUpStatus" : "notToppedUp",
-               |        "lastPayDate" : "2020-03-28",
-               |        "furloughStartDate" : "2020-03-10",
-               |        "payMethod" : "variable",
-               |        "pensionStatus" : "doesContribute",
-               |        "claimPeriodEnd" : "2020-03-21",
-               |        "nicCategory" : "payable",
-               |        "payDate" : [
-               |            "2020-02-29",
-               |            "2020-03-14",
-               |            "2020-03-28"
-               |        ]
-               |    }""".stripMargin)
+  lazy val variableFortnightly: UserAnswers =
+    emptyUserAnswers.withEndedFurlough.withVariablePayMethod
+      .withPaymentFrequency(FortNightly)
+      .withVariableGrossPay(10000.0)
+      .withEmployeeStartedAfter1Feb2019
+      .withEmployeeStartDate("2019-12-01")
+      .withFurloughStartDate("2020-03-10")
+      .withFurloughEndDate("2020-03-21")
+      .withClaimPeriodStart("2020-03-01")
+      .withClaimPeriodEnd("2020-03-21")
+      .withLastPayDate("2020-03-28")
+      .withFurloughNotToppedUp
+      .withNi
+      .withPension
+      .withPayDate(List("2020-02-29", "2020-03-14", "2020-03-28"))
 
   val variableFourweekly: UserAnswers =
     template("""
