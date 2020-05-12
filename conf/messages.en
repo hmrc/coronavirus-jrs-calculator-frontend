@@ -143,8 +143,8 @@ errorPage.title = Sorry, there is a problem with the service
 errorPage.heading = Sorry, there is a problem with the service
 errorPage.p1 = Try again later.
 
-unauthorised.title = You can’t access this service with this account
-unauthorised.heading = You can’t access this service with this account
+unauthorised.title = You cannot access this service with this account
+unauthorised.heading = You cannot access this service with this account
 
 payMethod.title = How is this employee paid?
 payMethod.heading = How is this employee paid?
@@ -339,7 +339,7 @@ claimPeriodEnd.error.required = The end date must include {0}
 claimPeriodEnd.error.invalid = Enter a real end date
 claimPeriodEnd.cannot.be.after.policyEnd = The claim period end date cannot be after the policy end date {0}
 claimPeriodEnd.cannot.be.after.14days = The claim period end date cannot be more than 14 days from today
-claimPeriodEnd.cannot.be.before.claimStart = The claim period end date can’t be before start date
+claimPeriodEnd.cannot.be.before.claimStart = The claim period end date cannot be before start date
 claimPeriodEnd.legend = End date
 claimPeriodEnd.hint = For example, 31 3 2020
 
@@ -404,18 +404,6 @@ comingSoon.topup.title = We’re unable to calculate claims when pay is topped u
 comingSoon.topup.heading = We’re unable to calculate claims when pay is topped up
 comingSoon.topup.p = This will be available in a future version.
 
-furloughTopUp.heading = Furlough amount calculated so far
-furloughTopUp.title = Furlough amount calculated so far
-furloughTopUp.p1 = Are you paying the employee more than this?
-furloughTopUp.p2 = You can top up the remaining 20 per cent of your employees’ pay while they’re furloughed.
-furloughTopUp.p3 = If you do, the employer National Insurance contributions will be divided between the 80% you’re claiming and the amount you funded.
-furloughTopUp.toppedUp = Yes
-furloughTopUp.notToppedUp = No
-furloughTopUp.error.required = Select one of the options below
-furloughTopUp.payperiodending.label = Pay period end date
-furloughTopUp.grossfurloughamount.label = Furlough amount (80% of pay)
-furloughTopUp.total.label = Total
-
 FurloughPartialPay.title.between = What did the employee get paid between {0} and {1}?
 FurloughPartialPay.title.on = What did the employee get paid on {0}?
 FurloughPartialPay.heading.between = What did the employee get paid between {0} and {1}?
@@ -447,9 +435,9 @@ lastYearPay.heading.monthly = In 2019, what did this employee get paid in {0}?
 lastYearPay.error.nonNumeric = Enter the salary using numbers
 lastYearPay.error.required = Enter the salary
 
-amount.error.max.2.decimals = The amount can’t have more than two decimal places
+amount.error.max.2.decimals = The amount cannot have more than two decimal places
 amount.error.must.be.positive = Enter an amount greater than 0
-amount.error.negative = The amount can’t be negative
+amount.error.negative = The amount cannot be negative
 
 topupPeriods.title = When did you top up this employee's pay?
 topupPeriods.heading = Which of these are you topping up?
