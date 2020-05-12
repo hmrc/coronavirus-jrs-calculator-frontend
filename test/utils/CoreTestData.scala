@@ -19,10 +19,11 @@ package utils
 import java.util.UUID
 
 import base.CoreTestDataBuilder
+import models.Amount._
 import models.NicCategory.Nonpayable
 import models.PensionStatus.DoesNotContribute
-import models.UserAnswers
-import pages.{NicCategoryPage, PayDatePage, PensionStatusPage}
+import models.{CylbPayment, UserAnswers}
+import pages.{LastYearPayPage, NicCategoryPage, PayDatePage, PensionStatusPage}
 import play.api.libs.json.Json
 
 import scala.annotation.tailrec
@@ -224,7 +225,7 @@ trait CoreTestData {
                |        ]
                |    }""".stripMargin)
 
-  val manyPeriods =
+  lazy val manyPeriods =
     template("""
                |    "data" : {
                |        "furloughStatus" : "ended",
@@ -236,28 +237,6 @@ trait CoreTestData {
                |        "paymentFrequency" : "weekly",
                |        "claimPeriodStart" : "2020-03-01",
                |        "furloughTopUpStatus" : "notToppedUp",
-               |        "lastYearPay" : [
-               |            {
-               |                "date" : "2019-03-05",
-               |                "amount" : "500"
-               |            },
-               |            {
-               |                "date" : "2019-03-12",
-               |                "amount" : "450"
-               |            },
-               |            {
-               |                "date" : "2019-03-19",
-               |                "amount" : "500"
-               |            },
-               |            {
-               |                "date" : "2019-03-26",
-               |                "amount" : "550"
-               |            },
-               |            {
-               |                "date" : "2019-04-02",
-               |                "amount" : "600"
-               |            }
-               |        ],
                |        "lastPayDate" : "2020-03-31",
                |        "PartialPayBeforeFurlough" : {
                |            "value" : 200
@@ -284,6 +263,22 @@ trait CoreTestData {
             rec(
               userAnswers
                 .setListWithInvalidation(PayDatePage, buildLocalDate(periodBuilder(d)), idx)
+                .get,
+              tail)
+        }
+      rec(userAnswers, zipped)
+    }
+
+    def withLastYear(payments: List[(String, Int)]): UserAnswers = {
+      val zipped: List[((String, Int), Int)] = payments.zip(1 to payments.length)
+      @tailrec
+      def rec(userAnswers: UserAnswers, payments: List[((String, Int), Int)]): UserAnswers =
+        payments match {
+          case Nil => userAnswers
+          case ((d, amount), idx) :: tail =>
+            rec(
+              userAnswers
+                .setListWithInvalidation(LastYearPayPage, CylbPayment(buildLocalDate(periodBuilder(d)), amount.toAmount), idx)
                 .get,
               tail)
         }
