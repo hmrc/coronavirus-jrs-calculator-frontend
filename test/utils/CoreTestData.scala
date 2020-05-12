@@ -16,27 +16,15 @@
 
 package utils
 
-import base.CoreTestDataBuilder
-import models.Amount._
-import models.EmployeeStarted.{After1Feb2019, OnOrBefore1Feb2019}
-import models.FurloughStatus.{FurloughEnded, FurloughOngoing}
-import models.FurloughTopUpStatus.{NotToppedUp, ToppedUp}
-import models.NicCategory.{Nonpayable, Payable}
-import models.PayMethod.{Regular, Variable}
+import java.util.UUID
+
 import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
-import models.PensionStatus.{DoesContribute, DoesNotContribute}
-import models.{CylbPayment, FurloughPartialPay, PaymentFrequency, Salary, UserAnswers, VariableGrossPay}
-import pages._
+import models.UserAnswers
 import play.api.libs.json.Json
 
-import scala.annotation.tailrec
+trait CoreTestData extends UserAnswersBuilder {
 
-trait CoreTestData {
-
-  val coreDataBuilder = new CoreTestDataBuilder {}
-  import coreDataBuilder._
-
-  val userAnswersId = "id"
+  def userAnswersId: String = UUID.randomUUID().toString
   def dummyUserAnswers = userAnswersJson()
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 
@@ -170,108 +158,4 @@ trait CoreTestData {
       .withPension
       .withLastYear(List("2019-03-05" -> 500, "2019-03-12" -> 450, "2019-03-19" -> 500, "2019-03-26" -> 550, "2019-04-02" -> 600))
       .withPayDate(List("2020-02-25", "2020-03-03", "2020-03-10", "2020-03-17", "2020-03-24", "2020-03-31"))
-
-  implicit class UserAnswerBuilder(userAnswers: UserAnswers) {
-
-    def withPayDate(dates: List[String]): UserAnswers = {
-      val zipped: List[(String, Int)] = dates.zip(1 to dates.length)
-      @tailrec
-      def rec(userAnswers: UserAnswers, dates: List[(String, Int)]): UserAnswers =
-        dates match {
-          case Nil => userAnswers
-          case (d, idx) :: tail =>
-            rec(
-              userAnswers
-                .setListWithInvalidation(PayDatePage, buildLocalDate(periodBuilder(d)), idx)
-                .get,
-              tail)
-        }
-      rec(userAnswers, zipped)
-    }
-
-    def withLastYear(payments: List[(String, Int)]): UserAnswers = {
-      val zipped: List[((String, Int), Int)] = payments.zip(1 to payments.length)
-      @tailrec
-      def rec(userAnswers: UserAnswers, payments: List[((String, Int), Int)]): UserAnswers =
-        payments match {
-          case Nil => userAnswers
-          case ((d, amount), idx) :: tail =>
-            rec(
-              userAnswers
-                .setListWithInvalidation(LastYearPayPage, CylbPayment(buildLocalDate(periodBuilder(d)), amount.toAmount), idx)
-                .get,
-              tail)
-        }
-      rec(userAnswers, zipped)
-    }
-
-    def withNi: UserAnswers =
-      userAnswers.setValue(NicCategoryPage, Payable)
-
-    def withNoNi: UserAnswers =
-      userAnswers.setValue(NicCategoryPage, Nonpayable)
-
-    def withNoPension: UserAnswers =
-      userAnswers.setValue(PensionStatusPage, DoesNotContribute)
-
-    def withPension: UserAnswers =
-      userAnswers.setValue(PensionStatusPage, DoesContribute)
-
-    def withEndedFurlough: UserAnswers =
-      userAnswers.setValue(FurloughStatusPage, FurloughEnded)
-
-    def withOngoingFurlough: UserAnswers =
-      userAnswers.setValue(FurloughStatusPage, FurloughOngoing)
-
-    def withFurloughStartDate(startDate: String): UserAnswers =
-      userAnswers.setValue(FurloughStartDatePage, buildLocalDate(periodBuilder(startDate)))
-
-    def withFurloughEndDate(startDate: String): UserAnswers =
-      userAnswers.setValue(FurloughEndDatePage, buildLocalDate(periodBuilder(startDate)))
-
-    def withEmployeeStartDate(startDate: String): UserAnswers =
-      userAnswers.setValue(EmployeeStartDatePage, buildLocalDate(periodBuilder(startDate)))
-
-    def withLastPayDate(date: String): UserAnswers =
-      userAnswers.setValue(LastPayDatePage, buildLocalDate(periodBuilder(date)))
-
-    def withClaimPeriodEnd(date: String): UserAnswers =
-      userAnswers.setValue(ClaimPeriodEndPage, buildLocalDate(periodBuilder(date)))
-
-    def withClaimPeriodStart(date: String): UserAnswers =
-      userAnswers.setValue(ClaimPeriodStartPage, buildLocalDate(periodBuilder(date)))
-
-    def withRegularPayMethod(): UserAnswers =
-      userAnswers.setValue(PayMethodPage, Regular)
-
-    def withVariablePayMethod(): UserAnswers =
-      userAnswers.setValue(PayMethodPage, Variable)
-
-    def withPaymentFrequency(frequency: PaymentFrequency): UserAnswers =
-      userAnswers.setValue(PaymentFrequencyPage, frequency)
-
-    def withSalary(salary: BigDecimal): UserAnswers =
-      userAnswers.setValue(SalaryQuestionPage, Salary(salary))
-
-    def withPartialPayBeforeFurlough(pay: BigDecimal): UserAnswers =
-      userAnswers.setValue(PartialPayBeforeFurloughPage, FurloughPartialPay(pay))
-
-    def withPartialPayAfterFurlough(pay: BigDecimal): UserAnswers =
-      userAnswers.setValue(PartialPayAfterFurloughPage, FurloughPartialPay(pay))
-
-    def withVariableGrossPay(gross: BigDecimal): UserAnswers =
-      userAnswers.setValue(VariableGrossPayPage, VariableGrossPay(gross))
-
-    def withEmployeeStartedOnOrBefore1Feb2019(): UserAnswers =
-      userAnswers.setValue(EmployedStartedPage, OnOrBefore1Feb2019)
-
-    def withEmployeeStartedAfter1Feb2019(): UserAnswers =
-      userAnswers.setValue(EmployedStartedPage, After1Feb2019)
-
-    def withFurloughToppedUp(): UserAnswers =
-      userAnswers.setValue(FurloughTopUpStatusPage, ToppedUp)
-
-    def withFurloughNotToppedUp(): UserAnswers =
-      userAnswers.setValue(FurloughTopUpStatusPage, NotToppedUp)
-  }
 }
