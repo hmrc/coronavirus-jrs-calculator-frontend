@@ -41,32 +41,18 @@ trait CoreTestData {
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 
   def userAnswersJson(): UserAnswers =
-    template(s"""
-                |    "data" : {
-                |        "lastPayDate" : "2020-04-20",
-                |        "furloughStatus" : "ongoing",
-                |        "furloughEndDate" : "",
-                |        "payMethod" : "regular",
-                |        "variableGrossPay": {
-                |            "amount" : ""
-                |        },
-                |        "employeeStartDate": "",
-                |        "pensionStatus" : "doesContribute",
-                |        "claimPeriodEnd" : "2020-04-30",
-                |        "paymentFrequency" : "monthly",
-                |        "salary" : {
-                |            "amount" : 2000.0
-                |        },
-                |        "nicCategory" : "payable",
-                |        "claimPeriodStart" : "2020-03-01"
-                |    }""".stripMargin)
-      .withPayDate(
-        List(
-          "2020-02-29",
-          "2020-03-31",
-          "2020-04-30"
-        ))
+    emptyUserAnswers
       .withFurloughStartDate("2020-03-01")
+      .withLastPayDate("2020-04-20")
+      .withOngoingFurlough
+      .withRegularPayMethod
+      .withSalary(2000.0)
+      .withPaymentFrequency(Monthly)
+      .withPension
+      .withNi
+      .withClaimPeriodStart("2020-03-01")
+      .withClaimPeriodEnd("2020-04-30")
+      .withPayDate(List("2020-02-29", "2020-03-31", "2020-04-30"))
 
   lazy val answersWithPartialPeriod: UserAnswers =
     emptyUserAnswers
