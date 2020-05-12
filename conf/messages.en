@@ -420,7 +420,7 @@ lastPayDate.error.required.two = The pay date must include {0} and {1}
 lastPayDate.error.required = The pay date must include {0}
 lastPayDate.error.invalid = Enter a real date
 lastPayDate.error.minimum = The pay date must be on or after {0}
-lastPayDate.p1 = This is the date this employee got paid. We're asking because it may not be the same as the pay period end date.
+lastPayDate.p1 = This is the date this employee got paid. We’re asking because it may not be the same as the pay period end date.
 lastPayDate.p2 = This is needed to calculate National Insurance and pension contributions.
 lastPayDate.details.title = What’s the difference between a pay date and a pay period?
 lastPayDate.details.p1 = A ‘pay date’ is the date the employee actually gets their pay. It may not be the same as the end of the ‘pay period’. For example, the pay period might be 1 February to 28 February, but the employee gets paid on 27 February.
@@ -439,7 +439,7 @@ amount.error.max.2.decimals = The amount cannot have more than two decimal place
 amount.error.must.be.positive = Enter an amount greater than 0
 amount.error.negative = The amount cannot be negative
 
-topupPeriods.title = When did you top up this employee's pay?
+topupPeriods.title = When did you top up this employee’s pay?
 topupPeriods.heading = Which of these are you topping up?
 topupPeriods.hint = Select all that apply.
 topupPeriods.period = Pay period end: {0}
