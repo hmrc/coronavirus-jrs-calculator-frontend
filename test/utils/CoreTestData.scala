@@ -89,32 +89,22 @@ trait CoreTestData {
       .withPension
       .withPayDate(List("2020-02-29", "2020-03-31", "2020-04-30"))
 
-  val variableAveragePartial: UserAnswers =
-    template("""
-               |    "data" : {
-               |        "furloughStatus" : "ongoing",
-               |        "variableGrossPay" : {
-               |            "amount" : 12960
-               |        },
-               |        "employeeStarted" : "after1Feb2019",
-               |        "employeeStartDate" : "2019-08-01",
-               |        "paymentFrequency" : "monthly",
-               |        "claimPeriodStart" : "2020-03-01",
-               |        "furloughTopUpStatus" : "notToppedUp",
-               |        "lastPayDate" : "2020-03-31",
-               |        "PartialPayBeforeFurlough" : {
-               |            "value" : 280
-               |        },
-               |        "furloughStartDate" : "2020-03-05",
-               |        "payMethod" : "variable",
-               |        "pensionStatus" : "doesContribute",
-               |        "claimPeriodEnd" : "2020-03-31",
-               |        "nicCategory" : "payable",
-               |        "payDate" : [
-               |            "2020-02-29",
-               |            "2020-03-31"
-               |        ]
-               |    }""".stripMargin)
+  lazy val variableAveragePartial: UserAnswers =
+    emptyUserAnswers.withOngoingFurlough
+      .withVariableGrossPay(12960.0)
+      .withEmployeeStartedAfter1Feb2019
+      .withEmployeeStartDate("2019-08-01")
+      .withPaymentFrequency(Monthly)
+      .withClaimPeriodStart("2020-03-01")
+      .withClaimPeriodEnd("2020-03-31")
+      .withFurloughNotToppedUp
+      .withLastPayDate("2020-03-31")
+      .withPartialPayBeforeFurlough(280.0)
+      .withFurloughStartDate("2020-03-05")
+      .withVariablePayMethod
+      .withNi
+      .withPension
+      .withPayDate(List("2020-02-29", "2020-03-31"))
 
   def variableWeekly(lastPayDate: String = "2020-03-21"): UserAnswers =
     template(s"""

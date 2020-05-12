@@ -23,7 +23,6 @@ import controllers.routes
 import models.PayMethod.{Regular, Variable}
 import models._
 import pages._
-import play.api.libs.json.Json
 
 class NavigatorSpecWithApplication extends SpecBaseWithApplication with CoreTestDataBuilder {
 
