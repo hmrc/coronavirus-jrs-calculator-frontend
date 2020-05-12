@@ -58,7 +58,7 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
   }
 
   "for a given user answer calculate furlough and empty results for ni and pension if do not apply" in new ConfirmationControllerRequestHandler {
-    val userAnswers = userAnswersJson(nicCategory = "nonPayable", pensionStatus = "doesNotContribute")
+    val userAnswers = userAnswersJson().withNoNi.withNoPension
     val withPayDay: FullPeriodWithPaymentDate =
       FullPeriodWithPaymentDate(
         FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))),
@@ -127,7 +127,6 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
     val expected = ConfirmationViewBreakdown(furlough, nic, pension)
 
     loadResultData(userAnswers).get.confirmationViewBreakdown mustBe expected
-
   }
 
   "take into account all cylb payments for weekly frequency with partial period as first period" in new ConfirmationControllerRequestHandler {
