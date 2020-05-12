@@ -16,8 +16,6 @@
 
 package utils
 
-import java.util.UUID
-
 import base.CoreTestDataBuilder
 import models.Amount._
 import models.EmployeeStarted.{After1Feb2019, OnOrBefore1Feb2019}
@@ -156,27 +154,22 @@ trait CoreTestData {
       .withPayDate(List("2020-02-29", "2020-03-28", "2020-04-25"))
 
   lazy val manyPeriods =
-    template("""
-               |    "data" : {
-               |        "furloughStatus" : "ended",
-               |        "variableGrossPay" : {
-               |            "amount" : 31970
-               |        },
-               |        "employeeStarted" : "onOrBefore1Feb2019",
-               |        "furloughEndDate" : "2020-03-31",
-               |        "paymentFrequency" : "weekly",
-               |        "claimPeriodStart" : "2020-03-01",
-               |        "furloughTopUpStatus" : "notToppedUp",
-               |        "lastPayDate" : "2020-03-31",
-               |        "PartialPayBeforeFurlough" : {
-               |            "value" : 200
-               |        },
-               |        "furloughStartDate" : "2020-03-01",
-               |        "payMethod" : "variable",
-               |        "pensionStatus" : "doesContribute",
-               |        "claimPeriodEnd" : "2020-03-31",
-               |        "nicCategory" : "payable"
-               |    }""".stripMargin)
+    emptyUserAnswers.withEndedFurlough
+      .withPaymentFrequency(Weekly)
+      .withVariablePayMethod
+      .withVariableGrossPay(31970)
+      .withPartialPayBeforeFurlough(200.0)
+      .withEmployeeStartedOnOrBefore1Feb2019
+      .withFurloughStartDate("2020-03-01")
+      .withFurloughEndDate("2020-03-31")
+      .withClaimPeriodStart("2020-03-01")
+      .withClaimPeriodEnd("2020-03-31")
+      .withLastPayDate("2020-03-31")
+      .withFurloughNotToppedUp
+      .withNi
+      .withPension
+      .withLastYear(List("2019-03-05" -> 500, "2019-03-12" -> 450, "2019-03-19" -> 500, "2019-03-26" -> 550, "2019-04-02" -> 600))
+      .withPayDate(List("2020-02-25", "2020-03-03", "2020-03-10", "2020-03-17", "2020-03-24", "2020-03-31"))
 
   implicit class UserAnswerBuilder(userAnswers: UserAnswers) {
 
@@ -281,13 +274,4 @@ trait CoreTestData {
     def withFurloughNotToppedUp(): UserAnswers =
       userAnswers.setValue(FurloughTopUpStatusPage, NotToppedUp)
   }
-
-  private def template(data: String): UserAnswers =
-    Json.parse(s"""{
-                  |    "_id" : "session-${UUID.randomUUID().toString}",
-                  |    $data,
-                  |  "lastUpdated": {
-                  |    "$$date": 1586873457650
-                  |  }
-                  |}""".stripMargin).as[UserAnswers]
 }
