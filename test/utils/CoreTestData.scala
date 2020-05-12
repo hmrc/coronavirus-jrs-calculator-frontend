@@ -38,19 +38,15 @@ trait CoreTestData {
   def dummyUserAnswers = userAnswersJson()
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 
-  def userAnswersJson(
-    furloughEndDate: String = "",
-    payMethod: String = "regular",
-    variableGrossPay: String = "",
-    claimStartDate: String = "2020-03-01"): UserAnswers =
+  def userAnswersJson(): UserAnswers =
     template(s"""
                 |    "data" : {
                 |        "lastPayDate" : "2020-04-20",
                 |        "furloughStatus" : "ongoing",
-                |        "furloughEndDate" : "$furloughEndDate",
-                |        "payMethod" : "$payMethod",
+                |        "furloughEndDate" : "",
+                |        "payMethod" : "regular",
                 |        "variableGrossPay": {
-                |            "amount" : "$variableGrossPay"
+                |            "amount" : ""
                 |        },
                 |        "employeeStartDate": "",
                 |        "pensionStatus" : "doesContribute",
@@ -60,7 +56,7 @@ trait CoreTestData {
                 |            "amount" : 2000.0
                 |        },
                 |        "nicCategory" : "payable",
-                |        "claimPeriodStart" : "$claimStartDate"
+                |        "claimPeriodStart" : "2020-03-01"
                 |    }""".stripMargin)
       .withPayDate(
         List(
