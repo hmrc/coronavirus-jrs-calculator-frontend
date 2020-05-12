@@ -20,12 +20,14 @@ import java.util.UUID
 
 import base.CoreTestDataBuilder
 import models.Amount._
+import models.EmployeeStarted.{After1Feb2019, OnOrBefore1Feb2019}
 import models.FurloughStatus.{FurloughEnded, FurloughOngoing}
+import models.FurloughTopUpStatus.{NotToppedUp, ToppedUp}
 import models.NicCategory.{Nonpayable, Payable}
-import models.PayMethod.Regular
+import models.PayMethod.{Regular, Variable}
 import models.PaymentFrequency.Monthly
 import models.PensionStatus.{DoesContribute, DoesNotContribute}
-import models.{CylbPayment, PaymentFrequency, Salary, UserAnswers}
+import models.{CylbPayment, FurloughPartialPay, PaymentFrequency, Salary, UserAnswers, VariableGrossPay}
 import pages._
 import play.api.libs.json.Json
 
@@ -68,37 +70,24 @@ trait CoreTestData {
       .withLastPayDate("2020-03-31")
       .withPayDate(List("2020-02-29", "2020-03-31"))
 
-  val variableMonthlyPartial: UserAnswers =
-    template("""
-               |    "data" : {
-               |        "furloughStatus" : "ended",
-               |        "variableGrossPay" : {
-               |            "amount" : 10000
-               |        },
-               |        "employeeStarted" : "after1Feb2019",
-               |        "employeeStartDate" : "2019-12-01",
-               |        "furloughEndDate" : "2020-04-20",
-               |        "paymentFrequency" : "monthly",
-               |        "claimPeriodStart" : "2020-03-01",
-               |        "furloughTopUpStatus" : "notToppedUp",
-               |        "PartialPayAfterFurlough" : {
-               |            "value" : 800
-               |        },
-               |        "lastPayDate" : "2020-04-20",
-               |        "PartialPayBeforeFurlough" : {
-               |            "value" : 1000
-               |        },
-               |        "furloughStartDate" : "2020-03-10",
-               |        "payMethod" : "variable",
-               |        "pensionStatus" : "doesContribute",
-               |        "claimPeriodEnd" : "2020-04-30",
-               |        "nicCategory" : "payable",
-               |        "payDate" : [
-               |            "2020-02-29",
-               |            "2020-03-31",
-               |            "2020-04-30"
-               |        ]
-               |    }""".stripMargin)
+  lazy val variableMonthlyPartial: UserAnswers =
+    emptyUserAnswers.withEndedFurlough.withEmployeeStartedAfter1Feb2019
+      .withFurloughNotToppedUp()
+      .withFurloughStartDate("2020-03-10")
+      .withFurloughEndDate("2020-04-20")
+      .withEmployeeStartDate("2019-12-01")
+      .withPaymentFrequency(Monthly)
+      .withClaimPeriodStart("2020-03-01")
+      .withVariablePayMethod
+      .withVariableGrossPay(10000.0)
+      .withPartialPayBeforeFurlough(1000.0)
+      .withPartialPayAfterFurlough(800.0)
+      .withLastPayDate("2020-04-20")
+      .withClaimPeriodStart("2020-03-10")
+      .withClaimPeriodEnd("2020-04-30")
+      .withNi
+      .withPension
+      .withPayDate(List("2020-02-29", "2020-03-31", "2020-04-30"))
 
   val variableAveragePartial: UserAnswers =
     template("""
@@ -284,6 +273,9 @@ trait CoreTestData {
     def withFurloughStartDate(startDate: String): UserAnswers =
       userAnswers.setValue(FurloughStartDatePage, buildLocalDate(periodBuilder(startDate)))
 
+    def withFurloughEndDate(startDate: String): UserAnswers =
+      userAnswers.setValue(FurloughEndDatePage, buildLocalDate(periodBuilder(startDate)))
+
     def withEmployeeStartDate(startDate: String): UserAnswers =
       userAnswers.setValue(EmployeeStartDatePage, buildLocalDate(periodBuilder(startDate)))
 
@@ -299,11 +291,35 @@ trait CoreTestData {
     def withRegularPayMethod(): UserAnswers =
       userAnswers.setValue(PayMethodPage, Regular)
 
+    def withVariablePayMethod(): UserAnswers =
+      userAnswers.setValue(PayMethodPage, Variable)
+
     def withPaymentFrequency(frequency: PaymentFrequency): UserAnswers =
       userAnswers.setValue(PaymentFrequencyPage, frequency)
 
     def withSalary(salary: BigDecimal): UserAnswers =
       userAnswers.setValue(SalaryQuestionPage, Salary(salary))
+
+    def withPartialPayBeforeFurlough(pay: BigDecimal): UserAnswers =
+      userAnswers.setValue(PartialPayBeforeFurloughPage, FurloughPartialPay(pay))
+
+    def withPartialPayAfterFurlough(pay: BigDecimal): UserAnswers =
+      userAnswers.setValue(PartialPayAfterFurloughPage, FurloughPartialPay(pay))
+
+    def withVariableGrossPay(gross: BigDecimal): UserAnswers =
+      userAnswers.setValue(VariableGrossPayPage, VariableGrossPay(gross))
+
+    def withEmployeeStartedOnOrBefore1Feb2019(): UserAnswers =
+      userAnswers.setValue(EmployedStartedPage, OnOrBefore1Feb2019)
+
+    def withEmployeeStartedAfter1Feb2019(): UserAnswers =
+      userAnswers.setValue(EmployedStartedPage, After1Feb2019)
+
+    def withFurloughToppedUp(): UserAnswers =
+      userAnswers.setValue(FurloughTopUpStatusPage, ToppedUp)
+
+    def withFurloughNotToppedUp(): UserAnswers =
+      userAnswers.setValue(FurloughTopUpStatusPage, NotToppedUp)
   }
 
   private def template(data: String): UserAnswers =
