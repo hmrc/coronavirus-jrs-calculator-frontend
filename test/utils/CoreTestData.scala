@@ -41,9 +41,7 @@ trait CoreTestData {
     payMethod: String = "regular",
     variableGrossPay: String = "",
     employeeStartDate: String = "",
-    claimStartDate: String = "2020-03-01",
-    nicCategory: String = "payable",
-    pensionStatus: String = "doesContribute"): UserAnswers =
+    claimStartDate: String = "2020-03-01"): UserAnswers =
     template(s"""
                 |    "data" : {
                 |        "lastPayDate" : "2020-04-20",
@@ -55,13 +53,13 @@ trait CoreTestData {
                 |            "amount" : "$variableGrossPay"
                 |        },
                 |        "employeeStartDate": "$employeeStartDate",
-                |        "pensionStatus" : "$pensionStatus",
+                |        "pensionStatus" : "doesContribute",
                 |        "claimPeriodEnd" : "2020-04-30",
                 |        "paymentFrequency" : "monthly",
                 |        "salary" : {
                 |            "amount" : 2000.0
                 |        },
-                |        "nicCategory" : "$nicCategory",
+                |        "nicCategory" : "payable",
                 |        "claimPeriodStart" : "$claimStartDate"
                 |    }""".stripMargin).withPayDate(
       List(
