@@ -33,7 +33,7 @@ class DataExtractorSpec extends SpecBase with CoreTestData with CoreTestDataBuil
   "Extract prior furlough period from user answers" when {
 
     "employee start date is present" in new DataExtractor {
-      val userAnswers = userAnswersJson(employeeStartDate = "2020-12-01")
+      val userAnswers = userAnswersJson().withEmployeeStartDate("2020-12-01")
       val expected = period("2020, 12, 1", "2020, 2, 29")
 
       extractPriorFurloughPeriod(userAnswers) mustBe Some(expected)

@@ -20,39 +20,39 @@ import java.util.UUID
 
 import base.CoreTestDataBuilder
 import models.Amount._
+import models.FurloughStatus.FurloughEnded
 import models.NicCategory.Nonpayable
 import models.PensionStatus.DoesNotContribute
 import models.{CylbPayment, UserAnswers}
-import pages.{LastYearPayPage, NicCategoryPage, PayDatePage, PensionStatusPage}
+import pages._
 import play.api.libs.json.Json
 
 import scala.annotation.tailrec
 
 trait CoreTestData {
 
+  val coreDataBuilder = new CoreTestDataBuilder {}
+  import coreDataBuilder._
+
   val userAnswersId = "id"
   def dummyUserAnswers = userAnswersJson()
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 
   def userAnswersJson(
-    furloughOngoing: String = "ongoing",
-    furloughStartDate: String = "2020-03-01",
     furloughEndDate: String = "",
     payMethod: String = "regular",
     variableGrossPay: String = "",
-    employeeStartDate: String = "",
     claimStartDate: String = "2020-03-01"): UserAnswers =
     template(s"""
                 |    "data" : {
                 |        "lastPayDate" : "2020-04-20",
-                |        "furloughStatus" : "$furloughOngoing",
-                |        "furloughStartDate" : "$furloughStartDate",
+                |        "furloughStatus" : "ongoing",
                 |        "furloughEndDate" : "$furloughEndDate",
                 |        "payMethod" : "$payMethod",
                 |        "variableGrossPay": {
                 |            "amount" : "$variableGrossPay"
                 |        },
-                |        "employeeStartDate": "$employeeStartDate",
+                |        "employeeStartDate": "",
                 |        "pensionStatus" : "doesContribute",
                 |        "claimPeriodEnd" : "2020-04-30",
                 |        "paymentFrequency" : "monthly",
@@ -61,12 +61,14 @@ trait CoreTestData {
                 |        },
                 |        "nicCategory" : "payable",
                 |        "claimPeriodStart" : "$claimStartDate"
-                |    }""".stripMargin).withPayDate(
-      List(
-        "2020-02-29",
-        "2020-03-31",
-        "2020-04-30"
-      ))
+                |    }""".stripMargin)
+      .withPayDate(
+        List(
+          "2020-02-29",
+          "2020-03-31",
+          "2020-04-30"
+        ))
+      .withFurloughStartDate("2020-03-01")
 
   lazy val answersWithPartialPeriod: UserAnswers =
     template("""
@@ -246,9 +248,6 @@ trait CoreTestData {
                |        "nicCategory" : "payable"
                |    }""".stripMargin)
 
-  val coreDataBuilder = new CoreTestDataBuilder {}
-  import coreDataBuilder._
-
   implicit class UserAnswerBuilder(userAnswers: UserAnswers) {
 
     def withPayDate(dates: List[String]): UserAnswers = {
@@ -288,6 +287,15 @@ trait CoreTestData {
 
     def withNoPension: UserAnswers =
       userAnswers.setValue(PensionStatusPage, DoesNotContribute)
+
+    def withEndedFurlough: UserAnswers =
+      userAnswers.setValue(FurloughStatusPage, FurloughEnded)
+
+    def withFurloughStartDate(startDate: String): UserAnswers =
+      userAnswers.setValue(FurloughStartDatePage, buildLocalDate(periodBuilder(startDate)))
+
+    def withEmployeeStartDate(startDate: String): UserAnswers =
+      userAnswers.setValue(EmployeeStartDatePage, buildLocalDate(periodBuilder(startDate)))
   }
 
   private def template(data: String): UserAnswers =
