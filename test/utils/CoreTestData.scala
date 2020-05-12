@@ -20,10 +20,12 @@ import java.util.UUID
 
 import base.CoreTestDataBuilder
 import models.Amount._
-import models.FurloughStatus.FurloughEnded
-import models.NicCategory.Nonpayable
-import models.PensionStatus.DoesNotContribute
-import models.{CylbPayment, UserAnswers}
+import models.FurloughStatus.{FurloughEnded, FurloughOngoing}
+import models.NicCategory.{Nonpayable, Payable}
+import models.PayMethod.Regular
+import models.PaymentFrequency.Monthly
+import models.PensionStatus.{DoesContribute, DoesNotContribute}
+import models.{CylbPayment, PaymentFrequency, Salary, UserAnswers}
 import pages._
 import play.api.libs.json.Json
 
@@ -67,21 +69,18 @@ trait CoreTestData {
       .withFurloughStartDate("2020-03-01")
 
   lazy val answersWithPartialPeriod: UserAnswers =
-    template("""
-               |    "data" : {
-               |        "lastPayDate" : "2020-03-31",
-               |        "furloughStatus" : "ongoing",
-               |        "furloughStartDate" : "2020-03-10",
-               |        "payMethod" : "regular",
-               |        "pensionStatus" : "doesContribute",
-               |        "claimPeriodEnd" : "2020-03-31",
-               |        "paymentFrequency" : "monthly",
-               |        "salary" : {
-               |            "amount" : 3500
-               |        },
-               |        "nicCategory" : "payable",
-               |        "claimPeriodStart" : "2020-03-01"
-               |    }""".stripMargin).withPayDate(List("2020-02-29", "2020-03-31"))
+    emptyUserAnswers
+      .withFurloughStartDate("2020-03-10")
+      .withOngoingFurlough
+      .withPaymentFrequency(Monthly)
+      .withSalary(3500)
+      .withRegularPayMethod
+      .withClaimPeriodStart("2020-03-01")
+      .withClaimPeriodEnd("2020-03-31")
+      .withPension
+      .withNi
+      .withLastPayDate("2020-03-31")
+      .withPayDate(List("2020-02-29", "2020-03-31"))
 
   val variableMonthlyPartial: UserAnswers =
     template("""
@@ -278,20 +277,47 @@ trait CoreTestData {
       rec(userAnswers, zipped)
     }
 
+    def withNi: UserAnswers =
+      userAnswers.setValue(NicCategoryPage, Payable)
+
     def withNoNi: UserAnswers =
       userAnswers.setValue(NicCategoryPage, Nonpayable)
 
     def withNoPension: UserAnswers =
       userAnswers.setValue(PensionStatusPage, DoesNotContribute)
 
+    def withPension: UserAnswers =
+      userAnswers.setValue(PensionStatusPage, DoesContribute)
+
     def withEndedFurlough: UserAnswers =
       userAnswers.setValue(FurloughStatusPage, FurloughEnded)
+
+    def withOngoingFurlough: UserAnswers =
+      userAnswers.setValue(FurloughStatusPage, FurloughOngoing)
 
     def withFurloughStartDate(startDate: String): UserAnswers =
       userAnswers.setValue(FurloughStartDatePage, buildLocalDate(periodBuilder(startDate)))
 
     def withEmployeeStartDate(startDate: String): UserAnswers =
       userAnswers.setValue(EmployeeStartDatePage, buildLocalDate(periodBuilder(startDate)))
+
+    def withLastPayDate(date: String): UserAnswers =
+      userAnswers.setValue(LastPayDatePage, buildLocalDate(periodBuilder(date)))
+
+    def withClaimPeriodEnd(date: String): UserAnswers =
+      userAnswers.setValue(ClaimPeriodEndPage, buildLocalDate(periodBuilder(date)))
+
+    def withClaimPeriodStart(date: String): UserAnswers =
+      userAnswers.setValue(ClaimPeriodStartPage, buildLocalDate(periodBuilder(date)))
+
+    def withRegularPayMethod(): UserAnswers =
+      userAnswers.setValue(PayMethodPage, Regular)
+
+    def withPaymentFrequency(frequency: PaymentFrequency): UserAnswers =
+      userAnswers.setValue(PaymentFrequencyPage, frequency)
+
+    def withSalary(salary: BigDecimal): UserAnswers =
+      userAnswers.setValue(SalaryQuestionPage, Salary(salary))
   }
 
   private def template(data: String): UserAnswers =
