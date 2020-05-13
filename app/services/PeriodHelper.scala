@@ -22,11 +22,11 @@ import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
 import models.Period._
 import models.{FullPeriod, FullPeriodWithPaymentDate, FurloughWithinClaim, PartialPeriod, PartialPeriodWithPaymentDate, PaymentDate, PaymentFrequency, Period, PeriodWithPaymentDate, Periods}
 import utils.LocalDateHelpers._
+import models.PaymentFrequency.paymentFrequencyDays
 
 trait PeriodHelper {
 
   def generatePeriods(endDates: Seq[LocalDate], furloughPeriod: FurloughWithinClaim): Seq[Periods] = {
-    PeriodWithPaymentDate
     def generate(acc: Seq[Period], list: Seq[LocalDate]): Seq[Period] = list match {
       case Nil      => acc
       case _ :: Nil => acc
@@ -41,6 +41,17 @@ trait PeriodHelper {
       }
 
     generated.map(p => fullOrPartialPeriod(p, furloughPeriod))
+  }
+
+  def generateEndDates(frequency: PaymentFrequency, firstEndDate: LocalDate, furloughPeriod: FurloughWithinClaim): Seq[LocalDate] = {
+    def generate(acc: Seq[LocalDate], latest: LocalDate): Seq[LocalDate] =
+      if (latest.isAfter(furloughPeriod.end)) {
+        acc ++ Seq(latest)
+      } else {
+        generate(acc ++ Seq(latest), latest.plusDays(paymentFrequencyDays(frequency)))
+      }
+
+    generate(Seq(firstEndDate), firstEndDate.plusDays(paymentFrequencyDays(frequency)))
   }
 
   def endDateOrTaxYearEnd(period: Period): Period = {
@@ -82,6 +93,7 @@ trait PeriodHelper {
 
   protected def periodSpansMonth(period: Period): Boolean = period.start.getMonth != period.end.getMonth
 
+  //TODO Remove when new pay date gathering implemented
   def assignPayDates(frequency: PaymentFrequency, sortedPeriods: Seq[Periods], lastPayDay: LocalDate): Seq[PeriodWithPaymentDate] =
     sortedPeriods.zip(sortedPeriods.length - 1 to 0 by -1).map {
       case (p, idx) => {
@@ -94,6 +106,35 @@ trait PeriodHelper {
           case (pp: PartialPeriod, FortNightly) => PartialPeriodWithPaymentDate(pp, PaymentDate(lastPayDay.minusWeeks(idx * 2)))
           case (fp: FullPeriod, Weekly)         => FullPeriodWithPaymentDate(fp, PaymentDate(lastPayDay.minusWeeks(idx * 1)))
           case (pp: PartialPeriod, Weekly)      => PartialPeriodWithPaymentDate(pp, PaymentDate(lastPayDay.minusWeeks(idx * 1)))
+        }
+      }
+    }
+
+  def assignPayDates2(frequency: PaymentFrequency, sortedPeriods: Seq[Periods], payDay: LocalDate): Seq[PeriodWithPaymentDate] =
+    frequency match {
+      case Monthly             => assignMonthlyPayDates(sortedPeriods, payDay)
+      case f: PaymentFrequency => assignWeeklyPayDates(f, sortedPeriods, payDay.plusDays(paymentFrequencyDays(frequency)))
+    }
+
+  private def assignMonthlyPayDates(sortedPeriods: Seq[Periods], payDay: LocalDate): Seq[PeriodWithPaymentDate] =
+    sortedPeriods.zip(sortedPeriods.length - 1 to 0 by -1).map {
+      case (p, idx) => {
+        p match {
+          case fp: FullPeriod    => FullPeriodWithPaymentDate(fp, PaymentDate(payDay.minusMonths(idx)))
+          case pp: PartialPeriod => PartialPeriodWithPaymentDate(pp, PaymentDate(payDay.minusMonths(idx)))
+        }
+      }
+    }
+
+  private def assignWeeklyPayDates(
+    frequency: PaymentFrequency,
+    sortedPeriods: Seq[Periods],
+    payDay: LocalDate): Seq[PeriodWithPaymentDate] =
+    sortedPeriods.zipWithIndex.map {
+      case (p, idx) => {
+        p match {
+          case fp: FullPeriod    => FullPeriodWithPaymentDate(fp, PaymentDate(payDay.plusDays(idx * paymentFrequencyDays(frequency))))
+          case pp: PartialPeriod => PartialPeriodWithPaymentDate(pp, PaymentDate(payDay.plusDays(idx * paymentFrequencyDays(frequency))))
         }
       }
     }

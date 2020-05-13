@@ -86,6 +86,37 @@ class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreT
     generatePeriods(endDates, furloughPeriod) mustBe expected
   }
 
+  "generate period end dates given a payment frequency, a date that represents the first end date and a furlough period" in new PeriodHelper {
+    val furloughPeriod = FurloughWithinClaim(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))
+    val firstEndDate = LocalDate.of(2020, 2, 28)
+
+    val expectedWeekly = Seq(
+      LocalDate.of(2020, 2, 28),
+      LocalDate.of(2020, 3, 6),
+      LocalDate.of(2020, 3, 13),
+      LocalDate.of(2020, 3, 20),
+      LocalDate.of(2020, 3, 27),
+      LocalDate.of(2020, 4, 3)
+    )
+
+    val expectedFortnightly = Seq(
+      LocalDate.of(2020, 2, 28),
+      LocalDate.of(2020, 3, 13),
+      LocalDate.of(2020, 3, 27),
+      LocalDate.of(2020, 4, 10),
+    )
+
+    val expectedFourWeekly = Seq(
+      LocalDate.of(2020, 2, 28),
+      LocalDate.of(2020, 3, 27),
+      LocalDate.of(2020, 4, 24)
+    )
+
+    generateEndDates(Weekly, firstEndDate, furloughPeriod) mustBe expectedWeekly
+    generateEndDates(FortNightly, firstEndDate, furloughPeriod) mustBe expectedFortnightly
+    generateEndDates(FourWeekly, firstEndDate, furloughPeriod) mustBe expectedFourWeekly
+  }
+
   "determine if a period contains the start of a new tax year" in new PeriodHelper {
     periodContainsNewTaxYear(Period(LocalDate.of(2020, 3, 20), LocalDate.of(2020, 4, 20))) mustBe true
     periodContainsNewTaxYear(Period(LocalDate.of(2020, 3, 6), LocalDate.of(2020, 4, 6))) mustBe true
@@ -132,12 +163,10 @@ class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreT
     periodSpansMonth(periodTwo) mustBe true
   }
 
-  forAll(payDateScenarios) { (frequency, periods, lastPeriodPayDate, expected) =>
-    s"For a given list of SORTED periods: $periods, the payment frequency: $frequency and the " +
-      s"last period's pay date: $lastPeriodPayDate assign a pay date to each period: $expected" in new PeriodHelper {
-
-      assignPayDates(frequency, periods, lastPeriodPayDate) map (_.paymentDate) mustBe expected
-    }
+  "constrain priorFurloughPeriod to taxYearStart and taxYearEnd" in new PeriodHelper {
+    endDateOrTaxYearEnd(period("2019,3,1", "2020,3,1")) mustBe period("2019,4,6", "2020,3,1")
+    endDateOrTaxYearEnd(period("2019,12,1", "2020,3,1")) mustBe period("2019,12,1", "2020,3,1")
+    endDateOrTaxYearEnd(period("2019,12,1", "2020,4,20")) mustBe period("2019,12,1", "2020,4,5")
   }
 
   "Determine the full or partial period within the furlough period" when {
@@ -212,6 +241,84 @@ class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreT
       fullOrPartialPeriod(period("2020,3,31", "2020,4,1"), furloughPeriod) mustBe partialPeriod(
         "2020,3,31" -> "2020,4,1",
         "2020,3,31" -> "2020,3,31")
+    }
+  }
+
+  forAll(payDateScenarios2) { (frequency, periods, payDay, expected) =>
+    s"For a given list of SORTED periods: $periods, the payment frequency: $frequency and the " +
+      s" pay date: $payDay assign a pay date to each period: $expected" in new PeriodHelper {
+
+      assignPayDates2(frequency, periods, payDay) map (_.paymentDate) mustBe expected
+    }
+  }
+
+  private lazy val payDateScenarios2 = Table(
+    ("frequency", "periods", "lastPeriodPayDate", "expected"),
+    (
+      Monthly,
+      Seq(
+        fullPeriod("2020,3,1", "2020, 3, 31"),
+        partialPeriod("2020,4,1" -> "2020,4,30", "2020,4,1" -> "2020,4,15")
+      ),
+      LocalDate.of(2020, 4, 28),
+      Seq(
+        paymentDate("2020,3,28"),
+        paymentDate("2020,4,28")
+      )
+    ),
+    (
+      FourWeekly,
+      Seq(
+        partialPeriod("2020,2,29" -> "2020,3,27", "2020,3,1" -> "2020,3,27"),
+        fullPeriod("2020,3,28", "2020,4,24")
+      ),
+      LocalDate.of(2020, 2, 28),
+      Seq(
+        paymentDate("2020,3,27"),
+        paymentDate("2020,4,24")
+      )
+    ),
+    (
+      FortNightly,
+      Seq(
+        partialPeriod("2020,2,29" -> "2020,3,13", "2020,3,1" -> "2020,3,13"),
+        fullPeriod("2020,3,14", "2020,3,27"),
+        partialPeriod("2020,3,28" -> "2020,4,10", "2020,3,28" -> "2020,3,31")
+      ),
+      LocalDate.of(2020, 2, 28),
+      Seq(
+        paymentDate("2020,3,13"),
+        paymentDate("2020,3,27"),
+        paymentDate("2020,4,10")
+      )
+    ),
+    (
+      Weekly,
+      Seq(
+        partialPeriod("2020,2,29" -> "2020,3,6", "2020,3,1" -> "2020,3,6"),
+        fullPeriod("2020,3,7", "2020,3,13"),
+        fullPeriod("2020,3,14", "2020,3,20"),
+        fullPeriod("2020,3,21", "2020,3,27"),
+        partialPeriod("2020,3,28" -> "2020,4,3", "2020,3,28" -> "2020,3,31")
+      ),
+      LocalDate.of(2020, 2, 28),
+      Seq(
+        paymentDate("2020,3,6"),
+        paymentDate("2020,3,13"),
+        paymentDate("2020,3,20"),
+        paymentDate("2020,3,27"),
+        paymentDate("2020,4,3")
+      )
+    )
+  )
+
+  //TODO Everything below here can be deleted once new pay date gathering has been implemented
+
+  forAll(payDateScenarios) { (frequency, periods, lastPeriodPayDate, expected) =>
+    s"For a given list of SORTED periods: $periods, the payment frequency: $frequency and the " +
+      s"last period's pay date: $lastPeriodPayDate assign a pay date to each period: $expected" in new PeriodHelper {
+
+      assignPayDates(frequency, periods, lastPeriodPayDate) map (_.paymentDate) mustBe expected
     }
   }
 
