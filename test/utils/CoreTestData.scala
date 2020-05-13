@@ -45,8 +45,8 @@ trait CoreTestData extends UserAnswersBuilder {
       .withFurloughStartDate("2020-03-01")
       .withLastPayDate("2020-04-20")
       .withOngoingFurlough
-      .withRegularPayMethod
       .withRegularPayAmount(2000.0)
+      .withRegularPayMethod
       .withPaymentFrequency(Monthly)
       .withPension
       .withNi
