@@ -18,15 +18,9 @@ package base
 
 import java.time.LocalDate
 
-import models.FurloughStatus.FurloughOngoing
-import models.NicCategory.Payable
-import models.PayMethod.Regular
 import models.PaymentFrequency.Monthly
-import models.{Amount, FullPeriod, FullPeriodWithPaymentDate, FurloughWithinClaim, PartialPeriod, PartialPeriodWithPaymentDate, PaymentDate, PaymentWithFullPeriod, PaymentWithPartialPeriod, PensionStatus, Period, ReferencePayData, UserAnswers}
+import models.{Amount, FullPeriod, FullPeriodWithPaymentDate, FurloughWithinClaim, PartialPeriod, PartialPeriodWithPaymentDate, PaymentDate, PaymentWithFullPeriod, PaymentWithPartialPeriod, Period, ReferencePayData}
 import org.scalatest.TryValues
-import pages._
-import play.api.libs.json.Writes
-import queries.Settable
 
 trait CoreTestDataBuilder extends TryValues {
 
@@ -69,24 +63,6 @@ trait CoreTestDataBuilder extends TryValues {
 
   private val claimPeriod: Period = period("2020-3-1", "2020-3-31")
 
-  implicit class UserAnswersHelper(val userAnswers: UserAnswers) {
-    def setValue[A](page: Settable[A], value: A, idx: Option[Int] = None)(implicit writes: Writes[A]) =
-      userAnswers.set(page, value, idx).success.value
-  }
-
   val defaultReferencePayData =
     ReferencePayData(FurloughWithinClaim(claimPeriod), Seq(fullPeriodWithPaymentDate("2020-3-1", "2020-3-31", "2020-3-31")), Monthly)
-
-  val mandatoryAnswers = UserAnswers("id")
-    .setValue(ClaimPeriodStartPage, LocalDate.of(2020, 3, 1))
-    .setValue(ClaimPeriodEndPage, LocalDate.of(2020, 3, 31))
-    .setValue(PaymentFrequencyPage, Monthly)
-    .setValue(NicCategoryPage, Payable)
-    .setValue(PensionStatusPage, PensionStatus.DoesContribute)
-    .setValue(PayMethodPage, Regular)
-    .setValue(FurloughStatusPage, FurloughOngoing)
-    .setValue(FurloughStartDatePage, LocalDate.of(2020, 3, 1))
-    .setValue(LastPayDatePage, LocalDate.of(2020, 3, 31))
-    .setValue(PayDatePage, LocalDate.of(2020, 2, 29), Some(1))
-    .setValue(PayDatePage, LocalDate.of(2020, 3, 31), Some(2))
 }
