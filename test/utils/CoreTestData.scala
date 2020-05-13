@@ -28,6 +28,18 @@ trait CoreTestData extends UserAnswersBuilder {
   def dummyUserAnswers = userAnswersJson()
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 
+  lazy val mandatoryAnswers = emptyUserAnswers
+    .withClaimPeriodStart("2020, 3, 1")
+    .withClaimPeriodEnd("2020, 3, 31")
+    .withPaymentFrequency(Monthly)
+    .withNi
+    .withPension
+    .withRegularPayMethod()
+    .withOngoingFurlough
+    .withFurloughStartDate("2020, 3, 1")
+    .withLastPayDate("2020, 3, 31")
+    .withPayDate(List("2020, 2, 29", "2020, 3, 31"))
+
   def userAnswersJson(): UserAnswers =
     emptyUserAnswers
       .withFurloughStartDate("2020-03-01")

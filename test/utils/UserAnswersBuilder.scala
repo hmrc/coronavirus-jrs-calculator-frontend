@@ -26,6 +26,8 @@ import models.Amount._
 import models.PensionStatus.{DoesContribute, DoesNotContribute}
 import models.{CylbPayment, FurloughPartialPay, PaymentFrequency, Salary, UserAnswers, VariableGrossPay}
 import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage, EmployedStartedPage, EmployeeStartDatePage, FurloughEndDatePage, FurloughStartDatePage, FurloughStatusPage, FurloughTopUpStatusPage, LastPayDatePage, LastYearPayPage, NicCategoryPage, PartialPayAfterFurloughPage, PartialPayBeforeFurloughPage, PayDatePage, PayMethodPage, PaymentFrequencyPage, PensionStatusPage, SalaryQuestionPage, VariableGrossPayPage}
+import play.api.libs.json.Writes
+import queries.Settable
 
 import scala.annotation.tailrec
 
@@ -137,5 +139,10 @@ trait UserAnswersBuilder extends CoreTestDataBuilder {
 
       rec(userAnswers, zipped)
     }
+  }
+
+  implicit class UserAnswersHelper(val userAnswers: UserAnswers) {
+    def setValue[A](page: Settable[A], value: A, idx: Option[Int] = None)(implicit writes: Writes[A]) =
+      userAnswers.set(page, value, idx).success.value
   }
 }
