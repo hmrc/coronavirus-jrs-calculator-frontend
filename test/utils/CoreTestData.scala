@@ -28,43 +28,32 @@ trait CoreTestData extends UserAnswersBuilder {
   def dummyUserAnswers = userAnswersJson()
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 
-  lazy val mandatoryAnswers = emptyUserAnswers
-    .withClaimPeriodStart("2020, 3, 1")
-    .withClaimPeriodEnd("2020, 3, 31")
-    .withPaymentFrequency(Monthly)
-    .withNi
-    .withPension
-    .withRegularPayMethod()
-    .withOngoingFurlough
-    .withFurloughStartDate("2020, 3, 1")
-    .withLastPayDate("2020, 3, 31")
-    .withPayDate(List("2020, 2, 29", "2020, 3, 31"))
+  def mandatoryAnswersOnRegularMontlhy =
+    emptyUserAnswers
+      .withClaimPeriodStart("2020, 3, 1")
+      .withClaimPeriodEnd("2020, 3, 31")
+      .withFurloughStartDate("2020, 3, 1")
+      .withOngoingFurlough
+      .withPaymentFrequency(Monthly)
+      .withNi
+      .withPension
+      .withRegularPayMethod
+      .withLastPayDate("2020, 3, 31")
+      .withPayDate(List("2020, 2, 29", "2020, 3, 31"))
 
   private def userAnswersJson(): UserAnswers =
-    emptyUserAnswers
-      .withFurloughStartDate("2020-03-01")
-      .withLastPayDate("2020-04-20")
-      .withOngoingFurlough
-      .withRegularPayMethod
-      .withRegularPayAmount(2000.0)
-      .withPaymentFrequency(Monthly)
-      .withPension
-      .withNi
+    mandatoryAnswersOnRegularMontlhy
       .withClaimPeriodStart("2020-03-01")
       .withClaimPeriodEnd("2020-04-30")
+      .withFurloughStartDate("2020-03-01")
+      .withLastPayDate("2020-04-20")
+      .withRegularPayAmount(2000.0)
       .withPayDate(List("2020-02-29", "2020-03-31", "2020-04-30"))
 
   lazy val answersWithPartialPeriod: UserAnswers =
-    emptyUserAnswers
+    mandatoryAnswersOnRegularMontlhy
       .withFurloughStartDate("2020-03-10")
-      .withOngoingFurlough
-      .withPaymentFrequency(Monthly)
       .withRegularPayAmount(3500)
-      .withRegularPayMethod
-      .withClaimPeriodStart("2020-03-01")
-      .withClaimPeriodEnd("2020-03-31")
-      .withPension
-      .withNi
       .withLastPayDate("2020-03-31")
       .withPayDate(List("2020-02-29", "2020-03-31"))
 
