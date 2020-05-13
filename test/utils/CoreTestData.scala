@@ -19,7 +19,9 @@ package utils
 import java.util.UUID
 
 import models.FurloughStatus.{FurloughEnded, FurloughOngoing}
+import models.PayMethod.Variable
 import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
+import models.TopUpStatus.NotToppedUp
 import models.UserAnswers
 import play.api.libs.json.Json
 
@@ -38,7 +40,7 @@ trait CoreTestData extends UserAnswersBuilder {
       .withPaymentFrequency(Monthly)
       .withNiCategory()
       .withPensionStatus()
-      .withRegularPayMethod
+      .withPayMethod()
       .withLastPayDate("2020, 3, 31")
       .withPayDate(List("2020, 2, 29", "2020, 3, 31"))
 
@@ -52,13 +54,14 @@ trait CoreTestData extends UserAnswersBuilder {
       .withPayDate(List("2020-02-29", "2020-03-31", "2020-04-30"))
 
   lazy val variableMonthlyPartial: UserAnswers =
-    emptyUserAnswers.withVariablePayMethod
+    emptyUserAnswers
+      .withPayMethod(Variable)
       .withFurloughStartDate("2020-03-10")
       .withFurloughEndDate("2020-04-20")
       .withPaymentFrequency(Monthly)
       .withFurloughStatus(FurloughEnded)
       .withEmployeeStartedAfter1Feb2019
-      .withNotToppedUp()
+      .withToppedUpStatus(NotToppedUp)
       .withEmployeeStartDate("2019-12-01")
       .withClaimPeriodStart("2020-03-01")
       .withAnnualPayAmount(10000.0)
@@ -72,7 +75,8 @@ trait CoreTestData extends UserAnswersBuilder {
       .withPayDate(List("2020-02-29", "2020-03-31", "2020-04-30"))
 
   lazy val variableAveragePartial: UserAnswers =
-    emptyUserAnswers.withVariablePayMethod
+    emptyUserAnswers
+      .withPayMethod(Variable)
       .withFurloughStatus(FurloughOngoing)
       .withAnnualPayAmount(12960.0)
       .withEmployeeStartedAfter1Feb2019
@@ -80,7 +84,7 @@ trait CoreTestData extends UserAnswersBuilder {
       .withPaymentFrequency(Monthly)
       .withClaimPeriodStart("2020-03-01")
       .withClaimPeriodEnd("2020-03-31")
-      .withNotToppedUp
+      .withToppedUpStatus(NotToppedUp)
       .withLastPayDate("2020-03-31")
       .withPartialPayBeforeFurlough(280.0)
       .withFurloughStartDate("2020-03-05")
@@ -91,7 +95,7 @@ trait CoreTestData extends UserAnswersBuilder {
   def variableWeekly(lastPayDate: String = "2020-03-21"): UserAnswers =
     emptyUserAnswers
       .withFurloughStatus(FurloughEnded)
-      .withVariablePayMethod
+      .withPayMethod(Variable)
       .withAnnualPayAmount(10000.0)
       .withEmployeeStartedAfter1Feb2019
       .withEmployeeStartDate("2019-12-01")
@@ -100,7 +104,7 @@ trait CoreTestData extends UserAnswersBuilder {
       .withPaymentFrequency(Weekly)
       .withClaimPeriodStart("2020-03-01")
       .withClaimPeriodEnd("2020-03-21")
-      .withNotToppedUp()
+      .withToppedUpStatus(NotToppedUp)
       .withNiCategory()
       .withPensionStatus()
       .withLastPayDate(lastPayDate)
@@ -109,7 +113,7 @@ trait CoreTestData extends UserAnswersBuilder {
   lazy val variableFortnightly: UserAnswers =
     emptyUserAnswers
       .withFurloughStatus(FurloughEnded)
-      .withVariablePayMethod
+      .withPayMethod(Variable)
       .withPaymentFrequency(FortNightly)
       .withAnnualPayAmount(10000.0)
       .withEmployeeStartedAfter1Feb2019
@@ -119,7 +123,7 @@ trait CoreTestData extends UserAnswersBuilder {
       .withClaimPeriodStart("2020-03-01")
       .withClaimPeriodEnd("2020-03-21")
       .withLastPayDate("2020-03-28")
-      .withNotToppedUp
+      .withToppedUpStatus(NotToppedUp)
       .withNiCategory()
       .withPensionStatus()
       .withPayDate(List("2020-02-29", "2020-03-14", "2020-03-28"))
@@ -127,7 +131,7 @@ trait CoreTestData extends UserAnswersBuilder {
   lazy val variableFourweekly: UserAnswers =
     emptyUserAnswers
       .withFurloughStatus(FurloughEnded)
-      .withVariablePayMethod()
+      .withPayMethod(Variable)
       .withAnnualPayAmount(10000.0)
       .withEmployeeStartedAfter1Feb2019
       .withPaymentFrequency(FourWeekly)
@@ -139,14 +143,14 @@ trait CoreTestData extends UserAnswersBuilder {
       .withFurloughStartDate("2020-03-10")
       .withNiCategory()
       .withPensionStatus()
-      .withNotToppedUp
+      .withToppedUpStatus(NotToppedUp)
       .withPayDate(List("2020-02-29", "2020-03-28", "2020-04-25"))
 
   lazy val manyPeriods =
     emptyUserAnswers
       .withFurloughStatus(FurloughEnded)
       .withPaymentFrequency(Weekly)
-      .withVariablePayMethod
+      .withPayMethod(Variable)
       .withAnnualPayAmount(31970)
       .withPartialPayBeforeFurlough(200.0)
       .withEmployeeStartedOnOrBefore1Feb2019
@@ -155,7 +159,7 @@ trait CoreTestData extends UserAnswersBuilder {
       .withClaimPeriodStart("2020-03-01")
       .withClaimPeriodEnd("2020-03-31")
       .withLastPayDate("2020-03-31")
-      .withNotToppedUp
+      .withToppedUpStatus(NotToppedUp)
       .withNiCategory()
       .withPensionStatus()
       .withLastYear(List("2019-03-05" -> 500, "2019-03-12" -> 450, "2019-03-19" -> 500, "2019-03-26" -> 550, "2019-04-02" -> 600))

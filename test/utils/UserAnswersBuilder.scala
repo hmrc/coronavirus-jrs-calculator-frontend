@@ -21,10 +21,10 @@ import models.Amount._
 import models.EmployeeStarted.{After1Feb2019, OnOrBefore1Feb2019}
 import models.FurloughStatus.FurloughOngoing
 import models.NicCategory.Payable
-import models.PayMethod.{Regular, Variable}
+import models.PayMethod.Regular
 import models.PensionStatus.DoesContribute
-import models.TopUpStatus.{NotToppedUp, ToppedUp}
-import models.{AnnualPayAmount, CylbPayment, FurloughPartialPay, FurloughStatus, NicCategory, PaymentFrequency, PensionStatus, Salary, UserAnswers}
+import models.TopUpStatus.ToppedUp
+import models.{AnnualPayAmount, CylbPayment, FurloughPartialPay, FurloughStatus, NicCategory, PayMethod, PaymentFrequency, PensionStatus, Salary, TopUpStatus, UserAnswers}
 import pages._
 import play.api.libs.json.Writes
 import queries.Settable
@@ -45,28 +45,25 @@ trait UserAnswersBuilder extends CoreTestDataBuilder {
       userAnswers.setValue(FurloughStatusPage, status)
 
     def withFurloughStartDate(startDate: String): UserAnswers =
-      userAnswers.setValue(FurloughStartDatePage, buildLocalDate(periodBuilder(startDate)))
+      userAnswers.setValue(FurloughStartDatePage, startDate.toLocalDate)
 
     def withFurloughEndDate(startDate: String): UserAnswers =
-      userAnswers.setValue(FurloughEndDatePage, buildLocalDate(periodBuilder(startDate)))
+      userAnswers.setValue(FurloughEndDatePage, startDate.toLocalDate)
 
     def withEmployeeStartDate(startDate: String): UserAnswers =
-      userAnswers.setValue(EmployeeStartDatePage, buildLocalDate(periodBuilder(startDate)))
+      userAnswers.setValue(EmployeeStartDatePage, startDate.toLocalDate)
 
     def withLastPayDate(date: String): UserAnswers =
-      userAnswers.setValue(LastPayDatePage, buildLocalDate(periodBuilder(date)))
+      userAnswers.setValue(LastPayDatePage, date.toLocalDate)
 
     def withClaimPeriodEnd(date: String): UserAnswers =
-      userAnswers.setValue(ClaimPeriodEndPage, buildLocalDate(periodBuilder(date)))
+      userAnswers.setValue(ClaimPeriodEndPage, date.toLocalDate)
 
     def withClaimPeriodStart(date: String): UserAnswers =
-      userAnswers.setValue(ClaimPeriodStartPage, buildLocalDate(periodBuilder(date)))
+      userAnswers.setValue(ClaimPeriodStartPage, date.toLocalDate)
 
-    def withRegularPayMethod(): UserAnswers =
-      userAnswers.setValue(PayMethodPage, Regular)
-
-    def withVariablePayMethod(): UserAnswers =
-      userAnswers.setValue(PayMethodPage, Variable)
+    def withPayMethod(method: PayMethod = Regular): UserAnswers =
+      userAnswers.setValue(PayMethodPage, method)
 
     def withPaymentFrequency(frequency: PaymentFrequency): UserAnswers =
       userAnswers.setValue(PaymentFrequencyPage, frequency)
@@ -89,11 +86,8 @@ trait UserAnswersBuilder extends CoreTestDataBuilder {
     def withEmployeeStartedAfter1Feb2019(): UserAnswers =
       userAnswers.setValue(EmployedStartedPage, After1Feb2019)
 
-    def withToppedUp(): UserAnswers =
-      userAnswers.setValue(TopUpStatusPage, ToppedUp)
-
-    def withNotToppedUp(): UserAnswers =
-      userAnswers.setValue(TopUpStatusPage, NotToppedUp)
+    def withToppedUpStatus(status: TopUpStatus = ToppedUp): UserAnswers =
+      userAnswers.setValue(TopUpStatusPage, status)
 
     def withPayDate(dates: List[String]): UserAnswers = {
       val zipped: List[(String, Int)] = dates.zip(1 to dates.length)
@@ -105,7 +99,7 @@ trait UserAnswersBuilder extends CoreTestDataBuilder {
           case (d, idx) :: tail =>
             rec(
               userAnswers
-                .setListWithInvalidation(PayDatePage, buildLocalDate(periodBuilder(d)), idx)
+                .setListWithInvalidation(PayDatePage, d.toLocalDate, idx)
                 .get,
               tail)
         }
@@ -123,7 +117,7 @@ trait UserAnswersBuilder extends CoreTestDataBuilder {
           case ((d, amount), idx) :: tail =>
             rec(
               userAnswers
-                .setListWithInvalidation(LastYearPayPage, CylbPayment(buildLocalDate(periodBuilder(d)), amount.toAmount), idx)
+                .setListWithInvalidation(LastYearPayPage, CylbPayment(d.toLocalDate, amount.toAmount), idx)
                 .get,
               tail)
         }

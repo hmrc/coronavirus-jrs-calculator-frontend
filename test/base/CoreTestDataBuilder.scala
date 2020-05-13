@@ -25,7 +25,7 @@ import org.scalatest.TryValues
 trait CoreTestDataBuilder extends TryValues {
 
   def period(start: String, end: String) =
-    Period(buildLocalDate(periodBuilder(start)), buildLocalDate(periodBuilder(end)))
+    Period(start.toLocalDate, end.toLocalDate)
 
   def partialPeriod(original: (String, String), partial: (String, String)) =
     PartialPeriod(period(original._1, original._2), period(partial._1, partial._2))
@@ -42,7 +42,7 @@ trait CoreTestDataBuilder extends TryValues {
     PaymentWithPartialPeriod(Amount(nonFurloughPay), Amount(furloughPayment), period)
 
   def fullPeriodWithPaymentDate(start: String, end: String, paymentDate: String): FullPeriodWithPaymentDate =
-    FullPeriodWithPaymentDate(FullPeriod(period(start, end)), PaymentDate(buildLocalDate(periodBuilder(paymentDate))))
+    FullPeriodWithPaymentDate(FullPeriod(period(start, end)), PaymentDate(paymentDate.toLocalDate))
 
   def partialPeriodWithPaymentDate(
     start: String,
@@ -50,11 +50,9 @@ trait CoreTestDataBuilder extends TryValues {
     pstart: String,
     pend: String,
     paymentDate: String): PartialPeriodWithPaymentDate =
-    PartialPeriodWithPaymentDate(
-      PartialPeriod(period(start, end), period(pstart, pend)),
-      PaymentDate(buildLocalDate(periodBuilder(paymentDate))))
+    PartialPeriodWithPaymentDate(PartialPeriod(period(start, end), period(pstart, pend)), PaymentDate(paymentDate.toLocalDate))
 
-  def paymentDate(date: String): PaymentDate = PaymentDate(buildLocalDate(periodBuilder(date)))
+  def paymentDate(date: String): PaymentDate = PaymentDate(date.toLocalDate)
 
   val periodBuilder: String => Array[Int] =
     date => date.replace(" ", "").replace("-", ",").split(",").map(_.toInt)
@@ -65,4 +63,8 @@ trait CoreTestDataBuilder extends TryValues {
 
   val defaultReferencePayData =
     ReferencePayData(FurloughWithinClaim(claimPeriod), Seq(fullPeriodWithPaymentDate("2020-3-1", "2020-3-31", "2020-3-31")), Monthly)
+
+  implicit class ToLocalDate(date: String) {
+    def toLocalDate = buildLocalDate(periodBuilder(date))
+  }
 }
