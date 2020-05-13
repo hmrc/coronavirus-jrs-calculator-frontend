@@ -20,7 +20,9 @@ import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBase}
 import models.Calculation.{FurloughCalculationResult, NicCalculationResult, PensionCalculationResult}
-import models.{Amount, CalculationResult, FullPeriod, FullPeriodBreakdown, FullPeriodWithPaymentDate, PartialPeriod, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentDate, Period}
+import models.NicCategory.Nonpayable
+import models.PensionStatus.DoesNotContribute
+import models.{Amount, CalculationResult, FullPeriod, FullPeriodBreakdown, FullPeriodWithPaymentDate, PartialPeriod, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentDate, Period, UserAnswers}
 import utils.CoreTestData
 import viewmodels.ConfirmationViewBreakdown
 
@@ -56,7 +58,7 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
   }
 
   "for a given user answer calculate furlough and empty results for ni and pension if do not apply" in new ConfirmationControllerRequestHandler {
-    val userAnswers = dummyUserAnswers.withNoNi.withNoPension
+    val userAnswers = dummyUserAnswers.withNiCategory(Nonpayable).withPensionStatus(DoesNotContribute)
     val withPayDay: FullPeriodWithPaymentDate =
       FullPeriodWithPaymentDate(
         FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))),
@@ -81,6 +83,10 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
   }
 
   "partial period scenario" in new ConfirmationControllerRequestHandler {
+    val userAnswers: UserAnswers = mandatoryAnswersOnRegularMonthly
+      .withFurloughStartDate("2020-03-10")
+      .withRegularPayAmount(3500)
+
     def periodBreakdownOne(grossPay: BigDecimal, grant: BigDecimal) =
       PartialPeriodBreakdown(
         Amount(grossPay),
@@ -100,7 +106,7 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
 
     val expected = ConfirmationViewBreakdown(furlough, nic, pension)
 
-    loadResultData(answersWithPartialPeriod).get.confirmationViewBreakdown mustBe expected //TODO metadata to be tested
+    loadResultData(userAnswers).get.confirmationViewBreakdown mustBe expected //TODO metadata to be tested
   }
 
   "variable average partial period scenario" in new ConfirmationControllerRequestHandler {

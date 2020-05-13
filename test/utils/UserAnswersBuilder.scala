@@ -19,12 +19,12 @@ package utils
 import base.CoreTestDataBuilder
 import models.Amount._
 import models.EmployeeStarted.{After1Feb2019, OnOrBefore1Feb2019}
-import models.FurloughStatus.{FurloughEnded, FurloughOngoing}
-import models.NicCategory.{Nonpayable, Payable}
+import models.FurloughStatus.FurloughOngoing
+import models.NicCategory.Payable
 import models.PayMethod.{Regular, Variable}
-import models.PensionStatus.{DoesContribute, DoesNotContribute}
+import models.PensionStatus.DoesContribute
 import models.TopUpStatus.{NotToppedUp, ToppedUp}
-import models.{AnnualPayAmount, CylbPayment, FurloughPartialPay, PaymentFrequency, Salary, UserAnswers}
+import models.{AnnualPayAmount, CylbPayment, FurloughPartialPay, FurloughStatus, NicCategory, PaymentFrequency, PensionStatus, Salary, UserAnswers}
 import pages._
 import play.api.libs.json.Writes
 import queries.Settable
@@ -35,23 +35,14 @@ trait UserAnswersBuilder extends CoreTestDataBuilder {
 
   implicit class UserAnswerBuilder(userAnswers: UserAnswers) {
 
-    def withNi: UserAnswers =
-      userAnswers.setValue(NicCategoryPage, Payable)
+    def withNiCategory(category: NicCategory = Payable): UserAnswers =
+      userAnswers.setValue(NicCategoryPage, category)
 
-    def withNoNi: UserAnswers =
-      userAnswers.setValue(NicCategoryPage, Nonpayable)
+    def withPensionStatus(status: PensionStatus = DoesContribute): UserAnswers =
+      userAnswers.setValue(PensionStatusPage, status)
 
-    def withNoPension: UserAnswers =
-      userAnswers.setValue(PensionStatusPage, DoesNotContribute)
-
-    def withPension: UserAnswers =
-      userAnswers.setValue(PensionStatusPage, DoesContribute)
-
-    def withEndedFurlough: UserAnswers =
-      userAnswers.setValue(FurloughStatusPage, FurloughEnded)
-
-    def withOngoingFurlough: UserAnswers =
-      userAnswers.setValue(FurloughStatusPage, FurloughOngoing)
+    def withFurloughStatus(status: FurloughStatus = FurloughOngoing): UserAnswers =
+      userAnswers.setValue(FurloughStatusPage, status)
 
     def withFurloughStartDate(startDate: String): UserAnswers =
       userAnswers.setValue(FurloughStartDatePage, buildLocalDate(periodBuilder(startDate)))

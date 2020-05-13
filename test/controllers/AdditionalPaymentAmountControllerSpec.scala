@@ -53,7 +53,7 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
     "return OK and the correct view for a GET" in {
       val additionalPaymentPeriod = LocalDate.of(2020, 3, 31)
 
-      val userAnswers = mandatoryAnswersOnRegularMontlhy.setValue(AdditionalPaymentPeriodsPage, List(additionalPaymentPeriod))
+      val userAnswers = mandatoryAnswersOnRegularMonthly.setValue(AdditionalPaymentPeriodsPage, List(additionalPaymentPeriod))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -76,7 +76,7 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
       "index is negative" in {
         val additionalPaymentPeriod = LocalDate.of(2020, 3, 31)
 
-        val userAnswers = mandatoryAnswersOnRegularMontlhy.setValue(AdditionalPaymentPeriodsPage, List(additionalPaymentPeriod))
+        val userAnswers = mandatoryAnswersOnRegularMonthly.setValue(AdditionalPaymentPeriodsPage, List(additionalPaymentPeriod))
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -92,7 +92,7 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
       "index is 0" in {
         val additionalPaymentPeriod = LocalDate.of(2020, 3, 31)
 
-        val userAnswers = mandatoryAnswersOnRegularMontlhy.setValue(AdditionalPaymentPeriodsPage, List(additionalPaymentPeriod))
+        val userAnswers = mandatoryAnswersOnRegularMonthly.setValue(AdditionalPaymentPeriodsPage, List(additionalPaymentPeriod))
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -108,7 +108,7 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
       "index is too high" in {
         val additionalPaymentPeriod = LocalDate.of(2020, 3, 31)
 
-        val userAnswers = mandatoryAnswersOnRegularMontlhy.setValue(AdditionalPaymentPeriodsPage, List(additionalPaymentPeriod))
+        val userAnswers = mandatoryAnswersOnRegularMonthly.setValue(AdditionalPaymentPeriodsPage, List(additionalPaymentPeriod))
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -127,7 +127,7 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
       val amount = Amount(100)
       val additionalPayment = AdditionalPayment(additionalPaymentPeriod, amount)
 
-      val userAnswers = mandatoryAnswersOnRegularMontlhy
+      val userAnswers = mandatoryAnswersOnRegularMonthly
         .setValue(AdditionalPaymentPeriodsPage, List(additionalPaymentPeriod))
         .setValue(AdditionalPaymentAmountPage, additionalPayment, Some(1))
 
@@ -151,7 +151,7 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
 
       val additionalPaymentPeriod = LocalDate.of(2020, 3, 31)
 
-      val userAnswers = mandatoryAnswersOnRegularMontlhy.setValue(AdditionalPaymentPeriodsPage, List(additionalPaymentPeriod))
+      val userAnswers = mandatoryAnswersOnRegularMonthly.setValue(AdditionalPaymentPeriodsPage, List(additionalPaymentPeriod))
 
       val mockSessionRepository = mock[SessionRepository]
 
@@ -181,7 +181,7 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
 
       val additionalPaymentPeriod = LocalDate.of(2020, 3, 31)
 
-      val userAnswers = mandatoryAnswersOnRegularMontlhy.setValue(AdditionalPaymentPeriodsPage, List(additionalPaymentPeriod))
+      val userAnswers = mandatoryAnswersOnRegularMonthly.setValue(AdditionalPaymentPeriodsPage, List(additionalPaymentPeriod))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
