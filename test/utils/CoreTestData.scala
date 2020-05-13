@@ -40,7 +40,7 @@ trait CoreTestData extends UserAnswersBuilder {
     .withLastPayDate("2020, 3, 31")
     .withPayDate(List("2020, 2, 29", "2020, 3, 31"))
 
-  def userAnswersJson(): UserAnswers =
+  private def userAnswersJson(): UserAnswers =
     emptyUserAnswers
       .withFurloughStartDate("2020-03-01")
       .withLastPayDate("2020-04-20")

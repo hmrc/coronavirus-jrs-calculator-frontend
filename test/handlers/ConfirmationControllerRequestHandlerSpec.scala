@@ -27,8 +27,6 @@ import viewmodels.ConfirmationViewBreakdown
 class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestData with CoreTestDataBuilder {
 
   "do all calculations given a set of userAnswers" in new ConfirmationControllerRequestHandler {
-    val userAnswers = userAnswersJson()
-
     def periodBreakdownOne(grant: BigDecimal) =
       FullPeriodBreakdown(
         Amount(grant),
@@ -54,11 +52,11 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
 
     val expected = ConfirmationViewBreakdown(furlough, nic, pension)
 
-    loadResultData(userAnswers).get.confirmationViewBreakdown mustBe expected //TODO metadata to be tested
+    loadResultData(dummyUserAnswers).get.confirmationViewBreakdown mustBe expected //TODO metadata to be tested
   }
 
   "for a given user answer calculate furlough and empty results for ni and pension if do not apply" in new ConfirmationControllerRequestHandler {
-    val userAnswers = userAnswersJson().withNoNi.withNoPension
+    val userAnswers = dummyUserAnswers.withNoNi.withNoPension
     val withPayDay: FullPeriodWithPaymentDate =
       FullPeriodWithPaymentDate(
         FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))),
