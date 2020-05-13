@@ -396,6 +396,8 @@ annualPayAmount.error.invalid = Enter a valid amount
 annualPayAmount.p = This is the total gross amount before deductions the employee has been paid up to the earlier of:
 annualPayAmount.l1 = 5th April 2020 or
 annualPayAmount.l2 = the day before they were furloughed ({0})
+annualPayAmount.l3 = This is the total amount before deductions.
+annualPayAmount.l4 = Do not include discretionary payments, non-cash payments or non-monetary benefits.
 
 comingSoon.title = We are unable to do this calculation at the moment
 comingSoon.heading = We are unable to do this calculation at the moment
