@@ -17,15 +17,15 @@
 package utils
 
 import base.CoreTestDataBuilder
+import models.Amount._
 import models.EmployeeStarted.{After1Feb2019, OnOrBefore1Feb2019}
 import models.FurloughStatus.{FurloughEnded, FurloughOngoing}
-import models.FurloughTopUpStatus.{NotToppedUp, ToppedUp}
 import models.NicCategory.{Nonpayable, Payable}
 import models.PayMethod.{Regular, Variable}
-import models.Amount._
 import models.PensionStatus.{DoesContribute, DoesNotContribute}
-import models.{CylbPayment, FurloughPartialPay, PaymentFrequency, Salary, UserAnswers, VariableGrossPay}
-import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage, EmployedStartedPage, EmployeeStartDatePage, FurloughEndDatePage, FurloughStartDatePage, FurloughStatusPage, FurloughTopUpStatusPage, LastPayDatePage, LastYearPayPage, NicCategoryPage, PartialPayAfterFurloughPage, PartialPayBeforeFurloughPage, PayDatePage, PayMethodPage, PaymentFrequencyPage, PensionStatusPage, SalaryQuestionPage, VariableGrossPayPage}
+import models.TopUpStatus.{NotToppedUp, ToppedUp}
+import models.{AnnualPayAmount, CylbPayment, FurloughPartialPay, PaymentFrequency, Salary, UserAnswers}
+import pages._
 import play.api.libs.json.Writes
 import queries.Settable
 
@@ -80,8 +80,8 @@ trait UserAnswersBuilder extends CoreTestDataBuilder {
     def withPaymentFrequency(frequency: PaymentFrequency): UserAnswers =
       userAnswers.setValue(PaymentFrequencyPage, frequency)
 
-    def withSalary(salary: BigDecimal): UserAnswers =
-      userAnswers.setValue(SalaryQuestionPage, Salary(salary))
+    def withRegularPayAmount(salary: BigDecimal): UserAnswers =
+      userAnswers.setValue(RegularPayAmountPage, Salary(salary))
 
     def withPartialPayBeforeFurlough(pay: BigDecimal): UserAnswers =
       userAnswers.setValue(PartialPayBeforeFurloughPage, FurloughPartialPay(pay))
@@ -89,8 +89,8 @@ trait UserAnswersBuilder extends CoreTestDataBuilder {
     def withPartialPayAfterFurlough(pay: BigDecimal): UserAnswers =
       userAnswers.setValue(PartialPayAfterFurloughPage, FurloughPartialPay(pay))
 
-    def withVariableGrossPay(gross: BigDecimal): UserAnswers =
-      userAnswers.setValue(VariableGrossPayPage, VariableGrossPay(gross))
+    def withAnnualPayAmount(gross: BigDecimal): UserAnswers =
+      userAnswers.setValue(AnnualPayAmountPage, AnnualPayAmount(gross))
 
     def withEmployeeStartedOnOrBefore1Feb2019(): UserAnswers =
       userAnswers.setValue(EmployedStartedPage, OnOrBefore1Feb2019)
@@ -98,11 +98,11 @@ trait UserAnswersBuilder extends CoreTestDataBuilder {
     def withEmployeeStartedAfter1Feb2019(): UserAnswers =
       userAnswers.setValue(EmployedStartedPage, After1Feb2019)
 
-    def withFurloughToppedUp(): UserAnswers =
-      userAnswers.setValue(FurloughTopUpStatusPage, ToppedUp)
+    def withToppedUp(): UserAnswers =
+      userAnswers.setValue(TopUpStatusPage, ToppedUp)
 
-    def withFurloughNotToppedUp(): UserAnswers =
-      userAnswers.setValue(FurloughTopUpStatusPage, NotToppedUp)
+    def withNotToppedUp(): UserAnswers =
+      userAnswers.setValue(TopUpStatusPage, NotToppedUp)
 
     def withPayDate(dates: List[String]): UserAnswers = {
       val zipped: List[(String, Int)] = dates.zip(1 to dates.length)
