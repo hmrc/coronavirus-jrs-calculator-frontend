@@ -28,7 +28,7 @@ import viewmodels.ConfirmationViewBreakdown
 
 class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestData with CoreTestDataBuilder {
 
-  "do all calculations given a set of userAnswers" in new ConfirmationControllerRequestHandler {
+  "do all calculations given a set of userAnswers returning a breakdown of each" in new ConfirmationControllerRequestHandler {
     def periodBreakdownOne(grant: BigDecimal) =
       FullPeriodBreakdown(
         Amount(grant),
@@ -59,27 +59,11 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
 
   "for a given user answer calculate furlough and empty results for ni and pension if do not apply" in new ConfirmationControllerRequestHandler {
     val userAnswers = dummyUserAnswers.withNiCategory(Nonpayable).withPensionStatus(DoesNotContribute)
-    val withPayDay: FullPeriodWithPaymentDate =
-      FullPeriodWithPaymentDate(
-        FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))),
-        PaymentDate(LocalDate.of(2020, 3, 20)))
-    val withPayDayTwo: FullPeriodWithPaymentDate =
-      FullPeriodWithPaymentDate(
-        FullPeriod(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30))),
-        PaymentDate(LocalDate.of(2020, 4, 20)))
+    val confirmationViewBreakdown: ConfirmationViewBreakdown = loadResultData(userAnswers).get.confirmationViewBreakdown
 
-    val payPeriodBreakdowns =
-      List(FullPeriodBreakdown(Amount(1600.0), withPayDay), FullPeriodBreakdown(Amount(1600.0), withPayDayTwo))
-    val nicPayPeriodBreakdowns =
-      List(FullPeriodBreakdown(Amount(0.0), withPayDay), FullPeriodBreakdown(Amount(0.0), withPayDayTwo))
-    val pensionPayPeriodBreakdowns =
-      List(FullPeriodBreakdown(Amount(0.0), withPayDay), FullPeriodBreakdown(Amount(0.0), withPayDayTwo))
-
-    loadResultData(userAnswers).get.confirmationViewBreakdown mustBe ConfirmationViewBreakdown(
-      CalculationResult(FurloughCalculationResult, 3200.0, payPeriodBreakdowns),
-      CalculationResult(NicCalculationResult, 0.0, nicPayPeriodBreakdowns),
-      CalculationResult(PensionCalculationResult, 0.0, pensionPayPeriodBreakdowns)
-    ) //TODO metadata to be tested
+    confirmationViewBreakdown.furlough.total mustBe 3200.0
+    confirmationViewBreakdown.nic.total mustBe 0.0
+    confirmationViewBreakdown.pension.total mustBe 0.0
   }
 
   "partial period scenario" in new ConfirmationControllerRequestHandler {
