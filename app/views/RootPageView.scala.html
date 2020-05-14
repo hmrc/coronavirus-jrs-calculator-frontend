@@ -39,7 +39,7 @@
     @p(Html(Messages(if (featureFlag(VariableJourneyFlag)) {"rootPage.p3.variableOn"} else {"rootPage.p3.variableOff"})))
     @p(Html(Messages("rootPage.p4")))
     <ul class="govuk-list govuk-list--bullet">
-       @if(featureFlag(TopUpJourneyFlag)) {
+       @if(!featureFlag(TopUpJourneyFlag)) {
            <li>@messages("rootPage.p4.l1")</li>
            <li>@messages("rootPage.p4.l2")</li>
        }
