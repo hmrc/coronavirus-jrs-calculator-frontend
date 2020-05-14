@@ -19,7 +19,7 @@ package base
 import java.time.LocalDate
 
 import models.PaymentFrequency.Monthly
-import models.{Amount, FullPeriod, FullPeriodWithPaymentDate, FurloughWithinClaim, PartialPeriod, PartialPeriodWithPaymentDate, PaymentDate, PaymentWithFullPeriod, PaymentWithPartialPeriod, Period, ReferencePayData}
+import models.{Amount, FullPeriod, FullPeriodBreakdown, FullPeriodWithPaymentDate, FurloughWithinClaim, PartialPeriod, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentDate, PaymentWithFullPeriod, PaymentWithPartialPeriod, Period, ReferencePayData}
 import org.scalatest.TryValues
 
 trait CoreTestDataBuilder extends TryValues {
@@ -43,6 +43,15 @@ trait CoreTestDataBuilder extends TryValues {
 
   def fullPeriodWithPaymentDate(start: String, end: String, paymentDate: String): FullPeriodWithPaymentDate =
     FullPeriodWithPaymentDate(FullPeriod(period(start, end)), PaymentDate(paymentDate.toLocalDate))
+
+  def fullPeriodBreakdown(grant: BigDecimal, period: FullPeriodWithPaymentDate): FullPeriodBreakdown =
+    FullPeriodBreakdown(
+      Amount(grant),
+      period
+    )
+
+  def partialPeriodBreakdown(nonFurlough: BigDecimal, grant: BigDecimal, period: PartialPeriodWithPaymentDate): PartialPeriodBreakdown =
+    PartialPeriodBreakdown(Amount(nonFurlough), Amount(grant), period)
 
   def partialPeriodWithPaymentDate(
     start: String,

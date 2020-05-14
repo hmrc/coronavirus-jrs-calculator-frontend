@@ -16,13 +16,11 @@
 
 package handlers
 
-import java.time.LocalDate
-
 import base.{CoreTestDataBuilder, SpecBase}
 import models.Calculation.{FurloughCalculationResult, NicCalculationResult, PensionCalculationResult}
 import models.NicCategory.Nonpayable
 import models.PensionStatus.DoesNotContribute
-import models.{Amount, CalculationResult, FullPeriod, FullPeriodBreakdown, FullPeriodWithPaymentDate, PartialPeriod, PartialPeriodBreakdown, PartialPeriodWithPaymentDate, PaymentDate, Period, UserAnswers}
+import models.{CalculationResult, UserAnswers}
 import utils.CoreTestData
 import viewmodels.ConfirmationViewBreakdown
 
@@ -30,20 +28,10 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
 
   "do all calculations given a set of userAnswers returning a breakdown of each" in new ConfirmationControllerRequestHandler {
     def periodBreakdownOne(grant: BigDecimal) =
-      FullPeriodBreakdown(
-        Amount(grant),
-        FullPeriodWithPaymentDate(
-          FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))),
-          PaymentDate(LocalDate.of(2020, 3, 20)))
-      )
+      fullPeriodBreakdown(grant, fullPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 20"))
 
     def periodBreakdownTwo(grant: BigDecimal) =
-      FullPeriodBreakdown(
-        Amount(grant),
-        FullPeriodWithPaymentDate(
-          FullPeriod(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30))),
-          PaymentDate(LocalDate.of(2020, 4, 20)))
-      )
+      fullPeriodBreakdown(grant, fullPeriodWithPaymentDate("2020, 4, 1", "2020, 4, 30", "2020, 4, 20"))
 
     val furlough =
       CalculationResult(FurloughCalculationResult, 3200.00, Seq(periodBreakdownOne(1600.00), periodBreakdownTwo(1600.00)))
@@ -72,16 +60,11 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
       .withRegularPayAmount(3500)
 
     def periodBreakdownOne(grossPay: BigDecimal, grant: BigDecimal) =
-      PartialPeriodBreakdown(
-        Amount(grossPay),
-        Amount(grant),
-        PartialPeriodWithPaymentDate(
-          PartialPeriod(
-            Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)),
-            Period(LocalDate.of(2020, 3, 10), LocalDate.of(2020, 3, 31))),
-          PaymentDate(LocalDate.of(2020, 3, 31))
-        )
-      )
+      partialPeriodBreakdown(
+        grossPay,
+        grant,
+        partialPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 10", "2020, 3, 31", "2020, 3, 31"))
+
     val furlough = CalculationResult(FurloughCalculationResult, 1774.30, List(periodBreakdownOne(1016.13, 1774.30)))
     val nic =
       CalculationResult(NicCalculationResult, 202.83, List(periodBreakdownOne(1016.13, 202.83)))
@@ -97,16 +80,10 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
     val userAnswers = variableAveragePartial
 
     def periodBreakdownOne(grossPay: BigDecimal, grant: BigDecimal) =
-      PartialPeriodBreakdown(
-        Amount(grossPay),
-        Amount(grant),
-        PartialPeriodWithPaymentDate(
-          PartialPeriod(
-            Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)),
-            Period(LocalDate.of(2020, 3, 5), LocalDate.of(2020, 3, 31))),
-          PaymentDate(LocalDate.of(2020, 3, 31))
-        )
-      )
+      partialPeriodBreakdown(
+        grossPay,
+        grant,
+        partialPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 5", "2020, 3, 31", "2020, 3, 31"))
 
     val furlough = CalculationResult(FurloughCalculationResult, 1289.95, List(periodBreakdownOne(280.00, 1289.95)))
     val nic = CalculationResult(NicCalculationResult, 102.16, List(periodBreakdownOne(280.00, 102.16)))
