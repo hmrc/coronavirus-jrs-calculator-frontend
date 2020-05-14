@@ -22,7 +22,7 @@ import base.SpecBase
 import generators.Generators
 import models.{FurloughEnded, FurloughOngoing, FurloughWithinClaim}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.{FurloughEndDatePage, FurloughStartDatePage}
+import pages.FurloughStartDatePage
 import utils.CoreTestData
 
 class FurloughPeriodExtractorSpec extends SpecBase with CoreTestData with ScalaCheckPropertyChecks with Generators {
@@ -139,7 +139,7 @@ class FurloughPeriodExtractorSpec extends SpecBase with CoreTestData with ScalaC
     "use claim period end if before furlough end" in new FurloughPeriodExtractor {
       val userAnswers = emptyUserAnswers
         .withFurloughStartDate("2020, 3, 1")
-        .setValue(FurloughEndDatePage, LocalDate.of(2020, 3, 31))
+        .withFurloughEndDate("2020, 3, 31")
         .withClaimPeriodStart("2020, 3, 2")
         .withClaimPeriodEnd("2020, 3, 30")
 
@@ -169,7 +169,7 @@ class FurloughPeriodExtractorSpec extends SpecBase with CoreTestData with ScalaC
     "use furlough end if before claim period end" in new FurloughPeriodExtractor {
       val userAnswers = emptyUserAnswers
         .withFurloughStartDate("2020, 3, 1")
-        .setValue(FurloughEndDatePage, LocalDate.of(2020, 3, 29))
+        .withFurloughEndDate("2020, 3, 29")
         .withClaimPeriodStart("2020, 3, 2")
         .withClaimPeriodEnd("2020, 3, 30")
 

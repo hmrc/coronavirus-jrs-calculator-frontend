@@ -24,8 +24,8 @@ import models.NicCategory.Payable
 import models.PayMethod.Regular
 import models.PensionStatus.DoesContribute
 import models.TopUpStatus.ToppedUp
-import models.{AnnualPayAmount, CylbPayment, FurloughPartialPay, FurloughStatus, NicCategory, PayMethod, PaymentFrequency, PensionStatus, Salary, TopUpStatus, UserAnswers}
-import pages._
+import models.{AdditionalPayment, AnnualPayAmount, CylbPayment, FurloughPartialPay, FurloughStatus, NicCategory, PayMethod, PaymentFrequency, PensionStatus, Salary, TopUpPayment, TopUpPeriod, TopUpStatus, UserAnswers}
+import pages.{TopUpPeriodsPage, _}
 import play.api.libs.json.Writes
 import queries.Settable
 
@@ -89,6 +89,18 @@ trait UserAnswersBuilder extends CoreTestDataBuilder {
     def withToppedUpStatus(status: TopUpStatus = ToppedUp): UserAnswers =
       userAnswers.setValue(TopUpStatusPage, status)
 
+    def withAdditionalPaymentPeriods(dates: List[String]): UserAnswers =
+      userAnswers.setValue(AdditionalPaymentPeriodsPage, dates.map(_.toLocalDate))
+
+    def withAdditionalPaymentAmount(payment: AdditionalPayment, idx: Option[Int]): UserAnswers =
+      userAnswers.setValue(AdditionalPaymentAmountPage, payment, idx)
+
+    def withTopUpPeriods(periods: List[TopUpPeriod]): UserAnswers =
+      userAnswers.setValue(TopUpPeriodsPage, periods)
+
+    def withTopUpAmount(payment: TopUpPayment, idx: Option[Int]): UserAnswers =
+      userAnswers.setValue(TopUpAmountPage, payment, idx)
+
     def withPayDate(dates: List[String]): UserAnswers = {
       val zipped: List[(String, Int)] = dates.zip(1 to dates.length)
 
@@ -126,7 +138,7 @@ trait UserAnswersBuilder extends CoreTestDataBuilder {
     }
   }
 
-  implicit class UserAnswersHelper(val userAnswers: UserAnswers) {
+  private implicit class UserAnswersHelper(val userAnswers: UserAnswers) {
     def setValue[A](page: Settable[A], value: A, idx: Option[Int] = None)(implicit writes: Writes[A]) =
       userAnswers.set(page, value, idx).success.value
   }
