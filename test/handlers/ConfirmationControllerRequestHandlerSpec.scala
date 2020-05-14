@@ -43,7 +43,7 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
 
     loadResultData(dummyUserAnswers).get.confirmationViewBreakdown mustBe ConfirmationViewBreakdown(furlough, nic, pension)
     loadResultData(dummyUserAnswers).get.confirmationMetadata must matchPattern {
-      case ConfirmationMetadata(Period(_, _),FurloughOngoing(_),Monthly, Payable, DoesContribute) =>
+      case ConfirmationMetadata(Period(_, _), FurloughOngoing(_), Monthly, Payable, DoesContribute) =>
     }
   }
 
