@@ -18,11 +18,12 @@ package handlers
 
 import base.{CoreTestDataBuilder, SpecBase}
 import models.Calculation.{FurloughCalculationResult, NicCalculationResult, PensionCalculationResult}
-import models.NicCategory.Nonpayable
-import models.PensionStatus.DoesNotContribute
-import models.{CalculationResult, UserAnswers}
+import models.NicCategory.{Nonpayable, Payable}
+import models.PaymentFrequency.Monthly
+import models.PensionStatus.{DoesContribute, DoesNotContribute}
+import models.{CalculationResult, FurloughOngoing, Period, UserAnswers}
 import utils.CoreTestData
-import viewmodels.ConfirmationViewBreakdown
+import viewmodels.{ConfirmationMetadata, ConfirmationViewBreakdown}
 
 class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestData with CoreTestDataBuilder {
 
@@ -40,9 +41,10 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
     val pension =
       CalculationResult(PensionCalculationResult, 65.04, List(periodBreakdownOne(32.64), periodBreakdownTwo(32.40)))
 
-    val expected = ConfirmationViewBreakdown(furlough, nic, pension)
-
-    loadResultData(dummyUserAnswers).get.confirmationViewBreakdown mustBe expected //TODO metadata to be tested
+    loadResultData(dummyUserAnswers).get.confirmationViewBreakdown mustBe ConfirmationViewBreakdown(furlough, nic, pension)
+    loadResultData(dummyUserAnswers).get.confirmationMetadata must matchPattern {
+      case ConfirmationMetadata(Period(_, _),FurloughOngoing(_),Monthly, Payable, DoesContribute) =>
+    }
   }
 
   "for a given user answer calculate furlough and empty results for ni and pension if do not apply" in new ConfirmationControllerRequestHandler {
