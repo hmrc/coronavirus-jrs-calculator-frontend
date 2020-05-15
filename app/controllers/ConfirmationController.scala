@@ -44,7 +44,7 @@ class ConfirmationController @Inject()(
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     loadResultData(request.userAnswers).fold(Future.successful(Redirect(routes.ErrorController.somethingWentWrong())))(data => {
       auditService.sendCalculationPerformed(request.userAnswers, data.confirmationViewBreakdown)
-      Future.successful(Ok(view(data.confirmationMetadata, data.confirmationViewBreakdown, config.calculatorVersion)))
+      Future.successful(Ok(view(data.confirmationViewBreakdown, data.claimPeriod, config.calculatorVersion)))
     })
   }
 }

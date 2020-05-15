@@ -16,12 +16,12 @@
 
 package handlers
 
-import models.{CalculationResult, UserAnswers}
+import models.{FurloughCalculationResult, UserAnswers}
 import services.{FurloughCalculator, ReferencePayCalculator}
 
 trait FurloughCalculationHandler extends FurloughCalculator with ReferencePayCalculator with JourneyBuilder {
 
-  def handleCalculationFurlough(userAnswers: UserAnswers): Option[CalculationResult] =
+  def handleCalculationFurlough(userAnswers: UserAnswers): Option[FurloughCalculationResult] =
     for {
       questions <- extractBranchingQuestions(userAnswers)
       data      <- journeyData(define(questions), userAnswers)

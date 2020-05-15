@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package viewmodels
+package models
 
-import models.{FurloughCalculationResult, NicCalculationResult, PensionCalculationResult, Period}
-
-case class ConfirmationDataResult(confirmationViewBreakdown: ConfirmationViewBreakdown, claimPeriod: Period)
-
-case class ConfirmationViewBreakdown(furlough: FurloughCalculationResult, nic: NicCalculationResult, pension: PensionCalculationResult)
+case class FurloughCalculationResult(total: BigDecimal, periodBreakdowns: Seq[FurloughBreakdown])
+case class NicCalculationResult(total: BigDecimal, periodBreakdowns: Seq[NicBreakdown])
+case class PensionCalculationResult(total: BigDecimal, periodBreakdowns: Seq[PensionBreakdown])

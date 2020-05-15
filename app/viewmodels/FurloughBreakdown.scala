@@ -16,8 +16,15 @@
 
 package viewmodels
 
-import models.{FurloughCalculationResult, NicCalculationResult, PensionCalculationResult, Period}
+import models.{Amount, FullPeriod, FurloughCap, PartialPeriod, Periods}
 
-case class ConfirmationDataResult(confirmationViewBreakdown: ConfirmationViewBreakdown, claimPeriod: Period)
+case class FurloughBreakdown(employeesWages: Amount, furloughCap: FurloughCap, furloughGrant: Amount, period: Periods) {
+  def fullPeriodDays: Int = period.period.countDays
 
-case class ConfirmationViewBreakdown(furlough: FurloughCalculationResult, nic: NicCalculationResult, pension: PensionCalculationResult)
+  def furloughDays: Int = period match {
+    case fp: FullPeriod    => fp.period.countDays
+    case pp: PartialPeriod => pp.partial.countDays
+  }
+
+  def isCapped: Boolean = (employeesWages.value * 0.8) > furloughCap.value
+}

@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package viewmodels
+@this()
 
-import models.{FurloughCalculationResult, NicCalculationResult, PensionCalculationResult, Period}
+@(msg: String, classes: Option[String] = None)(implicit messages: Messages)
 
-case class ConfirmationDataResult(confirmationViewBreakdown: ConfirmationViewBreakdown, claimPeriod: Period)
-
-case class ConfirmationViewBreakdown(furlough: FurloughCalculationResult, nic: NicCalculationResult, pension: PensionCalculationResult)
+<h3 class="@classes.getOrElse("govuk-heading-m")">@messages(msg)</h3>

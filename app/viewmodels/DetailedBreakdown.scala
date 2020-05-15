@@ -16,8 +16,10 @@
 
 package viewmodels
 
-import models.{FurloughCalculationResult, NicCalculationResult, PensionCalculationResult, Period}
+import models.Periods
+import views.ViewUtils._
 
-case class ConfirmationDataResult(confirmationViewBreakdown: ConfirmationViewBreakdown, claimPeriod: Period)
-
-case class ConfirmationViewBreakdown(furlough: FurloughCalculationResult, nic: NicCalculationResult, pension: PensionCalculationResult)
+case class DetailedBreakdown(period: Periods, furlough: FurloughBreakdown) {
+  def payPeriodStart: String = dateToStringWithoutYear(period.period.start)
+  def payPeriodEnd: String = dateToString(period.period.end)
+}

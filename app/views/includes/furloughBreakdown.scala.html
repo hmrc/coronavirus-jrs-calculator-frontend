@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package viewmodels
+@import viewmodels.FurloughBreakdown
 
-import models.{FurloughCalculationResult, NicCalculationResult, PensionCalculationResult, Period}
+@this(h4: components.h4,
+      p: components.p)
 
-case class ConfirmationDataResult(confirmationViewBreakdown: ConfirmationViewBreakdown, claimPeriod: Period)
+@(breakdown: FurloughBreakdown)(implicit messages: Messages) {
 
-case class ConfirmationViewBreakdown(furlough: FurloughCalculationResult, nic: NicCalculationResult, pension: PensionCalculationResult)
+    <ol class="govuk-list govuk-list--number">
+        <li>@messages("furloughBreakdown.l1", breakdown.employeesWages)</li>
+        <li>@messages("furloughBreakdown.l2", breakdown.fullPeriodDays)</li>
+        <li>@messages("furloughBreakdown.l3", breakdown.furloughDays)</li>
+        <li>@messages("furloughBreakdown.l4")</li>
+    </ol>
+
+    @p(Html(messages("furloughBreakdown.p1", breakdown.furloughGrant)))
+}
