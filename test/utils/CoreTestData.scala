@@ -116,10 +116,7 @@ trait CoreTestData extends UserAnswersBuilder {
   lazy val variableFourweekly: UserAnswers =
     variablePartialWith10KAnnualPayment
       .withPaymentFrequency(FourWeekly)
-      .withEmployeeStartDate("2019-12-01")
       .withFurloughEndDate("2020-04-26")
-      .withClaimPeriodStart("2020-03-01")
-      .withClaimPeriodEnd("2020-03-21")
       .withLastPayDate("2020-04-25")
       .withFurloughStartDate("2020-03-10")
       .withPayDate(List("2020-02-29", "2020-03-28", "2020-04-25"))
