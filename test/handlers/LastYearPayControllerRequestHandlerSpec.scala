@@ -35,9 +35,7 @@ class LastYearPayControllerRequestHandlerSpec extends SpecBase with CoreTestData
   }
 
   "get the pay dates in previous year for weekly" in new LastYearPayControllerRequestHandler {
-    val userAnswers = variableWeekly()
-
-    val payDates = getPayDates(userAnswers).get
+    val payDates = getPayDates(variableWeekly).get
 
     val expected = Seq(
       LocalDate.of(2019, 3, 2),
@@ -50,7 +48,7 @@ class LastYearPayControllerRequestHandlerSpec extends SpecBase with CoreTestData
   }
 
   "get the pay dates in previous year for weekly with later pay date" in new LastYearPayControllerRequestHandler {
-    val userAnswers = variableWeekly("2020-03-28")
+    val userAnswers = variableWeekly.withLastPayDate("2020-03-28")
 
     val payDates = getPayDates(userAnswers).get
 
