@@ -14,12 +14,12 @@
  * limitations under the License.
  *@
 
-@import viewmodels.FurloughBreakdown
+@import viewmodels.DetailedFurloughBreakdown
 
 @this(h4: components.h4,
       p: components.p)
 
-@(breakdown: FurloughBreakdown)(implicit messages: Messages) {
+@(breakdown: DetailedFurloughBreakdown)(implicit messages: Messages) {
 
     <ol class="govuk-list govuk-list--number">
         <li>@messages("furloughBreakdown.l1", breakdown.employeesWages)</li>

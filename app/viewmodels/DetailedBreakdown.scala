@@ -19,7 +19,7 @@ package viewmodels
 import models.Periods
 import views.ViewUtils._
 
-case class DetailedBreakdown(period: Periods, furlough: FurloughBreakdown) {
+case class DetailedBreakdown(period: Periods, furlough: DetailedFurloughBreakdown) {
   def payPeriodStart: String = dateToStringWithoutYear(period.period.start)
   def payPeriodEnd: String = dateToString(period.period.end)
 }
