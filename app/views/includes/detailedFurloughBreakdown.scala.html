@@ -19,7 +19,9 @@
 @this(h4: components.h4,
       p: components.p)
 
-@(breakdown: DetailedFurloughBreakdown)(implicit messages: Messages) {
+@(breakdown: DetailedFurloughBreakdown)(implicit messages: Messages)
+
+    @h4(messages("furloughBreakdown.h4"))
 
     <ol class="govuk-list govuk-list--number">
         <li>@messages("furloughBreakdown.l1", breakdown.formattedWages)</li>
@@ -29,4 +31,3 @@
     </ol>
 
     @p(Html(messages("furloughBreakdown.p1", breakdown.formattedGrant)))
-}

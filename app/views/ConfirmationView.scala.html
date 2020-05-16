@@ -21,11 +21,12 @@
         govukLayout: templates.GovukLayoutWrapper,
         h1: components.h1,
         h2: components.h2,
+        h3: components.h3,
         p: components.p,
         confirmation: components.confirmation,
         button: components.button,
         details: components.details,
-        furloughBreakdown: includes.furloughBreakdown,
+        detailedFurloughBreakdown: includes.detailedFurloughBreakdown,
         link: components.link,
         appConfig: config.FrontendAppConfig
 )
@@ -72,8 +73,9 @@
     @details(
         summaryText = Messages("confirmation.breakdown.details")
     ) {
-        @for((furlough, nic, pension) <- cvb.zippedBreakdowns) {
-            @furloughBreakdown(furlough.toDetailedFurloughBreakdown)
+        @for(detailedBreakdown <- cvb.detailedBreakdowns) {
+            @h3(Messages("detailedBreakdown.h3", detailedBreakdown.payPeriodStart, detailedBreakdown.payPeriodEnd))
+            @detailedFurloughBreakdown(detailedBreakdown.furlough)
         }
     }
 

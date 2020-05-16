@@ -23,4 +23,11 @@ case class ConfirmationDataResult(confirmationViewBreakdown: ConfirmationViewBre
 case class ConfirmationViewBreakdown(furlough: FurloughCalculationResult, nic: NicCalculationResult, pension: PensionCalculationResult) {
   def zippedBreakdowns: Seq[(FurloughBreakdown, NicBreakdown, PensionBreakdown)] =
     (furlough.periodBreakdowns, nic.periodBreakdowns, pension.periodBreakdowns).zipped.toList
+
+  def detailedBreakdowns: Seq[DetailedBreakdown] = zippedBreakdowns map { breakdowns =>
+    DetailedBreakdown(
+      breakdowns._1.paymentWithPeriod.periodWithPaymentDate.period,
+      breakdowns._1.toDetailedFurloughBreakdown
+    )
+  }
 }
