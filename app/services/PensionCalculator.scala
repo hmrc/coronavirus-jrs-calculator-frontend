@@ -36,7 +36,7 @@ trait PensionCalculator extends FurloughCapCalculator with CommonCalculationServ
     PensionCalculationResult(pensionBreakdowns.map(_.grant.value).sum, pensionBreakdowns)
   }
 
-  private def calculatePartialPeriodPension(
+  protected def calculatePartialPeriodPension(
     pensionStatus: PensionStatus,
     frequency: PaymentFrequency,
     furloughPayment: Amount,

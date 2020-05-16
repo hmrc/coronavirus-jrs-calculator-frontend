@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBase}
 import models.Amount._
-import models.NicCategory.Payable
+import models.NicCategory.{Nonpayable, Payable}
 import models.PaymentFrequency.{FourWeekly, Monthly}
 import models.{AdditionalPayment, Amount, FullPeriodCap, PartialPeriodCap, PartialPeriodNicBreakdown, PaymentWithPartialPeriod, TopUpPayment}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -58,7 +58,7 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with Core
 
   forAll(partialPeriodScenarios) { (frequency, furloughGrant, payment, expectedGrant) =>
     s"Calculate grant for a partial period with Payment Frequency: $frequency," +
-      s"a PaymentDate: ${payment.periodWithPaymentDate.paymentDate} and a Gross Pay: ${payment.furloughPayment.value}" in new NicCalculator {
+      s"a PaymentDate: ${payment.periodWithPaymentDate.paymentDate} and a Furlough Grant: ${furloughGrant.value}" in new NicCalculator {
       val expected = PartialPeriodNicBreakdown(expectedGrant, Amount(0.0), Amount(0.0), payment)
 
       calculatePartialPeriodNic(Payable, frequency, furloughGrant, payment, None, None) mustBe expected
@@ -112,6 +112,23 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with Core
       paymentWithFullPeriod(2750.0, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"))
 
     calculateFullPeriodNic(Payable, Monthly, Amount(2200.0), payment, None, Some(Amount(300.0))).grant mustBe Amount(216.29)
+  }
+
+  "Returns 0.00 for Nic grant if not eligible for Nic grant full period" in new NicCalculator {
+    val payment =
+      paymentWithFullPeriod(2750.0, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"))
+
+    calculateFullPeriodNic(Nonpayable, Monthly, Amount(2200.0), payment, None, Some(Amount(300.0))).grant mustBe Amount(0.00)
+  }
+
+  "Returns 0.00 for Nic grant if not eligible for Nic grant partial period" in new NicCalculator {
+    val payment: PaymentWithPartialPeriod =
+      paymentWithPartialPeriod(
+        2200.0,
+        900.0,
+        partialPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-23", "2020-03-31", "2020-03-31"))
+
+    calculatePartialPeriodNic(Nonpayable, Monthly, Amount(720.0), payment, None, None).grant mustBe Amount(0.00)
   }
 
   private lazy val partialPeriodScenarios = Table(
