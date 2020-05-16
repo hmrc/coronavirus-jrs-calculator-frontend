@@ -16,6 +16,8 @@
 
 package models
 
+import viewmodels.DetailedFurloughBreakdown
+
 sealed trait PeriodBreakdown {
   val grant: Amount
   val paymentWithPeriod: PaymentWithPeriod
@@ -61,3 +63,15 @@ final case class FullPeriodPensionBreakdown(grant: Amount, paymentWithPeriod: Pa
 
 final case class PartialPeriodPensionBreakdown(grant: Amount, paymentWithPeriod: PaymentWithPartialPeriod)
     extends PartialPeriodBreakdown with PensionBreakdown
+
+object FurloughBreakdown {
+  implicit class DetailedBreakdownTransformer(breakdown: FurloughBreakdown) {
+    def toDetailedFurloughBreakdown =
+      DetailedFurloughBreakdown(
+        breakdown.paymentWithPeriod.furloughPayment,
+        breakdown.furloughCap,
+        breakdown.grant,
+        breakdown.paymentWithPeriod.periodWithPaymentDate.period
+      )
+  }
+}

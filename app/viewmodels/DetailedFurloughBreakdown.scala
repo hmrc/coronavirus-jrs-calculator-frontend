@@ -27,4 +27,8 @@ case class DetailedFurloughBreakdown(employeesWages: Amount, furloughCap: Furlou
   }
 
   def isCapped: Boolean = (employeesWages.value * 0.8) > furloughCap.value
+
+  def formattedWages: String = employeesWages.value.formatted("%.2f")
+
+  def formattedGrant: String = furloughGrant.value.formatted("%.2f")
 }

@@ -25,6 +25,7 @@
         confirmation: components.confirmation,
         button: components.button,
         details: components.details,
+        furloughBreakdown: includes.furloughBreakdown,
         link: components.link,
         appConfig: config.FrontendAppConfig
 )
@@ -71,7 +72,9 @@
     @details(
         summaryText = Messages("confirmation.breakdown.details")
     ) {
-        <p>TODO</p>
+        @for((furlough, nic, pension) <- cvb.zippedBreakdowns) {
+            @furloughBreakdown(furlough.toDetailedFurloughBreakdown)
+        }
     }
 
     @h2(Html(messages("confirmation.nextSteps.heading")), classes = Some("govuk-heading-m"))

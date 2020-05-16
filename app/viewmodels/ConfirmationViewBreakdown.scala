@@ -16,8 +16,11 @@
 
 package viewmodels
 
-import models.{FurloughCalculationResult, NicCalculationResult, PensionCalculationResult, Period}
+import models.{FurloughBreakdown, FurloughCalculationResult, NicBreakdown, NicCalculationResult, PensionBreakdown, PensionCalculationResult, Period}
 
 case class ConfirmationDataResult(confirmationViewBreakdown: ConfirmationViewBreakdown, claimPeriod: Period)
 
-case class ConfirmationViewBreakdown(furlough: FurloughCalculationResult, nic: NicCalculationResult, pension: PensionCalculationResult)
+case class ConfirmationViewBreakdown(furlough: FurloughCalculationResult, nic: NicCalculationResult, pension: PensionCalculationResult) {
+  def zippedBreakdowns: Seq[(FurloughBreakdown, NicBreakdown, PensionBreakdown)] =
+    (furlough.periodBreakdowns, nic.periodBreakdowns, pension.periodBreakdowns).zipped.toList
+}

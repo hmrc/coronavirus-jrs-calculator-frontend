@@ -22,11 +22,11 @@
 @(breakdown: DetailedFurloughBreakdown)(implicit messages: Messages) {
 
     <ol class="govuk-list govuk-list--number">
-        <li>@messages("furloughBreakdown.l1", breakdown.employeesWages)</li>
+        <li>@messages("furloughBreakdown.l1", breakdown.formattedWages)</li>
         <li>@messages("furloughBreakdown.l2", breakdown.fullPeriodDays)</li>
         <li>@messages("furloughBreakdown.l3", breakdown.furloughDays)</li>
         <li>@messages("furloughBreakdown.l4")</li>
     </ol>
 
-    @p(Html(messages("furloughBreakdown.p1", breakdown.furloughGrant)))
+    @p(Html(messages("furloughBreakdown.p1", breakdown.formattedGrant)))
 }
