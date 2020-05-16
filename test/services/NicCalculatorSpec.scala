@@ -61,18 +61,20 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with Core
       s"a PaymentDate: ${payment.periodWithPaymentDate.paymentDate} and a Gross Pay: ${payment.furloughPayment.value}" in new NicCalculator {
       val expected = PartialPeriodNicBreakdown(expectedGrant, Amount(0.0), Amount(0.0), payment)
 
-      calculatePartialPeriodNic(Payable, frequency, payment.furloughPayment, payment, None, None) mustBe expected
+      calculatePartialPeriodNic(Payable, frequency, furloughGrant, payment, None, None) mustBe expected
     }
   }
 
-  "For a partial period and variable pay calculate nic grant" in new NicCalculator {
+  "For a partial period and variable average daily pay of £50.00 calculate nic grant" in new NicCalculator {
     val payment: PaymentWithPartialPeriod =
-      paymentWithPartialPeriod(0.0, 0.0, partialPeriodWithPaymentDate("2020-03-01", "2020-03-28", "2020-03-20", "2020-03-28", "2020-03-28"))
+      paymentWithPartialPeriod(
+        950.0,
+        450.0,
+        partialPeriodWithPaymentDate("2020-03-01", "2020-03-28", "2020-03-20", "2020-03-28", "2020-03-28"))
 
-//    val expected = PartialPeriodPensionBreakdown(Amount(1124.23), Amount(39.30), PartialPeriodWithPaymentDate(period, paymentDate))
-    val expected = partialPeriodPensionBreakdown(39.30, payment)
+    val expected = partialPeriodNicBreakdown(28.66, 0.00, 0.00, payment)
 
-    calculatePartialPeriodNic(Payable, FourWeekly, Amount(1124.23), payment, None, None) mustBe expected
+    calculatePartialPeriodNic(Payable, FourWeekly, Amount(360.0), payment, None, None) mustBe expected
   }
 
   "calculates Nic with additional payment and 0.0 top up for a partial period" in new NicCalculator {
@@ -118,7 +120,7 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with Core
       Monthly,
       Amount(960.00),
       paymentWithPartialPeriod(
-        1200.0,
+        1200.00,
         1200.00,
         partialPeriodWithPaymentDate("2020-04-01", "2020-04-30", "2020-04-16", "2020-04-30", "2020-04-30")),
       Amount(98.53)
