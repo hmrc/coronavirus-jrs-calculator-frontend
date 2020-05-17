@@ -89,7 +89,7 @@ class FurloughCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with
           FullPeriod(Period(LocalDate.of(2020, 3, 15), LocalDate.of(2020, 4, 15))),
           PaymentDate(LocalDate.of(2020, 4, 30)))
       ),
-      PeriodSpansMonthCap(2621.15, 17, 3, 15, 4),
+      PeriodSpansMonthCap(2621.15, 17, 3, 80.65, 15, 4, 83.34),
       Amount(2621.15)),
     (
       Weekly,
@@ -166,7 +166,7 @@ class FurloughCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with
           PaymentDate(LocalDate.of(2020, 3, 31))
         )
       ),
-      PartialPeriodCap(1371.05, 17, 3),
+      PartialPeriodCap(1371.05, 17, 3, 80.65),
       Amount(658.06)),
     (
       paymentWithPartialPeriod(
@@ -179,7 +179,7 @@ class FurloughCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with
           PaymentDate(LocalDate.of(2020, 3, 31))
         )
       ),
-      PartialPeriodCap(1371.05, 17, 3),
+      PartialPeriodCap(1371.05, 17, 3, 80.65),
       Amount(1371.05)),
     (
       paymentWithPartialPeriod(
@@ -192,7 +192,7 @@ class FurloughCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with
           PaymentDate(LocalDate.of(2020, 3, 31))
         )
       ),
-      PartialPeriodCap(1129.1, 14, 3),
+      PartialPeriodCap(1129.1, 14, 3, 80.65),
       Amount(722.58))
   )
 }

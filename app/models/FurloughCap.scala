@@ -28,14 +28,21 @@ object FullPeriodCap {
   implicit val defaultFormat: Format[FullPeriodCap] = Json.format
 }
 
-case class PeriodSpansMonthCap(value: BigDecimal, monthOneFurloughDays: Int, monthOne: Int, monthTwoFurloughDays: Int, monthTwo: Int)
+case class PeriodSpansMonthCap(
+  value: BigDecimal,
+  monthOneFurloughDays: Int,
+  monthOne: Int,
+  monthOneDaily: BigDecimal,
+  monthTwoFurloughDays: Int,
+  monthTwo: Int,
+  MonthTwoDaily: BigDecimal)
     extends FurloughCap
 
 object PeriodSpansMonthCap {
   implicit val defaultFormat: Format[PeriodSpansMonthCap] = Json.format
 }
 
-case class PartialPeriodCap(value: BigDecimal, furloughDays: Int, month: Int) extends FurloughCap
+case class PartialPeriodCap(value: BigDecimal, furloughDays: Int, month: Int, dailyCap: BigDecimal) extends FurloughCap
 
 object PartialPeriodCap {
   implicit val defaultFormat: Format[PartialPeriodCap] = Json.format

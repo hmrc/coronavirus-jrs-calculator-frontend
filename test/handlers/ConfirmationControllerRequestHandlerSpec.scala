@@ -100,7 +100,7 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
             1016.13,
             2483.87,
             partialPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 10", "2020, 3, 31", "2020, 3, 31")),
-          PartialPeriodCap(1774.30, 22, 3)
+          PartialPeriodCap(1774.30, 22, 3, 80.65)
         )
       )
     )
@@ -149,7 +149,7 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
             280.0,
             1612.44,
             partialPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 5", "2020, 3, 31", "2020, 3, 31")),
-          PartialPeriodCap(2177.55, 27, 3)
+          PartialPeriodCap(2177.55, 27, 3, 80.65)
         )
       )
     )

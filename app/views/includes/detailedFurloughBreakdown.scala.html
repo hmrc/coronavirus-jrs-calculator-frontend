@@ -15,9 +15,11 @@
  *@
 
 @import viewmodels.DetailedFurloughBreakdown
+@import views.includes.FurloughCapHelper
 
 @this(h4: components.h4,
-      p: components.p)
+      p: components.p,
+      helper: FurloughCapHelper)
 
 @(breakdown: DetailedFurloughBreakdown)(implicit messages: Messages)
 
@@ -28,6 +30,10 @@
         <li>@messages("furloughBreakdown.l2", breakdown.fullPeriodDays)</li>
         <li>@messages("furloughBreakdown.l3", breakdown.furloughDays)</li>
         <li>@messages("furloughBreakdown.l4")</li>
+        @if(breakdown.isCapped) {
+        <li>@messages("furloughBreakdown.furloughCap.l1", breakdown.furloughCap.value.formatted("%.2f")) @helper.calculationFor(breakdown.furloughCap)</li>
+        }
+
     </ol>
 
     @p(Html(messages("furloughBreakdown.p1", breakdown.formattedGrant)))

@@ -39,7 +39,7 @@ class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with Core
           1750.0,
           1750.0,
           partialPeriodWithPaymentDate("2020,4,1", "2020, 4, 30", "2020,4,1", "2020, 4, 15", "2020, 4, 30")),
-        PartialPeriodCap(1250.0, 15, 4)
+        PartialPeriodCap(1250.0, 15, 4, 83.34)
       )
     )
 
