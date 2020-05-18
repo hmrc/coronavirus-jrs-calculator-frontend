@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import controllers.actions._
 import forms.ClaimPeriodQuestionFormProvider
 import javax.inject.Inject
@@ -34,11 +35,12 @@ class ClaimPeriodQuestionController @Inject()(
   sessionRepository: SessionRepository,
   navigator: Navigator,
   identify: IdentifierAction,
+  config: FrontendAppConfig,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   formProvider: ClaimPeriodQuestionFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ClaimPeriodQuestionView
+  view: ClaimPeriodQuestionView,
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -50,7 +52,10 @@ class ClaimPeriodQuestionController @Inject()(
       case Some(value) => form.fill(value)
     }
 
-    Ok(view(preparedForm))
+    if (config.fastTrackJourneyEnabled)
+      Ok(view(preparedForm))
+    else
+      Redirect(routes.ClaimPeriodStartController.onPageLoad())
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
