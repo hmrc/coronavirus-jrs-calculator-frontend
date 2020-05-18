@@ -16,9 +16,9 @@
 
 package viewmodels
 
-import models.{FurloughBreakdown, FurloughCalculationResult, NicBreakdown, NicCalculationResult, PensionBreakdown, PensionCalculationResult, Period}
+import models.{FurloughBreakdown, FurloughCalculationResult, FurloughDates, NicBreakdown, NicCalculationResult, NicCategory, PaymentFrequency, PensionBreakdown, PensionCalculationResult, PensionStatus, Period}
 
-case class ConfirmationDataResult(confirmationViewBreakdown: ConfirmationViewBreakdown, claimPeriod: Period)
+case class ConfirmationDataResult(metaData: ConfirmationMetadata, confirmationViewBreakdown: ConfirmationViewBreakdown)
 
 case class ConfirmationViewBreakdown(furlough: FurloughCalculationResult, nic: NicCalculationResult, pension: PensionCalculationResult) {
   def zippedBreakdowns: Seq[(FurloughBreakdown, NicBreakdown, PensionBreakdown)] =
@@ -31,3 +31,10 @@ case class ConfirmationViewBreakdown(furlough: FurloughCalculationResult, nic: N
     )
   }
 }
+
+case class ConfirmationMetadata(
+  claimPeriod: Period,
+  furloughDates: FurloughDates,
+  frequency: PaymentFrequency,
+  nic: NicCategory,
+  pension: PensionStatus)

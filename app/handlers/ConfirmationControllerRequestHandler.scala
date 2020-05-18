@@ -18,17 +18,16 @@ package handlers
 
 import models.{AdditionalPayment, FurloughCalculationResult, NicCalculationResult, NicCategory, PaymentFrequency, PensionCalculationResult, PensionStatus, Period, TopUpPayment, UserAnswers}
 import services._
-import viewmodels.{ConfirmationDataResult, ConfirmationViewBreakdown}
+import viewmodels.{ConfirmationDataResult, ConfirmationMetadata, ConfirmationViewBreakdown}
 
 trait ConfirmationControllerRequestHandler
     extends FurloughCalculator with NicCalculator with PensionCalculator with JourneyBuilder with ReferencePayCalculator {
 
   def loadResultData(userAnswers: UserAnswers): Option[ConfirmationDataResult] =
     for {
-      breakdown  <- breakdown(userAnswers)
-      claimStart <- extractClaimPeriodStart(userAnswers)
-      claimEnd   <- extractClaimPeriodEnd(userAnswers)
-    } yield ConfirmationDataResult(breakdown, Period(claimStart, claimEnd))
+      breakdown <- breakdown(userAnswers)
+      metadata  <- meta(userAnswers)
+    } yield ConfirmationDataResult(metadata, breakdown)
 
   private def breakdown(userAnswers: UserAnswers): Option[ConfirmationViewBreakdown] =
     for {
@@ -41,6 +40,16 @@ trait ConfirmationControllerRequestHandler
       pensionAnswer <- extractPensionStatus(userAnswers)
       pension = calculatePension(furlough, pensionAnswer, data.frequency)
     } yield ConfirmationViewBreakdown(furlough, ni, pension)
+
+  private def meta(userAnswers: UserAnswers): Option[ConfirmationMetadata] =
+    for {
+      furloughPeriod <- extractFurloughPeriod(userAnswers)
+      claimStart     <- extractClaimPeriodStart(userAnswers)
+      claimEnd       <- extractClaimPeriodEnd(userAnswers)
+      frequency      <- extractPaymentFrequency(userAnswers)
+      nicCategory    <- extractNicCategory(userAnswers)
+      pensionStatus  <- extractPensionStatus(userAnswers)
+    } yield ConfirmationMetadata(Period(claimStart, claimEnd), furloughPeriod, frequency, nicCategory, pensionStatus)
 
   private def calculateNi(
     furloughResult: FurloughCalculationResult,

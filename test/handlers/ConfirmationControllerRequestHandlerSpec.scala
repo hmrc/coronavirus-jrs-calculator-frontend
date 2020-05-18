@@ -74,7 +74,7 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
     val expectedClaimPeriod = period("2020-03-01", "2020-04-30")
 
     loadResultData(dummyUserAnswers).get.confirmationViewBreakdown mustBe expectedBreakdown
-    loadResultData(dummyUserAnswers).get.claimPeriod mustBe expectedClaimPeriod
+    loadResultData(dummyUserAnswers).get.metaData.claimPeriod mustBe expectedClaimPeriod
   }
 
   "for a given user answer calculate furlough and empty results for ni and pension if do not apply" in new ConfirmationControllerRequestHandler {

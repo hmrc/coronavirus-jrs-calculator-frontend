@@ -16,19 +16,27 @@
 
 package controllers
 
+import java.time.LocalDate
+
 import base.{CoreTestDataBuilder, SpecBaseWithApplication}
-import models.{FullPeriodCap, FurloughCalculationResult, NicCalculationResult, PensionCalculationResult}
+import models.NicCategory.Payable
+import models.PaymentFrequency.Monthly
+import models.PensionStatus.DoesContribute
+import models.{FullPeriodCap, FurloughCalculationResult, FurloughOngoing, NicCalculationResult, PensionCalculationResult, Period}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewmodels.ConfirmationViewBreakdown
+import viewmodels.{ConfirmationMetadata, ConfirmationViewBreakdown}
 import views.html.ConfirmationView
+import views.html.ConfirmationViewWithDetailedBreakdowns
 
 class ConfirmationControllerSpec extends SpecBaseWithApplication with CoreTestDataBuilder {
 
   "Confirmation Controller" must {
 
-    "return OK and the correct view for a GET" in {
-      val application = applicationBuilder(userAnswers = Some(dummyUserAnswers)).build()
+    "return OK and the confirmation view without detailed breakdowns for a GET" in {
+      val application =
+        applicationBuilder(config = Map("confirmationWithDetailedBreakdowns.enabled" -> "false"), userAnswers = Some(dummyUserAnswers))
+          .build()
 
       val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
 
@@ -38,7 +46,25 @@ class ConfirmationControllerSpec extends SpecBaseWithApplication with CoreTestDa
 
       status(result) mustEqual OK
 
-      contentAsString(result) mustEqual view(breakdown, claimPeriod, frontendAppConfig.calculatorVersion)(request, messages).toString
+      contentAsString(result) mustEqual view(meta, breakdown, frontendAppConfig.calculatorVersion)(request, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the confirmation view with detailed breakdowns for a GET" in {
+      val application =
+        applicationBuilder(config = Map("confirmationWithDetailedBreakdowns.enabled" -> "true"), userAnswers = Some(dummyUserAnswers))
+          .build()
+
+      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[ConfirmationViewWithDetailedBreakdowns]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual view(breakdown, meta.claimPeriod, frontendAppConfig.calculatorVersion)(request, messages).toString
 
       application.stop()
     }
@@ -87,5 +113,9 @@ class ConfirmationControllerSpec extends SpecBaseWithApplication with CoreTestDa
 
   lazy val breakdown = ConfirmationViewBreakdown(furlough, nic, pension)
 
-  lazy val claimPeriod = period("2020-03-01", "2020-04-30")
+  val furloughPeriod = FurloughOngoing(LocalDate.of(2020, 3, 1))
+
+  val meta =
+    ConfirmationMetadata(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 4, 30)), furloughPeriod, Monthly, Payable, DoesContribute)
+
 }
