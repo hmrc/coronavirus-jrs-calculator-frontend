@@ -17,8 +17,7 @@
 package controllers
 
 import base.SpecBaseWithApplication
-import config.FrontendAppConfig
-import forms.{ClaimPeriodQuestionFormProvider, ClaimPeriodStartFormProvider}
+import forms.ClaimPeriodQuestionFormProvider
 import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -31,7 +30,7 @@ import play.api.test.CSRFTokenHelper._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.{ClaimPeriodQuestionView, ClaimPeriodStartView}
+import views.html.ClaimPeriodQuestionView
 
 import scala.concurrent.Future
 
@@ -46,7 +45,7 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
 
   "ClaimPeriodQuestion Controller" must {
 
-    "return OK and the claim-period-start view if feature flag is disabled for a GET" ignore {
+    "return OK and the claim-period-start view if feature flag is disabled for a GET" in {
 
       val application =
         applicationBuilder(config = Map("fastTrackJourney.enabled" -> "false"), userAnswers = Some(emptyUserAnswers)).build()
@@ -55,12 +54,8 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ClaimPeriodStartView]
-
       status(result) mustEqual SEE_OTHER
-
-//      val startFormProvider = new ClaimPeriodStartFormProvider(application.injector.instanceOf[FrontendAppConfig])
-//      contentAsString(result) mustEqual view(startFormProvider())(request, messages).toString
+      redirectLocation(result).get must include("job-retention-scheme-calculator/claim-period-start")
 
       application.stop()
     }
