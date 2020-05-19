@@ -21,9 +21,10 @@ import java.time.LocalDate
 import config.FrontendAppConfig
 import controllers.actions._
 import forms.ClaimPeriodQuestionFormProvider
-import handlers.ErrorHandler
+import handlers.{ClaimPeriodQuestionRequestHandler, ErrorHandler}
 import javax.inject.Inject
 import models.ClaimPeriodQuestion
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.{ClaimPeriodEndPage, ClaimPeriodQuestionPage, ClaimPeriodStartPage}
 import play.api.data.Form
@@ -46,7 +47,7 @@ class ClaimPeriodQuestionController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: ClaimPeriodQuestionView,
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
-    extends BaseController {
+    extends BaseController with ClaimPeriodQuestionRequestHandler {
 
   val form = formProvider()
 
@@ -65,14 +66,14 @@ class ClaimPeriodQuestionController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, claimStart, claimEnd))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(ClaimPeriodQuestionPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedAnswers))
+          value => onSubmitResult(request, value)
         )
     }
   }
+
+  private def onSubmitResult(request: DataRequest[AnyContent], value: ClaimPeriodQuestion): Future[Result] =
+    persistAnswer(request.userAnswers, value, sessionRepository.set).map(updatedAnswers =>
+      Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedAnswers)))
 
   private def onLoadResult(claimStart: LocalDate, claimEnd: LocalDate, filledForm: Form[ClaimPeriodQuestion])(
     implicit request: Request[_]): Future[Result] =
