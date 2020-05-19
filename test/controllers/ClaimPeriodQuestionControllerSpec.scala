@@ -60,9 +60,9 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
       application.stop()
     }
 
-    "return OK and the correct view for a GET" ignore {
+    "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(config = Map("fastTrackJourney.enabled" -> "true"), userAnswers = Some(emptyUserAnswers)).build()
 
       val request = FakeRequest(GET, claimPeriodQuestionRoute).withCSRFToken
 
@@ -78,11 +78,11 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
       application.stop()
     }
 
-    "populate the view correctly on a GET when the question has previously been answered" ignore {
+    "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = UserAnswers(userAnswersId).set(ClaimPeriodQuestionPage, true).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(config = Map("fastTrackJourney.enabled" -> "true"), userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, claimPeriodQuestionRoute).withCSRFToken
 
