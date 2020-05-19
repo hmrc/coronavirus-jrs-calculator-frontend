@@ -28,7 +28,7 @@ class EmployeeStartedSpec extends WordSpec with MustMatchers with ScalaCheckProp
 
     "deserialise valid values" in {
 
-      val gen = Gen.oneOf(EmployeeStarted.values.toSeq)
+      val gen = Gen.oneOf(EmployeeStarted.values)
 
       forAll(gen) { employeeStarted =>
         JsString(employeeStarted.toString).validate[EmployeeStarted].asOpt.value mustEqual employeeStarted
@@ -46,7 +46,7 @@ class EmployeeStartedSpec extends WordSpec with MustMatchers with ScalaCheckProp
 
     "serialise" in {
 
-      val gen = Gen.oneOf(EmployeeStarted.values.toSeq)
+      val gen = Gen.oneOf(EmployeeStarted.values)
 
       forAll(gen) { employeeStarted =>
         Json.toJson(employeeStarted) mustEqual JsString(employeeStarted.toString)

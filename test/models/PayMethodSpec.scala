@@ -28,7 +28,7 @@ class PayMethodSpec extends WordSpec with MustMatchers with ScalaCheckPropertyCh
 
     "deserialise valid values" in {
 
-      val gen = Gen.oneOf(PayMethod.values.toSeq)
+      val gen = Gen.oneOf(PayMethod.values)
 
       forAll(gen) { payMethod =>
         JsString(payMethod.toString).validate[PayMethod].asOpt.value mustEqual payMethod
@@ -46,7 +46,7 @@ class PayMethodSpec extends WordSpec with MustMatchers with ScalaCheckPropertyCh
 
     "serialise" in {
 
-      val gen = Gen.oneOf(PayMethod.values.toSeq)
+      val gen = Gen.oneOf(PayMethod.values)
 
       forAll(gen) { payMethod =>
         Json.toJson(payMethod) mustEqual JsString(payMethod.toString)

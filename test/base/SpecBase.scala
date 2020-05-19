@@ -16,6 +16,8 @@
 
 package base
 
-import org.scalatest.{MustMatchers, OptionValues, TryValues, WordSpec}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.{OptionValues, TryValues}
 
-trait SpecBase extends WordSpec with MustMatchers with TryValues with OptionValues
+trait SpecBase extends AnyWordSpec with Matchers with TryValues with OptionValues

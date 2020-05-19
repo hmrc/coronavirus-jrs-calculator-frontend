@@ -28,7 +28,7 @@ class FurloughPeriodQuestionSpec extends WordSpec with MustMatchers with ScalaCh
 
     "deserialise valid values" in {
 
-      val gen = Gen.oneOf(FurloughPeriodQuestion.values.toSeq)
+      val gen = Gen.oneOf(FurloughPeriodQuestion.values)
 
       forAll(gen) { furloughPeriodQuestion =>
         JsString(furloughPeriodQuestion.toString).validate[FurloughPeriodQuestion].asOpt.value mustEqual furloughPeriodQuestion
@@ -46,7 +46,7 @@ class FurloughPeriodQuestionSpec extends WordSpec with MustMatchers with ScalaCh
 
     "serialise" in {
 
-      val gen = Gen.oneOf(FurloughPeriodQuestion.values.toSeq)
+      val gen = Gen.oneOf(FurloughPeriodQuestion.values)
 
       forAll(gen) { furloughPeriodQuestion =>
         Json.toJson(furloughPeriodQuestion) mustEqual JsString(furloughPeriodQuestion.toString)

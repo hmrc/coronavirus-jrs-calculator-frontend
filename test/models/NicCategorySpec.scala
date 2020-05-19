@@ -28,7 +28,7 @@ class NicCategorySpec extends WordSpec with MustMatchers with ScalaCheckProperty
 
     "deserialise valid values" in {
 
-      val gen = Gen.oneOf(NicCategory.values.toSeq)
+      val gen = Gen.oneOf(NicCategory.values)
 
       forAll(gen) { nicCategory =>
         JsString(nicCategory.toString).validate[NicCategory].asOpt.value mustEqual nicCategory
@@ -46,7 +46,7 @@ class NicCategorySpec extends WordSpec with MustMatchers with ScalaCheckProperty
 
     "serialise" in {
 
-      val gen = Gen.oneOf(NicCategory.values.toSeq)
+      val gen = Gen.oneOf(NicCategory.values)
 
       forAll(gen) { nicCategory =>
         Json.toJson(nicCategory) mustEqual JsString(nicCategory.toString)

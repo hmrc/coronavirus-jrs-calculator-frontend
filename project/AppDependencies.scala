@@ -22,7 +22,11 @@ object AppDependencies {
     "org.pegdown"                 %  "pegdown"            % "1.6.0",
     "org.jsoup"                   %  "jsoup"              % "1.12.1",
     "com.typesafe.play"           %% "play-test"          % PlayVersion.current,
+    "com.ironcorelabs"            %% "cats-scalatest"     % "3.0.5",
     "org.mockito"                 %  "mockito-all"        % "1.10.19",
+    "com.vladsch.flexmark"        % "flexmark-all"        % "0.35.10",
+    "org.scalatestplus"           %% "scalatestplus-mockito" % "1.0.0-SNAP5",
+    "org.scalatestplus"           %% "scalatestplus-scalacheck" % "3.1.0.0-RC2",
     "org.scalacheck"              %% "scalacheck"         % "1.14.1"
   ).map(_ % Test)
 

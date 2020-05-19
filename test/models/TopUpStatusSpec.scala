@@ -28,7 +28,7 @@ class TopUpStatusSpec extends WordSpec with MustMatchers with ScalaCheckProperty
 
     "deserialise valid values" in {
 
-      val gen = Gen.oneOf(TopUpStatus.values.toSeq)
+      val gen = Gen.oneOf(TopUpStatus.values)
 
       forAll(gen) { topUpStatus =>
         JsString(topUpStatus.toString).validate[TopUpStatus].asOpt.value mustEqual topUpStatus
@@ -46,7 +46,7 @@ class TopUpStatusSpec extends WordSpec with MustMatchers with ScalaCheckProperty
 
     "serialise" in {
 
-      val gen = Gen.oneOf(TopUpStatus.values.toSeq)
+      val gen = Gen.oneOf(TopUpStatus.values)
 
       forAll(gen) { topUpStatus =>
         Json.toJson(topUpStatus) mustEqual JsString(topUpStatus.toString)

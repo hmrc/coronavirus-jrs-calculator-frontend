@@ -19,7 +19,7 @@ package pages
 import models.PaymentFrequency
 import pages.behaviours.PageBehaviours
 
-class PaymentFrequencySpec extends PageBehaviours {
+class PaymentFrequencyPageSpec extends PageBehaviours {
 
   "PaymentFrequencyPage" must {
 
