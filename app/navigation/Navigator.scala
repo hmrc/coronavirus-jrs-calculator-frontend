@@ -277,7 +277,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
   private def claimPeriodQuestionRoutes: UserAnswers => Call =
     userAnswers =>
       userAnswers.get(ClaimPeriodQuestionPage).fold(routes.ClaimPeriodQuestionController.onPageLoad()) {
-        case ClaimPeriodQuestion.ClaimOnSamePeriod      => routes.RootPageController.onPageLoad()
+        case ClaimPeriodQuestion.ClaimOnSamePeriod      => routes.FurloughPeriodQuestionController.onPageLoad()
         case ClaimPeriodQuestion.ClaimOnDifferentPeriod => routes.ClaimPeriodStartController.onPageLoad()
     }
 

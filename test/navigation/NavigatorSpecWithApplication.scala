@@ -486,7 +486,7 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication with CoreTest
         navigator.nextPage(
           ClaimPeriodQuestionPage,
           emptyUserAnswers.withClaimPeriodQuestion(ClaimOnSamePeriod)
-        ) mustBe routes.RootPageController.onPageLoad()
+        ) mustBe routes.FurloughPeriodQuestionController.onPageLoad()
 
         navigator.nextPage(
           ClaimPeriodQuestionPage,

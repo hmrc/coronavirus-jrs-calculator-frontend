@@ -130,7 +130,6 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-
       val userAnswers = dummyUserAnswers.withClaimPeriodStart(claimStart.toString).withClaimPeriodEnd(claimEnd.toString)
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
