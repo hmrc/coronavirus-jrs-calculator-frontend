@@ -16,16 +16,17 @@
 
 package pages
 
+import models.ClaimPeriodQuestion
 import pages.behaviours.PageBehaviours
 
 class ClaimPeriodQuestionPageSpec extends PageBehaviours {
 
   "ClaimPeriodQuestionPage" must {
 
-    beRetrievable[Boolean](ClaimPeriodQuestionPage)
+    beRetrievable[ClaimPeriodQuestion](ClaimPeriodQuestionPage)
 
-    beSettable[Boolean](ClaimPeriodQuestionPage)
+    beSettable[ClaimPeriodQuestion](ClaimPeriodQuestionPage)
 
-    beRemovable[Boolean](ClaimPeriodQuestionPage)
+    beRemovable[ClaimPeriodQuestion](ClaimPeriodQuestionPage)
   }
 }

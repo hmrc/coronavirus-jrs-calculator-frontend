@@ -16,15 +16,15 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import javax.inject.Inject
+import models.ClaimPeriodQuestion
 import play.api.data.Form
 
 class ClaimPeriodQuestionFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Boolean] =
+  def apply(): Form[ClaimPeriodQuestion] =
     Form(
-      "value" -> boolean("claimPeriodQuestion.error.required")
+      "value" -> enumerable[ClaimPeriodQuestion]("claimPeriodQuestion.error.required")
     )
 }

@@ -16,16 +16,20 @@
 
 package controllers
 
+import java.time.LocalDate
+
 import config.FrontendAppConfig
 import controllers.actions._
 import forms.ClaimPeriodQuestionFormProvider
+import handlers.ErrorHandler
 import javax.inject.Inject
+import models.ClaimPeriodQuestion
 import navigation.Navigator
-import pages.ClaimPeriodQuestionPage
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import pages.{ClaimPeriodEndPage, ClaimPeriodQuestionPage, ClaimPeriodStartPage}
+import play.api.data.Form
+import play.api.i18n.MessagesApi
+import play.api.mvc._
 import repositories.SessionRepository
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.ClaimPeriodQuestionView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ClaimPeriodQuestionController @Inject()(
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  navigator: Navigator,
+  val navigator: Navigator,
   identify: IdentifierAction,
   config: FrontendAppConfig,
   getData: DataRetrievalAction,
@@ -41,33 +45,40 @@ class ClaimPeriodQuestionController @Inject()(
   formProvider: ClaimPeriodQuestionFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ClaimPeriodQuestionView,
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport {
+)(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
+    extends BaseController {
 
   val form = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.get(ClaimPeriodQuestionPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    getRequiredAnswers(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStart, claimEnd) =>
+      val filledForm: Form[ClaimPeriodQuestion] =
+        request.userAnswers.get(ClaimPeriodQuestionPage).fold(form)(form.fill)
 
-    if (config.fastTrackJourneyEnabled)
-      Ok(view(preparedForm))
-    else
-      Redirect(routes.ClaimPeriodStartController.onPageLoad())
+      onLoadResult(claimStart, claimEnd, filledForm)
+    }
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ClaimPeriodQuestionPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedAnswers))
-      )
+    getRequiredAnswers(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStart, claimEnd) =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, claimStart, claimEnd))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(ClaimPeriodQuestionPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedAnswers))
+        )
+    }
   }
+
+  private def onLoadResult(claimStart: LocalDate, claimEnd: LocalDate, filledForm: Form[ClaimPeriodQuestion])(
+    implicit request: Request[_]): Future[Result] =
+    if (config.fastTrackJourneyEnabled)
+      Future.successful(Ok(view(filledForm, claimStart, claimEnd)))
+    else
+      Future.successful(Redirect(routes.ClaimPeriodStartController.onPageLoad()))
+
 }

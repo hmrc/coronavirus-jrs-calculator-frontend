@@ -16,14 +16,15 @@
 
 package controllers
 
+import java.time.LocalDate
+
 import base.SpecBaseWithApplication
 import forms.ClaimPeriodQuestionFormProvider
-import models.UserAnswers
+import models.ClaimPeriodQuestion.ClaimOnSamePeriod
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.ClaimPeriodQuestionPage
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, Call}
 import play.api.test.CSRFTokenHelper._
@@ -38,17 +39,19 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ClaimPeriodQuestionFormProvider()
-  val form = formProvider()
+  private val formProvider = new ClaimPeriodQuestionFormProvider()
+  private val form = formProvider()
+  private val claimStart = LocalDate.now
+  private val claimEnd = claimStart.plusDays(30)
 
   lazy val claimPeriodQuestionRoute = routes.ClaimPeriodQuestionController.onPageLoad().url
 
   "ClaimPeriodQuestion Controller" must {
 
-    "return OK and the claim-period-start view if feature flag is disabled for a GET" in {
+    "redirect to claim-period-start view if feature flag is disabled for a GET" in {
 
       val application =
-        applicationBuilder(config = Map("fastTrackJourney.enabled" -> "false"), userAnswers = Some(emptyUserAnswers)).build()
+        applicationBuilder(config = Map("fastTrackJourney.enabled" -> "false"), userAnswers = Some(dummyUserAnswers)).build()
 
       val request = FakeRequest(GET, claimPeriodQuestionRoute).withCSRFToken
 
@@ -61,8 +64,8 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
     }
 
     "return OK and the correct view for a GET" in {
-
-      val application = applicationBuilder(config = Map("fastTrackJourney.enabled" -> "true"), userAnswers = Some(emptyUserAnswers)).build()
+      val userAnswers = dummyUserAnswers.withClaimPeriodStart(claimStart.toString).withClaimPeriodEnd(claimEnd.toString)
+      val application = applicationBuilder(config = Map("fastTrackJourney.enabled" -> "true"), userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, claimPeriodQuestionRoute).withCSRFToken
 
@@ -72,15 +75,17 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
 
       status(result) mustEqual OK
 
-      contentAsString(result) mustEqual
-        view(form)(request, messages).toString
+      contentAsString(result) mustEqual view(form, claimStart, claimEnd)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ClaimPeriodQuestionPage, true).success.value
+      val userAnswers = dummyUserAnswers
+        .withClaimPeriodStart(claimStart.toString)
+        .withClaimPeriodEnd(claimEnd.toString)
+        .withClaimPeriodQuestion(ClaimOnSamePeriod)
 
       val application = applicationBuilder(config = Map("fastTrackJourney.enabled" -> "true"), userAnswers = Some(userAnswers)).build()
 
@@ -93,19 +98,18 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true))(request, messages).toString
+        view(form.fill(ClaimOnSamePeriod), claimStart, claimEnd)(request, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
-
       val mockSessionRepository = mock[SessionRepository]
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(dummyUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -114,7 +118,7 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
 
       val request =
         FakeRequest(POST, claimPeriodQuestionRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+          .withFormUrlEncodedBody(("value", ClaimOnSamePeriod.toString))
 
       val result = route(application, request).value
 
@@ -127,7 +131,8 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val userAnswers = dummyUserAnswers.withClaimPeriodStart(claimStart.toString).withClaimPeriodEnd(claimEnd.toString)
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
         FakeRequest(POST, claimPeriodQuestionRoute).withCSRFToken
@@ -143,7 +148,7 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm)(request, messages).toString
+        view(boundForm, claimStart, claimEnd)(request, messages).toString
 
       application.stop()
     }

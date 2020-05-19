@@ -101,8 +101,10 @@ POST        /additional-pay-amount/:idx                      controllers.Additio
 GET         /furlough-period-question                        controllers.FurloughPeriodQuestionController.onPageLoad()
 POST        /furlough-period-question                        controllers.FurloughPeriodQuestionController.onSubmit()
 
+
 GET         /pay-period-question                             controllers.PayPeriodQuestionController.onPageLoad()
 POST        /pay-period-question                             controllers.PayPeriodQuestionController.onSubmit()
 
-GET         /claimPeriodQuestion                             controllers.ClaimPeriodQuestionController.onPageLoad()
-POST        /claimPeriodQuestion                             controllers.ClaimPeriodQuestionController.onSubmit()
+GET        /claimPeriodQuestion                              controllers.ClaimPeriodQuestionController.onPageLoad()
+POST       /claimPeriodQuestion                              controllers.ClaimPeriodQuestionController.onSubmit()
+

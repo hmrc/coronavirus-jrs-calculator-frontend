@@ -46,7 +46,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[ClaimPeriodQuestionPage.type]
-        value <- arbitrary[Boolean].map(Json.toJson(_))
+        value <- arbitrary[ClaimPeriodQuestion].map(Json.toJson(_))
       } yield (page, value)
     }
 

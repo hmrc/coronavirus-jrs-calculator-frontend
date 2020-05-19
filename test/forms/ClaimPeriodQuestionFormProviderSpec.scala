@@ -16,23 +16,23 @@
 
 package forms
 
-import forms.behaviours.BooleanFieldBehaviours
+import forms.behaviours.OptionFieldBehaviours
+import models.ClaimPeriodQuestion
 import play.api.data.FormError
 
-class ClaimPeriodQuestionFormProviderSpec extends BooleanFieldBehaviours {
+class ClaimPeriodQuestionFormProviderSpec extends OptionFieldBehaviours {
 
   val requiredKey = "claimPeriodQuestion.error.required"
-  val invalidKey = "error.boolean"
-
+  val invalidKey = "error.invalid"
   val form = new ClaimPeriodQuestionFormProvider()()
 
   ".value" must {
-
     val fieldName = "value"
 
-    behave like booleanField(
+    behave like optionsField(
       form,
       fieldName,
+      validValues = ClaimPeriodQuestion.values,
       invalidError = FormError(fieldName, invalidKey)
     )
 

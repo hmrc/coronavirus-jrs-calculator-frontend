@@ -14,24 +14,40 @@
  * limitations under the License.
  *@
 
+@import java.time.LocalDate
+@import controllers.routes._
+@import models.ClaimPeriodQuestion
+
 @this(
         govukLayout: templates.GovukLayoutWrapper,
         formHelper: FormWithCSRF,
         errorSummary: components.errorSummary,
-        yesNoRadio: components.yesNoRadio,
-        button: components.button
+        inputRadio: components.inputRadio,
+        button: components.button,
+        h1: components.h1,
+        p: components.p
 )
 
-@(form: Form[_])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], claimStart: LocalDate, claimEnd: LocalDate)(implicit request: Request[_], messages: Messages)
 
 @govukLayout(pageTitle = Some(title(form, "claimPeriodQuestion.title"))) {
 
-    @formHelper(action = ClaimPeriodQuestionController.onSubmit()) {
+    @formHelper(action = ClaimPeriodQuestionController.onSubmit(), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
-        @yesNoRadio(form, "claimPeriodQuestion.heading")
+        @h1("claimPeriodQuestion.heading")
 
-        @button("site.saveAndContinue")
+        @p(Html(messages("claimPeriodQuestion.ended.text", dateToString(claimStart), dateToString(claimEnd))))
+
+        @inputRadio(
+            form = form,
+            legend = messages("claimPeriodQuestion.heading"),
+            legendAsHeading = false,
+            classes = "govuk-visually-hidden",
+            items = ClaimPeriodQuestion.options(form)
+        )
+
+        @button("site.continue")
     }
 }
