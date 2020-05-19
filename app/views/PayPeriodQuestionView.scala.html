@@ -29,7 +29,7 @@
         p: components.p
 )
 
-@(form: Form[_], payPeriods: Iterator[Seq[LocalDate]])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], payPeriods: Seq[Period])(implicit request: Request[_], messages: Messages)
 
 @govukLayout(pageTitle = Some(title(form, "payPeriodQuestion.title"))) {
 
@@ -39,9 +39,9 @@
 
         @h1("payPeriodQuestion.heading")
 
-        @for((payPeriod, idx) <- payPeriods.zipWithIndex) {
+        @for(payPeriod <- payPeriods) {
             <ul class="govuk-list govuk-list--bullet">
-                <li>@messages("payPeriodQuestion.period.text",  if(idx == 0) dateToString(payPeriod.head) else dateToString(payPeriod.head.plusDays(1)) , dateToString(payPeriod(1)))</li>
+                <li>@messages("payPeriodQuestion.period.text",  dateToString(payPeriod.start), dateToString(payPeriod.end))</li>
             </ul>
         }
 

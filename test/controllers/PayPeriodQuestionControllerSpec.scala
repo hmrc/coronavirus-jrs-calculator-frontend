@@ -20,12 +20,15 @@ import java.time.LocalDate
 
 import base.SpecBaseWithApplication
 import forms.PayPeriodQuestionFormProvider
-import models.{PayPeriodQuestion, UserAnswers}
+import models.FurloughStatus.FurloughOngoing
+import models.PayMethod.Regular
+import models.PaymentFrequency.Monthly
+import models.{PayPeriodQuestion, Period}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{PayDatePage, PayPeriodQuestionPage}
+import pages.PayPeriodQuestionPage
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, Call}
 import play.api.test.CSRFTokenHelper._
@@ -46,20 +49,20 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
   val formProvider = new PayPeriodQuestionFormProvider()
   val form = formProvider()
 
-  private val payDate1 = LocalDate.of(2020, 3, 3)
-  private val payDate2 = LocalDate.of(2020, 3, 15)
-  private val payDate3 = LocalDate.of(2020, 4, 3)
+  val baseUserAnswers = emptyUserAnswers
+    .withClaimPeriodStart("2020, 3, 1")
+    .withClaimPeriodEnd("2020, 4, 30")
+    .withPaymentFrequency(Monthly)
+    .withPayMethod(Regular)
+    .withFurloughStatus(FurloughOngoing)
+    .withFurloughStartDate("2020, 3, 1")
+    .withLastPayDate("2020, 3, 31")
+    .withPayDate(List("2020, 2, 29", "2020, 3, 31", "2020, 4, 30"))
 
-  private val userAnswers = UserAnswers(userAnswersId)
-    .set(PayDatePage, payDate1, Some(1))
-    .success
-    .value
-    .set(PayDatePage, payDate2, Some(2))
-    .success
-    .value
-    .set(PayDatePage, payDate3, Some(3))
-    .success
-    .value
+  val payPeriods = Seq(
+    Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31)),
+    Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30))
+  )
 
   val getRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, payPeriodQuestionRoute).withCSRFToken
@@ -69,7 +72,7 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       val result = route(application, getRequest).value
 
@@ -78,14 +81,14 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, Seq(payDate1, payDate2, payDate3).sliding(2))(getRequest, messages).toString
+        view(form, payPeriods)(getRequest, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswersUpdated = userAnswers
+      val userAnswersUpdated = baseUserAnswers
         .set(PayPeriodQuestionPage, PayPeriodQuestion.values.head)
         .success
         .value
@@ -99,7 +102,7 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(PayPeriodQuestion.values.head), Seq(payDate1, payDate2, payDate3).sliding(2))(getRequest, messages).toString
+        view(form.fill(PayPeriodQuestion.values.head), payPeriods)(getRequest, messages).toString
 
       application.stop()
     }
@@ -111,7 +114,7 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
+        applicationBuilder(userAnswers = Some(baseUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -132,7 +135,7 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       val request =
         FakeRequest(POST, payPeriodQuestionRoutePost).withCSRFToken
@@ -148,7 +151,7 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, Seq(payDate1, payDate2, payDate3).sliding(2))(request, messages).toString
+        view(boundForm, payPeriods)(request, messages).toString
 
       application.stop()
     }

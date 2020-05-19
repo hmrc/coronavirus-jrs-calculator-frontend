@@ -19,12 +19,12 @@ package controllers
 import controllers.actions._
 import forms.PayPeriodQuestionFormProvider
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.{PayDatePage, PayPeriodQuestionPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.PeriodHelper
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.PayPeriodQuestionView
 
@@ -41,7 +41,7 @@ class PayPeriodQuestionController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: PayPeriodQuestionView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport {
+    extends FrontendBaseController with I18nSupport with PeriodHelper {
 
   val form = formProvider()
 
@@ -50,19 +50,14 @@ class PayPeriodQuestionController @Inject()(
       case None        => form
       case Some(value) => form.fill(value)
     }
-
-    val payDates = request.userAnswers.getList(PayDatePage)
-    Ok(view(preparedForm, payDates.sliding(2)))
+    Ok(view(preparedForm, generatePeriods(request.userAnswers.getList(PayDatePage))))
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => {
-          val payDates = request.userAnswers.getList(PayDatePage)
-          Future.successful(BadRequest(view(formWithErrors, payDates.sliding(2))))
-        },
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, generatePeriods(request.userAnswers.getList(PayDatePage))))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodQuestionPage, value))
