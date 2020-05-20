@@ -18,7 +18,9 @@ package handlers
 
 import base.SpecBase
 import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
-import play.api.libs.json.Json
+import models.FurloughPeriodQuestion.FurloughedOnDifferentPeriod
+import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage}
+import play.api.libs.json.{JsObject, Json}
 import utils.CoreTestData
 
 class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
@@ -37,5 +39,20 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
     userAnswer.data.value.values.size must be > 1
     updateJourney(userAnswer).get.id mustBe userAnswer.id
     updateJourney(userAnswer).get.data mustBe userAnswer.data
+  }
+
+  "delete all from the DB if answer is `No` to furlough period question excluding claim period" in new FastJourneyUserAnswersHandler {
+    val userAnswer = dummyUserAnswers
+      .withClaimPeriodQuestion(ClaimOnSamePeriod)
+        .withFurloughPeriodQuestion(FurloughedOnDifferentPeriod)
+
+    val expectedUserAnswersData: JsObject = emptyUserAnswers
+      .copy(id = userAnswer.id)
+      .withClaimPeriodStart(userAnswer.get(ClaimPeriodStartPage).get.toString)
+      .withClaimPeriodEnd(userAnswer.get(ClaimPeriodEndPage).get.toString).data
+
+    userAnswer.data.value.values.size must be > 2
+    updateJourney(userAnswer).get.id mustBe userAnswer.id
+    updateJourney(userAnswer).get.data mustBe expectedUserAnswersData
   }
 }

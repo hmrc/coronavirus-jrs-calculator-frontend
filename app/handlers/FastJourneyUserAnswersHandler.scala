@@ -17,16 +17,27 @@
 package handlers
 
 import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
+import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnSamePeriod}
 import models.UserAnswers
-import pages.ClaimPeriodQuestionPage
+import pages.{ClaimPeriodEndPage, ClaimPeriodQuestionPage, ClaimPeriodStartPage, FurloughPeriodQuestionPage}
 import play.api.libs.json.Json
 
 trait FastJourneyUserAnswersHandler {
 
   def updateJourney(userAnswer: UserAnswers): Option[UserAnswers] =
     userAnswer.get(ClaimPeriodQuestionPage) map {
-      case ClaimOnSamePeriod      => userAnswer
+      case ClaimOnSamePeriod      => updateWithFurloughQuestion(userAnswer).fold(userAnswer)(updated => updated)
       case ClaimOnDifferentPeriod => userAnswer.copy(data = Json.obj())
     }
 
+
+  private def updateWithFurloughQuestion(answer: UserAnswers): Option[UserAnswers] =
+    answer.get(FurloughPeriodQuestionPage) map {
+      case FurloughedOnSamePeriod => answer
+      case FurloughedOnDifferentPeriod =>
+        answer.copy(data = Json.obj(
+          ClaimPeriodStartPage.toString -> answer.get(ClaimPeriodStartPage).fold("")(v => v.toString),
+          ClaimPeriodEndPage.toString -> answer.get(ClaimPeriodEndPage).fold("")(v => v.toString)
+      ))
+    }
 }

@@ -104,6 +104,9 @@ trait UserAnswersBuilder extends CoreTestDataBuilder {
     def withClaimPeriodQuestion(claim: ClaimPeriodQuestion): UserAnswers =
       userAnswers.setValue(ClaimPeriodQuestionPage, claim)
 
+    def withFurloughPeriodQuestion(furlough: FurloughPeriodQuestion): UserAnswers =
+      userAnswers.setValue(FurloughPeriodQuestionPage, furlough)
+
     def withPayDate(dates: List[String]): UserAnswers =
       withListOfValues[String](dates, PayDatePage)
 
