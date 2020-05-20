@@ -28,31 +28,31 @@ trait UserAnswersGenerator extends TryValues {
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
     arbitrary[(PayPeriodQuestionPage.type, JsValue)] ::
-      arbitrary[(FurloughPeriodQuestionPage.type, JsValue)] ::
-      arbitrary[(ClaimPeriodQuestionPage.type, JsValue)] ::
-      arbitrary[(TopUpStatusPage.type, JsValue)] ::
-      arbitrary[(TopUpAmountPage.type, JsValue)] ::
-      arbitrary[(TopUpPeriodsPage.type, JsValue)] ::
-      arbitrary[(LastYearPayPage.type, JsValue)] ::
-      arbitrary[(LastPayDatePage.type, JsValue)] ::
-      arbitrary[(PartialPayBeforeFurloughPage.type, JsValue)] ::
-      arbitrary[(PartialPayBeforeFurloughPage.type, JsValue)] ::
-      arbitrary[(PartialPayAfterFurloughPage.type, JsValue)] ::
-      arbitrary[(AnnualPayAmountPage.type, JsValue)] ::
-      arbitrary[(EmployeeStartDatePage.type, JsValue)] ::
-      arbitrary[(EmployedStartedPage.type, JsValue)] ::
-      arbitrary[(FurloughStartDatePage.type, JsValue)] ::
-      arbitrary[(FurloughEndDatePage.type, JsValue)] ::
-      arbitrary[(FurloughStatusPage.type, JsValue)] ::
-      arbitrary[(ClaimPeriodEndPage.type, JsValue)] ::
-      arbitrary[(ClaimPeriodStartPage.type, JsValue)] ::
-      arbitrary[(PensionStatusPage.type, JsValue)] ::
-      arbitrary[(NicCategoryPage.type, JsValue)] ::
-      arbitrary[(RegularPayAmountPage.type, JsValue)] ::
-      arbitrary[(PaymentFrequencyPage.type, JsValue)] ::
-      arbitrary[(PayDatePage.type, JsValue)] ::
-      arbitrary[(PayMethodPage.type, JsValue)] ::
-      Nil
+    arbitrary[(FurloughPeriodQuestionPage.type, JsValue)] ::
+    arbitrary[(ClaimPeriodQuestionPage.type, JsValue)] ::
+    arbitrary[(TopUpStatusPage.type, JsValue)] ::
+    arbitrary[(TopUpAmountPage.type, JsValue)] ::
+    arbitrary[(TopUpPeriodsPage.type, JsValue)] ::
+    arbitrary[(LastYearPayPage.type, JsValue)] ::
+    arbitrary[(LastPayDatePage.type, JsValue)] ::
+    arbitrary[(PartialPayBeforeFurloughPage.type, JsValue)] ::
+    arbitrary[(PartialPayBeforeFurloughPage.type, JsValue)] ::
+    arbitrary[(PartialPayAfterFurloughPage.type, JsValue)] ::
+    arbitrary[(AnnualPayAmountPage.type, JsValue)] ::
+    arbitrary[(EmployeeStartDatePage.type, JsValue)] ::
+    arbitrary[(EmployedStartedPage.type, JsValue)] ::
+    arbitrary[(FurloughStartDatePage.type, JsValue)] ::
+    arbitrary[(FurloughEndDatePage.type, JsValue)] ::
+    arbitrary[(FurloughStatusPage.type, JsValue)] ::
+    arbitrary[(ClaimPeriodEndPage.type, JsValue)] ::
+    arbitrary[(ClaimPeriodStartPage.type, JsValue)] ::
+    arbitrary[(PensionStatusPage.type, JsValue)] ::
+    arbitrary[(NicCategoryPage.type, JsValue)] ::
+    arbitrary[(RegularPayAmountPage.type, JsValue)] ::
+    arbitrary[(PaymentFrequencyPage.type, JsValue)] ::
+    arbitrary[(PayDatePage.type, JsValue)] ::
+    arbitrary[(PayMethodPage.type, JsValue)] ::
+    Nil
 
   implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] = {
 
