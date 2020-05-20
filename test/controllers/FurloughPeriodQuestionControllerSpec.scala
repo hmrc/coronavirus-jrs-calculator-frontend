@@ -156,27 +156,6 @@ class FurloughPeriodQuestionControllerSpec extends SpecBaseWithApplication with 
       application.stop()
     }
 
-    "return /error and when Furlough is Ended but no FurloughEndDate saved in Mongo" in {
-
-      val userAnswersUpdated = emptyUserAnswers
-        .set(FurloughStartDatePage, furloughStart)
-        .success
-        .value
-        .set(FurloughStatusPage, FurloughEnded)
-        .success
-        .value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswersUpdated)).build()
-
-      val result = route(application, getRequest).value
-
-      status(result) mustEqual 303
-
-      redirectLocation(result).value mustEqual routes.ErrorController.somethingWentWrong().url
-
-      application.stop()
-    }
-
     "redirect to the next page when valid data is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
