@@ -18,19 +18,17 @@ package models
 
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import org.scalatest.OptionValues
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import org.scalatest.{MustMatchers, OptionValues, WordSpec}
 import play.api.libs.json.{JsError, JsString, Json}
 
-class NicCategorySpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class NicCategorySpec extends WordSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues {
 
   "NicCategory" must {
 
     "deserialise valid values" in {
 
-      val gen = Gen.oneOf(NicCategory.values)
+      val gen = Gen.oneOf(NicCategory.values.toSeq)
 
       forAll(gen) { nicCategory =>
         JsString(nicCategory.toString).validate[NicCategory].asOpt.value mustEqual nicCategory
@@ -48,7 +46,7 @@ class NicCategorySpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
 
     "serialise" in {
 
-      val gen = Gen.oneOf(NicCategory.values)
+      val gen = Gen.oneOf(NicCategory.values.toSeq)
 
       forAll(gen) { nicCategory =>
         Json.toJson(nicCategory) mustEqual JsString(nicCategory.toString)

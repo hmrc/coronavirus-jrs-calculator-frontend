@@ -18,19 +18,17 @@ package models
 
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import org.scalatest.OptionValues
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import org.scalatest.{MustMatchers, OptionValues, WordSpec}
 import play.api.libs.json.{JsError, JsString, Json}
 
-class EmployeeStartedSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class EmployeeStartedSpec extends WordSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues {
 
   "EmployeeStarted" must {
 
     "deserialise valid values" in {
 
-      val gen = Gen.oneOf(EmployeeStarted.values)
+      val gen = Gen.oneOf(EmployeeStarted.values.toSeq)
 
       forAll(gen) { employeeStarted =>
         JsString(employeeStarted.toString).validate[EmployeeStarted].asOpt.value mustEqual employeeStarted
@@ -48,7 +46,7 @@ class EmployeeStartedSpec extends AnyWordSpec with Matchers with ScalaCheckPrope
 
     "serialise" in {
 
-      val gen = Gen.oneOf(EmployeeStarted.values)
+      val gen = Gen.oneOf(EmployeeStarted.values.toSeq)
 
       forAll(gen) { employeeStarted =>
         Json.toJson(employeeStarted) mustEqual JsString(employeeStarted.toString)

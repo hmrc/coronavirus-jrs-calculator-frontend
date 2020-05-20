@@ -18,19 +18,17 @@ package models
 
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import org.scalatest.OptionValues
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import org.scalatest.{MustMatchers, OptionValues, WordSpec}
 import play.api.libs.json.{JsError, JsString, Json}
 
-class FurloughStatusSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class FurloughStatusSpec extends WordSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues {
 
   "furloughStatus" must {
 
     "deserialise valid values" in {
 
-      val gen = Gen.oneOf(FurloughStatus.values)
+      val gen = Gen.oneOf(FurloughStatus.values.toSeq)
 
       forAll(gen) { furloughOngoing =>
         JsString(furloughOngoing.toString).validate[FurloughStatus].asOpt.value mustEqual furloughOngoing
@@ -48,7 +46,7 @@ class FurloughStatusSpec extends AnyWordSpec with Matchers with ScalaCheckProper
 
     "serialise" in {
 
-      val gen = Gen.oneOf(FurloughStatus.values)
+      val gen = Gen.oneOf(FurloughStatus.values.toSeq)
 
       forAll(gen) { furloughOngoing =>
         Json.toJson(furloughOngoing) mustEqual JsString(furloughOngoing.toString)

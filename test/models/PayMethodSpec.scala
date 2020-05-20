@@ -18,19 +18,17 @@ package models
 
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import org.scalatest.OptionValues
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import org.scalatest.{MustMatchers, OptionValues, WordSpec}
 import play.api.libs.json.{JsError, JsString, Json}
 
-class PayMethodSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class PayMethodSpec extends WordSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues {
 
   "PayMethod" must {
 
     "deserialise valid values" in {
 
-      val gen = Gen.oneOf(PayMethod.values)
+      val gen = Gen.oneOf(PayMethod.values.toSeq)
 
       forAll(gen) { payMethod =>
         JsString(payMethod.toString).validate[PayMethod].asOpt.value mustEqual payMethod
@@ -48,7 +46,7 @@ class PayMethodSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChe
 
     "serialise" in {
 
-      val gen = Gen.oneOf(PayMethod.values)
+      val gen = Gen.oneOf(PayMethod.values.toSeq)
 
       forAll(gen) { payMethod =>
         Json.toJson(payMethod) mustEqual JsString(payMethod.toString)

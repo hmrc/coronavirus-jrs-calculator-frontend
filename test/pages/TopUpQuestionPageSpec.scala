@@ -16,17 +16,17 @@
 
 package pages
 
-import models.PaymentFrequency
+import models.TopUpStatus
 import pages.behaviours.PageBehaviours
 
-class PaymentFrequencySpec extends PageBehaviours {
+class TopUpStatusPageSpec extends PageBehaviours {
 
-  "PaymentFrequencyPage" must {
+  "TopUpStatusPage" must {
 
-    beRetrievable[PaymentFrequency](PaymentFrequencyPage)
+    beRetrievable[TopUpStatus](TopUpStatusPage)
 
-    beSettable[PaymentFrequency](PaymentFrequencyPage)
+    beSettable[TopUpStatus](TopUpStatusPage)
 
-    beRemovable[PaymentFrequency](PaymentFrequencyPage)
+    beRemovable[TopUpStatus](TopUpStatusPage)
   }
 }

@@ -19,7 +19,7 @@ package pages
 import models.NicCategory
 import pages.behaviours.PageBehaviours
 
-class NicCategoryPageSpec extends PageBehaviours {
+class NicCategorySpec extends PageBehaviours {
 
   "NicCategoryPage" must {
 

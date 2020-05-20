@@ -21,7 +21,7 @@ import java.time.LocalDate
 import models.{FurloughStatus, UserAnswers}
 import pages.behaviours.PageBehaviours
 
-class FurloughQuestionPageSpec extends PageBehaviours {
+class FurloughOngoingSpec extends PageBehaviours {
 
   "furloughOngoingPage" must {
 

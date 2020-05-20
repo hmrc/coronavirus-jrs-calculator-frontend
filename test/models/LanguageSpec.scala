@@ -16,12 +16,10 @@
 
 package models
 
-import org.scalatest.EitherValues
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
+import org.scalatest.{EitherValues, FreeSpec, MustMatchers}
 import play.api.mvc.PathBindable
 
-class LanguageSpec extends AnyFreeSpec with Matchers with EitherValues {
+class LanguageSpec extends FreeSpec with MustMatchers with EitherValues {
 
   "Language" - {
 

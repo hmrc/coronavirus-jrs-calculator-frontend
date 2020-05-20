@@ -18,19 +18,17 @@ package models
 
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import org.scalatest.OptionValues
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import org.scalatest.{MustMatchers, OptionValues, WordSpec}
 import play.api.libs.json.{JsError, JsString, Json}
 
-class TopUpStatusSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class TopUpStatusSpec extends WordSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues {
 
   "TopUpStatus" must {
 
     "deserialise valid values" in {
 
-      val gen = Gen.oneOf(TopUpStatus.values)
+      val gen = Gen.oneOf(TopUpStatus.values.toSeq)
 
       forAll(gen) { topUpStatus =>
         JsString(topUpStatus.toString).validate[TopUpStatus].asOpt.value mustEqual topUpStatus
@@ -48,7 +46,7 @@ class TopUpStatusSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
 
     "serialise" in {
 
-      val gen = Gen.oneOf(TopUpStatus.values)
+      val gen = Gen.oneOf(TopUpStatus.values.toSeq)
 
       forAll(gen) { topUpStatus =>
         Json.toJson(topUpStatus) mustEqual JsString(topUpStatus.toString)
