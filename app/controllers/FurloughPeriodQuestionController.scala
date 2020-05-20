@@ -16,6 +16,7 @@
 
 package controllers
 
+import controllers.actions.FeatureFlag.FastTrackJourneyFlag
 import controllers.actions._
 import forms.FurloughPeriodQuestionFormProvider
 import handlers.ErrorHandler
@@ -35,6 +36,7 @@ class FurloughPeriodQuestionController @Inject()(
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   val navigator: Navigator,
+  feature: FeatureFlagActionProvider,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
@@ -46,49 +48,51 @@ class FurloughPeriodQuestionController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswers(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
-      val preparedForm = request.userAnswers.get(FurloughPeriodQuestionPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(): Action[AnyContent] = (identify andThen feature(FastTrackJourneyFlag) andThen getData andThen requireData).async {
+    implicit request =>
+      getRequiredAnswers(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
+        val preparedForm = request.userAnswers.get(FurloughPeriodQuestionPage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
 
-      furloughStatus match {
-        case FurloughOngoing => Future.successful(Ok(view(preparedForm, furloughStart, furloughStatus, None)))
-        case FurloughEnded =>
-          getAnswer(FurloughEndDatePage) match {
-            case Some(furloughEnd) => Future.successful(Ok(view(preparedForm, furloughStart, furloughStatus, Some(furloughEnd))))
-            case None =>
-              Logger.error("expecting FurloughEndDate in mongo when its furlough ended, but not found")
-              Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-          }
+        furloughStatus match {
+          case FurloughOngoing => Future.successful(Ok(view(preparedForm, furloughStart, furloughStatus, None)))
+          case FurloughEnded =>
+            getAnswer(FurloughEndDatePage) match {
+              case Some(furloughEnd) => Future.successful(Ok(view(preparedForm, furloughStart, furloughStatus, Some(furloughEnd))))
+              case None =>
+                Logger.error("expecting FurloughEndDate in mongo when its furlough ended, but not found")
+                Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+            }
+        }
       }
-    }
   }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswers(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors =>
-            furloughStatus match {
-              case FurloughOngoing => Future.successful(BadRequest(view(formWithErrors, furloughStart, furloughStatus, None)))
-              case FurloughEnded =>
-                getAnswer(FurloughEndDatePage) match {
-                  case Some(furloughEnd) =>
-                    Future.successful(BadRequest(view(formWithErrors, furloughStart, furloughStatus, Some(furloughEnd))))
-                  case None =>
-                    Logger.error("expecting FurloughEndDate in mongo when its furlough ended, but not found")
-                    Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-                }
-          },
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(FurloughPeriodQuestionPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(FurloughPeriodQuestionPage, updatedAnswers))
-        )
-    }
+  def onSubmit(): Action[AnyContent] = (identify andThen feature(FastTrackJourneyFlag) andThen getData andThen requireData).async {
+    implicit request =>
+      getRequiredAnswers(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors =>
+              furloughStatus match {
+                case FurloughOngoing => Future.successful(BadRequest(view(formWithErrors, furloughStart, furloughStatus, None)))
+                case FurloughEnded =>
+                  getAnswer(FurloughEndDatePage) match {
+                    case Some(furloughEnd) =>
+                      Future.successful(BadRequest(view(formWithErrors, furloughStart, furloughStatus, Some(furloughEnd))))
+                    case None =>
+                      Logger.error("expecting FurloughEndDate in mongo when its furlough ended, but not found")
+                      Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+                  }
+            },
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(FurloughPeriodQuestionPage, value))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(FurloughPeriodQuestionPage, updatedAnswers))
+          )
+      }
   }
 }
