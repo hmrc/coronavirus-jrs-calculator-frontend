@@ -46,7 +46,8 @@
                 <span class="govuk-!-font-weight-bold">@messages("furloughPeriodQuestion.end")</span>
                 @furloughEnd.map(dateToString).getOrElse("")
             } else {
-                <span class="govuk-!-font-weight-bold">@messages("furloughPeriodQuestion.ongoing")</span>
+                <span class="govuk-!-font-weight-bold">@messages("furloughPeriodQuestion.end")</span>
+                @messages("furloughPeriodQuestion.ongoing")
             }
         }
 
