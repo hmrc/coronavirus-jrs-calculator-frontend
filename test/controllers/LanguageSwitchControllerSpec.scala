@@ -17,13 +17,15 @@
 package controllers
 
 import models.Language
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-class LanguageSwitchControllerSpec extends FreeSpec with MustMatchers with OptionValues with ScalaFutures {
+class LanguageSwitchControllerSpec extends AnyFreeSpec with Matchers with OptionValues with ScalaFutures {
 
   "switching language" - {
 
