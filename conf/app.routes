@@ -105,6 +105,6 @@ POST        /furlough-period-question                        controllers.Furloug
 GET         /pay-period-question                             controllers.PayPeriodQuestionController.onPageLoad()
 POST        /pay-period-question                             controllers.PayPeriodQuestionController.onSubmit()
 
-GET        /claimPeriodQuestion                              controllers.ClaimPeriodQuestionController.onPageLoad()
-POST       /claimPeriodQuestion                              controllers.ClaimPeriodQuestionController.onSubmit()
+GET        /claim-period-question                            controllers.ClaimPeriodQuestionController.onPageLoad()
+POST       /claim-period-question                            controllers.ClaimPeriodQuestionController.onSubmit()
 
