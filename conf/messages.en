@@ -513,11 +513,6 @@ whatToInclude.doNotInclude.l1.l3 = discretionary commission payments
 whatToInclude.doNotInclude.l2 = non-cash payments
 whatToInclude.doNotInclude.l3 = non-monetary benefits like benefits in kind (such as a company car) and salary sacrifice schemes that reduce taxable pay
 
-claimPeriodQuestion.title = claimPeriodQuestion
-claimPeriodQuestion.heading = claimPeriodQuestion
-claimPeriodQuestion.checkYourAnswersLabel = claimPeriodQuestion
-claimPeriodQuestion.error.required = Select yes if claimPeriodQuestion
-
 detailedBreakdown.h3 = For pay period {0} to {1}
 
 furloughBreakdown.h4 = Furlough grant
