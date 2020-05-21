@@ -30,7 +30,7 @@ import scala.annotation.tailrec
 import scala.util.Try
 import cats.implicits._
 
-trait FastJourneyUserAnswersHandler {
+trait FastJourneyUserAnswersHandler extends DataExtractor {
 
   def updateJourney(userAnswer: UserAnswers): Option[UserAnswers] =
     userAnswer.get(ClaimPeriodQuestionPage) flatMap {
@@ -59,8 +59,8 @@ trait FastJourneyUserAnswersHandler {
   private val keepClaimPeriod: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli((current: UserAnswersState) =>
     for {
       newAnswers <- Option(current.original.copy(data = Json.obj()))
-      start      <- current.original.get(ClaimPeriodStartPage)
-      end        <- current.original.get(ClaimPeriodEndPage)
+      start      <- extractClaimPeriodStart(current.original)
+      end        <- extractClaimPeriodEnd(current.original)
       withStart  <- newAnswers.set(ClaimPeriodStartPage, start).toOption
       withEnd    <- withStart.set(ClaimPeriodEndPage, end).toOption
     } yield UserAnswersState(withEnd, current.original)
@@ -68,10 +68,9 @@ trait FastJourneyUserAnswersHandler {
 
   private val keepFurloughPeriod: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli((current: UserAnswersState) =>
     for {
-      start      <- current.original.get(FurloughStartDatePage)
-      end        <- current.original.get(FurloughEndDatePage)
-      withStart  <- current.updated.set(FurloughStartDatePage, start).toOption
-      withEnd    <- withStart.set(FurloughEndDatePage, end).toOption
+      furlough   <- extractFurloughWithinClaim(current.original)
+      withStart  <- current.updated.set(FurloughStartDatePage, furlough.start).toOption
+      withEnd    <- withStart.set(FurloughEndDatePage, furlough.end).toOption
     } yield UserAnswersState(withEnd, current.original))
 
   private val keepPayPeriod: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli((current: UserAnswersState) =>
