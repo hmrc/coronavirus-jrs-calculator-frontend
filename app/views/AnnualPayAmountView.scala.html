@@ -26,7 +26,7 @@
         h1: components.h1,
         p: components.p,
         inputCurrency: components.inputCurrency,
-        details: components.details,
+        whatToInclude: includes.whatToInclude
 )
 
 @(form: Form[_], furloughStart: LocalDate)(implicit request: Request[_], messages: Messages)
@@ -41,31 +41,7 @@
         @p(Html(messages("annualPayAmount.p1")))
         @p(Html(messages("annualPayAmount.p2")))
 
-        @details(
-            summaryText = Messages("annualPayAmount.details.header")
-        ) {
-            @p(Html(messages("annualPayAmount.section1.heading")))
-            <ul class="govuk-list govuk-list--bullet">
-                <li>@messages("annualPayAmount.section1.l1")</li>
-                <li>@messages("annualPayAmount.section1.l2")</li>
-                <li>@messages("annualPayAmount.section1.l3")</li>
-                <li>@messages("annualPayAmount.section1.l4")</li>
-                <li>@messages("annualPayAmount.section1.l5")</li>
-            </ul>
-
-            @p(Html(messages("annualPayAmount.section2.heading")))
-            <ul class="govuk-list govuk-list--bullet">
-                <li>@messages("annualPayAmount.section2.l1")
-                    <ul class="govuk-list govuk-list--bullet">
-                        <li>@messages("annualPayAmount.section2.l1.l1")</li>
-                        <li>@messages("annualPayAmount.section2.l1.l2")</li>
-                        <li>@messages("annualPayAmount.section2.l1.l3")</li>
-                    </ul>
-                </li>
-                <li>@messages("annualPayAmount.section2.l2")</li>
-                <li>@messages("annualPayAmount.section2.l3")</li>
-            </ul>
-        }
+        @whatToInclude()
 
         @inputCurrency(
             form,
