@@ -25,6 +25,7 @@ import models.PayMethod.Regular
 import models.PensionStatus.DoesContribute
 import models.TopUpStatus.ToppedUp
 import models.{AdditionalPayment, AnnualPayAmount, ClaimPeriodQuestion, FurloughPartialPay, FurloughStatus, LastYearPayment, NicCategory, PayMethod, PaymentFrequency, PensionStatus, Salary, TopUpPayment, TopUpPeriod, TopUpStatus, UserAnswers}
+import models.{AdditionalPayment, AnnualPayAmount, ClaimPeriodQuestion, CylbPayment, FurloughPartialPay, FurloughPeriodQuestion, FurloughStatus, NicCategory, PayMethod, PayPeriodQuestion, PaymentFrequency, PensionStatus, Salary, TopUpPayment, TopUpPeriod, TopUpStatus, UserAnswers}
 import pages.{QuestionPage, TopUpPeriodsPage, _}
 import play.api.libs.json.Writes
 import queries.Settable
@@ -106,6 +107,9 @@ trait UserAnswersBuilder extends CoreTestDataBuilder {
 
     def withFurloughPeriodQuestion(furlough: FurloughPeriodQuestion): UserAnswers =
       userAnswers.setValue(FurloughPeriodQuestionPage, furlough)
+
+    def withPayPeriodQuestion(pay: PayPeriodQuestion): UserAnswers =
+      userAnswers.setValue(PayPeriodQuestionPage, pay)
 
     def withPayDate(dates: List[String]): UserAnswers =
       withListOfValues[String](dates, PayDatePage)

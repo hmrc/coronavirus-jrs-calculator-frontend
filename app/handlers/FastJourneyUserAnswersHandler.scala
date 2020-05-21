@@ -18,8 +18,9 @@ package handlers
 
 import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
 import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnSamePeriod}
+import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
 import models.UserAnswers
-import pages.{ClaimPeriodEndPage, ClaimPeriodQuestionPage, ClaimPeriodStartPage, FurloughPeriodQuestionPage}
+import pages.{ClaimPeriodEndPage, ClaimPeriodQuestionPage, ClaimPeriodStartPage, FurloughEndDatePage, FurloughPeriodQuestionPage, FurloughStartDatePage, PayPeriodQuestionPage}
 import play.api.libs.json.Json
 
 trait FastJourneyUserAnswersHandler {
@@ -33,11 +34,23 @@ trait FastJourneyUserAnswersHandler {
 
   private def updateWithFurloughQuestion(answer: UserAnswers): Option[UserAnswers] =
     answer.get(FurloughPeriodQuestionPage) map {
-      case FurloughedOnSamePeriod => answer
+      case FurloughedOnSamePeriod => updateWithPayQuestion(answer).fold(answer)(updated => updated)
       case FurloughedOnDifferentPeriod =>
         answer.copy(data = Json.obj(
           ClaimPeriodStartPage.toString -> answer.get(ClaimPeriodStartPage).fold("")(v => v.toString),
-          ClaimPeriodEndPage.toString -> answer.get(ClaimPeriodEndPage).fold("")(v => v.toString)
+          ClaimPeriodEndPage.toString -> answer.get(ClaimPeriodEndPage).fold("")(v => v.toString),
+      ))
+    }
+
+  private def updateWithPayQuestion(answer: UserAnswers): Option[UserAnswers] =
+    answer.get(PayPeriodQuestionPage) map {
+      case UseSamePayPeriod => answer
+      case UseDifferentPayPeriod =>
+        answer.copy(data = Json.obj(
+          ClaimPeriodStartPage.toString -> answer.get(ClaimPeriodStartPage).fold("")(v => v.toString),
+          ClaimPeriodEndPage.toString -> answer.get(ClaimPeriodEndPage).fold("")(v => v.toString),
+          FurloughStartDatePage.toString -> answer.get(FurloughStartDatePage).fold("")(v => v.toString),
+          FurloughEndDatePage.toString -> answer.get(FurloughEndDatePage).fold("")(v => v.toString)
       ))
     }
 }
