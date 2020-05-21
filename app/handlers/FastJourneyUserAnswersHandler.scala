@@ -52,7 +52,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
 
 
 
-  private val keepClaimPeriod: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli((current: UserAnswersState) =>
+  private val keepClaimPeriod: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli(current =>
     for {
       newAnswers <- Option(current.original.copy(data = Json.obj()))
       start      <- extractClaimPeriodStart(current.original)
@@ -62,14 +62,14 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
     } yield UserAnswersState(withEnd, current.original)
   )
 
-  private val keepFurloughPeriod: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli((current: UserAnswersState) =>
+  private val keepFurloughPeriod: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli(current =>
     for {
       furlough   <- extractFurloughWithinClaim(current.original)
       withStart  <- current.updated.set(FurloughStartDatePage, furlough.start).toOption
       withEnd    <- withStart.set(FurloughEndDatePage, furlough.end).toOption
     } yield UserAnswersState(withEnd, current.original))
 
-  private val keepPayPeriod: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli((current: UserAnswersState) =>
+  private val keepPayPeriod: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli(current =>
     addPayDates(current.updated, current.original.getList(PayDatePage).toList).toOption
       .map(payPeriods => UserAnswersState(payPeriods, current.original))
   )
