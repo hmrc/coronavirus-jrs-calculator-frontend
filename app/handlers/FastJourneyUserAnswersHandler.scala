@@ -16,47 +16,82 @@
 
 package handlers
 
+import java.time.LocalDate
+
 import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
 import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnSamePeriod}
 import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
 import models.UserAnswers
-import pages.{ClaimPeriodEndPage, ClaimPeriodQuestionPage, ClaimPeriodStartPage, FurloughEndDatePage, FurloughPeriodQuestionPage, FurloughStartDatePage, PayDatePage, PayPeriodQuestionPage}
+import pages._
 import play.api.libs.json.Json
+
+import scala.annotation.tailrec
+import scala.util.Try
 
 trait FastJourneyUserAnswersHandler {
 
   def updateJourney(userAnswer: UserAnswers): Option[UserAnswers] =
-    userAnswer.get(ClaimPeriodQuestionPage) map {
-      case ClaimOnSamePeriod      => updateWithFurloughQuestion(userAnswer).fold(userAnswer)(updated => updated)
-      case ClaimOnDifferentPeriod => userAnswer.copy(data = Json.obj())
+    userAnswer.get(ClaimPeriodQuestionPage) flatMap {
+      case ClaimOnSamePeriod      => updateWithFurloughQuestion(AnswerState(userAnswer, userAnswer)).map(_.updated)
+      case ClaimOnDifferentPeriod => Some(userAnswer.copy(data = Json.obj()))
     }
 
 
-  private def updateWithFurloughQuestion(answer: UserAnswers): Option[UserAnswers] =
-    answer.get(FurloughPeriodQuestionPage) map {
-      case FurloughedOnSamePeriod => updateWithPayQuestion(answer).fold(answer)(updated => updated)
-      case FurloughedOnDifferentPeriod =>
-        answer.copy(data = Json.obj(
-          ClaimPeriodStartPage.toString -> answer.get(ClaimPeriodStartPage).fold("")(v => v.toString),
-          ClaimPeriodEndPage.toString -> answer.get(ClaimPeriodEndPage).fold("")(v => v.toString),
-      ))
+  private def updateWithFurloughQuestion(answer: AnswerState): Option[AnswerState] =
+    answer.original.get(FurloughPeriodQuestionPage) match {
+      case Some(FurloughedOnSamePeriod)      => updateWithPayQuestion(answer)
+      case Some(FurloughedOnDifferentPeriod) => keepClaimPeriod(Try(answer)).toOption
+      case None => Some(answer)
     }
 
-  private def updateWithPayQuestion(answer: UserAnswers): Option[UserAnswers] =
-    answer.get(PayPeriodQuestionPage) map {
-      case UseSamePayPeriod => answer.copy(data = Json.obj(
-        ClaimPeriodStartPage.toString -> answer.get(ClaimPeriodStartPage).fold("")(v => v.toString),
-        ClaimPeriodEndPage.toString -> answer.get(ClaimPeriodEndPage).fold("")(v => v.toString),
-        FurloughStartDatePage.toString -> answer.get(FurloughStartDatePage).fold("")(v => v.toString),
-        FurloughEndDatePage.toString -> answer.get(FurloughEndDatePage).fold("")(v => v.toString),
-        PayDatePage.toString -> answer.getList(PayDatePage)
-      ))
-      case UseDifferentPayPeriod =>
-        answer.copy(data = Json.obj(
-          ClaimPeriodStartPage.toString -> answer.get(ClaimPeriodStartPage).fold("")(v => v.toString),
-          ClaimPeriodEndPage.toString -> answer.get(ClaimPeriodEndPage).fold("")(v => v.toString),
-          FurloughStartDatePage.toString -> answer.get(FurloughStartDatePage).fold("")(v => v.toString),
-          FurloughEndDatePage.toString -> answer.get(FurloughEndDatePage).fold("")(v => v.toString)
-      ))
+  private def updateWithPayQuestion(answer: AnswerState): Option[AnswerState] =
+    answer.original.get(PayPeriodQuestionPage) match {
+      case Some(UseSamePayPeriod) =>
+        (keepClaimPeriod andThen keepFurloughPeriod andThen keepPayPeriod)(Try(answer)).toOption
+      case Some(UseDifferentPayPeriod) =>
+        (keepClaimPeriod andThen keepFurloughPeriod)(Try(answer)).toOption
+      case None => Some(answer)
     }
+
+  val keepClaimPeriod: Try[AnswerState] => Try[AnswerState] = currentAnswersState =>
+    for {
+      current    <- currentAnswersState
+      newAnswers <- currentAnswersState.map(_.original.copy(data = Json.obj()))
+      start      <- Try(current.original.get(ClaimPeriodStartPage).get)
+      end        <- Try(current.original.get(ClaimPeriodEndPage).get)
+      withStart  <- newAnswers.set(ClaimPeriodStartPage, start)
+      withEnd    <- withStart.set(ClaimPeriodEndPage, end)
+    } yield AnswerState(withEnd, current.original)
+
+  val keepFurloughPeriod: Try[AnswerState] => Try[AnswerState] = currentAnswersState =>
+    for {
+      current    <- currentAnswersState
+      newAnswers <- currentAnswersState.map(_.updated)
+      start      <- Try(current.original.get(FurloughStartDatePage).get)
+      end        <- Try(current.original.get(FurloughEndDatePage).get)
+      withStart  <- newAnswers.set(FurloughStartDatePage, start)
+      withEnd    <- withStart.set(FurloughEndDatePage, end)
+    } yield AnswerState(withEnd, current.original)
+
+  val keepPayPeriod: Try[AnswerState] => Try[AnswerState] = currentAnswersState =>
+    for {
+      current    <- currentAnswersState
+      newAnswers <- currentAnswersState.map(_.updated)
+      payPeriod  <- Try(withListOfValues(newAnswers, current.original.getList(PayDatePage).toList))
+    } yield AnswerState(payPeriod, current.original)
+
+  private def withListOfValues(userAnswers: UserAnswers, answers: List[LocalDate]): UserAnswers = {
+    val zipped: List[(LocalDate, Int)] = answers.zip(1 to answers.length)
+
+    @tailrec
+    def rec(userAnswers: UserAnswers, payments: List[(LocalDate, Int)]): UserAnswers =
+      payments match {
+        case Nil => userAnswers
+        case (d: LocalDate, idx) :: tail =>
+          rec(userAnswers.setListWithInvalidation(PayDatePage, d, idx).get, tail)
+      }
+    rec(userAnswers, zipped)
+  }
 }
+
+case class AnswerState(updated: UserAnswers, original: UserAnswers)
