@@ -37,15 +37,15 @@ sealed trait FurloughBreakdown extends PeriodBreakdown {
 }
 
 sealed trait NicBreakdown extends PeriodBreakdown {
-  val topUpPay: Amount
-  val additionalPay: Amount
-  val threshold: Threshold
-  val nicCap: NicCap
+  def topUpPay: Amount
+  def additionalPay: Amount
+  def threshold: Threshold
+  def nicCap: NicCap
 }
 
 sealed trait PensionBreakdown extends PeriodBreakdown {
-  val threshold: Threshold
-  val allowance: Amount
+  def threshold: Threshold
+  def allowance: Amount
 }
 
 final case class FullPeriodFurloughBreakdown(grant: Amount, paymentWithPeriod: PaymentWithFullPeriod, furloughCap: FurloughCap)
