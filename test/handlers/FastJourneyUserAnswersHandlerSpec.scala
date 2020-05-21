@@ -16,13 +16,11 @@
 
 package handlers
 
-import java.time.LocalDate
-
 import base.SpecBase
 import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
 import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnSamePeriod}
 import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
-import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage, FurloughEndDatePage, FurloughStartDatePage, PayDatePage}
+import pages._
 import play.api.libs.json.{JsObject, Json}
 import utils.CoreTestData
 
@@ -72,7 +70,7 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
   "delete all from the DB if answer is `Yes` to claim and furlough period questions " +
   "but `No` to pay period, keeping claim&furlough period dates" in new FastJourneyUserAnswersHandler {
     val userAnswers = dummyUserAnswers
-        .withFurloughEndDate("2020-3-31")
+      .withFurloughEndDate("2020-3-31")
       .withClaimPeriodQuestion(ClaimOnSamePeriod)
       .withFurloughPeriodQuestion(FurloughedOnSamePeriod)
       .withPayPeriodQuestion(UseDifferentPayPeriod)
@@ -97,13 +95,13 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
       .withFurloughPeriodQuestion(FurloughedOnSamePeriod)
       .withPayPeriodQuestion(UseSamePayPeriod)
 
-    val expectedUserAnswersData: JsObject = emptyUserAnswers.copy(data = Json.obj(
-      ClaimPeriodStartPage.toString -> userAnswers.get(ClaimPeriodStartPage).fold("")(v => v.toString),
-      ClaimPeriodEndPage.toString -> userAnswers.get(ClaimPeriodEndPage).fold("")(v => v.toString),
-      FurloughStartDatePage.toString -> userAnswers.get(FurloughStartDatePage).fold("")(v => v.toString),
-      FurloughEndDatePage.toString -> userAnswers.get(FurloughEndDatePage).fold("")(v => v.toString),
-      PayDatePage.toString -> userAnswers.getList(PayDatePage)
-    )).data
+    val expectedUserAnswersData: JsObject = emptyUserAnswers.copy(data = Json.obj())
+      .withClaimPeriodStart(userAnswers.get(ClaimPeriodStartPage).get.toString)
+      .withClaimPeriodEnd(userAnswers.get(ClaimPeriodEndPage).get.toString)
+      .withFurloughStartDate(userAnswers.get(FurloughStartDatePage).get.toString)
+      .withFurloughEndDate(userAnswers.get(FurloughEndDatePage).get.toString)
+      .withPayDate(userAnswers.getList(PayDatePage).map(_.toString).toList)
+      .data
 
     userAnswers.data.value.values.size must be > 2
     updateJourney(userAnswers).get.id mustBe userAnswers.id
