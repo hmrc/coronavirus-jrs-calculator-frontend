@@ -16,21 +16,17 @@
 
 package handlers
 
-import java.time.LocalDate
-
 import cats.data.Kleisli
+import cats.implicits._
 import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
 import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnSamePeriod}
 import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
 import models.UserAnswers
 import pages._
 import play.api.libs.json.Json
+import utils.UserAnswersHelper
 
-import scala.annotation.tailrec
-import scala.util.Try
-import cats.implicits._
-
-trait FastJourneyUserAnswersHandler extends DataExtractor {
+trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper {
 
   def updateJourney(userAnswer: UserAnswers): Option[UserAnswers] =
     userAnswer.get(ClaimPeriodQuestionPage) flatMap {
@@ -77,18 +73,6 @@ trait FastJourneyUserAnswersHandler extends DataExtractor {
     addPayDates(current.updated, current.original.getList(PayDatePage).toList).toOption
       .map(payPeriods => UserAnswersState(payPeriods, current.original))
   )
-
-  private def addPayDates(userAnswers: UserAnswers, answers: List[LocalDate]): Try[UserAnswers] = {
-    val zipped: List[(LocalDate, Int)] = answers.zip(1 to answers.length)
-
-    def rec(userAnswers: Try[UserAnswers], dates: List[(LocalDate, Int)]): Try[UserAnswers] =
-      dates match {
-        case Nil => userAnswers
-        case (d: LocalDate, idx) :: tail =>
-          userAnswers.flatMap(answers => rec(answers.setListWithInvalidation(PayDatePage, d, idx), tail))
-      }
-    rec(Try(userAnswers), zipped)
-  }
 }
 
 case class UserAnswersState(updated: UserAnswers, original: UserAnswers)
