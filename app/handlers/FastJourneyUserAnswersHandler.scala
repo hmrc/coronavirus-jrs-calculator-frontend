@@ -20,7 +20,7 @@ import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
 import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnSamePeriod}
 import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
 import models.UserAnswers
-import pages.{ClaimPeriodEndPage, ClaimPeriodQuestionPage, ClaimPeriodStartPage, FurloughEndDatePage, FurloughPeriodQuestionPage, FurloughStartDatePage, PayPeriodQuestionPage}
+import pages.{ClaimPeriodEndPage, ClaimPeriodQuestionPage, ClaimPeriodStartPage, FurloughEndDatePage, FurloughPeriodQuestionPage, FurloughStartDatePage, PayDatePage, PayPeriodQuestionPage}
 import play.api.libs.json.Json
 
 trait FastJourneyUserAnswersHandler {
@@ -44,7 +44,13 @@ trait FastJourneyUserAnswersHandler {
 
   private def updateWithPayQuestion(answer: UserAnswers): Option[UserAnswers] =
     answer.get(PayPeriodQuestionPage) map {
-      case UseSamePayPeriod => answer
+      case UseSamePayPeriod => answer.copy(data = Json.obj(
+        ClaimPeriodStartPage.toString -> answer.get(ClaimPeriodStartPage).fold("")(v => v.toString),
+        ClaimPeriodEndPage.toString -> answer.get(ClaimPeriodEndPage).fold("")(v => v.toString),
+        FurloughStartDatePage.toString -> answer.get(FurloughStartDatePage).fold("")(v => v.toString),
+        FurloughEndDatePage.toString -> answer.get(FurloughEndDatePage).fold("")(v => v.toString),
+        PayDatePage.toString -> answer.getList(PayDatePage)
+      ))
       case UseDifferentPayPeriod =>
         answer.copy(data = Json.obj(
           ClaimPeriodStartPage.toString -> answer.get(ClaimPeriodStartPage).fold("")(v => v.toString),
