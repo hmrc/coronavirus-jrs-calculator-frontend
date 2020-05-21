@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,22 +12,25 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package handlers
+@import models.TwoPeriodCylb
 
-import models.{ClaimPeriodQuestion, UserAnswers}
-import pages.ClaimPeriodQuestionPage
+@this(
+    cylbBreakdown: cylbPeriodBreakdown,
+    p: components.p
+)
 
-import scala.concurrent.{ExecutionContext, Future}
+@(cylb: TwoPeriodCylb)(implicit messages: Messages)
 
-trait ClaimPeriodQuestionRequestHandler {
+@p(Html(messages("referencePayBreakdown.cylb.twoPeriods")))
 
-  def persistAnswer(userAnswers: UserAnswers, value: ClaimPeriodQuestion, persist: UserAnswers => Future[Boolean])(
-    implicit ec: ExecutionContext): Future[UserAnswers] =
-    for {
-      updatedAnswers <- Future.fromTry(userAnswers.set(ClaimPeriodQuestionPage, value))
-      _              <- persist(updatedAnswers)
-    } yield updatedAnswers
+@cylbBreakdown(cylb.firstPeriod)
 
-}
+@p(Html(messages("referencePayBreakdown.cylb.then")))
+
+@cylbBreakdown(cylb.secondPeriod)
+
+@p(Html(messages("referencePayBreakdown.cylb.then")))
+
+@p(Html(messages("referencePayBreakdown.cylb.addTotals", cylb.firstPeriod.referencePay.value.formatted("%.2f"), cylb.secondPeriod.referencePay.value.formatted("%.2f"))))
