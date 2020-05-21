@@ -27,22 +27,24 @@ import utils.CoreTestData
 
 class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
 
-  "delete all data from the DB if answer is `No` to claim period question" in new FastJourneyUserAnswersHandler {
+  "delete all data from the DB if answer is `No` to claim period question excluding session id" in new FastJourneyUserAnswersHandler {
     val userAnswers = dummyUserAnswers.withClaimPeriodQuestion(ClaimOnDifferentPeriod)
-    val actualUserAnswers: UserAnswers = updateJourney(userAnswers).get
+    val actualUserAnswers = updateJourney(userAnswers).get
 
     userAnswers.data.value.values.size must be > 1
-    actualUserAnswers.id mustBe userAnswers.id
-    actualUserAnswers.data mustBe Json.obj()
+    actualUserAnswers.updated.id mustBe actualUserAnswers.original.id
+    actualUserAnswers.original.data mustBe userAnswers.data
+    actualUserAnswers.updated.data mustBe Json.obj()
   }
 
   "delete nothing from the DB if answer is `Yes` to claim period question" in new FastJourneyUserAnswersHandler {
     val userAnswers = dummyUserAnswers.withClaimPeriodQuestion(ClaimOnSamePeriod)
-    val actual: UserAnswers = updateJourney(userAnswers).get
+    val actual: UserAnswersState = updateJourney(userAnswers).get
 
     userAnswers.data.value.values.size must be > 1
-    actual.id mustBe userAnswers.id
-    actual.data mustBe userAnswers.data
+    actual.original.data mustBe userAnswers.data
+    actual.updated.id mustBe userAnswers.id
+    actual.updated.data mustBe userAnswers.data
   }
 
   "delete all from the DB if answer is `No` to furlough period question excluding claim period" in new FastJourneyUserAnswersHandler {
@@ -55,11 +57,12 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
       .withClaimPeriodStart(userAnswers.get(ClaimPeriodStartPage).get.toString)
       .withClaimPeriodEnd(userAnswers.get(ClaimPeriodEndPage).get.toString).data
 
-    val actual: UserAnswers = updateJourney(userAnswers).get
+    val actual: UserAnswersState = updateJourney(userAnswers).get
 
     userAnswers.data.value.values.size must be > 2
-    actual.id mustBe userAnswers.id
-    actual.data mustBe expectedUserAnswersData
+    actual.updated.id mustBe userAnswers.id
+    actual.original.data mustBe userAnswers.data
+    actual.updated.data mustBe expectedUserAnswersData
   }
 
   "delete nothing from the DB if answer is `Yes` to furlough period question" in new FastJourneyUserAnswersHandler {
@@ -67,11 +70,12 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
       .withClaimPeriodQuestion(ClaimOnSamePeriod)
         .withFurloughPeriodQuestion(FurloughedOnSamePeriod)
 
-    val actual: UserAnswers = updateJourney(userAnswers).get
+    val actual: UserAnswersState = updateJourney(userAnswers).get
 
     userAnswers.data.value.values.size must be > 2
-    actual.id mustBe userAnswers.id
-    actual.data mustBe userAnswers.data
+    actual.updated.id mustBe userAnswers.id
+    actual.original.data mustBe userAnswers.data
+    actual.updated.data mustBe userAnswers.data
   }
 
   "delete all from the DB if answer is `Yes` to claim and furlough period questions " +
@@ -90,11 +94,12 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
       .withFurloughEndDate(userAnswers.get(FurloughEndDatePage).get.toString)
       .data
 
-    val actualUserAnswer: UserAnswers = updateJourney(userAnswers).get
+    val actualUserAnswer: UserAnswersState = updateJourney(userAnswers).get
 
     userAnswers.data.value.values.size must be > 2
-    actualUserAnswer.id mustBe userAnswers.id
-    actualUserAnswer.data mustBe expectedUserAnswersData
+    actualUserAnswer.updated.id mustBe userAnswers.id
+    actualUserAnswer.original.data mustBe userAnswers.data
+    actualUserAnswer.updated.data mustBe expectedUserAnswersData
   }
 
   "delete data from the DB if answer is `Yes` to pay period question excluding Claim,furlough and pay periods" in new FastJourneyUserAnswersHandler {
@@ -112,10 +117,10 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
       .withPayDate(userAnswers.getList(PayDatePage).map(_.toString).toList)
       .data
 
-    val actual: UserAnswers = updateJourney(userAnswers).get
+    val actual: UserAnswersState = updateJourney(userAnswers).get
 
     userAnswers.data.value.values.size must be > 2
-    actual.id mustBe userAnswers.id
-    actual.data mustBe expectedUserAnswersData
+    actual.updated.id mustBe userAnswers.id
+    actual.updated.data mustBe expectedUserAnswersData
   }
 }

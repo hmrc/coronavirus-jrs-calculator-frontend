@@ -28,10 +28,10 @@ import utils.UserAnswersHelper
 
 trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper {
 
-  def updateJourney(userAnswer: UserAnswers): Option[UserAnswers] =
+  def updateJourney(userAnswer: UserAnswers): Option[UserAnswersState] =
     userAnswer.get(ClaimPeriodQuestionPage) flatMap {
-      case ClaimOnSamePeriod      => processFurloughQuestion(UserAnswersState(userAnswer, userAnswer)).map(_.updated)
-      case ClaimOnDifferentPeriod => Some(userAnswer.copy(data = Json.obj()))
+      case ClaimOnSamePeriod      => processFurloughQuestion(UserAnswersState(userAnswer, userAnswer))
+      case ClaimOnDifferentPeriod => Some(UserAnswersState(userAnswer.copy(data = Json.obj()), userAnswer))
     }
 
   private def processFurloughQuestion(answer: UserAnswersState): Option[UserAnswersState] =
