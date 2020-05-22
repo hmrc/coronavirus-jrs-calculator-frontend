@@ -17,7 +17,7 @@
 @import config.FrontendAppConfig
 
 @this(
-    main_template: templates.GovukLayoutWrapper,
+    govukLayout: templates.GovukLayoutWrapper,
     h1: components.h1,
     h2: components.h2,
     lede: components.lede,
@@ -27,7 +27,7 @@
 
 @(problemPageUri: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(Some(titleNoForm("accessibility.title")), timeout = false) {
+@govukLayout(Some(titleNoForm("accessibility.title")), timeout = false, thisPage = None) {
 
     @h1(messages("compliant.one.heading"))
 

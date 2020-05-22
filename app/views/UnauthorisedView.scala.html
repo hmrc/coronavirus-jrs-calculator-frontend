@@ -15,13 +15,13 @@
  *@
 
 @this(
-    main_template: templates.GovukLayoutWrapper,
+        govukLayout: templates.GovukLayoutWrapper,
     h1: components.h1
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
-@main_template(Some(titleNoForm("unauthorised.title")), timeout = false) {
+@govukLayout(Some(titleNoForm("unauthorised.title")), timeout = false, thisPage = None) {
 
     @h1("unauthorised.heading")
 }

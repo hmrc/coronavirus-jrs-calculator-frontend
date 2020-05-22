@@ -18,6 +18,7 @@ package controllers
 
 import base.SpecBaseWithApplication
 import forms.PaymentFrequencyFormProvider
+import models.requests.DataRequest
 import models.{PaymentFrequency, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -68,7 +69,7 @@ class PaymentFrequencyControllerSpec extends SpecBaseWithApplication with Mockit
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form)(getRequest, messages).toString
+        view(form)(DataRequest(getRequest, userAnswersId, emptyUserAnswers), messages).toString
 
       application.stop()
     }
@@ -86,7 +87,7 @@ class PaymentFrequencyControllerSpec extends SpecBaseWithApplication with Mockit
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(PaymentFrequency.values.head))(getRequest, messages).toString
+        view(form.fill(PaymentFrequency.values.head))(DataRequest(getRequest, userAnswersId, emptyUserAnswers), messages).toString
 
       application.stop()
     }
@@ -132,7 +133,7 @@ class PaymentFrequencyControllerSpec extends SpecBaseWithApplication with Mockit
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm)(request, messages).toString
+        view(boundForm)(DataRequest(request, userAnswersId, emptyUserAnswers), messages).toString
 
       application.stop()
     }

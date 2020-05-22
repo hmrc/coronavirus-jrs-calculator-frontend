@@ -23,7 +23,7 @@
 
 @()(implicit request: Request[_], messages: Messages)
 
-@main_template(Some(titleNoForm("session_expired.title")), timeout = false) {
+@main_template(Some(titleNoForm("session_expired.title")), timeout = false, thisPage = None) {
 
     @h1(messages("session_expired.heading"))
 

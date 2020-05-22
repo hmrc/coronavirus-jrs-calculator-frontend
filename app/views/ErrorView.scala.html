@@ -15,7 +15,7 @@
  *@
 
 @this(
-        main_template: templates.GovukLayoutWrapper,
+        govukLayout: templates.GovukLayoutWrapper,
         h1: components.h1,
         p: components.p,
         button: components.button
@@ -23,7 +23,7 @@
 
 @(startAgain: Boolean = false)(implicit request: Request[_], messages: Messages)
 
-@main_template(Some(titleNoForm("errorPage.title")), timeout = false) {
+@govukLayout(Some(titleNoForm("errorPage.title")), timeout = false, thisPage = None) {
 
     @h1(messages("errorPage.heading"))
 

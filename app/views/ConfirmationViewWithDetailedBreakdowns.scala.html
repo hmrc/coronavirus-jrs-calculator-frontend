@@ -38,7 +38,7 @@
 
 @(cvb: ConfirmationViewBreakdown, claimPeriod: Period, version: String)(implicit request: Request[_], messages: Messages)
 
-@govukLayout(pageTitle = Some(titleNoForm("confirmation.title")), showBackButton = false) {
+@govukLayout(pageTitle = Some(titleNoForm("confirmation.title")), showBackButton = false, thisPage = None) {
 
     @confirmation {
 

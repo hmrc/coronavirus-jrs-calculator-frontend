@@ -15,6 +15,9 @@
  *@
 
 @import views.components.FooterLinks
+@import navigation.BackLinkImpl
+@import models.requests.DataRequest
+@import pages.Page
 
 @this(
     govukLayout: GovukLayout,
@@ -25,10 +28,11 @@
     languageSelection: components.languageSelection,
     link: components.link,
     appConfig: config.FrontendAppConfig,
-    footerLinks: FooterLinks
+    footerLinks: FooterLinks,
+    backLinkImpl: BackLinkImpl
 )
 
-@(pageTitle: Option[String] = None, timeout: Boolean = true, js: Option[Html] = None, showBackButton: Boolean = true)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
+@(pageTitle: Option[String] = None, timeout: Boolean = true, js: Option[Html] = None, showBackButton: Boolean = true, thisPage: Option[Page], currentIdx: Option[Int] = None)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 @head = {
     <script src='@controllers.routes.Assets.versioned("javascripts/gtm.js")'></script>
@@ -71,7 +75,13 @@
     @phaseBanner("beta")
 
     @if(showBackButton) {
-        @govukBackLink(BackLink(href = "#", content = Text("Back"), attributes = Map("id" -> "back-link")))
+      @thisPage.fold(govukBackLink(BackLink(href = "#", content = Text("Back"), attributes = Map("id" -> "back-link")))){ page =>
+            @if(request.isInstanceOf[DataRequest[_]]) {
+                @govukBackLink(BackLink(href = backLinkImpl.backLinkFor(page, currentIdx)(request.asInstanceOf[DataRequest[_]]), content = Text("Back"), attributes = Map("id" -> "back-link")))
+            } else {
+                @govukBackLink(BackLink(href = "#", content = Text("Back"), attributes = Map("id" -> "back-link")))
+            }
+        }
     }
 }
 
