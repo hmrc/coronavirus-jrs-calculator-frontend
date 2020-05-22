@@ -19,7 +19,7 @@ package controllers
 import controllers.actions.FeatureFlag.FastTrackJourneyFlag
 import controllers.actions._
 import forms.ClaimPeriodQuestionFormProvider
-import handlers.ErrorHandler
+import handlers.{ErrorHandler, FastJourneyUserAnswersHandler}
 import javax.inject.Inject
 import models.ClaimPeriodQuestion
 import navigation.Navigator
@@ -31,6 +31,7 @@ import repositories.SessionRepository
 import views.html.ClaimPeriodQuestionView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class ClaimPeriodQuestionController @Inject()(
   override val messagesApi: MessagesApi,
@@ -44,7 +45,7 @@ class ClaimPeriodQuestionController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: ClaimPeriodQuestionView,
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
-    extends BaseController {
+    extends BaseController with FastJourneyUserAnswersHandler {
 
   val form = formProvider()
 
@@ -69,7 +70,8 @@ class ClaimPeriodQuestionController @Inject()(
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(ClaimPeriodQuestionPage, value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedAnswers))
+                updatedJourney <- Future.fromTry(Try(updateJourney(updatedAnswers).get))
+              } yield Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedJourney.updated))
           )
       }
   }

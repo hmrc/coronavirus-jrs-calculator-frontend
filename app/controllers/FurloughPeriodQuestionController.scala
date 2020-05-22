@@ -19,7 +19,7 @@ package controllers
 import controllers.actions.FeatureFlag.FastTrackJourneyFlag
 import controllers.actions._
 import forms.FurloughPeriodQuestionFormProvider
-import handlers.ErrorHandler
+import handlers.{ErrorHandler, FastJourneyUserAnswersHandler}
 import javax.inject.Inject
 import models.{FurloughEnded, FurloughOngoing}
 import navigation.Navigator
@@ -31,6 +31,7 @@ import services.FurloughPeriodExtractor
 import views.html.FurloughPeriodQuestionView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class FurloughPeriodQuestionController @Inject()(
   override val messagesApi: MessagesApi,
@@ -44,7 +45,7 @@ class FurloughPeriodQuestionController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: FurloughPeriodQuestionView
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
-    extends BaseController with FurloughPeriodExtractor {
+    extends BaseController with FurloughPeriodExtractor with FastJourneyUserAnswersHandler {
 
   val form = formProvider()
 
@@ -82,7 +83,8 @@ class FurloughPeriodQuestionController @Inject()(
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(FurloughPeriodQuestionPage, value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(FurloughPeriodQuestionPage, updatedAnswers))
+                updatedJourney <- Future.fromTry(Try(updateJourney(updatedAnswers).get))
+              } yield Redirect(navigator.nextPage(FurloughPeriodQuestionPage, updatedJourney.updated))
           )
       }
   }

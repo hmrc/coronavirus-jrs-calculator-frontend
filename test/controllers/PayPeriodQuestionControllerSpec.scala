@@ -21,16 +21,17 @@ import java.time.LocalDate
 import base.SpecBaseWithApplication
 import controllers.actions.FeatureFlag.FastTrackJourneyFlag
 import forms.PayPeriodQuestionFormProvider
+import models.ClaimPeriodQuestion.ClaimOnSamePeriod
 import models.FurloughPeriodQuestion.FurloughedOnSamePeriod
 import models.FurloughStatus.FurloughOngoing
 import models.PayMethod.Regular
+import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
 import models.PaymentFrequency.Monthly
 import models.{PayPeriodQuestion, Period}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.PayPeriodQuestionPage
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, Call}
 import play.api.test.CSRFTokenHelper._
@@ -54,6 +55,9 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
   val baseUserAnswers = emptyUserAnswers
     .withClaimPeriodStart("2020, 3, 1")
     .withClaimPeriodEnd("2020, 4, 30")
+    .withClaimPeriodQuestion(ClaimOnSamePeriod)
+    .withFurloughPeriodQuestion(FurloughedOnSamePeriod)
+    .withPayPeriodQuestion(UseDifferentPayPeriod)
     .withPaymentFrequency(Monthly)
     .withPayMethod(Regular)
     .withFurloughStatus(FurloughOngoing)
@@ -74,7 +78,9 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
+      val application = applicationBuilder(
+        userAnswers = Some(baseUserAnswers
+          .withPayPeriodQuestion(UseSamePayPeriod))).build()
 
       val result = route(application, getRequest).value
 
@@ -89,12 +95,7 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-
-      val userAnswersUpdated = baseUserAnswers
-        .set(PayPeriodQuestionPage, PayPeriodQuestion.values.head)
-        .success
-        .value
-
+      val userAnswersUpdated = baseUserAnswers.withPayPeriodQuestion(PayPeriodQuestion.values.head)
       val application = applicationBuilder(userAnswers = Some(userAnswersUpdated)).build()
 
       val view = application.injector.instanceOf[PayPeriodQuestionView]

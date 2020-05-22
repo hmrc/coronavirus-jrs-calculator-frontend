@@ -20,7 +20,6 @@ import base.SpecBase
 import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
 import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnSamePeriod}
 import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
-import models.UserAnswers
 import pages._
 import play.api.libs.json.{JsObject, Json}
 import utils.CoreTestData
