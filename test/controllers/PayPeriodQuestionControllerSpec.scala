@@ -25,7 +25,6 @@ import models.ClaimPeriodQuestion.ClaimOnSamePeriod
 import models.FurloughPeriodQuestion.FurloughedOnSamePeriod
 import models.FurloughStatus.FurloughOngoing
 import models.PayMethod.Regular
-import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
 import models.PaymentFrequency.Monthly
 import models.{PayPeriodQuestion, Period}
 import navigation.{FakeNavigator, Navigator}
@@ -57,7 +56,6 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
     .withClaimPeriodEnd("2020, 4, 30")
     .withClaimPeriodQuestion(ClaimOnSamePeriod)
     .withFurloughPeriodQuestion(FurloughedOnSamePeriod)
-    .withPayPeriodQuestion(UseDifferentPayPeriod)
     .withPaymentFrequency(Monthly)
     .withPayMethod(Regular)
     .withFurloughStatus(FurloughOngoing)
@@ -70,17 +68,14 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
     Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30))
   )
 
-  val getRequest: FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest(GET, payPeriodQuestionRoute).withCSRFToken
-      .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
-
   "PayPeriodQuestion Controller" must {
 
     "return OK and the correct view for a GET" in {
+      val getRequest: FakeRequest[AnyContentAsEmpty.type] =
+        FakeRequest(GET, payPeriodQuestionRoute).withCSRFToken
+          .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
-      val application = applicationBuilder(
-        userAnswers = Some(baseUserAnswers
-          .withPayPeriodQuestion(UseSamePayPeriod))).build()
+      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       val result = route(application, getRequest).value
 
@@ -95,6 +90,9 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
+      val getRequest: FakeRequest[AnyContentAsEmpty.type] =
+        FakeRequest(GET, payPeriodQuestionRoute).withCSRFToken
+          .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
       val userAnswersUpdated = baseUserAnswers.withPayPeriodQuestion(PayPeriodQuestion.values.head)
       val application = applicationBuilder(userAnswers = Some(userAnswersUpdated)).build()
 
@@ -111,6 +109,9 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
     }
 
     "redirect to 404 page for a GET if FastTrackJourneyFlag is disabled" in {
+      val getRequest: FakeRequest[AnyContentAsEmpty.type] =
+        FakeRequest(GET, payPeriodQuestionRoute).withCSRFToken
+          .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
       val application = applicationBuilder(config = Map(FastTrackJourneyFlag.key -> false), userAnswers = Some(emptyUserAnswers)).build()
 
