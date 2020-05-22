@@ -50,12 +50,13 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
   "delete all from the DB if answer is `No` to furlough period question excluding claim period" in new FastJourneyUserAnswersHandler {
     val userAnswers = dummyUserAnswers
       .withClaimPeriodQuestion(ClaimOnSamePeriod)
-        .withFurloughPeriodQuestion(FurloughedOnDifferentPeriod)
+      .withFurloughPeriodQuestion(FurloughedOnDifferentPeriod)
 
     val expectedUserAnswersData: JsObject = emptyUserAnswers
       .copy(id = userAnswers.id)
       .withClaimPeriodStart(userAnswers.get(ClaimPeriodStartPage).get.toString)
-      .withClaimPeriodEnd(userAnswers.get(ClaimPeriodEndPage).get.toString).data
+      .withClaimPeriodEnd(userAnswers.get(ClaimPeriodEndPage).get.toString)
+      .data
 
     val actual: UserAnswersState = updateJourney(userAnswers).get
 
@@ -68,7 +69,7 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
   "delete nothing from the DB if answer is `Yes` to furlough period question" in new FastJourneyUserAnswersHandler {
     val userAnswers = dummyUserAnswers
       .withClaimPeriodQuestion(ClaimOnSamePeriod)
-        .withFurloughPeriodQuestion(FurloughedOnSamePeriod)
+      .withFurloughPeriodQuestion(FurloughedOnSamePeriod)
 
     val actual: UserAnswersState = updateJourney(userAnswers).get
 
@@ -109,7 +110,8 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
       .withFurloughPeriodQuestion(FurloughedOnSamePeriod)
       .withPayPeriodQuestion(UseSamePayPeriod)
 
-    val expectedUserAnswersData: JsObject = emptyUserAnswers.copy(data = Json.obj())
+    val expectedUserAnswersData: JsObject = emptyUserAnswers
+      .copy(data = Json.obj())
       .withClaimPeriodStart(userAnswers.get(ClaimPeriodStartPage).get.toString)
       .withClaimPeriodEnd(userAnswers.get(ClaimPeriodEndPage).get.toString)
       .withFurloughStartDate(userAnswers.get(FurloughStartDatePage).get.toString)
