@@ -74,6 +74,14 @@
         @for(messageKey <- cvb.detailedBreakdownMessageKeys) {
             @p(Html(messages(messageKey)))
         }
+
+        <p class="govuk-body">
+            @messages("detailedBreakdown.p2")
+            <a href="@messages("detailedBreakdown.p2.a.href")" target="_blank">@messages("detailedBreakdown.p2.a")</a>
+        </p>
+
+        @p(Html(messages("detailedBreakdown.p3")))
+
         @for(detailedBreakdown <- cvb.detailedBreakdowns) {
             @h3(Messages("detailedBreakdown.h3", detailedBreakdown.payPeriodStart, detailedBreakdown.payPeriodEnd))
             @detailedFurloughBreakdown(detailedBreakdown.furlough)
