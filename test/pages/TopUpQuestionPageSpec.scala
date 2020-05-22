@@ -21,7 +21,7 @@ import pages.behaviours.PageBehaviours
 
 class TopUpQuestionPageSpec extends PageBehaviours {
 
-  "TopUpQuestionPageSpec" must {
+  "TopUpQuestionPage" must {
 
     beRetrievable[TopUpStatus](TopUpStatusPage)
 
