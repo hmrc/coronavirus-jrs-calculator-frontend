@@ -30,12 +30,12 @@
     <ol class="govuk-list govuk-list--number">
         <li>@messages("furloughBreakdown.l1", breakdown.formattedWages)</li>
         <li>@messages("furloughBreakdown.l2")</li>
-        @if(breakdown.isCapped) {
-            <li>@messages("furloughBreakdown.furloughCap", breakdown.furloughCap.value.formatted("%.2f"))</li>
-        }
     </ol>
+
+    @if(breakdown.isCapped) {
+        p(Html(messages("furloughBreakdown.furloughCap")))
+    }
 
     <div class="govuk-inset-text">
         @messages("furloughBreakdown.total", breakdown.formattedGrant)
-        <span class="govuk-hint">@messages("furloughBreakdown.total.rounding")</span>
     </div>

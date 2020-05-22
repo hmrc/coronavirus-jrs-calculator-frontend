@@ -29,8 +29,6 @@
           <li>@messages("referencePayBreakdown.regular.l2", regular.periodDays)</li>
           <li>@messages("referencePayBreakdown.regular.l3", regular.furloughDays)</li>
       </ol>
-
-      @p(Html(messages("referencePayBreakdown.regular.result", regular.referencePay.value.formatted("%.2f"))))
   }
 
   @averagePaymentBreakdown(average: AveragePayment) = {
@@ -71,3 +69,5 @@
     case p: AveragePayment => averagePaymentBreakdown(p)
     case p: CylbPayment    => cylbPaymentBreakdown(p)
   }}
+
+@p(Html(messages("referencePayBreakdown.result", payment.referencePay.value.formatted("%.2f"))))
