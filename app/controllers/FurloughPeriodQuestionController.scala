@@ -16,14 +16,17 @@
 
 package controllers
 
+import cats.data.Validated.{Invalid, Valid}
 import controllers.actions.FeatureFlag.FastTrackJourneyFlag
 import controllers.actions._
 import forms.FurloughPeriodQuestionFormProvider
 import handlers.ErrorHandler
 import javax.inject.Inject
-import models.{FurloughEnded, FurloughOngoing}
+import models.{FurloughEnded, FurloughOngoing, FurloughPeriodQuestion}
 import navigation.Navigator
 import pages.{FurloughPeriodQuestionPage, FurloughStartDatePage, FurloughStatusPage}
+import play.api.Logger
+import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,37 +49,44 @@ class FurloughPeriodQuestionController @Inject()(
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
     extends BaseController with FurloughPeriodExtractor {
 
-  val form = formProvider()
+  val form: Form[FurloughPeriodQuestion] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (identify andThen feature(FastTrackJourneyFlag) andThen getData andThen requireData).async {
     implicit request =>
-      getRequiredAnswers(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
-        val preparedForm = request.userAnswers.get(FurloughPeriodQuestionPage) match {
-          case None        => form
-          case Some(value) => form.fill(value)
+      getRequiredAnswersV(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
+        val preparedForm = request.userAnswers.getV(FurloughPeriodQuestionPage) match {
+          case Invalid(_)   => form
+          case Valid(value) => form.fill(value)
         }
 
-        extractFurloughPeriod(request.userAnswers) match {
-          case Some(FurloughOngoing(_)) =>
+        extractFurloughPeriodV(request.userAnswers) match {
+          case Valid(FurloughOngoing(_)) =>
             Future.successful(Ok(view(preparedForm, furloughStart, furloughStatus, None)))
-          case Some(FurloughEnded(_, end)) =>
+          case Valid(FurloughEnded(_, end)) =>
             Future.successful(Ok(view(preparedForm, furloughStart, furloughStatus, Some(end))))
+          case Invalid(errors) =>
+            Logger.error("Failed to extract furlough period.")
+            Logger.error(errors.toChain.toList.mkString("\n"))
+            Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
         }
       }
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen feature(FastTrackJourneyFlag) andThen getData andThen requireData).async {
     implicit request =>
-      getRequiredAnswers(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
+      getRequiredAnswersV(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
         form
           .bindFromRequest()
           .fold(
             formWithErrors =>
-              extractFurloughPeriod(request.userAnswers) match {
-                case Some(FurloughOngoing(_)) =>
+              extractFurloughPeriodV(request.userAnswers) match {
+                case Valid(FurloughOngoing(_)) =>
                   Future.successful(BadRequest(view(formWithErrors, furloughStart, furloughStatus, None)))
-                case Some(FurloughEnded(_, end)) =>
+                case Valid(FurloughEnded(_, end)) =>
                   Future.successful(BadRequest(view(formWithErrors, furloughStart, furloughStatus, Some(end))))
+                case Invalid(e) =>
+                  logErrors("Failued to extract furlough period", e)
+                  Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
             },
             value =>
               for {
