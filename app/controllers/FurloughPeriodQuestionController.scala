@@ -76,14 +76,16 @@ class FurloughPeriodQuestionController @Inject()(
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => processSubmissionWithErrors(request, furloughStart, furloughStatus, formWithErrors),
-            value          => processSubmittedAnswer(request, value)
+            formWithErrors => processSubmissionWithErrors(furloughStart, furloughStatus, formWithErrors),
+            value => processSubmittedAnswer(request, value)
           )
       }
   }
 
-  private def processSubmissionWithErrors(request: DataRequest[AnyContent], furloughStart: LocalDate,
-                                          furloughStatus: FurloughStatus, formWithErrors: Form[FurloughPeriodQuestion]): Future[Result] =
+  private def processSubmissionWithErrors(
+    furloughStart: LocalDate,
+    furloughStatus: FurloughStatus,
+    formWithErrors: Form[FurloughPeriodQuestion])(implicit request: DataRequest[AnyContent]): Future[Result] =
     extractFurloughPeriod(request.userAnswers) match {
       case Some(FurloughOngoing(_)) =>
         Future.successful(BadRequest(view(formWithErrors, furloughStart, furloughStatus, None)))

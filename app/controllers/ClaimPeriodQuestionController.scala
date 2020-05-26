@@ -67,8 +67,7 @@ class ClaimPeriodQuestionController @Inject()(
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, claimStart, claimEnd))),
-            value =>
-              processSubmittedAnswer(request, value)
+            value => processSubmittedAnswer(request, value)
           )
       }
   }

@@ -65,7 +65,7 @@ class PayPeriodQuestionController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, generatePeriods(request.userAnswers.getList(PayDatePage))))),
-          value          => processSubmittedAnswer(request, value)
+          value => processSubmittedAnswer(request, value)
         )
   }
 
