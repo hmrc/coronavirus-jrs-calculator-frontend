@@ -18,13 +18,14 @@ package handlers
 
 import java.time.LocalDate
 
-import cats.data.Validated.Valid
 import models.UserAnswers.AnswerV
 import models.{AdditionalPayment, Amount, BranchingQuestions, LastYearPayment, NicCategory, NonFurloughPay, PayMethod, PaymentFrequency, PensionStatus, Period, ReferencePayData, TopUpPayment, UserAnswers}
 import pages._
 import services.{FurloughPeriodExtractor, PeriodHelper}
 import cats.syntax.apply._
 import cats.syntax.validated._
+import play.api.libs.json.JsError
+import cats.syntax.semigroupk._
 
 trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
 
@@ -40,7 +41,7 @@ trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
 
     (
       userAnswers.getV(FurloughStartDatePage),
-      userAnswers.getV(EmployeeStartDatePage).orElse(default.validNec)
+      userAnswers.getV(EmployeeStartDatePage) <+> default.validNec[JsError]
     ).mapN { (furloughStart, employeeStartDate) =>
       endDateOrTaxYearEnd(Period(employeeStartDate, furloughStart.minusDays(1)))
     }
@@ -73,12 +74,8 @@ trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
     } yield BranchingQuestions(payMethod, employeeStarted, employeeStartDate)
 
   def extractBranchingQuestionsV(userAnswers: UserAnswers): AnswerV[BranchingQuestions] =
-    (
-      extractPayMethodV(userAnswers),
-      userAnswers.getV(EmployedStartedPage),
-      userAnswers.getV(EmployeeStartDatePage)
-    ).mapN { (payMethod, employeeStarted, employeeStartDate) =>
-      BranchingQuestions(payMethod, Some(employeeStarted), Some(employeeStartDate))
+    extractPayMethodV(userAnswers).map {
+      BranchingQuestions(_, userAnswers.getV(EmployedStartedPage).toOption, userAnswers.getV(EmployeeStartDatePage).toOption)
     }
 
   @deprecated("Use validated API instead", "1.0.0")
