@@ -19,6 +19,7 @@ package handlers
 import base.SpecBase
 import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
 import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnSamePeriod}
+import models.PayMethod.Regular
 import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
 import pages._
 import play.api.libs.json.{JsObject, Json}
@@ -102,7 +103,8 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
     actualUserAnswer.updated.data mustBe expectedUserAnswersData
   }
 
-  "delete data from the DB if answer is `Yes` to pay period question excluding Claim,furlough and pay periods" in new FastJourneyUserAnswersHandler {
+  "delete data from the DB if answer is `Yes` to pay period question excluding Claim,furlough and " +
+    "pay periods, pay frequency and pay method" in new FastJourneyUserAnswersHandler {
     val userAnswers = dummyUserAnswers
       .withFurloughEndDate("2020-3-31")
       .withClaimPeriodQuestion(ClaimOnSamePeriod)
@@ -116,6 +118,7 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
       .withFurloughStartDate(userAnswers.get(FurloughStartDatePage).get.toString)
       .withFurloughEndDate(userAnswers.get(FurloughEndDatePage).get.toString)
       .withPayDate(userAnswers.getList(PayDatePage).map(_.toString).toList)
+      .withPayMethod(Regular)
       .data
 
     val actual: UserAnswersState = updateJourney(userAnswers).get

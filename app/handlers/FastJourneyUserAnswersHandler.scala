@@ -45,7 +45,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
   private def processPayQuestion(answer: UserAnswersState): Option[UserAnswersState] =
     answer.original.get(PayPeriodQuestionPage) match {
       case Some(UseSamePayPeriod) =>
-        (clearAllAnswers andThen keepClaimPeriod andThen keepFurloughPeriod andThen keepPayPeriod).run(answer)
+        (clearAllAnswers andThen keepClaimPeriod andThen keepFurloughPeriod andThen keepPayPeriod andThen keepPayMethod).run(answer)
       case Some(UseDifferentPayPeriod) =>
         (clearAllAnswers andThen keepClaimPeriod andThen keepFurloughPeriod).run(answer)
       case None => Some(answer)
@@ -70,6 +70,13 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
     answersState =>
       addPayDates(answersState.updated, answersState.original.getList(PayDatePage).toList).toOption
         .map(payPeriods => UserAnswersState(payPeriods, answersState.original)))
+
+  private val keepPayMethod: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli(answersState =>
+    for {
+      method     <- extractPayMethod(answersState.original)
+      withStart  <- answersState.updated.set(PayMethodPage, method).toOption
+      withMethod <- withStart.set(PayMethodPage, method).toOption
+    } yield UserAnswersState(withMethod, answersState.original))
 
   private val clearAllAnswers: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli(
     answersState => Option(answersState.modify(_.updated.data).setTo(Json.obj())))
