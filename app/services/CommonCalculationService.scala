@@ -22,11 +22,11 @@ import utils.TaxYearFinder
 
 trait CommonCalculationService extends TaxYearFinder {
 
-  protected def greaterThanAllowance(amount: Amount, threshold: BigDecimal, rate: Rate): Amount =
-    if (amount.value < threshold) Amount(0.0)
-    else Amount((amount.value - threshold) * rate.value).halfUp
+  protected def greaterThanAllowance(amount: Amount, allowance: BigDecimal, rate: Rate): Amount =
+    if (amount.value < allowance) Amount(0.0)
+    else Amount((amount.value - allowance) * rate.value).halfUp
 
-  protected def thresholdFinder(frequency: PaymentFrequency, paymentDate: PaymentDate, rate: Rate): BigDecimal =
-    FrequencyTaxYearThresholdMapping.findThreshold(frequency, taxYearAt(paymentDate), rate)
+  protected def thresholdFinder(frequency: PaymentFrequency, paymentDate: PaymentDate, rate: Rate): Threshold =
+    FrequencyTaxYearThresholdMapping.thresholdFor(frequency, taxYearAt(paymentDate), rate)
 
 }

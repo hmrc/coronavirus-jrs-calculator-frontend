@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package viewmodels
+package models
 
-import models.{NicBreakdown, PensionBreakdown, Periods}
-import views.ViewUtils._
-
-case class DetailedBreakdown(period: Periods, furlough: DetailedFurloughBreakdown, nic: NicBreakdown, pension: PensionBreakdown) {
-  def payPeriodStart: String = dateToStringWithoutYear(period.period.start)
-  def payPeriodEnd: String = dateToString(period.period.end)
+case class NicCap(furloughGrant: Amount, nicGrant: Amount, cap: Amount) {
+  def cappedGrant = Amount(nicGrant.value.min(cap.value))
+  def isCapped = nicGrant.value > cap.value
 }
