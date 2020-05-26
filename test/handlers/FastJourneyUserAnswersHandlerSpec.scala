@@ -21,6 +21,7 @@ import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
 import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnSamePeriod}
 import models.PayMethod.Regular
 import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
+import models.PaymentFrequency.Monthly
 import pages._
 import play.api.libs.json.{JsObject, Json}
 import utils.CoreTestData
@@ -119,6 +120,7 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
       .withFurloughEndDate(userAnswers.get(FurloughEndDatePage).get.toString)
       .withPayDate(userAnswers.getList(PayDatePage).map(_.toString).toList)
       .withPayMethod(Regular)
+      .withPaymentFrequency(Monthly)
       .data
 
     val actual: UserAnswersState = updateJourney(userAnswers).get
