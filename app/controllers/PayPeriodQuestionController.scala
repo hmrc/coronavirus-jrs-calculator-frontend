@@ -21,10 +21,12 @@ import controllers.actions._
 import forms.PayPeriodQuestionFormProvider
 import handlers.FastJourneyUserAnswersHandler
 import javax.inject.Inject
+import models.PayPeriodQuestion
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.{PayDatePage, PayPeriodQuestionPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.PayPeriodQuestionView
@@ -63,12 +65,14 @@ class PayPeriodQuestionController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, generatePeriods(request.userAnswers.getList(PayDatePage))))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodQuestionPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-              updatedJourney <- Future.fromTry(Try(updateJourney(updatedAnswers).get))
-            } yield Redirect(navigator.nextPage(PayPeriodQuestionPage, updatedJourney.updated))
+          value          => processSubmittedAnswer(request, value)
         )
   }
+
+  private def processSubmittedAnswer(request: DataRequest[AnyContent], value: PayPeriodQuestion): Future[Result] =
+    for {
+      updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodQuestionPage, value))
+      _              <- sessionRepository.set(updatedAnswers)
+      updatedJourney <- Future.fromTry(Try(updateJourney(updatedAnswers).get))
+    } yield Redirect(navigator.nextPage(PayPeriodQuestionPage, updatedJourney.updated))
 }

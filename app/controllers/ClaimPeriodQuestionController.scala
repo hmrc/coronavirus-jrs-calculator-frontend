@@ -22,6 +22,7 @@ import forms.ClaimPeriodQuestionFormProvider
 import handlers.{ErrorHandler, FastJourneyUserAnswersHandler}
 import javax.inject.Inject
 import models.ClaimPeriodQuestion
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.{ClaimPeriodEndPage, ClaimPeriodQuestionPage, ClaimPeriodStartPage}
 import play.api.data.Form
@@ -67,12 +68,15 @@ class ClaimPeriodQuestionController @Inject()(
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, claimStart, claimEnd))),
             value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(ClaimPeriodQuestionPage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-                updatedJourney <- Future.fromTry(Try(updateJourney(updatedAnswers).get))
-              } yield Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedJourney.updated))
+              processSubmittedAnswer(request, value)
           )
       }
   }
+
+  private def processSubmittedAnswer(request: DataRequest[AnyContent], value: ClaimPeriodQuestion): Future[Result] =
+    for {
+      updatedAnswers <- Future.fromTry(request.userAnswers.set(ClaimPeriodQuestionPage, value))
+      _              <- sessionRepository.set(updatedAnswers)
+      updatedJourney <- Future.fromTry(Try(updateJourney(updatedAnswers).get))
+    } yield Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedJourney.updated))
 }

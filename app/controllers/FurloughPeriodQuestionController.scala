@@ -16,16 +16,20 @@
 
 package controllers
 
+import java.time.LocalDate
+
 import controllers.actions.FeatureFlag.FastTrackJourneyFlag
 import controllers.actions._
 import forms.FurloughPeriodQuestionFormProvider
 import handlers.{ErrorHandler, FastJourneyUserAnswersHandler}
 import javax.inject.Inject
-import models.{FurloughEnded, FurloughOngoing}
+import models.requests.DataRequest
+import models.{FurloughEnded, FurloughOngoing, FurloughPeriodQuestion, FurloughStatus}
 import navigation.Navigator
 import pages.{FurloughPeriodQuestionPage, FurloughStartDatePage, FurloughStatusPage}
+import play.api.data.Form
 import play.api.i18n.MessagesApi
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import services.FurloughPeriodExtractor
 import views.html.FurloughPeriodQuestionView
@@ -72,20 +76,25 @@ class FurloughPeriodQuestionController @Inject()(
         form
           .bindFromRequest()
           .fold(
-            formWithErrors =>
-              extractFurloughPeriod(request.userAnswers) match {
-                case Some(FurloughOngoing(_)) =>
-                  Future.successful(BadRequest(view(formWithErrors, furloughStart, furloughStatus, None)))
-                case Some(FurloughEnded(_, end)) =>
-                  Future.successful(BadRequest(view(formWithErrors, furloughStart, furloughStatus, Some(end))))
-            },
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(FurloughPeriodQuestionPage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-                updatedJourney <- Future.fromTry(Try(updateJourney(updatedAnswers).get))
-              } yield Redirect(navigator.nextPage(FurloughPeriodQuestionPage, updatedJourney.updated))
+            formWithErrors => processSubmissionWithErrors(request, furloughStart, furloughStatus, formWithErrors),
+            value          => processSubmittedAnswer(request, value)
           )
       }
   }
+
+  private def processSubmissionWithErrors(request: DataRequest[AnyContent], furloughStart: LocalDate,
+                                          furloughStatus: FurloughStatus, formWithErrors: Form[FurloughPeriodQuestion]): Future[Result] =
+    extractFurloughPeriod(request.userAnswers) match {
+      case Some(FurloughOngoing(_)) =>
+        Future.successful(BadRequest(view(formWithErrors, furloughStart, furloughStatus, None)))
+      case Some(FurloughEnded(_, end)) =>
+        Future.successful(BadRequest(view(formWithErrors, furloughStart, furloughStatus, Some(end))))
+    }
+
+  private def processSubmittedAnswer(request: DataRequest[AnyContent], value: FurloughPeriodQuestion): Future[Result] =
+    for {
+      updatedAnswers <- Future.fromTry(request.userAnswers.set(FurloughPeriodQuestionPage, value))
+      _              <- sessionRepository.set(updatedAnswers)
+      updatedJourney <- Future.fromTry(Try(updateJourney(updatedAnswers).get))
+    } yield Redirect(navigator.nextPage(FurloughPeriodQuestionPage, updatedJourney.updated))
 }
