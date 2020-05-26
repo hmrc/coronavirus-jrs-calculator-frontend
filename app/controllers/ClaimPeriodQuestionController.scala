@@ -48,13 +48,13 @@ class ClaimPeriodQuestionController @Inject()(
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
     extends BaseController with FastJourneyUserAnswersHandler {
 
-  val form = formProvider()
+  val form: Form[ClaimPeriodQuestion] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (identify andThen feature(FastTrackJourneyFlag) andThen getData andThen requireData).async {
     implicit request =>
-      getRequiredAnswers(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStart, claimEnd) =>
+      getRequiredAnswersV(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStart, claimEnd) =>
         val filledForm: Form[ClaimPeriodQuestion] =
-          request.userAnswers.get(ClaimPeriodQuestionPage).fold(form)(form.fill)
+          request.userAnswers.getV(ClaimPeriodQuestionPage).fold(_ => form, form.fill)
 
         Future.successful(Ok(view(filledForm, claimStart, claimEnd)))
       }
@@ -62,7 +62,7 @@ class ClaimPeriodQuestionController @Inject()(
 
   def onSubmit(): Action[AnyContent] = (identify andThen feature(FastTrackJourneyFlag) andThen getData andThen requireData).async {
     implicit request =>
-      getRequiredAnswers(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStart, claimEnd) =>
+      getRequiredAnswersV(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStart, claimEnd) =>
         form
           .bindFromRequest()
           .fold(
@@ -76,6 +76,6 @@ class ClaimPeriodQuestionController @Inject()(
     for {
       updatedAnswers <- Future.fromTry(request.userAnswers.set(ClaimPeriodQuestionPage, value))
       _              <- sessionRepository.set(updatedAnswers)
-      updatedJourney <- Future.fromTry(Try(updateJourney(updatedAnswers).get))
+      updatedJourney <- Future.fromTry(Try(updateJourney(updatedAnswers)))
     } yield Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedJourney.updated))
 }

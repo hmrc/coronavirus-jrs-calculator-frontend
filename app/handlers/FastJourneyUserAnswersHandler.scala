@@ -17,6 +17,7 @@
 package handlers
 
 import cats.data.Kleisli
+import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
 import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
 import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnSamePeriod}
@@ -26,23 +27,37 @@ import pages._
 import play.api.libs.json.Json
 import utils.UserAnswersHelper
 import com.softwaremill.quicklens._
+import models.UserAnswers.AnswerV
 
 trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper {
 
-  def updateJourney(userAnswer: UserAnswers): Option[UserAnswersState] =
-    userAnswer.get(ClaimPeriodQuestionPage) flatMap {
-      case ClaimOnSamePeriod      => processFurloughQuestion(UserAnswersState(userAnswer, userAnswer))
-      case ClaimOnDifferentPeriod => Some(UserAnswersState(userAnswer.copy(data = Json.obj()), userAnswer))
+//  def updateJourney(userAnswer: UserAnswers): Option[UserAnswersState] =
+//    userAnswer.getV(ClaimPeriodQuestionPage) flatMap {
+//      case ClaimOnSamePeriod      => processFurloughQuestion(UserAnswersState(userAnswer, userAnswer))
+//      case ClaimOnDifferentPeriod => Some(UserAnswersState(userAnswer.copy(data = Json.obj()), userAnswer))
+//    }
+
+  def updateJourney(userAnswer: UserAnswers): AnswerV[UserAnswersState] =
+    userAnswer.getV(ClaimPeriodQuestionPage) match {
+      case Valid(ClaimOnSamePeriod)      => processFurloughQuestion(UserAnswersState(userAnswer, userAnswer))
+      case Valid(ClaimOnDifferentPeriod) => UserAnswersState(userAnswer.copy(data = Json.obj()), userAnswer).validNec
     }
 
-  private def processFurloughQuestion(answer: UserAnswersState): Option[UserAnswersState] =
-    answer.original.get(FurloughPeriodQuestionPage) match {
-      case Some(FurloughedOnSamePeriod)      => processPayQuestion(answer)
-      case Some(FurloughedOnDifferentPeriod) => (clearAllAnswers andThen keepClaimPeriod).run(answer)
-      case None                              => Some(answer)
+//  private[this] def processFurloughQuestion(answer: UserAnswersState): Option[UserAnswersState] =
+//    answer.original.get(FurloughPeriodQuestionPage) match {
+//      case Some(FurloughedOnSamePeriod)      => processPayQuestion(answer)
+//      case Some(FurloughedOnDifferentPeriod) => (clearAllAnswers andThen keepClaimPeriod).run(answer)
+//      case None                              => Some(answer)
+//    }
+
+  private[this] def processFurloughQuestion(answer: UserAnswersState): AnswerV[UserAnswersState] =
+    answer.original.getV(FurloughPeriodQuestionPage) match {
+      case Valid(FurloughedOnSamePeriod)      => processPayQuestion(answer)
+      case Valid(FurloughedOnDifferentPeriod) => (clearAllAnswers andThen keepClaimPeriod).run(answer)
+      case Invalid(errors)                    => Some(answer)
     }
 
-  private def processPayQuestion(answer: UserAnswersState): Option[UserAnswersState] =
+  private[this] def processPayQuestion(answer: UserAnswersState): Option[UserAnswersState] =
     answer.original.get(PayPeriodQuestionPage) match {
       case Some(UseSamePayPeriod) =>
         (clearAllAnswers andThen keepClaimPeriod andThen keepFurloughPeriod andThen keepPayPeriodData).run(answer)
