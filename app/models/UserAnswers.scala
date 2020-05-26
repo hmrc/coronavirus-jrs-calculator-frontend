@@ -43,6 +43,7 @@ final case class UserAnswers(
           .invalid[A]
     }
 
+  @deprecated("Use validated API instead", "1.0.0")
   def get[A](page: Gettable[A], idx: Option[Int] = None)(implicit rds: Reads[A]): Option[A] =
     Reads.optionNoError(Reads.at(path(page, idx))).reads(data).getOrElse(None)
 

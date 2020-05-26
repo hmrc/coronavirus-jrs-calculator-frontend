@@ -59,13 +59,13 @@ class LastYearPayController @Inject()(
       ) { payDates =>
         withValidPayDate(payDates, idx) { date =>
           val preparedForm = request.userAnswers.getV(LastYearPayPage) match {
-            case Invalid(e)        => form
+            case Invalid(e)   => form
             case Valid(value) => form.fill(value.amount)
           }
 
           val isMonthlyFrequency = request.userAnswers.getV(PaymentFrequencyPage) match {
             case Valid(PaymentFrequency.Monthly) => true
-            case _ => false
+            case _                               => false
           }
           Future.successful(Ok(view(preparedForm, idx, date, isMonthlyFrequency)))
         }
@@ -86,7 +86,7 @@ class LastYearPayController @Inject()(
         withValidPayDate(payDates, idx) { date =>
           val isMonthlyFrequency = request.userAnswers.getV(PaymentFrequencyPage) match {
             case Valid(PaymentFrequency.Monthly) => true
-            case _ => false
+            case _                               => false
           }
 
           form

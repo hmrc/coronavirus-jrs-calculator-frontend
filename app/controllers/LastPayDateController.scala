@@ -52,7 +52,7 @@ class LastPayDateController @Inject()(
     request.userAnswers.getList(PayDatePage).lastOption match {
       case Some(date) =>
         val preparedForm = request.userAnswers.getV(LastPayDatePage) match {
-          case Invalid(e)        => form(date)
+          case Invalid(e)   => form(date)
           case Valid(value) => form(date).fill(value)
         }
 

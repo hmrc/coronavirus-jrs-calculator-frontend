@@ -99,6 +99,7 @@ trait BaseController extends FrontendBaseController with I18nSupport {
         Future.successful(Redirect(requiredPage))
     }
 
+  @deprecated("User validated API", "1.0.0")
   def getRequiredAnswerOrRedirect[A](page: QuestionPage[A], idx: Option[Int] = None)(
     f: A => Future[Result])(implicit request: DataRequest[_], reads: Reads[A]): Future[Result] =
     getAnswer(page, idx) match {

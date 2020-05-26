@@ -18,6 +18,7 @@ package controllers
 
 import java.time.LocalDate
 
+import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.FurloughStartDateFormProvider
 import handlers.ErrorHandler
@@ -48,10 +49,10 @@ class FurloughStartDateController @Inject()(
   def form(claimEndDate: LocalDate): Form[LocalDate] = formProvider(claimEndDate)
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswer(ClaimPeriodEndPage) { claimEndDate =>
-      val preparedForm = request.userAnswers.get(FurloughStartDatePage) match {
-        case None        => form(claimEndDate)
-        case Some(value) => form(claimEndDate).fill(value)
+    getRequiredAnswerV(ClaimPeriodEndPage) { claimEndDate =>
+      val preparedForm = request.userAnswers.getV(FurloughStartDatePage) match {
+        case Invalid(e)   => form(claimEndDate)
+        case Valid(value) => form(claimEndDate).fill(value)
       }
 
       Future.successful(Ok(view(preparedForm)))
@@ -59,7 +60,7 @@ class FurloughStartDateController @Inject()(
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswer(ClaimPeriodEndPage) { claimEndDate =>
+    getRequiredAnswerV(ClaimPeriodEndPage) { claimEndDate =>
       form(claimEndDate)
         .bindFromRequest()
         .fold(
