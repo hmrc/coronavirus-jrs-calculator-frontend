@@ -222,6 +222,15 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication with CoreTest
         ) mustBe routes.LastYearPayController.onPageLoad(1)
       }
 
+      "go to annual-pay-amount after EmployedStartedPage in a fast journey if pay dates are persisted and After1Feb2019" in {
+        navigator.nextPage(
+          EmployedStartedPage,
+          emptyUserAnswers
+            .withEmployeeStartedAfter1Feb2019()
+            .withPayDate(List("2019-12-12"))
+        ) mustBe routes.AnnualPayAmountController.onPageLoad()
+      }
+
       "go to correct page after EmployeeStartDatePage" in {
         navigator.nextPage(
           EmployeeStartDatePage,
