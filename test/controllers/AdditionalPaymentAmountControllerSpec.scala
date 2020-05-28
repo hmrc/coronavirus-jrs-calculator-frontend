@@ -84,7 +84,7 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
       val request = getRequest(GET, 1)
       val result = controller(
         mandatoryAnswersOnRegularMonthly
-          .withAdditionalPaymentPeriods(List(additionalPaymentPeriod.toString))).onPageLoad(1).apply(request)
+          .withAdditionalPaymentPeriods(List(additionalPaymentPeriod.toString))).onPageLoad(1)(request)
 
       status(result) mustEqual OK
 
@@ -118,61 +118,39 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
         .withAdditionalPaymentPeriods(List(additionalPaymentPeriod.toString))
         .withAdditionalPaymentAmount(additionalPayment, Some(1))
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
       val request = getRequest(GET, 1)
-
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[AdditionalPaymentAmountView]
+      val result = controller(userAnswers).onPageLoad(1)(request)
 
       status(result) mustEqual OK
 
       val dataRequest = DataRequest(request, userAnswers.id, userAnswers)
 
       contentAsString(result) mustEqual
+        view(form.fill(amount), additionalPaymentPeriod, 1)(request, messages).toString
         view(form.fill(amount), additionalPaymentPeriod, 1)(dataRequest, messages).toString
-
-      application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
-
       val additionalPaymentPeriod = LocalDate.of(2020, 3, 31)
 
       val userAnswers = mandatoryAnswersOnRegularMonthly.withAdditionalPaymentPeriods(List(additionalPaymentPeriod.toString))
 
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
+      when(mockRepository.set(any())) thenReturn Future.successful(true)
 
       val request =
         getRequest(POST, 1)
           .withFormUrlEncodedBody(("value", "100.00"))
 
-      val result = route(application, request).value
+      val result = controller(userAnswers).onSubmit(1)(request)
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual onwardRoute.url
-
-      application.stop()
+      redirectLocation(result).value mustEqual "/job-retention-scheme-calculator/ni-category-letter"
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-
       val additionalPaymentPeriod = LocalDate.of(2020, 3, 31)
 
       val userAnswers = mandatoryAnswersOnRegularMonthly.withAdditionalPaymentPeriods(List(additionalPaymentPeriod.toString))
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
         getRequest(POST, 1).withCSRFToken
@@ -181,18 +159,15 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[AdditionalPaymentAmountView]
-
-      val result = route(application, request).value
+      val result = controller(userAnswers).onSubmit(1)(request)
 
       status(result) mustEqual BAD_REQUEST
 
       val dataRequest = DataRequest(request, userAnswers.id, userAnswers)
 
       contentAsString(result) mustEqual
+        view(boundForm, additionalPaymentPeriod, 1)(request, messages).toString
         view(boundForm, additionalPaymentPeriod, 1)(dataRequest, messages).toString
-
-      application.stop()
     }
 
     "redirect to 404 page for a GET if topups flag is disabled" in {
