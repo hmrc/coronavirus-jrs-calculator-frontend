@@ -195,8 +195,6 @@ rootPage.beforeYouStart.p1.l3 = employee’s pay dates (when they get their pay)
 rootPage.beforeYouStart.p1.l4 = end dates of the periods of time (for example monthly) that they are paid for
 rootPage.beforeYouStart.p1.l5 = how much they are paid (before deductions)
 rootPage.beforeYouStart.p1.l6 = when their furlough started (and ended, if not ongoing)
-rootPage.beforeYouStart.p1.l7 = their {0}
-rootPage.beforeYouStart.p1.l7.link = National Insurance category letter
 
 payDate.title = What’s the end of the next pay period after {0}?
 payDate.heading = What’s the end of the next pay period after {0}?
