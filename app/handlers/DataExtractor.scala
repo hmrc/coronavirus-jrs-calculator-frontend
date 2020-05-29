@@ -101,7 +101,7 @@ trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
       payDates = userAnswers.getList(PayDatePage)
       periods = generatePeriodsWithFurlough(payDates, furloughPeriod)
       frequency  <- extractPaymentFrequency(userAnswers)
-      lastPayDay <- userAnswers.get(LastPayDatePage)
+      lastPayDay <- extractLastPayDate(userAnswers)
       assigned = assignPayDates(frequency, periods, lastPayDay)
     } yield ReferencePayData(furloughPeriod, assigned, frequency)
 
