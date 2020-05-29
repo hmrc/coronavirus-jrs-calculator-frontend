@@ -92,7 +92,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
 
     case ClaimPeriodQuestionPage =>
       claimPeriodQuestionRoutes
-    case EmployeeStartDatePage => skipPayPeriodsIfFastJourney
+    case EmployeeStartDatePage => employeeStartDateRoutes
     case PayPeriodQuestionPage =>
       payPeriodQuestionRoutes
     case _ =>
@@ -196,7 +196,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     }
   }
 
-  private def skipPayPeriodsIfFastJourney: UserAnswers => Call = { userAnswers =>
+  private def employeeStartDateRoutes: UserAnswers => Call = { userAnswers =>
     if (userAnswers.getList(PayDatePage).isEmpty) routes.PayDateController.onPageLoad(1)
     else routes.AnnualPayAmountController.onPageLoad()
   }
@@ -215,7 +215,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
       case (Some(EmployeeStarted.OnOrBefore1Feb2019), dates) if dates.isEmpty => routes.PayDateController.onPageLoad(1)
       case (Some(EmployeeStarted.OnOrBefore1Feb2019), _)                      => routes.LastYearPayController.onPageLoad(1)
       case (Some(EmployeeStarted.After1Feb2019), _)                           => routes.EmployeeStartDateController.onPageLoad()
-      case _ => routes.VariableLengthEmployedController.onPageLoad()
+      case _                                                                  => routes.VariableLengthEmployedController.onPageLoad()
     }
   }
 
