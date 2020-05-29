@@ -82,14 +82,17 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
     "return OK and the correct view for a GET" in {
       val additionalPaymentPeriod = LocalDate.of(2020, 3, 31)
       val request = getRequest(GET, 1)
+      val userAnswers = mandatoryAnswersOnRegularMonthly
+        .withAdditionalPaymentPeriods(List(additionalPaymentPeriod.toString))
       val result = controller(
-        mandatoryAnswersOnRegularMonthly
-          .withAdditionalPaymentPeriods(List(additionalPaymentPeriod.toString))).onPageLoad(1)(request)
+        userAnswers).onPageLoad(1)(request)
 
       status(result) mustEqual OK
 
+      val dataRequest = DataRequest(request, userAnswers.id, userAnswers)
+
       contentAsString(result) mustEqual
-        view(form, additionalPaymentPeriod, 1)(request, messages).toString
+        view(form, additionalPaymentPeriod, 1)(dataRequest, messages).toString
     }
 
     "redirect to error page for GET when index is not valid" when {
@@ -126,7 +129,6 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
       val dataRequest = DataRequest(request, userAnswers.id, userAnswers)
 
       contentAsString(result) mustEqual
-        view(form.fill(amount), additionalPaymentPeriod, 1)(request, messages).toString
         view(form.fill(amount), additionalPaymentPeriod, 1)(dataRequest, messages).toString
     }
 
@@ -166,7 +168,6 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
       val dataRequest = DataRequest(request, userAnswers.id, userAnswers)
 
       contentAsString(result) mustEqual
-        view(boundForm, additionalPaymentPeriod, 1)(request, messages).toString
         view(boundForm, additionalPaymentPeriod, 1)(dataRequest, messages).toString
     }
 
