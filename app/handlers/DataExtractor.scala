@@ -89,6 +89,9 @@ trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
   def extractPayPeriodQuestion(userAnswers: UserAnswers): Option[PayPeriodQuestion] =
     userAnswers.get(PayPeriodQuestionPage)
 
+  def extractLastPayDate(userAnswers: UserAnswers): Option[LocalDate] =
+    userAnswers.get(LastPayDatePage)
+
   def extractReferencePayData(userAnswers: UserAnswers): Option[ReferencePayData] =
     for {
       furloughPeriod <- extractFurloughWithinClaim(userAnswers)
