@@ -18,7 +18,7 @@ package handlers
 
 import java.time.LocalDate
 
-import models.{AdditionalPayment, Amount, BranchingQuestions, LastYearPayment, NicCategory, NonFurloughPay, PayMethod, PayPeriodQuestion, PaymentFrequency, PensionStatus, Period, ReferencePayData, TopUpPayment, UserAnswers}
+import models.{AdditionalPayment, Amount, BranchingQuestions, FurloughStatus, LastYearPayment, NicCategory, NonFurloughPay, PayMethod, PayPeriodQuestion, PaymentFrequency, PensionStatus, Period, ReferencePayData, TopUpPayment, UserAnswers}
 import pages._
 import services.{FurloughPeriodExtractor, PeriodHelper}
 trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
@@ -91,6 +91,9 @@ trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
 
   def extractLastPayDate(userAnswers: UserAnswers): Option[LocalDate] =
     userAnswers.get(LastPayDatePage)
+
+  def extractFurloughStatus(userAnswers: UserAnswers): Option[FurloughStatus] =
+    userAnswers.get(FurloughStatusPage)
 
   def extractReferencePayData(userAnswers: UserAnswers): Option[ReferencePayData] =
     for {
