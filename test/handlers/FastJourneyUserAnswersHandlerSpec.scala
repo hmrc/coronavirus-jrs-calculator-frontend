@@ -30,7 +30,7 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
 
   "delete all data from the DB if answer is `No` to claim period question excluding session id" in new FastJourneyUserAnswersHandler {
     val userAnswers = dummyUserAnswers.withClaimPeriodQuestion(ClaimOnDifferentPeriod)
-    val actualUserAnswers = updateJourney(userAnswers).get
+    val actualUserAnswers = updateJourney(userAnswers).toOption.value
 
     userAnswers.data.value.values.size must be > 1
     actualUserAnswers.updated.id mustBe actualUserAnswers.original.id
@@ -40,7 +40,7 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
 
   "delete nothing from the DB if answer is `Yes` to claim period question" in new FastJourneyUserAnswersHandler {
     val userAnswers = dummyUserAnswers.withClaimPeriodQuestion(ClaimOnSamePeriod)
-    val actual: UserAnswersState = updateJourney(userAnswers).get
+    val actual: UserAnswersState = updateJourney(userAnswers).toOption.value
 
     userAnswers.data.value.values.size must be > 1
     actual.original.data mustBe userAnswers.data
@@ -59,7 +59,7 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
       .withClaimPeriodEnd(userAnswers.get(ClaimPeriodEndPage).get.toString)
       .data
 
-    val actual: UserAnswersState = updateJourney(userAnswers).get
+    val actual: UserAnswersState = updateJourney(userAnswers).toOption.value
 
     userAnswers.data.value.values.size must be > 2
     actual.updated.id mustBe userAnswers.id
@@ -72,7 +72,7 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
       .withClaimPeriodQuestion(ClaimOnSamePeriod)
       .withFurloughPeriodQuestion(FurloughedOnSamePeriod)
 
-    val actual: UserAnswersState = updateJourney(userAnswers).get
+    val actual: UserAnswersState = updateJourney(userAnswers).toOption.value
 
     userAnswers.data.value.values.size must be > 2
     actual.updated.id mustBe userAnswers.id
@@ -96,7 +96,7 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
       .withFurloughEndDate(userAnswers.get(FurloughEndDatePage).get.toString)
       .data
 
-    val actualUserAnswer: UserAnswersState = updateJourney(userAnswers).get
+    val actualUserAnswer: UserAnswersState = updateJourney(userAnswers).toOption.value
 
     userAnswers.data.value.values.size must be > 2
     actualUserAnswer.updated.id mustBe userAnswers.id
@@ -123,7 +123,7 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
       .withPaymentFrequency(Monthly)
       .data
 
-    val actual: UserAnswersState = updateJourney(userAnswers).get
+    val actual: UserAnswersState = updateJourney(userAnswers).toOption.value
 
     userAnswers.data.value.values.size must be > 2
     actual.updated.id mustBe userAnswers.id

@@ -35,7 +35,6 @@ import services.FurloughPeriodExtractor
 import views.html.FurloughPeriodQuestionView
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 class FurloughPeriodQuestionController @Inject()(
   override val messagesApi: MessagesApi,
@@ -101,6 +100,12 @@ class FurloughPeriodQuestionController @Inject()(
     for {
       updatedAnswers <- Future.fromTry(request.userAnswers.set(FurloughPeriodQuestionPage, value))
       _              <- sessionRepository.set(updatedAnswers)
-      updatedJourney <- Future.fromTry(Try(updateJourney(updatedAnswers).get))
-    } yield Redirect(navigator.nextPage(FurloughPeriodQuestionPage, updatedJourney.updated))
+    } yield {
+      updateJourney(updatedAnswers) match {
+        case Valid(updatedJourney) =>
+          Redirect(navigator.nextPage(FurloughPeriodQuestionPage, updatedJourney.updated))
+        case Invalid(errors) =>
+          InternalServerError(errorHandler.internalServerErrorTemplate(request))
+      }
+    }
 }

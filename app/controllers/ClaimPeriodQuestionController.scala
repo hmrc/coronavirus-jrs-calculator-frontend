@@ -16,6 +16,7 @@
 
 package controllers
 
+import cats.data.Validated.{Invalid, Valid}
 import controllers.actions.FeatureFlag.FastTrackJourneyFlag
 import controllers.actions._
 import forms.ClaimPeriodQuestionFormProvider
@@ -32,7 +33,6 @@ import repositories.SessionRepository
 import views.html.ClaimPeriodQuestionView
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 class ClaimPeriodQuestionController @Inject()(
   override val messagesApi: MessagesApi,
@@ -76,6 +76,14 @@ class ClaimPeriodQuestionController @Inject()(
     for {
       updatedAnswers <- Future.fromTry(request.userAnswers.set(ClaimPeriodQuestionPage, value))
       _              <- sessionRepository.set(updatedAnswers)
-      updatedJourney <- Future.fromTry(Try(updateJourney(updatedAnswers)))
-    } yield Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedJourney.updated))
+    } yield {
+
+      updateJourney(updatedAnswers) match {
+        case Valid(updatedJourney) =>
+          Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedJourney.updated))
+        case Invalid(errors) =>
+          InternalServerError(errorHandler.internalServerErrorTemplate(request))
+      }
+
+    }
 }

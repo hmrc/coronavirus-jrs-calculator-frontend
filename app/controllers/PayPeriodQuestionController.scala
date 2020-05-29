@@ -20,7 +20,7 @@ import cats.data.Validated.{Invalid, Valid}
 import controllers.actions.FeatureFlag.FastTrackJourneyFlag
 import controllers.actions._
 import forms.PayPeriodQuestionFormProvider
-import handlers.FastJourneyUserAnswersHandler
+import handlers.{ErrorHandler, FastJourneyUserAnswersHandler}
 import javax.inject.Inject
 import models.PayPeriodQuestion
 import models.requests.DataRequest
@@ -33,7 +33,6 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.PayPeriodQuestionView
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 class PayPeriodQuestionController @Inject()(
   override val messagesApi: MessagesApi,
@@ -46,7 +45,7 @@ class PayPeriodQuestionController @Inject()(
   formProvider: PayPeriodQuestionFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PayPeriodQuestionView
-)(implicit ec: ExecutionContext)
+)(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
     extends FrontendBaseController with I18nSupport with FastJourneyUserAnswersHandler {
 
   val form = formProvider()
@@ -70,10 +69,19 @@ class PayPeriodQuestionController @Inject()(
         )
   }
 
-  private def processSubmittedAnswer(request: DataRequest[AnyContent], value: PayPeriodQuestion): Future[Result] =
+  private def processSubmittedAnswer(
+    request: DataRequest[AnyContent],
+    value: PayPeriodQuestion
+  ): Future[Result] =
     for {
       updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodQuestionPage, value))
       _              <- sessionRepository.set(updatedAnswers)
-      updatedJourney <- Future.fromTry(Try(updateJourney(updatedAnswers).get))
-    } yield Redirect(navigator.nextPage(PayPeriodQuestionPage, updatedJourney.updated))
+    } yield {
+      updateJourney(updatedAnswers) match {
+        case Valid(updatedJourney) =>
+          Redirect(navigator.nextPage(PayPeriodQuestionPage, updatedJourney.updated))
+        case Invalid(errors) =>
+          InternalServerError(errorHandler.internalServerErrorTemplate(request))
+      }
+    }
 }

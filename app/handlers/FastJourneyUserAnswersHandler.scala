@@ -24,7 +24,7 @@ import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnS
 import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
 import models.UserAnswers
 import pages._
-import play.api.libs.json.Json
+import play.api.libs.json.{JsError, Json}
 import utils.UserAnswersHelper
 import com.softwaremill.quicklens._
 import models.UserAnswers.AnswerV
@@ -39,17 +39,25 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
 
   private[this] def processFurloughQuestion(answer: UserAnswersState): AnswerV[UserAnswersState] =
     answer.original.getV(FurloughPeriodQuestionPage) match {
-      case Valid(FurloughedOnSamePeriod)      => processPayQuestionV(answer)
-      case Valid(FurloughedOnDifferentPeriod) => (clearAllAnswers andThen keepClaimPeriod).run(answer)
-      case Invalid(_)                         => Valid(answer)
+      case Valid(FurloughedOnSamePeriod) => processPayQuestionV(answer)
+      case Valid(FurloughedOnDifferentPeriod) =>
+        (clearAllAnswers andThen keepClaimPeriod)
+          .run(answer)
+          .toValidNec(JsError(s"Unable to clear answers while keeping pay period for ${answer.original}"))
+      case Invalid(_) => Valid(answer)
     }
 
   private[this] def processPayQuestionV(answer: UserAnswersState): AnswerV[UserAnswersState] =
     answer.original.getV(PayPeriodQuestionPage) match {
       case Valid(UseSamePayPeriod) =>
-        (clearAllAnswers andThen keepClaimPeriod andThen keepFurloughPeriod andThen keepPayPeriodData).run(answer)
+        (clearAllAnswers andThen keepClaimPeriod andThen keepFurloughPeriod andThen keepPayPeriodData)
+          .run(answer)
+          .toValidNec(JsError(s"Unable to clear answers using same pay period: ${answer.original}"))
+
       case Valid(UseDifferentPayPeriod) =>
-        (clearAllAnswers andThen keepClaimPeriod andThen keepFurloughPeriod).run(answer)
+        (clearAllAnswers andThen keepClaimPeriod andThen keepFurloughPeriod)
+          .run(answer)
+          .toValidNec(JsError(s"Unable to clear answers using different pay period: ${answer.original}"))
       case Invalid(_) => Valid(answer)
     }
 
