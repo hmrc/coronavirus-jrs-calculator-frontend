@@ -17,6 +17,7 @@
 package handlers
 
 import base.SpecBase
+import cats.scalatest.ValidatedValues
 import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
 import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnSamePeriod}
 import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
@@ -26,7 +27,7 @@ import pages._
 import play.api.libs.json.{JsObject, Json}
 import utils.CoreTestData
 
-class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
+class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData with ValidatedValues {
 
   "delete all data from the DB if answer is `No` to claim period question excluding session id" in new FastJourneyUserAnswersHandler {
     val userAnswers: UserAnswers = dummyUserAnswers.withClaimPeriodQuestion(ClaimOnDifferentPeriod)
@@ -49,14 +50,14 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
   }
 
   "delete all from the DB if answer is `No` to furlough period question excluding claim period" in new FastJourneyUserAnswersHandler {
-    val userAnswers = dummyUserAnswers
+    val userAnswers: UserAnswers = dummyUserAnswers
       .withClaimPeriodQuestion(ClaimOnSamePeriod)
       .withFurloughPeriodQuestion(FurloughedOnDifferentPeriod)
 
     val expectedUserAnswersData: JsObject = emptyUserAnswers
       .copy(id = userAnswers.id)
-      .withClaimPeriodStart(userAnswers.get(ClaimPeriodStartPage).get.toString)
-      .withClaimPeriodEnd(userAnswers.get(ClaimPeriodEndPage).get.toString)
+      .withClaimPeriodStart(userAnswers.getV(ClaimPeriodStartPage).value.toString)
+      .withClaimPeriodEnd(userAnswers.getV(ClaimPeriodEndPage).value.toString)
       .data
 
     val actual: UserAnswersState = updateJourney(userAnswers).toOption.value
@@ -89,10 +90,10 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
 
     val expectedUserAnswersData: JsObject = emptyUserAnswers
       .copy(id = userAnswers.id)
-      .withClaimPeriodStart(userAnswers.get(ClaimPeriodStartPage).get.toString)
-      .withClaimPeriodEnd(userAnswers.get(ClaimPeriodEndPage).get.toString)
-      .withFurloughStartDate(userAnswers.get(FurloughStartDatePage).get.toString)
-      .withFurloughEndDate(userAnswers.get(FurloughEndDatePage).get.toString)
+      .withClaimPeriodStart(userAnswers.getV(ClaimPeriodStartPage).value.toString)
+      .withClaimPeriodEnd(userAnswers.getV(ClaimPeriodEndPage).value.toString)
+      .withFurloughStartDate(userAnswers.getV(FurloughStartDatePage).value.toString)
+      .withFurloughEndDate(userAnswers.getV(FurloughEndDatePage).value.toString)
       .data
 
     val actualUserAnswer: UserAnswersState = updateJourney(userAnswers).toOption.value
@@ -113,14 +114,14 @@ class FastJourneyUserAnswersHandlerSpec extends SpecBase with CoreTestData {
 
     val expectedUserAnswersData: JsObject = emptyUserAnswers
       .copy(data = Json.obj())
-      .withClaimPeriodStart(userAnswers.get(ClaimPeriodStartPage).get.toString)
-      .withClaimPeriodEnd(userAnswers.get(ClaimPeriodEndPage).get.toString)
-      .withFurloughStartDate(userAnswers.get(FurloughStartDatePage).get.toString)
-      .withFurloughEndDate(userAnswers.get(FurloughEndDatePage).get.toString)
+      .withClaimPeriodStart(userAnswers.getV(ClaimPeriodStartPage).value.toString)
+      .withClaimPeriodEnd(userAnswers.getV(ClaimPeriodEndPage).value.toString)
+      .withFurloughStartDate(userAnswers.getV(FurloughStartDatePage).value.toString)
+      .withFurloughEndDate(userAnswers.getV(FurloughEndDatePage).value.toString)
       .withPayDate(userAnswers.getList(PayDatePage).map(_.toString).toList)
       .withPaymentFrequency(Monthly)
       .withFurloughStatus()
-      .withLastPayDate(dummyUserAnswers.get(LastPayDatePage).get.toString)
+      .withLastPayDate(dummyUserAnswers.getV(LastPayDatePage).value.toString)
       .data
 
     val actual: UserAnswersState = updateJourney(userAnswers).toOption.value

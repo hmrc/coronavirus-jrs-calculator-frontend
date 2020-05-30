@@ -55,14 +55,14 @@ trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
     NonFurloughPay(preFurloughPay.map(v => Amount(v.value)), postFurloughPay.map(v => Amount(v.value)))
   }
 
-  def extractNonFurloughV(userAnswers: UserAnswers): NonFurloughPay = {
+  def extractNonFurloughV(userAnswers: UserAnswers): AnswerV[NonFurloughPay] = {
     val preFurloughPay = userAnswers.getV(PartialPayBeforeFurloughPage).toOption
     val postFurloughPay = userAnswers.getV(PartialPayAfterFurloughPage).toOption
 
     NonFurloughPay(
       preFurloughPay.map(v => Amount(v.value)),
       postFurloughPay.map(v => Amount(v.value))
-    )
+    ).validNec
   }
 
   @deprecated("Use validated API instead", "1.0.0")
@@ -151,12 +151,21 @@ trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
   def extractPayPeriodQuestion(userAnswers: UserAnswers): Option[PayPeriodQuestion] =
     userAnswers.get(PayPeriodQuestionPage)
 
+  @deprecated("Use validated API instead", "1.0.0")
   def extractLastPayDate(userAnswers: UserAnswers): Option[LocalDate] =
     userAnswers.get(LastPayDatePage)
 
+  def extractLastPayDateV(userAnswers: UserAnswers): AnswerV[LocalDate] =
+    userAnswers.getV(LastPayDatePage)
+
+  @deprecated("Use validated API instead", "1.0.0")
   def extractFurloughStatus(userAnswers: UserAnswers): Option[FurloughStatus] =
     userAnswers.get(FurloughStatusPage)
 
+  def extractFurloughStatusV(userAnswers: UserAnswers): AnswerV[FurloughStatus] =
+    userAnswers.getV(FurloughStatusPage)
+
+  @deprecated("Use validated API instead", "1.0.0")
   def extractReferencePayData(userAnswers: UserAnswers): Option[ReferencePayData] =
     for {
       furloughPeriod <- extractFurloughWithinClaim(userAnswers)
