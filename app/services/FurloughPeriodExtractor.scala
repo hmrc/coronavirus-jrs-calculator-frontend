@@ -38,12 +38,6 @@ trait FurloughPeriodExtractor extends LocalDateHelpers {
       FurloughWithinClaim(startDate, endDate)
     }
 
-  @deprecated("Use validated API instead", "1.0.0")
-  def extractFurloughPeriod(userAnswers: UserAnswers): Option[FurloughDates] =
-    userAnswers
-      .get(FurloughStartDatePage)
-      .map(FurloughDates(_, userAnswers.get(FurloughEndDatePage)))
-
   def extractFurloughPeriodV(
     userAnswers: UserAnswers
   ): AnswerV[FurloughDates] =
