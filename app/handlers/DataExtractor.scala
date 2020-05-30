@@ -92,10 +92,6 @@ trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
   def extractAdditionalPayment(userAnswers: UserAnswers): Seq[AdditionalPayment] =
     userAnswers.getList(AdditionalPaymentAmountPage)
 
-  @deprecated("Use validated API instead", "1.0.0")
-  def extractPayPeriodQuestion(userAnswers: UserAnswers): Option[PayPeriodQuestion] =
-    userAnswers.get(PayPeriodQuestionPage)
-
   def extractLastPayDateV(userAnswers: UserAnswers): AnswerV[LocalDate] =
     userAnswers.getV(LastPayDatePage)
 
