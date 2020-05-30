@@ -75,12 +75,13 @@ class ClaimPeriodQuestionController @Inject()(
   private def processSubmittedAnswer(request: DataRequest[AnyContent], value: ClaimPeriodQuestion): Future[Result] =
     for {
       updatedAnswers <- Future.fromTry(request.userAnswers.set(ClaimPeriodQuestionPage, value))
-      _              <- sessionRepository.set(updatedAnswers)
+      call = navigator.nextPage(ClaimPeriodQuestionPage, updatedAnswers)
     } yield {
 
       updateJourney(updatedAnswers) match {
         case Valid(updatedJourney) =>
-          Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedJourney.updated))
+          sessionRepository.set(updatedJourney.updated)
+          Redirect(call)
         case Invalid(errors) =>
           InternalServerError(errorHandler.internalServerErrorTemplate(request))
       }

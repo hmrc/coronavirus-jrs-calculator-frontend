@@ -33,6 +33,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.PayPeriodQuestionView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class PayPeriodQuestionController @Inject()(
   override val messagesApi: MessagesApi,
@@ -69,19 +70,28 @@ class PayPeriodQuestionController @Inject()(
         )
   }
 
-  private def processSubmittedAnswer(
-    request: DataRequest[AnyContent],
-    value: PayPeriodQuestion
-  ): Future[Result] =
+//  private def processSubmittedAnswer(
+//    request: DataRequest[AnyContent],
+//    value: PayPeriodQuestion
+//  ): Future[Result] =
+//    for {
+//      updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodQuestionPage, value))
+//      _              <- sessionRepository.set(updatedAnswers)
+//    } yield {
+//      updateJourney(updatedAnswers) match {
+//        case Valid(updatedJourney) =>
+//          Redirect(navigator.nextPage(PayPeriodQuestionPage, updatedJourney.updated))
+//        case Invalid(errors) =>
+//          InternalServerError(errorHandler.internalServerErrorTemplate(request))
+//      }
+//    }
+
+  private def processSubmittedAnswer(request: DataRequest[AnyContent], value: PayPeriodQuestion): Future[Result] =
     for {
       updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodQuestionPage, value))
       _              <- sessionRepository.set(updatedAnswers)
-    } yield {
-      updateJourney(updatedAnswers) match {
-        case Valid(updatedJourney) =>
-          Redirect(navigator.nextPage(PayPeriodQuestionPage, updatedJourney.updated))
-        case Invalid(errors) =>
-          InternalServerError(errorHandler.internalServerErrorTemplate(request))
-      }
-    }
+      call = navigator.nextPage(PayPeriodQuestionPage, updatedAnswers)
+      updatedJourney <- Future.fromTry(Try(payQuestion(updatedAnswers).get))
+      _              <- sessionRepository.set(updatedJourney.updated)
+    } yield Redirect(call)
 }

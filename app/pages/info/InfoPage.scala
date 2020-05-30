@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-package pages
+package pages.info
 
-import models.EmployeeStarted
-import play.api.libs.json.JsPath
+import pages.Page
 
-case object EmployedStartedPage extends QuestionPage[EmployeeStarted] {
+trait InfoPage extends Page
 
-  override def path: JsPath = JsPath \ toString
+case object AccessibilityStatementPage extends InfoPage
 
-  override def toString: String = "employeeStarted"
-}
+case object ComingSoonViewPage extends InfoPage
+
+case object ConfirmationPage extends InfoPage
+
+case object ErrorPage extends InfoPage
+
+case object RootPage extends InfoPage
+
+case object SessionExpiredPage extends InfoPage
+
+case object UnauthorisedPage extends InfoPage
+
+case object IndexPage extends InfoPage

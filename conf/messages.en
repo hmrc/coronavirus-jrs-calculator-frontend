@@ -76,7 +76,7 @@ compliant.two.p4.2=has advice on making your device easier to use if you have a 
 compliant.three.heading=How accessible this service is
 compliant.three.p1.1=This service is partially compliant with the
 compliant.three.p1.2=Web Content Accessibility Guidelines version 2.1 AA standard
-compliant.three.p1.3=We cannot be certain that it is fully compliant until it is fully tested, which will be within one week of its launch date of 20 April 2020.
+compliant.three.p1.3=There are no known accessibility issues within this service.
 
 ## section five
 compliant.five.heading=Reporting accessibility problems with this service
@@ -106,11 +106,11 @@ compliant.eight.p2.2=Web Content Accessibility Guidelines version 2.1 AA standar
 
 ## section nine
 compliant.nine.heading=How we tested this service
-compliant.nine.p1=The service was launched on 20 April 2020 and checked for compliance with WCAG 2.1 AA.
+compliant.nine.p1=The service was last tested on 5 May 2020 and checked for compliance with WCAG 2.1 AA.
 compliant.nine.p2.1=The service was built using parts that were tested by the
 compliant.nine.p2.2=Digital Accessibility Centre
-compliant.nine.p2.3=The full service will be tested by HMRC within a week of the launch date. Tests will include disabled users.
-compliant.nine.p3=This page was prepared on 17 April 2020. It was last updated on 20 April 2020.
+compliant.nine.p2.3=The full service was tested by HMRC and included disabled users.
+compliant.nine.p3=This page was prepared on 17 April 2020. It was last updated on 20 May 2020.
 
 date.day = Day
 date.month = Month
@@ -195,8 +195,6 @@ rootPage.beforeYouStart.p1.l3 = employee’s pay dates (when they get their pay)
 rootPage.beforeYouStart.p1.l4 = end dates of the periods of time (for example monthly) that they are paid for
 rootPage.beforeYouStart.p1.l5 = how much they are paid (before deductions)
 rootPage.beforeYouStart.p1.l6 = when their furlough started (and ended, if not ongoing)
-rootPage.beforeYouStart.p1.l7 = their {0}
-rootPage.beforeYouStart.p1.l7.link = National Insurance category letter
 
 payDate.title = What’s the end of the next pay period after {0}?
 payDate.heading = What’s the end of the next pay period after {0}?
@@ -218,45 +216,19 @@ reviewPayDates.heading = Pay dates within the claim period
 reviewPayDates.addMore = Do you need to add another pay date for this claim period?
 reviewPayDates.error.required = Select yes if reviewPayDates
 
-regularPayAmount.title.weekly = On 19 March 2020, what was this employee getting paid each week?
-regularPayAmount.title.fortnightly = On 19 March 2020, what was this employee getting paid every 2 weeks?
-regularPayAmount.title.fourweekly = On 19 March 2020, what was this employee getting paid every 4 weeks?
-regularPayAmount.title.monthly = On 19 March 2020, what was this employee getting paid each month?
-regularPayAmount.heading.weekly = On 19 March 2020, what was this employee getting paid each week?
-regularPayAmount.heading.fortnightly = On 19 March 2020, what was this employee getting paid every 2 weeks?
-regularPayAmount.heading.fourweekly = On 19 March 2020, what was this employee getting paid every 4 weeks?
-regularPayAmount.heading.monthly = On 19 March 2020, what was this employee getting paid each month?
-regularPayAmount.salary.label= If this employee started work in February, enter the amount they will get paid from now on.
-regularPayAmount.salary.hint = This is the gross amount before deductions.
+regularPayAmount.title = On 19 March 2020, what was this employee’s most recent pay amount?
+regularPayAmount.heading = On 19 March 2020, what was this employee’s most recent pay amount?
+regularPayAmount.p1 = This is the latest payment that was due on or before 19 March, before deductions.
+regularPayAmount.p2 = Do not include discretionary payments, non-cash payments or non-monetary benefits.
+regularPayAmount.inset = If this employee started work between 1 and 18 March 2020, enter the amount they’ll get paid from now on.
 regularPayAmount.salary.error.required = Enter a valid amount
 regularPayAmount.salary.error.invalid = Enter a valid amount
-regularPayAmount.inset.info = If this employee started work between 1 and 18 March 2020, enter the amount they’ll get paid from now on.
 
-nicCategory.title = What’s the employee’s National Insurance category letter?
-nicCategory.heading = What’s the employee’s National Insurance category letter?
-nicCategory.payable = A, B, C or J
-nicCategory.nonPayable = H, M or Z
-nicCategory.error.required = Select the employee’s National Insurance category letter
-nicCategory.hint = Most employees have category letter A. This is different from the letters in their National Insurance number.
-nicCategory.details.summary = What is a National Insurance category letter?
-nicCategory.details.summary.p1 = You can find this on the employee’s payslip. Employers use employee National Insurance category letters when they run payroll to work out how much they both need to contribute.
-nicCategory.letter.legend = Category letter
-nicCategory.group.legend = Employee group
-nicCategory.details.letter.a = A
-nicCategory.details.letter.b = B
-nicCategory.details.letter.c = C
-nicCategory.details.letter.j = J
-nicCategory.details.letter.h = H
-nicCategory.details.letter.m = M
-nicCategory.details.letter.z = Z
-nicCategory.details.category.a = All employees apart from those in groups B, C, J, H, M and Z in this table
-nicCategory.details.category.b = Married women and widows entitled to pay reduced National Insurance
-nicCategory.details.category.c.1 = Employees over the
-nicCategory.details.category.c.2 = State Pension age
-nicCategory.details.category.j = Employees who can defer National Insurance because they’re already paying it in another job
-nicCategory.details.category.h = Apprentice under 25
-nicCategory.details.category.m = Employees under 21
-nicCategory.details.category.z = Employees under 21 who can defer National Insurance because they’re already paying it in another job
+nicCategory.title = Do you pay Employers Class 1 National Insurance contributions for this employee?
+nicCategory.heading = Do you pay Employers Class 1 National Insurance contributions for this employee?
+nicCategory.payable = Yes
+nicCategory.nonPayable = No
+nicCategory.error.required = Select yes if you pay Employers Class 1 National Insurance contributions
 
 pensionContribution.title = Do you pay pension contributions for this employee?
 pensionContribution.heading = Do you pay pension contributions for this employee?
@@ -529,6 +501,11 @@ referencePayBreakdown.regular.p1 = Take the pay in pay period:
 referencePayBreakdown.regular.l1 = Start with £{0} (from pay period).
 referencePayBreakdown.regular.l2 = Divide by {0} (days in pay period).
 referencePayBreakdown.regular.l3 = Multiply by {0} (furlough days).
+
+referencePayBreakdown.regular.employerFunded.h4 = Calculate employer-funded pay
+referencePayBreakdown.regular.employerFunded.l1 = Start with £{0} (from pay period).
+referencePayBreakdown.regular.employerFunded.l2 = Minus £{0} (pay based on furlough days).
+referencePayBreakdown.regular.employerFunded.result = Employer-funded pay for the remaining {0} days in pay period = £{1}
 
 referencePayBreakdown.average.p1 = Take the total pay from employee start date (or 6 April 2019, if earlier) to day before the employee's furlough start date (or 5 April 2020, if later).
 referencePayBreakdown.average.p1.partOfCylb = Method 2: take the total pay from employee start date (or 6 April 2019, if earlier) to day before the employee's furlough start date (or 5 April 2020, if later).

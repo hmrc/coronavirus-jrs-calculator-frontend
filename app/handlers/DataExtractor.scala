@@ -19,7 +19,7 @@ package handlers
 import java.time.LocalDate
 
 import models.UserAnswers.AnswerV
-import models.{AdditionalPayment, Amount, BranchingQuestions, LastYearPayment, NicCategory, NonFurloughPay, PayMethod, PaymentFrequency, PensionStatus, Period, ReferencePayData, TopUpPayment, UserAnswers}
+import models.{AdditionalPayment, Amount, BranchingQuestions, FurloughStatus, LastYearPayment, NicCategory, NonFurloughPay, PayMethod, PayPeriodQuestion, PaymentFrequency, PensionStatus, Period, ReferencePayData, TopUpPayment, UserAnswers}
 import pages._
 import services.{FurloughPeriodExtractor, PeriodHelper}
 import cats.syntax.apply._
@@ -69,13 +69,17 @@ trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
   def extractBranchingQuestions(userAnswers: UserAnswers): Option[BranchingQuestions] =
     for {
       payMethod <- extractPayMethod(userAnswers)
-      employeeStarted = userAnswers.get(EmployedStartedPage)
+      employeeStarted = userAnswers.get(EmployeeStartedPage)
       employeeStartDate = userAnswers.get(EmployeeStartDatePage)
     } yield BranchingQuestions(payMethod, employeeStarted, employeeStartDate)
 
   def extractBranchingQuestionsV(userAnswers: UserAnswers): AnswerV[BranchingQuestions] =
     extractPayMethodV(userAnswers).map {
-      BranchingQuestions(_, userAnswers.getV(EmployedStartedPage).toOption, userAnswers.getV(EmployeeStartDatePage).toOption)
+      BranchingQuestions(
+        _,
+        userAnswers.getV(EmployeeStartedPage).toOption,
+        userAnswers.getV(EmployeeStartDatePage).toOption
+      )
     }
 
   @deprecated("Use validated API instead", "1.0.0")
@@ -144,6 +148,15 @@ trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
     userAnswers.getList(AdditionalPaymentAmountPage)
 
   @deprecated("Use validated API instead", "1.0.0")
+  def extractPayPeriodQuestion(userAnswers: UserAnswers): Option[PayPeriodQuestion] =
+    userAnswers.get(PayPeriodQuestionPage)
+
+  def extractLastPayDate(userAnswers: UserAnswers): Option[LocalDate] =
+    userAnswers.get(LastPayDatePage)
+
+  def extractFurloughStatus(userAnswers: UserAnswers): Option[FurloughStatus] =
+    userAnswers.get(FurloughStatusPage)
+
   def extractReferencePayData(userAnswers: UserAnswers): Option[ReferencePayData] =
     for {
       furloughPeriod <- extractFurloughWithinClaim(userAnswers)

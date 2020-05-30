@@ -20,6 +20,7 @@ import base.SpecBaseWithApplication
 import forms.RegularPayAmountFormProvider
 import models.PaymentFrequency.{FourWeekly, Weekly}
 import models.UserAnswers
+import models.requests.DataRequest
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -61,7 +62,7 @@ class RegularPayAmountControllerSpec extends SpecBaseWithApplication with Mockit
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PaymentFrequencyPage, Weekly).success.value
+      val userAnswers = UserAnswers(userAnswersId)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -71,8 +72,10 @@ class RegularPayAmountControllerSpec extends SpecBaseWithApplication with Mockit
 
       status(result) mustEqual OK
 
+      val dataRequest = DataRequest(getRequest, userAnswers.id, userAnswers)
+
       contentAsString(result) mustEqual
-        view(form, Weekly)(getRequest, messages).toString
+        view(form)(dataRequest, messages).toString
 
       application.stop()
     }
@@ -121,8 +124,10 @@ class RegularPayAmountControllerSpec extends SpecBaseWithApplication with Mockit
 
       status(result) mustEqual BAD_REQUEST
 
+      val dataRequest = DataRequest(request, userAnswers.id, userAnswers)
+
       contentAsString(result) mustEqual
-        view(boundForm, FourWeekly)(request, messages).toString
+        view(boundForm)(dataRequest, messages).toString
 
       application.stop()
     }

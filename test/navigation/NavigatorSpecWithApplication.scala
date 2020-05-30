@@ -21,10 +21,10 @@ import java.time.LocalDate
 import base.{CoreTestDataBuilder, SpecBaseWithApplication}
 import config.FrontendAppConfig
 import controllers.routes
+import models.ClaimPeriodQuestion._
 import models.PayMethod.{Regular, Variable}
 import models._
 import pages._
-import ClaimPeriodQuestion._
 
 class NavigatorSpecWithApplication extends SpecBaseWithApplication with CoreTestDataBuilder {
 
@@ -70,22 +70,27 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication with CoreTest
           .onPageLoad()
       }
 
-      "go to correct page after PayMethodPage" in {
+      "go to pay dates page after PayMethodPage" in {
         navigator.nextPage(
           PayMethodPage,
-          UserAnswers("id")
-            .set(PayMethodPage, PayMethod.Regular)
-            .success
-            .value) mustBe routes.PayDateController.onPageLoad(1)
+          emptyUserAnswers
+            .withPayMethod(Regular)
+            .withPayDate(List())) mustBe routes.PayDateController.onPageLoad(1)
 
         navigator.nextPage(
           PayMethodPage,
-          UserAnswers("id")
-            .set(PayMethodPage, PayMethod.Variable)
-            .success
-            .value) mustBe routes.VariableLengthEmployedController.onPageLoad()
+          emptyUserAnswers.withPayMethod(PayMethod.Variable)
+        ) mustBe routes.VariableLengthEmployedController.onPageLoad()
 
         navigator.nextPage(PayMethodPage, UserAnswers("id")) mustBe routes.PayMethodController.onPageLoad()
+      }
+
+      "go to regular-pay-amount page after PayMethodPage if regular and PayDates were persisted in fast journey" in {
+        navigator.nextPage(
+          PayMethodPage,
+          dummyUserAnswers
+            .withPayMethod(Regular)
+            .withPayDate(List("2020-1-1"))) mustBe routes.RegularPayAmountController.onPageLoad()
       }
 
       "go to RegularPayAmountPage after PaymentQuestionPage" in {
@@ -198,19 +203,31 @@ class NavigatorSpecWithApplication extends SpecBaseWithApplication with CoreTest
         }
       }
 
-      "go to correct page after EmployedStartedPage" in {
+      "go to pay dates page after EmployedStartedPage in a normal journey" in {
+        navigator.nextPage(EmployeeStartedPage, emptyUserAnswers.withEmployeeStartedOnOrBefore1Feb2019()) mustBe routes.PayDateController
+          .onPageLoad(1)
+
+        navigator
+          .nextPage(EmployeeStartedPage, emptyUserAnswers.withEmployeeStartedAfter1Feb2019()) mustBe routes.EmployeeStartDateController
+          .onPageLoad()
+      }
+
+      "go to last-year-pay after EmployedStartedPage in a fast journey if pay dates are persisted and OnOrBefore1Feb2019" in {
         navigator.nextPage(
-          EmployedStartedPage,
-          UserAnswers("id")
-            .set(EmployedStartedPage, EmployeeStarted.OnOrBefore1Feb2019)
-            .success
-            .value) mustBe routes.PayDateController.onPageLoad(1)
+          EmployeeStartedPage,
+          emptyUserAnswers
+            .withEmployeeStartedOnOrBefore1Feb2019()
+            .withPayDate(List("2019-12-12"))
+        ) mustBe routes.LastYearPayController.onPageLoad(1)
+      }
+
+      "go to EmployedStartedPage after `variable-length-employed` in a fast journey if pay dates are persisted and After1Feb2019" in {
         navigator.nextPage(
-          EmployedStartedPage,
-          UserAnswers("id")
-            .set(EmployedStartedPage, EmployeeStarted.After1Feb2019)
-            .success
-            .value) mustBe routes.EmployeeStartDateController.onPageLoad()
+          EmployeeStartedPage,
+          emptyUserAnswers
+            .withEmployeeStartedAfter1Feb2019()
+            .withPayDate(List("2019-12-12"))
+        ) mustBe routes.EmployeeStartDateController.onPageLoad()
       }
 
       "go to correct page after EmployeeStartDatePage" in {

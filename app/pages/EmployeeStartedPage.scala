@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this(
-        main_template: templates.GovukLayoutWrapper,
-        h1: components.h1
-)
+package pages
 
-@(nic: String)(implicit request: Request[_], messages: Messages)
+import models.EmployeeStarted
+import play.api.libs.json.JsPath
 
-@main_template(Some(titleNoForm("index.title")), timeout = false) {
- @nic
+case object EmployeeStartedPage extends QuestionPage[EmployeeStarted] {
+
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "employeeStarted"
 }

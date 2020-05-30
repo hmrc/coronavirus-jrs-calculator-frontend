@@ -31,10 +31,22 @@ import models.UserAnswers.AnswerV
 
 trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper {
 
+  def claimQuestion(userAnswer: UserAnswers): Option[UserAnswersState] =
+    userAnswer.get(ClaimPeriodQuestionPage) map {
+      case ClaimOnSamePeriod      => UserAnswersState(userAnswer, userAnswer)
+      case ClaimOnDifferentPeriod => UserAnswersState(userAnswer.copy(data = Json.obj()), userAnswer)
+    }
+
   def updateJourney(userAnswer: UserAnswers): AnswerV[UserAnswersState] =
     userAnswer.getV(ClaimPeriodQuestionPage) match {
       case Valid(ClaimOnSamePeriod)      => processFurloughQuestion(UserAnswersState(userAnswer, userAnswer))
       case Valid(ClaimOnDifferentPeriod) => UserAnswersState(userAnswer.copy(data = Json.obj()), userAnswer).validNec
+    }
+
+  def furloughQuestion(answer: UserAnswers): Option[UserAnswersState] =
+    answer.get(FurloughPeriodQuestionPage) flatMap {
+      case FurloughedOnSamePeriod      => Some(UserAnswersState(answer, answer))
+      case FurloughedOnDifferentPeriod => (clearAllAnswers andThen keepClaimPeriod).run(UserAnswersState(answer, answer))
     }
 
   private[this] def processFurloughQuestion(answer: UserAnswersState): AnswerV[UserAnswersState] =
@@ -45,6 +57,14 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
           .run(answer)
           .toValidNec(JsError(s"Unable to clear answers while keeping pay period for ${answer.original}"))
       case Invalid(_) => Valid(answer)
+    }
+
+  def payQuestion(answer: UserAnswers): Option[UserAnswersState] =
+    answer.get(PayPeriodQuestionPage) flatMap {
+      case UseSamePayPeriod =>
+        (clearAllAnswers andThen keepClaimPeriod andThen keepFurloughPeriod andThen keepPayPeriodData).run(UserAnswersState(answer, answer))
+      case UseDifferentPayPeriod =>
+        (clearAllAnswers andThen keepClaimPeriod andThen keepFurloughPeriod).run(UserAnswersState(answer, answer))
     }
 
   private[this] def processPayQuestionV(answer: UserAnswersState): AnswerV[UserAnswersState] =
@@ -93,7 +113,19 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
       withFrequency <- answersState.updated.set(PaymentFrequencyPage, frequency).toOption
     } yield UserAnswersState(withFrequency, answersState.original))
 
-  private val keepPayPeriodData = keepPayPeriod andThen keepPayMethod andThen keepPaymentFrequency
+  private val keepLastPayDate: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli(answersState =>
+    for {
+      frequency       <- extractLastPayDate(answersState.original)
+      withLastPayDate <- answersState.updated.set(LastPayDatePage, frequency).toOption
+    } yield UserAnswersState(withLastPayDate, answersState.original))
+
+  private val keepFurloughStatus: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli(answersState =>
+    for {
+      frequency  <- extractFurloughStatus(answersState.original)
+      withStatus <- answersState.updated.set(FurloughStatusPage, frequency).toOption
+    } yield UserAnswersState(withStatus, answersState.original))
+
+  private val keepPayPeriodData = keepPayPeriod andThen keepPaymentFrequency andThen keepLastPayDate andThen keepFurloughStatus
 
   private val clearAllAnswers: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli(
     answersState => Option(answersState.modify(_.updated.data).setTo(Json.obj())))

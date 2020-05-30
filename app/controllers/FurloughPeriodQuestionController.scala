@@ -35,6 +35,7 @@ import services.FurloughPeriodExtractor
 import views.html.FurloughPeriodQuestionView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class FurloughPeriodQuestionController @Inject()(
   override val messagesApi: MessagesApi,
@@ -89,23 +90,21 @@ class FurloughPeriodQuestionController @Inject()(
     furloughStart: LocalDate,
     furloughStatus: FurloughStatus,
     formWithErrors: Form[FurloughPeriodQuestion])(implicit request: DataRequest[AnyContent]): Future[Result] =
-    extractFurloughPeriod(request.userAnswers) match {
-      case Some(FurloughOngoing(_)) =>
+    extractFurloughPeriodV(request.userAnswers) match {
+      case Valid(FurloughOngoing(_)) =>
         Future.successful(BadRequest(view(formWithErrors, furloughStart, furloughStatus, None)))
-      case Some(FurloughEnded(_, end)) =>
+      case Valid(FurloughEnded(_, end)) =>
         Future.successful(BadRequest(view(formWithErrors, furloughStart, furloughStatus, Some(end))))
+      case Invalid(errors) =>
+        Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
     }
 
   private def processSubmittedAnswer(request: DataRequest[AnyContent], value: FurloughPeriodQuestion): Future[Result] =
     for {
       updatedAnswers <- Future.fromTry(request.userAnswers.set(FurloughPeriodQuestionPage, value))
       _              <- sessionRepository.set(updatedAnswers)
-    } yield {
-      updateJourney(updatedAnswers) match {
-        case Valid(updatedJourney) =>
-          Redirect(navigator.nextPage(FurloughPeriodQuestionPage, updatedJourney.updated))
-        case Invalid(errors) =>
-          InternalServerError(errorHandler.internalServerErrorTemplate(request))
-      }
-    }
+      call = navigator.nextPage(FurloughPeriodQuestionPage, updatedAnswers)
+      updatedJourney <- Future.fromTry(Try(furloughQuestion(updatedAnswers).get))
+      _              <- sessionRepository.set(updatedJourney.updated)
+    } yield Redirect(call)
 }

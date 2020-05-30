@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import pages.info.ErrorPage
+
 @this(
         govuk_wrapper: templates.GovukLayoutWrapper,
         h1: components.h1
@@ -21,7 +23,7 @@
 
 @(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
 
-@govuk_wrapper(Some(titleNoForm(pageTitle))) {
+@govuk_wrapper(Some(titleNoForm(pageTitle)), thisPage = ErrorPage) {
 
     @h1(messages(heading))
 

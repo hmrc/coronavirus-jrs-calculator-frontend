@@ -59,11 +59,8 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     case RegularPayAmountPage =>
       _ =>
         topUpFeatureRoutes
-    case EmployedStartedPage =>
+    case EmployeeStartedPage =>
       variableLengthEmployedRoutes
-    case EmployeeStartDatePage =>
-      _ =>
-        routes.PayDateController.onPageLoad(1)
     case PartialPayBeforeFurloughPage =>
       partialPayBeforeFurloughRoutes
     case PartialPayAfterFurloughPage =>
@@ -95,6 +92,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
 
     case ClaimPeriodQuestionPage =>
       claimPeriodQuestionRoutes
+    case EmployeeStartDatePage => employeeStartDateRoutes
     case PayPeriodQuestionPage =>
       payPeriodQuestionRoutes
     case _ =>
@@ -198,19 +196,26 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     }
   }
 
+  private def employeeStartDateRoutes: UserAnswers => Call = { userAnswers =>
+    if (userAnswers.getList(PayDatePage).isEmpty) routes.PayDateController.onPageLoad(1)
+    else routes.AnnualPayAmountController.onPageLoad()
+  }
+
   private def payMethodRoutes: UserAnswers => Call = { userAnswers =>
-    userAnswers.get(PayMethodPage) match {
-      case Some(Regular)  => routes.PayDateController.onPageLoad(1)
-      case Some(Variable) => routes.VariableLengthEmployedController.onPageLoad()
-      case None           => routes.PayMethodController.onPageLoad()
+    (userAnswers.get(PayMethodPage), userAnswers.getList(PayDatePage)) match {
+      case (Some(Regular), dates) if dates.isEmpty => routes.PayDateController.onPageLoad(1)
+      case (Some(Regular), _)                      => routes.RegularPayAmountController.onPageLoad()
+      case (Some(Variable), _)                     => routes.VariableLengthEmployedController.onPageLoad()
+      case (None, _)                               => routes.PayMethodController.onPageLoad()
     }
   }
 
   private def variableLengthEmployedRoutes: UserAnswers => Call = { userAnswers =>
-    userAnswers.get(EmployedStartedPage) match {
-      case Some(EmployeeStarted.OnOrBefore1Feb2019) => routes.PayDateController.onPageLoad(1)
-      case Some(EmployeeStarted.After1Feb2019)      => routes.EmployeeStartDateController.onPageLoad()
-      case _                                        => routes.VariableLengthEmployedController.onPageLoad()
+    (userAnswers.get(EmployeeStartedPage), userAnswers.getList(PayDatePage)) match {
+      case (Some(EmployeeStarted.OnOrBefore1Feb2019), dates) if dates.isEmpty => routes.PayDateController.onPageLoad(1)
+      case (Some(EmployeeStarted.OnOrBefore1Feb2019), _)                      => routes.LastYearPayController.onPageLoad(1)
+      case (Some(EmployeeStarted.After1Feb2019), _)                           => routes.EmployeeStartDateController.onPageLoad()
+      case _                                                                  => routes.VariableLengthEmployedController.onPageLoad()
     }
   }
 
@@ -234,7 +239,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     userAnswers.get(PayMethodPage) match {
       case Some(Regular) => routes.RegularPayAmountController.onPageLoad()
       case Some(Variable) =>
-        userAnswers.get(EmployedStartedPage) match {
+        userAnswers.get(EmployeeStartedPage) match {
           case Some(EmployeeStarted.OnOrBefore1Feb2019) =>
             routes.LastYearPayController.onPageLoad(1)
           case _ =>
