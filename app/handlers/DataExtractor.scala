@@ -65,14 +65,6 @@ trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
     ).validNec
   }
 
-  @deprecated("Use validated API instead", "1.0.0")
-  def extractBranchingQuestions(userAnswers: UserAnswers): Option[BranchingQuestions] =
-    for {
-      payMethod <- extractPayMethod(userAnswers)
-      employeeStarted = userAnswers.get(EmployeeStartedPage)
-      employeeStartDate = userAnswers.get(EmployeeStartDatePage)
-    } yield BranchingQuestions(payMethod, employeeStarted, employeeStartDate)
-
   def extractBranchingQuestionsV(userAnswers: UserAnswers): AnswerV[BranchingQuestions] =
     extractPayMethodV(userAnswers).map {
       BranchingQuestions(
@@ -81,10 +73,6 @@ trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
         userAnswers.getV(EmployeeStartDatePage).toOption
       )
     }
-
-  @deprecated("Use validated API instead", "1.0.0")
-  def extractPayMethod(userAnswers: UserAnswers): Option[PayMethod] =
-    userAnswers.get(PayMethodPage)
 
   def extractPayMethodV(userAnswers: UserAnswers): AnswerV[PayMethod] =
     userAnswers.getV(PayMethodPage)

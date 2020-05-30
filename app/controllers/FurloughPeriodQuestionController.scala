@@ -35,7 +35,6 @@ import services.FurloughPeriodExtractor
 import views.html.FurloughPeriodQuestionView
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 class FurloughPeriodQuestionController @Inject()(
   override val messagesApi: MessagesApi,

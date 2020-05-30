@@ -134,7 +134,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
 
   private val topUpAmountRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
     userAnswers
-      .get(TopUpPeriodsPage)
+      .getV(TopUpPeriodsPage)
       .map { topUpPeriods =>
         if (topUpPeriods.isDefinedAt(previousIdx)) {
           routes.TopUpAmountController.onPageLoad(previousIdx + 1)
@@ -147,7 +147,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
 
   private val additionalPaymentAmountRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
     userAnswers
-      .get(AdditionalPaymentPeriodsPage)
+      .getV(AdditionalPaymentPeriodsPage)
       .map { additionalPaymentPeriods =>
         if (additionalPaymentPeriods.isDefinedAt(previousIdx)) {
           routes.AdditionalPaymentAmountController.onPageLoad(previousIdx + 1)
