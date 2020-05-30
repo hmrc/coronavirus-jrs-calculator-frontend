@@ -25,20 +25,6 @@ import services.PreviousYearPeriod
 
 trait LastYearPayControllerRequestHandler extends DataExtractor with PreviousYearPeriod {
 
-  @deprecated("User validated API", "1.0.0")
-  def getPayDates(userAnswers: UserAnswers): Option[Seq[LocalDate]] =
-    for {
-      frequency      <- userAnswers.get(PaymentFrequencyPage)
-      lastPayDay     <- userAnswers.get(LastPayDatePage)
-      furloughPeriod <- extractFurloughWithinClaim(userAnswers)
-    } yield {
-      val payDates = userAnswers.getList(PayDatePage)
-      val periods = generatePeriodsWithFurlough(payDates, furloughPeriod)
-      val periodsWithPayDates = assignPayDates(frequency, periods, lastPayDay)
-      val datesWithDuplicates = periodsWithPayDates.flatMap(p => previousYearPayDate(frequency, p))
-      datesWithDuplicates.distinct
-    }
-
   def getPayDatesV(userAnswers: UserAnswers): AnswerV[Seq[LocalDate]] = {
     import cats.syntax.apply._
 
