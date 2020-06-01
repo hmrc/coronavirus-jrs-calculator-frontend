@@ -18,29 +18,29 @@ package controllers
 
 import java.time.LocalDate
 
-import base.{CoreTestDataBuilder, SpecBaseWithApplication}
+import akka.stream.Materializer
+import base.{CoreTestDataBuilder, SpecBaseControllerSpecs}
+import com.typesafe.config.ConfigValue
 import config.FrontendAppConfig
 import controllers.actions.FeatureFlag.TopUpJourneyFlag
-import controllers.actions.{DataRequiredActionImpl, FakeDataRetrievalAction, FakeIdentifierAction, FeatureFlagActionProvider}
+import controllers.actions._
 import forms.AdditionalPaymentAmountFormProvider
-import models.requests.DataRequest
+import models.requests.{DataRequest, OptionalDataRequest}
 import models.{AdditionalPayment, Amount, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.MessagesApi
-import play.api.inject.bind
-import play.api.mvc.{AnyContentAsEmpty, Call, MessagesControllerComponents}
+import play.api.Configuration
+import play.api.mvc.{AnyContentAsEmpty, Call}
 import play.api.test.CSRFTokenHelper._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.AdditionalPaymentAmountView
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with MockitoSugar with CoreTestDataBuilder {
+class AdditionalPaymentAmountControllerSpec extends SpecBaseControllerSpecs with MockitoSugar with CoreTestDataBuilder {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -51,31 +51,30 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
   def getRequest(method: String, idx: Int) =
     FakeRequest(method, additionalPaymentAmountRoute(idx)).withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
-  import scala.concurrent.ExecutionContext.Implicits.global
-  val msgApi = app.injector.instanceOf[MessagesApi]
-  val flagProvider = app.injector.instanceOf[FeatureFlagActionProvider]
-  val component = app.injector.instanceOf[MessagesControllerComponents]
-  val view = app.injector.instanceOf[AdditionalPaymentAmountView]
-  val appConf = app.injector.instanceOf[FrontendAppConfig]
-  val identifier = app.injector.instanceOf[FakeIdentifierAction]
-  val dataRequired = app.injector.instanceOf[DataRequiredActionImpl]
-  val navigator = app.injector.instanceOf[Navigator]
-  val mockRepository = mock[SessionRepository]
-  val dataRetrieval: Option[UserAnswers] => FakeDataRetrievalAction =
-    stubbedAnswer => new FakeDataRetrievalAction(stubbedAnswer)
+  val entrySet: Set[(String, ConfigValue)] = app.injector.instanceOf[Configuration].entrySet
+  def configValues(kv: (String, Any)): List[(String, Any)] = entrySet.map(kv => kv._1 -> kv._2).toMap.+(kv._1 -> kv._2).toList
 
-  def controller(stubbedAnswer: UserAnswers = emptyUserAnswers) =
-    new AdditionalPaymentAmountController(
-      msgApi,
-      mockRepository,
-      navigator,
-      identifier,
-      flagProvider,
-      dataRetrieval(Some(stubbedAnswer)),
-      dataRequired,
-      formProvider,
-      component,
-      view)
+  val mockRepository = mock[SessionRepository]
+  val dataRetrieval: Option[UserAnswers] => FakeDataRetrievalAction = stubbedAnswer => new FakeDataRetrievalAction(stubbedAnswer)
+
+  def controller(stubbedAnswer: UserAnswers = emptyUserAnswers, stubbedFlag: Option[(String, Any)] = None) = {
+      val config: Configuration = stubbedFlag.map(f => Configuration.apply(configValues(f):_*)).getOrElse(app.injector.instanceOf[Configuration])
+      implicit val appConf: FrontendAppConfig = new FrontendAppConfig(config)
+      def flagProvider() = new FeatureFlagActionProviderImpl()
+
+      new AdditionalPaymentAmountController(
+        messagesApi,
+        mockRepository,
+        navigator,
+        identifier,
+        dataRetrieval(Some(stubbedAnswer)),
+        dataRequired,
+        formProvider,
+        component,
+        view) {
+        override val feature: FeatureFlagActionProvider = flagProvider()
+      }
+    }
 
   "AdditionalPaymentAmount Controller" must {
 
@@ -172,63 +171,79 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseWithApplication with
     }
 
     "redirect to 404 page for a GET if topups flag is disabled" in {
+      val additionalPaymentPeriod = LocalDate.of(2020, 3, 31)
 
-      val application = applicationBuilder(config = Map(TopUpJourneyFlag.key -> false), userAnswers = Some(UserAnswers("id"))).build()
+      val userAnswers = mandatoryAnswersOnRegularMonthly.withAdditionalPaymentPeriods(List(additionalPaymentPeriod.toString))
 
       val request = getRequest(GET, 1)
 
-      val result = route(application, request).value
+      val amountController = controller(userAnswers, stubbedFlag = Some("topup.journey.enabled" -> false))
+      val result = amountController.onPageLoad(1)(request)
 
       status(result) mustEqual NOT_FOUND
-
-      application.stop()
     }
 
     "redirect to 404 page for a POST if topups flag is disabled" in {
-
-      val application = applicationBuilder(config = Map(TopUpJourneyFlag.key -> false), userAnswers = Some(UserAnswers("id"))).build()
-
       val request =
         getRequest(POST, 1)
           .withFormUrlEncodedBody(("value", "100.00"))
 
-      val result = route(application, request).value
+      val result = controller(stubbedFlag = Some("topup.journey.enabled" -> false)).onSubmit(1)(request)
 
       status(result) mustEqual NOT_FOUND
-
-      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
+      implicit val mat = app.injector.instanceOf[Materializer]
+      implicit val appConf: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
+      val request =
+        getRequest(GET, 1)
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val controller = new AdditionalPaymentAmountController(
+        messagesApi,
+        mockRepository,
+        navigator,
+        identifier,
+        dataRetrieval(Some(emptyUserAnswers)),
+        new DataRequiredActionImpl() {
+          override def retrieveData[A](request: OptionalDataRequest[A]): Option[UserAnswers] = None
+        },
+        formProvider,
+        component,
+        view)
 
-      val request = getRequest(GET, 1)
-
-      val result = route(application, request).value
+      val result = controller.onSubmit(1)(request)
 
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
+      implicit val mat = app.injector.instanceOf[Materializer]
+      implicit val appConf: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
       val request =
         getRequest(POST, 1)
           .withFormUrlEncodedBody(("value", "100.00"))
 
-      val result = route(application, request).value
+      val controller = new AdditionalPaymentAmountController(
+        messagesApi,
+        mockRepository,
+        navigator,
+        identifier,
+        dataRetrieval(Some(emptyUserAnswers)),
+        new DataRequiredActionImpl() {
+          override def retrieveData[A](request: OptionalDataRequest[A]): Option[UserAnswers] = None
+        },
+        formProvider,
+        component,
+        view)
+
+      val result = controller.onSubmit(1)(request)
 
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
     }
   }
 }
