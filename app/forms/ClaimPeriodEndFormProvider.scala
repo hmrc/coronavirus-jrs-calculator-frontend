@@ -17,7 +17,6 @@
 package forms
 
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 
 import config.FrontendAppConfig
 import forms.mappings.Mappings
