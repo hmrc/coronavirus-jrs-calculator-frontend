@@ -17,10 +17,12 @@
 package forms
 
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 import config.FrontendAppConfig
 import forms.mappings.Mappings
 import javax.inject.Inject
+import models.Period
 import play.api.data.Form
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import utils.ImplicitDateFormatter
@@ -36,6 +38,8 @@ class ClaimPeriodEndFormProvider @Inject()(appConfig: FrontendAppConfig) extends
       Invalid("claimPeriodEnd.cannot.be.before.claimStart")
     } else if (claimEndDate.isAfter(appConfig.schemeEndDate)) {
       Invalid("claimPeriodEnd.cannot.be.after.policyEnd", ViewUtils.dateToString(appConfig.schemeEndDate))
+    } else if (claimStart.isAfter(appConfig.phaseTwoStartDate.minusDays(1)) && Period(claimStart, claimEndDate).countDays < 7) {
+      Invalid("claimPeriodEnd.cannot.be.lessThan.7days")
     } else {
       Valid
     }
