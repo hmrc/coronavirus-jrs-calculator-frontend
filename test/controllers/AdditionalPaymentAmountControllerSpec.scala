@@ -164,29 +164,6 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseControllerSpecs with
         view(boundForm, additionalPaymentPeriod, 1)(dataRequest, messages).toString
     }
 
-    "redirect to 404 page for a GET if topups flag is disabled" in {
-      val additionalPaymentPeriod = LocalDate.of(2020, 3, 31)
-
-      val userAnswers = mandatoryAnswersOnRegularMonthly.withAdditionalPaymentPeriods(List(additionalPaymentPeriod.toString))
-
-      val request = getRequest(GET, 1)
-
-      val amountController = controller(userAnswers, stubbedFlag = Some("topup.journey.enabled" -> false))
-      val result = amountController.onPageLoad(1)(request)
-
-      status(result) mustEqual NOT_FOUND
-    }
-
-    "redirect to 404 page for a POST if topups flag is disabled" in {
-      val request =
-        getRequest(POST, 1)
-          .withFormUrlEncodedBody(("value", "100.00"))
-
-      val result = controller(stubbedFlag = Some("topup.journey.enabled" -> false)).onSubmit(1)(request)
-
-      status(result) mustEqual NOT_FOUND
-    }
-
     "redirect to Session Expired for a GET if no existing data is found" in {
       implicit val appConf: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
       val request =
