@@ -42,17 +42,21 @@ class ClaimPeriodEndFormProvider @Inject()(appConfig: FrontendAppConfig) extends
     }
   }
 
-  val isBeforeStart: (LocalDate, LocalDate) =>  ValidationResult = (start, end) =>
+  val isSameCalendarMonth: (LocalDate, LocalDate) =>  ValidationResult = (start, end) =>
+    if (start.getMonthValue == end.getMonthValue) Valid
+    else Invalid("claimPeriodEnd.cannot.be.of.same.month")
+
+  private val isBeforeStart: (LocalDate, LocalDate) =>  ValidationResult = (start, end) =>
     if (end.isBefore(start)) Invalid("claimPeriodEnd.cannot.be.before.claimStart") else Valid
 
-  val isAfterPolicyEnd: LocalDate => ValidationResult = end => {
+  private val isAfterPolicyEnd: LocalDate => ValidationResult = end => {
     val schemaEndDate = appConfig.schemeEndDate
     if (end.isAfter(schemaEndDate)) {
         Invalid("claimPeriodEnd.cannot.be.after.policyEnd", ViewUtils.dateToString(schemaEndDate))
       } else Valid
     }
 
-  val isAfterPhaseTwoStartAndLessThan7Days: (LocalDate, LocalDate) => ValidationResult = (start, end) =>
+  private val isAfterPhaseTwoStartAndLessThan7Days: (LocalDate, LocalDate) => ValidationResult = (start, end) =>
     if (start.isAfter(appConfig.phaseTwoStartDate.minusDays(1)) && Period(start, end).countDays < 7)
       Invalid("claimPeriodEnd.cannot.be.lessThan.7days")
     else Valid

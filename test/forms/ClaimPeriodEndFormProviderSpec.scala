@@ -22,6 +22,7 @@ import base.SpecBaseWithApplication
 import forms.behaviours.DateBehaviours
 import forms.mappings.LocalDateFormatter
 import play.api.data.FormError
+import play.api.data.validation.{Invalid, Valid, ValidationError}
 import views.ViewUtils
 
 class ClaimPeriodEndFormProviderSpec extends SpecBaseWithApplication {
@@ -110,6 +111,16 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseWithApplication {
       val result = form.bind(data)
 
       result.errors shouldBe List(FormError("endDate", "claimPeriodEnd.cannot.be.lessThan.7days"))
+    }
+  }
+
+  "start and end should be of the same calendar month" in {
+    val form = new ClaimPeriodEndFormProvider(frontendAppConfig)
+
+    form.isSameCalendarMonth(LocalDate.of(2020, 7, 1), LocalDate.of(2020, 7, 31)) mustBe Valid
+
+    form.isSameCalendarMonth(LocalDate.of(2020, 7, 1), LocalDate.of(2020, 8, 1)) must matchPattern {
+      case Invalid(_) =>
     }
   }
 }
