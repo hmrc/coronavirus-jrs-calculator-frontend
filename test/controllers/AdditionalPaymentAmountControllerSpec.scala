@@ -58,23 +58,24 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseControllerSpecs with
   val dataRetrieval: Option[UserAnswers] => FakeDataRetrievalAction = stubbedAnswer => new FakeDataRetrievalAction(stubbedAnswer)
 
   def controller(stubbedAnswer: UserAnswers = emptyUserAnswers, stubbedFlag: Option[(String, Any)] = None) = {
-      val config: Configuration = stubbedFlag.map(f => Configuration.apply(configValues(f):_*)).getOrElse(app.injector.instanceOf[Configuration])
-      implicit val appConf: FrontendAppConfig = new FrontendAppConfig(config)
-      def flagProvider() = new FeatureFlagActionProviderImpl()
+    val config: Configuration =
+      stubbedFlag.map(f => Configuration.apply(configValues(f): _*)).getOrElse(app.injector.instanceOf[Configuration])
+    implicit val appConf: FrontendAppConfig = new FrontendAppConfig(config)
+    def flagProvider() = new FeatureFlagActionProviderImpl()
 
-      new AdditionalPaymentAmountController(
-        messagesApi,
-        mockRepository,
-        navigator,
-        identifier,
-        dataRetrieval(Some(stubbedAnswer)),
-        dataRequired,
-        formProvider,
-        component,
-        view) {
-        override val feature: FeatureFlagActionProvider = flagProvider()
-      }
+    new AdditionalPaymentAmountController(
+      messagesApi,
+      mockRepository,
+      navigator,
+      identifier,
+      dataRetrieval(Some(stubbedAnswer)),
+      dataRequired,
+      formProvider,
+      component,
+      view) {
+      override val feature: FeatureFlagActionProvider = flagProvider()
     }
+  }
 
   "AdditionalPaymentAmount Controller" must {
 
@@ -83,8 +84,7 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseControllerSpecs with
       val request = getRequest(GET, 1)
       val userAnswers = mandatoryAnswersOnRegularMonthly
         .withAdditionalPaymentPeriods(List(additionalPaymentPeriod.toString))
-      val result = controller(
-        userAnswers).onPageLoad(1)(request)
+      val result = controller(userAnswers).onPageLoad(1)(request)
 
       status(result) mustEqual OK
 
@@ -210,7 +210,8 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseControllerSpecs with
         },
         formProvider,
         component,
-        view)
+        view
+      )
 
       val result = controller.onSubmit(1)(request)
 
@@ -237,7 +238,8 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseControllerSpecs with
         },
         formProvider,
         component,
-        view)
+        view
+      )
 
       val result = controller.onSubmit(1)(request)
 
