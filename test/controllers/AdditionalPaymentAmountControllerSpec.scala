@@ -18,11 +18,9 @@ package controllers
 
 import java.time.LocalDate
 
-import akka.stream.Materializer
 import base.{CoreTestDataBuilder, SpecBaseControllerSpecs}
 import com.typesafe.config.ConfigValue
 import config.FrontendAppConfig
-import controllers.actions.FeatureFlag.TopUpJourneyFlag
 import controllers.actions._
 import forms.AdditionalPaymentAmountFormProvider
 import models.requests.{DataRequest, OptionalDataRequest}
@@ -194,7 +192,6 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseControllerSpecs with
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
-      implicit val mat = app.injector.instanceOf[Materializer]
       implicit val appConf: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
       val request =
         getRequest(GET, 1)
@@ -221,7 +218,6 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseControllerSpecs with
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      implicit val mat = app.injector.instanceOf[Materializer]
       implicit val appConf: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
       val request =
         getRequest(POST, 1)
