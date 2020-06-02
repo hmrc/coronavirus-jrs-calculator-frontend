@@ -40,8 +40,6 @@ import scala.concurrent.Future
 
 class AdditionalPaymentAmountControllerSpec extends SpecBaseControllerSpecs with MockitoSugar with CoreTestDataBuilder {
 
-  def onwardRoute = Call("GET", "/foo")
-
   val formProvider = new AdditionalPaymentAmountFormProvider()
   val form = formProvider()
 
@@ -49,16 +47,13 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseControllerSpecs with
   def getRequest(method: String, idx: Int) =
     FakeRequest(method, additionalPaymentAmountRoute(idx)).withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
-  val entrySet: Set[(String, ConfigValue)] = app.injector.instanceOf[Configuration].entrySet
-  def configValues(kv: (String, Any)): List[(String, Any)] = entrySet.map(kv => kv._1 -> kv._2).toMap.+(kv._1 -> kv._2).toList
-
   val mockRepository = mock[SessionRepository]
   val dataRetrieval: Option[UserAnswers] => FakeDataRetrievalAction = stubbedAnswer => new FakeDataRetrievalAction(stubbedAnswer)
 
   def controller(stubbedAnswer: UserAnswers = emptyUserAnswers, stubbedFlag: Option[(String, Any)] = None) = {
-    val config: Configuration =
+    val stubbedConfig: Configuration =
       stubbedFlag.map(f => Configuration.apply(configValues(f): _*)).getOrElse(app.injector.instanceOf[Configuration])
-    implicit val appConf: FrontendAppConfig = new FrontendAppConfig(config)
+    implicit val appConf: FrontendAppConfig = new FrontendAppConfig(stubbedConfig)
     def flagProvider() = new FeatureFlagActionProviderImpl()
 
     new AdditionalPaymentAmountController(
