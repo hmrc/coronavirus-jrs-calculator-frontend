@@ -33,6 +33,7 @@ import play.api.test.CSRFTokenHelper._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
+import views.html.AdditionalPaymentAmountView
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -45,6 +46,7 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseControllerSpecs with
   def additionalPaymentAmountRoute(idx: Int) = routes.AdditionalPaymentAmountController.onPageLoad(idx).url
   def getRequest(method: String, idx: Int) =
     FakeRequest(method, additionalPaymentAmountRoute(idx)).withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
+  val view = app.injector.instanceOf[AdditionalPaymentAmountView]
 
   val mockRepository = mock[SessionRepository]
   val dataRetrieval: Option[UserAnswers] => FakeDataRetrievalAction = stubbedAnswer => new FakeDataRetrievalAction(stubbedAnswer)
