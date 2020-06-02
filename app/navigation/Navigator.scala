@@ -92,6 +92,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
 
     case ClaimPeriodQuestionPage =>
       claimPeriodQuestionRoutes
+    case EmployeeStartDatePage => employeeStartDateRoutes
     case PayPeriodQuestionPage =>
       payPeriodQuestionRoutes
     case _ =>
