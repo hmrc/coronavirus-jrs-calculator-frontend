@@ -19,14 +19,14 @@ package pages
 import models.Periods
 import pages.behaviours.PageBehaviours
 
-//class PartTimePeriodsPageSpec extends PageBehaviours {
-//
-//  "PartTimePeriodsPage" must {
-//
-//    beRetrievable[List[Periods]](PartTimePeriodsPage)
-//
-//    beSettable[List[Periods]](PartTimePeriodsPage)
-//
-//    beRemovable[List[Periods]](PartTimePeriodsPage)
-//  }
-//}
+class PartTimePeriodsPageSpec extends PageBehaviours {
+
+  "PartTimePeriodsPage" must {
+
+    beRetrievable[List[Periods]](PartTimePeriodsPage)
+
+    beSettable[List[Periods]](PartTimePeriodsPage)
+
+    beRemovable[List[Periods]](PartTimePeriodsPage)
+  }
+}
