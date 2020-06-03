@@ -313,6 +313,7 @@ claimPeriodEnd.error.required.two = Mae’n rhaid i’r dyddiad dod i ben gynnwy
 claimPeriodEnd.error.required = Mae’n rhaid i’r dyddiad dod i ben gynnwys {0}
 claimPeriodEnd.error.invalid = Nodwch ddyddiad dod i ben go iawn
 claimPeriodEnd.cannot.be.after.policyEnd = Ni all y dyddiad dod i ben fod ar ôl dyddiad dod i ben y cynllun ({0})
+claimPeriodEnd.cannot.be.of.same.month = Ni all y dyddiad gorffen fod o fis gwahanol
 claimPeriodEnd.cannot.be.after.14days = Ni all y dyddiad dod i ben fod yn fwy na 14 diwrnod ar ôl dyddiad heddiw
 claimPeriodEnd.cannot.be.before.claimStart = Ni all y dyddiad dod i ben fod cyn y dyddiad dechrau
 claimPeriodEnd.legend = Dyddiad dod i ben
