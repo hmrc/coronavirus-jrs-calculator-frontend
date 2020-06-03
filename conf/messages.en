@@ -594,3 +594,9 @@ payPeriodQuestion.useSamePayPeriod = Yes
 payPeriodQuestion.useDifferentPayPeriod = No
 payPeriodQuestion.error.required = Select one of the options below
 payPeriodQuestion.period.text = from {0} to {1}
+
+partTimePeriods.title = When did this employee work during the claim period?
+partTimePeriods.heading = When did this employee work during the claim period?
+partTimePeriods.hint = Select all that apply.
+partTimePeriods.period = Pay period end: {0}
+partTimePeriods.error.required = Select the pay periods when the employee worked
