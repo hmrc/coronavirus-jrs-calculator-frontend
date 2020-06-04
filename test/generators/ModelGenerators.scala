@@ -31,7 +31,7 @@ trait ModelGenerators {
   implicit lazy val arbitraryPartialPeriod: Arbitrary[PartialPeriod] =
     Arbitrary {
       for {
-        period     <- Arbitrary.arbitrary[Period] suchThat (_.countDays > 2)
+        period     <- Arbitrary.arbitrary[Period]
         partialEnd <- periodDatesBetween(period.start.plusDays(1), period.end.minusDays(1))
         partial = Period(period.start, partialEnd)
       } yield PartialPeriod(period, partial)
@@ -45,8 +45,8 @@ trait ModelGenerators {
   implicit lazy val arbitraryPeriod: Arbitrary[Period] =
     Arbitrary {
       for {
-        startDate <- periodDatesBetween(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 5, 30))
-        endDate   <- periodDatesBetween(startDate.plusDays(1), LocalDate.of(2020, 5, 31))
+        startDate <- periodDatesBetween(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 5, 20))
+        endDate   <- periodDatesBetween(startDate.plusDays(7), LocalDate.of(2020, 5, 31))
       } yield Period(startDate, endDate)
     }
 
