@@ -22,7 +22,7 @@ import base.{CoreTestDataBuilder, SpecBaseControllerSpecs}
 import config.FrontendAppConfig
 import controllers.routes
 import models.ClaimPeriodQuestion._
-import models.PartTimeQuestion.PartTimeNo
+import models.PartTimeQuestion.{PartTimeNo, PartTimeYes}
 import models.PayMethod.{Regular, Variable}
 import models._
 import pages._
@@ -113,6 +113,16 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         val navigator = new Navigator(appConf)
 
         navigator.nextPage(RegularPayAmountPage, userAnswers) mustBe routes.PartTimeQuestionController.onPageLoad()
+      }
+
+      "go to PartTimePeriodsPage after PartTimeQuestionPage if PartTimeQuestion is PartTimeYes and pay periods > 1" in {
+        val answersWithPartTime = emptyUserAnswers.withPartTimeQuestion(PartTimeYes)
+
+        navigator
+          .nextPage(PartTimeQuestionPage, answersWithPartTime.withPayDate(List("2020, 7, 1", "2020, 7, 15"))) mustBe routes.PartTimePeriodsController
+          .onPageLoad()
+
+        navigator.nextPage(PartTimeQuestionPage, answersWithPartTime.withPayDate(Nil)) mustBe routes.RootPageController.onPageLoad()
       }
 
       "loop around pay date if last pay date isn't claim end date or after" in {
