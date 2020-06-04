@@ -93,8 +93,8 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
           .onPageLoad()
       }
 
-      "go to NicCategoryLetterPage after RegularPayAmountPage" in {
-        navigator.nextPage(RegularPayAmountPage, UserAnswers("id")) mustBe routes.NicCategoryController.onPageLoad()
+      "go to TopUpStatusPage after RegularPayAmountPage" in {
+        navigator.nextPage(RegularPayAmountPage, UserAnswers("id")) mustBe routes.TopUpStatusController.onPageLoad()
       }
 
       "go to PartTimeQuestionPage after RegularPayAmountPage if phase two started" in {

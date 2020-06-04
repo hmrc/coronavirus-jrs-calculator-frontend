@@ -101,7 +101,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
 
   private def regularPayAmountRoute: UserAnswers => Call = { userAnswer =>
     if (isPhaseTwo(userAnswer)) routes.PartTimeQuestionController.onPageLoad()
-    else routes.NicCategoryController.onPageLoad()
+    else routes.TopUpStatusController.onPageLoad()
   }
 
   private val payDateRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
