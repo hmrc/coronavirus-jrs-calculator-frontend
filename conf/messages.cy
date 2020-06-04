@@ -537,8 +537,8 @@ furloughBreakdown.total = Cyfanswm y grant ffyrlo ar gyfer y cyfnod cyflog = £{
 furloughBreakdown.furloughCap.p1 = Grant ffyrlo wedi’i gyfrifo = £{0}
 furloughBreakdown.furloughCap.p2 = Mae hyn yn fwy na’r uchafswm grant ffyrlo ar gyfer y cyfnod cyflog hwn, sef:
 furloughBreakdown.furloughCap.fullPeriodCap = £{0}
-furloughBreakdown.furloughCap.periodSpansMonthCap = {0} diwrnodau ffyrlo ym mis {1} ar £{2} + {3} diwrnodau ffyrlo ym mis {4} ar £{5} = £{6}.
-furloughBreakdown.furloughCap.partialPeriodCap ={0} diwrnodau ffyrlo ym mis {1} ar £{2} = £{3}
+furloughBreakdown.furloughCap.periodSpansMonthCap = {0} o ddiwrnodau ffyrlo ym mis {1} ar £{2} + {3} o ddiwrnodau ffyrlo ym mis {4} ar £{5} = £{6}.
+furloughBreakdown.furloughCap.partialPeriodCap ={0} o ddiwrnodau ffyrlo ym mis {1} ar £{2} = £{3}
 furloughBreakdown.furloughCap.p3 = Felly, rydym yn defnyddio’r uchafswm grant ffyrlo.
 
 nicBreakdown.h4 = Cyfraniadau Yswiriant Gwladol y cyflogwr
