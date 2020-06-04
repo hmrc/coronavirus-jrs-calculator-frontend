@@ -22,6 +22,7 @@ import config.FrontendAppConfig
 import controllers.routes
 import handlers.LastYearPayControllerRequestHandler
 import javax.inject.{Inject, Singleton}
+import models.PartTimeQuestion.{PartTimeNo, PartTimeYes}
 import models.PayMethod.{Regular, Variable}
 import models.{UserAnswers, _}
 import pages.{PayDatePage, _}
@@ -94,6 +95,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     case EmployeeStartDatePage => employeeStartDateRoutes
     case PayPeriodQuestionPage =>
       payPeriodQuestionRoutes
+    case PartTimeQuestionPage => partTimeQuestionRoute
     case _ =>
       _ =>
         routes.RootPageController.onPageLoad()
@@ -103,6 +105,16 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     if (isPhaseTwo(userAnswer)) routes.PartTimeQuestionController.onPageLoad()
     else routes.TopUpStatusController.onPageLoad()
   }
+
+  private def partTimeQuestionRoute: UserAnswers => Call =
+    userAnswer =>
+      userAnswer
+        .getV(PartTimeQuestionPage)
+        .map {
+          case PartTimeYes => routes.RootPageController.onPageLoad()
+          case PartTimeNo  => routes.TopUpStatusController.onPageLoad()
+        }
+        .getOrElse(routes.PartTimeQuestionController.onPageLoad())
 
   private val payDateRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
     (for {
