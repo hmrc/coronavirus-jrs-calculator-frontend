@@ -74,4 +74,6 @@ case class PartialPeriodWithPaymentDate(period: PartialPeriod, paymentDate: Paym
 
 case class PhaseTwoPeriod(periodWithPaymentDate: PeriodWithPaymentDate, actualHours: Option[Hours], usualHours: Option[Hours]) {
   def isPartTime: Boolean = actualHours.isDefined && usualHours.isDefined
+  def actual: BigDecimal = actualHours.defaulted.value
+  def usual: BigDecimal = usualHours.defaulted.value
 }

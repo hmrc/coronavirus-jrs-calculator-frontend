@@ -53,8 +53,6 @@ case object PhaseTwoRegularPay extends PhaseTwoJourney
 case object PhaseTwoVariablePay extends PhaseTwoJourney
 case object PhaseTwoVariablePayWithCylb extends PhaseTwoJourney
 
-case class PhaseTwoBranchingQuestions(claimStart: LocalDate, payMethod: PayMethod, employeeStarted: Option[EmployeeStarted], employeeStartDate: Option[LocalDate])
-
 case class PhaseTwoReferencePayData(furloughPeriod: FurloughWithinClaim, periods: Seq[PhaseTwoPeriod], frequency: PaymentFrequency)
 
 sealed trait PhaseTwoReferencePay {

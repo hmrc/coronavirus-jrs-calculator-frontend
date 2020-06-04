@@ -16,7 +16,7 @@
 
 package services
 
-import models.{Amount, PartialPeriod}
+import models.{Amount, Hours, PartialPeriod}
 import utils.AmountRounding._
 
 import scala.math.BigDecimal.RoundingMode
@@ -29,6 +29,11 @@ trait Calculators extends PeriodHelper {
 
   def partialPeriodDailyCalculation(payment: Amount, partialPeriod: PartialPeriod): Amount =
     dailyCalculation(payment, partialPeriod.original.countDays, partialPeriod.partial.countDays)
+
+  def partTimeHoursCalculation(payment: Amount, actual: BigDecimal, usual: BigDecimal) = {
+    val furloughed = usual - actual
+    Amount((payment.value / usual) * furloughed).halfUp
+  }
 
   def dailyCalculation(payment: Amount, wholePeriodCount: Int, partialPeriodCount: Int): Amount =
     Amount((payment.value / wholePeriodCount) * partialPeriodCount).halfUp
