@@ -57,8 +57,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     case PayMethodPage =>
       payMethodRoutes
     case RegularPayAmountPage =>
-      _ =>
-        routes.TopUpStatusController.onPageLoad()
+      regularPayAmountRoute
     case EmployeeStartedPage =>
       variableLengthEmployedRoutes
     case PartialPayBeforeFurloughPage =>
@@ -98,6 +97,11 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     case _ =>
       _ =>
         routes.RootPageController.onPageLoad()
+  }
+
+  private def regularPayAmountRoute: UserAnswers => Call = { userAnswer =>
+    if (isPhaseTwo(userAnswer)) routes.PartTimeQuestionController.onPageLoad()
+    else routes.NicCategoryController.onPageLoad()
   }
 
   private val payDateRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
@@ -299,4 +303,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
       case None                                          => routes.PayPeriodQuestionController.onPageLoad()
     }
   }
+
+  private def isPhaseTwo: UserAnswers => Boolean =
+    userAnswer => userAnswer.getV(ClaimPeriodStartPage).exists(!_.isBefore(appConfig.phaseTwoStartDate))
 }

@@ -19,6 +19,7 @@ package navigation
 import java.time.LocalDate
 
 import base.{CoreTestDataBuilder, SpecBaseControllerSpecs}
+import config.FrontendAppConfig
 import controllers.routes
 import models.ClaimPeriodQuestion._
 import models.PayMethod.{Regular, Variable}
@@ -92,8 +93,19 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
           .onPageLoad()
       }
 
-      "go to TopUpStatusPage after RegularPayAmountPage" in {
-        navigator.nextPage(RegularPayAmountPage, UserAnswers("id")) mustBe routes.TopUpStatusController.onPageLoad()
+      "go to NicCategoryLetterPage after RegularPayAmountPage" in {
+        navigator.nextPage(RegularPayAmountPage, UserAnswers("id")) mustBe routes.NicCategoryController.onPageLoad()
+      }
+
+      "go to PartTimeQuestionPage after RegularPayAmountPage if phase two started" in {
+        val userAnswers = emptyUserAnswers.withClaimPeriodStart(LocalDate.now)
+
+        val appConf = new FrontendAppConfig(conf) {
+          override lazy val phaseTwoStartDate: LocalDate = LocalDate.now
+        }
+        val navigator = new Navigator(appConf)
+
+        navigator.nextPage(RegularPayAmountPage, userAnswers) mustBe routes.PartTimeQuestionController.onPageLoad()
       }
 
       "loop around pay date if last pay date isn't claim end date or after" in {
