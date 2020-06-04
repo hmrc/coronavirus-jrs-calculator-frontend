@@ -48,6 +48,10 @@ trait ModelGenerators {
         startDate <- periodDatesBetween(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 5, 20))
         endDate   <- periodDatesBetween(startDate.plusDays(7), LocalDate.of(2020, 5, 31))
       } yield Period(startDate, endDate)
+
+  implicit lazy val arbitraryPartTimeQuestion: Arbitrary[PartTimeQuestion] =
+    Arbitrary {
+      Gen.oneOf(PartTimeQuestion.values)
     }
 
   implicit lazy val arbitraryPayPeriodQuestion: Arbitrary[PayPeriodQuestion] =

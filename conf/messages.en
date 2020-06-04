@@ -600,3 +600,10 @@ partTimePeriods.heading = When did this employee work during the claim period?
 partTimePeriods.hint = Select all that apply.
 partTimePeriods.period = Pay period end: {0}
 partTimePeriods.error.required = Select the pay periods when the employee worked
+
+partTimeQuestion.title = Has this employee done any work during the claim period?
+partTimeQuestion.heading = Has this employee done any work during the claim period?
+partTimeQuestion.p1 = From the 1 July employees are able to alternate between furlough and employee funded work during the claim period.
+partTimeQuestion.partTimeYes = Yes
+partTimeQuestion.partTimeNo = No
+partTimeQuestion.error.required = Select one of the options below

@@ -76,7 +76,7 @@ compliant.two.p4.2= gyngor ar wneud eich dyfais yn haws i’w defnyddio os oes g
 compliant.three.heading=Pa mor hygyrch yw’r gwasanaeth hwn
 compliant.three.p1.1=Mae’r gwasanaeth hwn yn cydymffurfio’n rhannol â
 compliant.three.p1.2=Safon ‘AA’ Canllawiau Hygyrchedd Cynnwys y We, fersiwn 2.1
-compliant.three.p2 =Nid oes unrhyw broblemau hygyrchedd hysbys yn y gwasanaeth hwn.
+compliant.three.p2=Nid oes unrhyw broblemau hygyrchedd hysbys yn y gwasanaeth hwn.
 
 ## section five
 compliant.five.heading=Rhoi gwybod am broblemau hygyrchedd gyda’r gwasanaeth hwn
@@ -109,7 +109,7 @@ compliant.nine.heading=Sut gwnaethom brofi’r gwasanaeth hwn
 compliant.nine.p1=Lansiwyd y gwasanaeth ar 20 Ebrill 2020 a gwiriwyd ei fod yn cydymffurfio â safon ‘AA’ Canllawiau Hygyrchedd Cynnwys y We, fersiwn 2.1.
 compliant.nine.p2.1=Adeiladwyd y gwasanaeth gan ddefnyddio rhannau a brofwyd gan y
 compliant.nine.p2.2=Ganolfan Hygyrchedd Digidol
-compliant.nine.p2.3=The full service was tested by HMRC and included disabled users.
+compliant.nine.p2.3=Profwyd y gwasanaeth llawn gan CThEM, ac roedd y gwaith o brofi’r gwasanaeth yn cynnwys defnyddwyr anabl.
 compliant.nine.p3=Paratowyd y dudalen hon ar 17 Ebrill 2020. Cafodd ei diweddaru ddiwethaf ar 20 Ebrill 2020.
 
 date.day = Diwrnod
@@ -254,8 +254,8 @@ confirmation.paid.weekly = Caiff ei dalu bob wythnos
 confirmation.paid.fortnightly = Caiff ei dalu bob 2 wythnos
 confirmation.paid.fourweekly = Caiff ei dalu bob 4 wythnos
 confirmation.paid.monthly = Caiff ei dalu bob mis
-confirmation.nic.payable = Ei gategori Yswiriant Gwladol yw [ var ] neu [ var ]
-confirmation.nic.nonPayable = Ei gategori Yswiriant Gwladol yw [ var ] neu [ var ]
+confirmation.nic.payable = Ei gategori Yswiriant Gwladol yw A, B, C neu J
+confirmation.nic.nonPayable = Ei gategori Yswiriant Gwladol yw H, M neu Z
 confirmation.pension.doesContribute = Mae’n derbyn cyfraniadau pensiwn y cyflogwr
 confirmation.pension.doesNotContribute = Nid yw’n cael cyfraniadau pensiwn y cyflogwr
 confirmation.breakdown.summary = Detailed breakdown of calculations
@@ -363,8 +363,8 @@ employeeStartDate.hint = Er enghraifft, 28 11 2019
 employeeStartDate.error.min = Mae’n rhaid i ddyddiad dechrau’r cyflogai fod ar neu ar ôl {0}
 employeeStartDate.error.max = Mae’n rhaid i ddyddiad dechrau’r cyflogai fod cyn iddo ddechrau ei ffyrlo, ar neu cyn 19 Mawrth 2020
 
-annualPayAmount.title.after1Feb2019 = What did the employee get paid in total since they started until {0}?
-annualPayAmount.heading.after1Feb2019 = What did the employee get paid in total since they started until {0}?
+annualPayAmount.title.after1Feb2019 = Beth oedd cyfanswm yr hyn a dalwyd i’r cyflogai ers iddo ddechrau tan {0}?
+annualPayAmount.heading.after1Feb2019 = Beth oedd cyfanswm yr hyn a dalwyd i’r cyflogai ers iddo ddechrau tan {0}?
 annualPayAmount.title.onOrBefore1Feb2019 = Faint a enillodd y cyflogai hwn o 6 April 2019 i {0}?
 annualPayAmount.heading.onOrBefore1Feb2019 = Faint a enillodd y cyflogai hwn o 6 April 2019 i {0}?
 annualPayAmount.error.required = Nodwch swm dilys
@@ -390,8 +390,8 @@ FurloughPartialPay.error.required = Nodwch swm dilys
 FurloughPartialPay.error.invalid = Nodwch swm dilys
 FurloughPartialPay.p = Mae hyn ar gyfer y cyfnod y cafodd y cyflogai hwn ei dalu pan nad oedd ar ffyrlo.
 
-lastPayDate.title = Beth yw dyddiad cyflog y cyflogai hwn ar gyfer y cyfnod cyflog sy’n dod i ben ar [var date]?
-lastPayDate.heading = Beth yw dyddiad cyflog y cyflogai hwn ar gyfer y cyfnod cyflog sy’n dod i ben ar [var date]?
+lastPayDate.title = Beth yw dyddiad cyflog y cyflogai hwn ar gyfer y cyfnod cyflog sy’n dod i ben ar {0}?
+lastPayDate.heading = Beth yw dyddiad cyflog y cyflogai hwn ar gyfer y cyfnod cyflog sy’n dod i ben ar {0}?
 lastPayDate.error.required.all = Nodwch y dyddiad cyflog
 lastPayDate.error.required.two = Mae’n rhaid i’r dyddiad cyflog gynnwys {0} a {1}
 lastPayDate.error.required = Mae’n rhaid i’r dyddiad cyflog gynnwys {0}
@@ -428,7 +428,7 @@ topupPeriods.error.required = Dewiswch y cyfnodau cyflog rydych yn ychwanegu tal
 
 topUpAmount.title = Beth yw swm y taliad atodol ar gyfer y cyfnod cyflog sy’n dod i ben ar {0}?
 topUpAmount.heading = Beth yw swm y taliad atodol ar gyfer y cyfnod cyflog sy’n dod i ben ar {0}?
-topUpAmount.p1 = Cyflog ffyrlo am y cyfnod cyflog hwn cyn gwneud taliad atodol: [var amount]
+topUpAmount.p1 = Cyflog ffyrlo am y cyfnod cyflog hwn cyn gwneud taliad atodol: £{0}
 topUpAmount.p2 = Sicrhewch eich bod yn cynnwys swm y taliad atodol yn unig. Peidiwch â chynnwys cyflog ffyrlo’r cyflogai nac unrhyw gyflog atodol arall.
 topUpAmount.error.required = Nodwch swm y taliad atodol ar gyfer y cyfnod cyflog hwn
 topUpAmount.error.nonNumeric = Nodwch swm y taliad atodol mewn rhifau
@@ -506,7 +506,7 @@ referencePayBreakdown.regular.l3 = Lluoswch â {0} (o ddiwrnodau ffyrlo).
 
 referencePayBreakdown.regular.employerFunded.h4 = Cyfrifo’r cyflog a ariennir gan y cyflogwr
 referencePayBreakdown.regular.employerFunded.l1 = Dechreuwch gyda £{0} (o’r cyfnod cyflog)
-referencePayBreakdown.regular.employerFunded.l2 = Llai {amount} (cyflog yn seiliedig ar ddiwrnodau ffyrlo)
+referencePayBreakdown.regular.employerFunded.l2 = Llai £{0} (cyflog yn seiliedig ar ddiwrnodau ffyrlo)
 referencePayBreakdown.regular.employerFunded.result = Cyflog a ariennir gan y cyflogwr am y {0} o ddiwrnodau sy’n weddill yn y cyfnod cyflog = £{1}
 
 referencePayBreakdown.average.p1 = ystyriwch gyfanswm y cyflog o ddyddiad cychwyn y cyflogai (neu 6 Ebrill 2019, os yw hynny’n gynharach) hyd at y diwrnod cyn dyddiad cychwyn ffyrlo y cyflogai (neu 5 Ebrill 2020, os yw hynny’n hwyrach):
@@ -537,8 +537,8 @@ furloughBreakdown.total = Cyfanswm y grant ffyrlo ar gyfer y cyfnod cyflog = £{
 furloughBreakdown.furloughCap.p1 = Grant ffyrlo wedi’i gyfrifo = £{0}
 furloughBreakdown.furloughCap.p2 = Mae hyn yn fwy na’r uchafswm grant ffyrlo ar gyfer y cyfnod cyflog hwn, sef:
 furloughBreakdown.furloughCap.fullPeriodCap = £{0}
-furloughBreakdown.furloughCap.periodSpansMonthCap = {0} furlough days in {1} at £{2} + {3} furlough days in {4} at £{5} = £{6}.
-furloughBreakdown.furloughCap.partialPeriodCap ={0} furlough days in {1} at £{2} = £{3}
+furloughBreakdown.furloughCap.periodSpansMonthCap = {0} diwrnodau ffyrlo ym mis {1} ar £{2} + {3} diwrnodau ffyrlo ym mis {4} ar £{5} = £{6}.
+furloughBreakdown.furloughCap.partialPeriodCap ={0} diwrnodau ffyrlo ym mis {1} ar £{2} = £{3}
 furloughBreakdown.furloughCap.p3 = Felly, rydym yn defnyddio’r uchafswm grant ffyrlo.
 
 nicBreakdown.h4 = Cyfraniadau Yswiriant Gwladol y cyflogwr
@@ -563,8 +563,8 @@ nicBreakdown.total = Cyfanswm y grant YG ar gyfer y cyfnod cyflog =  £{0}
 pensionBreakdown.h4 = Isafswm cyfraniadau pensiwn y cyflogwr
 pensionBreakdown.l1 = Dechreuwch gyda £{0} (grant ffyrlo).
 pensionBreakdown.l2 = Talgrynnwch i lawr i’r bunt agosaf.
-pensionBreakdown.l3.full.20 = Deduct £{0} (Lower Level of Qualifying Earnings for 19/20 tax year).
-pensionBreakdown.l3.full.21 = Deduct £{0} (Lower Level of Qualifying Earnings for 20/21 tax year).
+pensionBreakdown.l3.full.20 = Didynnwch £{0} (Lefel Is o Enillion Cymwys ar gyfer blwyddyn dreth 19/20).
+pensionBreakdown.l3.full.21 = Didynnwch £{0} (Lefel Is o Enillion Cymwys ar gyfer blwyddyn dreth 20/21).
 pensionBreakdown.l3.partial.20 = Didynnwch £{0} (£{1} Lefel Is o Enillion Cymwys ar gyfer blwyddyn dreth 2019/20, rhannwch â {2} o ddiwrnodau yn y cyfnod cyflog a lluoswch â {3} o ddiwrnodau ffyrlo).
 pensionBreakdown.l3.partial.21 = Didynnwch £{0} (£{1} Lefel Is o Enillion Cymwys ar gyfer blwyddyn dreth 2020/21, rhannwch â {2} o ddiwrnodau yn y cyfnod cyflog a lluoswch â {3} o ddiwrnodau ffyrlo).
 pensionBreakdown.l4 = Lluoswch â 3%.

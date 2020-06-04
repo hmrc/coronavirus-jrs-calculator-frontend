@@ -110,3 +110,6 @@ POST       /claim-period-question                            controllers.ClaimPe
 
 GET        /part-time-periods                                controllers.PartTimePeriodsController.onPageLoad()
 POST       /part-time-periods                                controllers.PartTimePeriodsController.onSubmit()
+
+GET        /part-time-question                               controllers.PartTimeQuestionController.onPageLoad()
+POST       /part-time-question                               controllers.PartTimeQuestionController.onSubmit()
