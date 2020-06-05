@@ -97,11 +97,11 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         navigator.nextPage(RegularPayAmountPage, emptyUserAnswers) mustBe routes.TopUpStatusController.onPageLoad()
       }
 
-      "go to TopUpStatusPage after PartTimeQuestionPage if `PartTimeNo`" in {
+      "go to NicCategoryPage after PartTimeQuestionPage if `PartTimeNo`" in {
         navigator.nextPage(
           PartTimeQuestionPage,
           emptyUserAnswers
-            .withPartTimeQuestion(PartTimeNo)) mustBe routes.TopUpStatusController.onPageLoad()
+            .withPartTimeQuestion(PartTimeNo)) mustBe routes.NicCategoryController.onPageLoad()
       }
 
       "go to PartTimeQuestionPage after RegularPayAmountPage if phase two started" in {

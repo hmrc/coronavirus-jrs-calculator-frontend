@@ -112,7 +112,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
         .getV(PartTimeQuestionPage)
         .map {
           case PartTimeYes => routes.PartTimePeriodsController.onPageLoad()
-          case PartTimeNo  => routes.TopUpStatusController.onPageLoad()
+          case PartTimeNo  => routes.NicCategoryController.onPageLoad()
         }
         .getOrElse(routes.PartTimeQuestionController.onPageLoad())
 
