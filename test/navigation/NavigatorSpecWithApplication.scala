@@ -123,7 +123,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
           .onPageLoad()
       }
 
-      "go to PartTimeQuestionPage after AnnualPayAmountPage if phase two started with no part pay periods" in {
+      "go to PartTimeQuestionPage after AnnualPayAmountPage if phase two started" in {
         val userAnswers = emptyUserAnswers.withClaimPeriodStart(LocalDate.now)
 
         val appConf = new FrontendAppConfig(conf) {
@@ -295,22 +295,12 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         ) mustBe routes.PartialPayBeforeFurloughController.onPageLoad()
       }
 
-      "go to PartialPayAfterFurloughPage loop after variable gross pay page" in {
+      "go to PartialPayAfterFurloughPage loop after variable gross pay page phase one" in {
         val userAnswers = emptyUserAnswers
-          .set(FurloughStartDatePage, LocalDate.of(2020, 3, 10))
-          .get
-          .set(PayDatePage, LocalDate.of(2020, 3, 9), Some(1))
-          .get
-          .set(PayDatePage, LocalDate.of(2020, 4, 10), Some(2))
-          .get
-          .set(PayDatePage, LocalDate.of(2020, 5, 10), Some(3))
-          .get
-          .set(PayDatePage, LocalDate.of(2020, 6, 10), Some(4))
-          .get
-          .set(ClaimPeriodStartPage, LocalDate.of(2020, 3, 10))
-          .get
-          .set(ClaimPeriodEndPage, LocalDate.of(2020, 5, 15))
-          .get
+          .withFurloughStartDate("2020, 3, 10")
+          .withPayDate(List("2020, 3, 9", "2020, 4, 10", "2020, 5, 10", "2020, 6, 10"))
+          .withClaimPeriodStart("2020, 3, 10")
+          .withClaimPeriodEnd("2020, 5, 15")
 
         navigator.nextPage(
           AnnualPayAmountPage,
@@ -318,16 +308,11 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         ) mustBe routes.PartialPayAfterFurloughController.onPageLoad()
       }
 
-      "go to TopUpStatusPage after variable gross pay page if there are no partial furloughs" in {
+      "go to TopUpStatusPage after variable gross pay page if there are no partial furloughs phase one" in {
         val userAnswers = emptyUserAnswers
-          .set(FurloughStartDatePage, LocalDate.of(2020, 3, 1))
-          .get
-          .set(FurloughEndDatePage, LocalDate.of(2020, 4, 10))
-          .get
-          .set(PayDatePage, LocalDate.of(2020, 3, 1), Some(1))
-          .get
-          .set(PayDatePage, LocalDate.of(2020, 4, 10), Some(2))
-          .get
+          .withFurloughStartDate("2020, 3, 1")
+          .withFurloughEndDate("2020, 4, 10")
+          .withPayDate(List("2020, 3, 1", "2020, 4, 10"))
 
         navigator.nextPage(
           AnnualPayAmountPage,
