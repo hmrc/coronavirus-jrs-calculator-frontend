@@ -123,6 +123,17 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
           .onPageLoad()
       }
 
+      "go to PartTimeQuestionPage after AnnualPayAmountPage if phase two started with no part pay periods" in {
+        val userAnswers = emptyUserAnswers.withClaimPeriodStart(LocalDate.now)
+
+        val appConf = new FrontendAppConfig(conf) {
+          override lazy val phaseTwoStartDate: LocalDate = LocalDate.now
+        }
+        val navigator = new Navigator(appConf)
+
+        navigator.nextPage(AnnualPayAmountPage, userAnswers) mustBe routes.PartTimeQuestionController.onPageLoad()
+      }
+
       "loop around pay date if last pay date isn't claim end date or after" in {
         val userAnswers = emptyUserAnswers
           .set(ClaimPeriodEndPage, LocalDate.of(2020, 5, 30))
