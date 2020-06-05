@@ -111,9 +111,8 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
       userAnswer
         .getV(PartTimeQuestionPage)
         .map {
-          case PartTimeYes if userAnswer.getList(PayDatePage).size > 1 => routes.PartTimePeriodsController.onPageLoad()
-          case PartTimeYes                                             => routes.RootPageController.onPageLoad()
-          case PartTimeNo                                              => routes.TopUpStatusController.onPageLoad()
+          case PartTimeYes => routes.PartTimePeriodsController.onPageLoad()
+          case PartTimeNo  => routes.TopUpStatusController.onPageLoad()
         }
         .getOrElse(routes.PartTimeQuestionController.onPageLoad())
 
