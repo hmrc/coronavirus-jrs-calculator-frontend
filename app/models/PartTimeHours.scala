@@ -25,3 +25,10 @@ case class PartTimeHours(date: LocalDate, hours: Hours)
 object PartTimeHours {
   implicit val format = Json.format[PartTimeHours]
 }
+
+
+case class PartTimeNormalHours(hours: Hours)
+
+object PartTimeNormalHours {
+  implicit val format = Json.format[PartTimeNormalHours]
+}
