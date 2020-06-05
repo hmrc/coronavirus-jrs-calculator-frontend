@@ -16,13 +16,13 @@
 
 package pages
 
-import models.PartTimeHours
+import models.PartTimeNormalHours
 import play.api.libs.json.JsPath
 
-case object PartTimeHoursPage extends QuestionPage[PartTimeHours] {
+case object PartTimeNormalHoursPage extends QuestionPage[PartTimeNormalHours] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "partTimeHours"
+  override def toString: String = "partTimeNormalHours"
 }
 
