@@ -32,7 +32,11 @@ trait Calculators extends PeriodHelper {
 
   def partTimeHoursCalculation(payment: Amount, actual: BigDecimal, usual: BigDecimal) = {
     val furloughed = usual - actual
-    Amount((payment.value / usual) * furloughed).halfUp
+    if(furloughed == 0) {
+      payment
+    } else {
+      Amount((payment.value / usual) * furloughed).halfUp
+    }
   }
 
   def dailyCalculation(payment: Amount, wholePeriodCount: Int, partialPeriodCount: Int): Amount =
