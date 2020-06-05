@@ -22,9 +22,7 @@ import models.PensionStatus.{DoesContribute, DoesNotContribute}
 import models.{Amount, FullPeriodCap, FullPeriodPensionBreakdown, Hours, PartialPeriodPensionBreakdown, PhaseTwoFurloughBreakdown, PhaseTwoPeriod, RegularPaymentWithPhaseTwoPeriod, TaxYearEnding2020, TaxYearEnding2021}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class
-
-PensionCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with CoreTestDataBuilder {
+class PensionCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with CoreTestDataBuilder {
 
   "Returns 0.00 for Pension grant if not eligible for Pension grant full period" in new PensionCalculator {
     val payment = regularPaymentWithFullPeriod(2000.00, 2000.00, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31"))
