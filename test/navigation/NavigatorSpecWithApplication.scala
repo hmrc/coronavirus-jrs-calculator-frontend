@@ -442,11 +442,24 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         ) mustBe routes.NicCategoryController.onPageLoad()
       }
 
-      "go to TopUpStatusPage after PartialPayAfterFurloughPage" in {
+      "go to TopUpStatusPage after PartialPayAfterFurloughPage if phase one" in {
         navigator.nextPage(
           PartialPayAfterFurloughPage,
           emptyUserAnswers
         ) mustBe routes.TopUpStatusController.onPageLoad()
+      }
+
+      "go to TopUpStatusPage after PartTimeQuestionPage if phase two" in {
+        val userAnswers = emptyUserAnswers.withClaimPeriodStart(LocalDate.now)
+        val appConf = new FrontendAppConfig(conf) {
+          override lazy val phaseTwoStartDate: LocalDate = LocalDate.now
+        }
+        val navigator = new Navigator(appConf)
+
+        navigator.nextPage(
+          PartialPayAfterFurloughPage,
+          userAnswers
+        ) mustBe routes.PartTimeQuestionController.onPageLoad()
       }
 
       "go to correct page after FurloughPeriodQuestionPage" in {

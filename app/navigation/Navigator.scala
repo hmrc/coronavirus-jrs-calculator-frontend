@@ -64,8 +64,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     case PartialPayBeforeFurloughPage =>
       partialPayBeforeFurloughRoutes
     case PartialPayAfterFurloughPage =>
-      _ =>
-        routes.TopUpStatusController.onPageLoad()
+      partialPayAfterFurloughRoute
     case AnnualPayAmountPage =>
       annualPayAmountRoutes
     case LastPayDatePage =>
@@ -100,6 +99,12 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
       _ =>
         routes.RootPageController.onPageLoad()
   }
+
+  def partialPayAfterFurloughRoute: UserAnswers => Call =
+    userAnswers =>
+      if (isPhaseTwo(userAnswers))
+        routes.PartTimeQuestionController.onPageLoad()
+      else routes.TopUpStatusController.onPageLoad()
 
   private def regularPayAmountRoute: UserAnswers => Call = { userAnswer =>
     if (isPhaseTwo(userAnswer)) routes.PartTimeQuestionController.onPageLoad()
