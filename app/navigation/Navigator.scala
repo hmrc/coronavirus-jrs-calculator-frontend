@@ -96,6 +96,9 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     case PayPeriodQuestionPage =>
       payPeriodQuestionRoutes
     case PartTimeQuestionPage => partTimeQuestionRoute
+    case PartTimePeriodsPage =>
+      _ =>
+        routes.PartTimeHoursController.onPageLoad(1)
     case _ =>
       _ =>
         routes.RootPageController.onPageLoad()
@@ -166,9 +169,9 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
       .getV(PartTimePeriodsPage)
       .map { partTimePeriods =>
         if (partTimePeriods.isDefinedAt(previousIdx)) {
-          routes.PartTimeHoursController.onPageLoad(previousIdx + 1)
+          routes.PartTimeNormalHoursController.onPageLoad(previousIdx)
         } else {
-          routes.PartTimeNormalHoursController.onPageLoad(previousIdx + 1)
+          routes.ErrorController.somethingWentWrong()
         }
       }
       .getOrElse(routes.PartTimePeriodsController.onPageLoad())
@@ -179,9 +182,9 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
       .getV(PartTimePeriodsPage)
       .map { partTimePeriods =>
         if (partTimePeriods.isDefinedAt(previousIdx)) {
-          routes.PartTimeNormalHoursController.onPageLoad(previousIdx + 1)
+          routes.PartTimeHoursController.onPageLoad(previousIdx + 1)
         } else {
-          routes.RootPageController.onPageLoad()
+          routes.NicCategoryController.onPageLoad()
         }
       }
       .getOrElse(routes.PartTimePeriodsController.onPageLoad())
