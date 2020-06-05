@@ -16,17 +16,17 @@
 
 package pages
 
-import models.{PartTimeHours, PartTimeNormalHours}
+import models.UsualHours
 import pages.behaviours.PageBehaviours
 
 class PartTimeNormalHoursPageSpec extends PageBehaviours {
 
   "PartTimeNormalHoursPage" must {
 
-    beRetrievable[PartTimeNormalHours](PartTimeNormalHoursPage)
+    beRetrievable[UsualHours](PartTimeNormalHoursPage)
 
-    beSettable[PartTimeNormalHours](PartTimeNormalHoursPage)
+    beSettable[UsualHours](PartTimeNormalHoursPage)
 
-    beRemovable[PartTimeNormalHours](PartTimeNormalHoursPage)
+    beRemovable[UsualHours](PartTimeNormalHoursPage)
   }
 }

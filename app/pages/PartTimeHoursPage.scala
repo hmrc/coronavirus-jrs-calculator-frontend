@@ -25,4 +25,3 @@ case object PartTimeHoursPage extends QuestionPage[PartTimeHours] {
 
   override def toString: String = "partTimeHours"
 }
-

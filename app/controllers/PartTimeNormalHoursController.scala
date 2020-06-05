@@ -20,7 +20,7 @@ import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.PartTimeHoursFormProvider
 import javax.inject.Inject
-import models.{Hours, PartTimeHours, PartTimeNormalHours, Period, Periods}
+import models.{Hours, PartTimeHours, Period, Periods, UsualHours}
 import navigation.Navigator
 import pages.{PartTimeHoursPage, PartTimeNormalHoursPage, PartTimePeriodsPage}
 import play.api.data.Form
@@ -41,7 +41,8 @@ class PartTimeNormalHoursController @Inject()(
   formProvider: PartTimeHoursFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartTimeHoursView
-)(implicit ec: ExecutionContext) extends BaseController {
+)(implicit ec: ExecutionContext)
+    extends BaseController {
 
   val form: Form[Hours] = formProvider()
 
@@ -68,7 +69,7 @@ class PartTimeNormalHoursController @Inject()(
             value =>
               for {
                 updatedAnswers <- Future.fromTry(
-                                   request.userAnswers.set(PartTimeNormalHours, PartTimeNormalHours(value), Some(idx)))
+                                   request.userAnswers.set(PartTimeNormalHoursPage, UsualHours(partTimePeriod.end, value), Some(idx)))
                 _ <- sessionRepository.set(updatedAnswers)
               } yield Redirect(navigator.nextPage(PartTimeHoursPage, updatedAnswers, Some(idx)))
           )
