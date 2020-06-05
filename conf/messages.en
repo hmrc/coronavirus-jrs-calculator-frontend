@@ -613,8 +613,8 @@ partTimeQuestion.partTimeYes = Yes
 partTimeQuestion.partTimeNo = No
 partTimeQuestion.error.required = Select one of the options below
 
-partTimeHours.title = What hours did this employee work between {0} and {1}?
-partTimeHours.heading = What hours did this employee work between {0} and {1}?
+partTimeHours.title = What hours did this employee actually work between {0} and {1}?
+partTimeHours.heading = What hours did this employee actually work between {0} and {1}?
 partTimeHours.p1 = For example, 37.5 hours
 partTimeHours.hint = Hours
 partTimeHours.error.required = Enter the part time hours for this pay period
