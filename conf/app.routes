@@ -118,4 +118,4 @@ GET        /part-time-hours/:idx                             controllers.PartTim
 POST       /part-time-hours/:idx                             controllers.PartTimeHoursController.onSubmit(idx: Int)
 
 GET        /part-time-normal-hours                           controllers.PartTimeNormalHoursController.onPageLoad(idx: Int)
-POST       /part-time-normal-hours                           controllers.PartTimeNormalHoursController.onPageLoad(idx: Int)
+POST       /part-time-normal-hours                           controllers.PartTimeNormalHoursController.onSubmit(idx: Int)
