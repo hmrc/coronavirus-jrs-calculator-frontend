@@ -18,9 +18,9 @@ package controllers
 
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
-import forms.PartTimeHoursFormProvider
+import forms.PartTimeNormalHoursFormProvider
 import javax.inject.Inject
-import models.{Hours, PartTimeHours, Period, Periods, UsualHours}
+import models.{Hours, Period, Periods, UsualHours}
 import navigation.Navigator
 import pages.{PartTimeHoursPage, PartTimeNormalHoursPage, PartTimePeriodsPage}
 import play.api.data.Form
@@ -38,7 +38,7 @@ class PartTimeNormalHoursController @Inject()(
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  formProvider: PartTimeHoursFormProvider,
+  formProvider: PartTimeNormalHoursFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartTimeHoursView
 )(implicit ec: ExecutionContext)
