@@ -19,7 +19,7 @@ package controllers
 import java.time.LocalDate
 
 import base.SpecBaseWithApplication
-import forms.PartTimeHoursFormProvider
+import forms.PartTimeNormalHoursFormProvider
 import models.FurloughStatus.FurloughOngoing
 import models.PayMethod.Regular
 import models.PaymentFrequency.Monthly
@@ -33,16 +33,16 @@ import play.api.mvc.{AnyContentAsEmpty, Call}
 import play.api.test.CSRFTokenHelper._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.PartTimeHoursView
+import views.html.PartTimeNormalHoursView
 
 class PartTimeNormalHoursControllerSpec extends SpecBaseWithApplication with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new PartTimeHoursFormProvider()
+  val formProvider = new PartTimeNormalHoursFormProvider()
   val form = formProvider()
 
-  def partTimeHoursRoute(idx: Int) = routes.PartTimeNormalHoursController.onPageLoad(idx).url
+  def partTimeNormalHoursRoute(idx: Int) = routes.PartTimeNormalHoursController.onPageLoad(idx).url
 
   val partTimePeriods: List[Periods] = List(fullPeriod("2020,3,1", "2020,3,31"), fullPeriod("2020,4,1", "2020,4,30"))
 
@@ -60,8 +60,10 @@ class PartTimeNormalHoursControllerSpec extends SpecBaseWithApplication with Moc
 
   val endDates: List[LocalDate] = partTimePeriods.map(_.period.end)
 
+  val period: Periods = fullPeriod("2020,3,1", "2020,3,31")
+
   def getRequest(method: String, idx: Int) =
-    FakeRequest(method, partTimeHoursRoute(idx)).withCSRFToken
+    FakeRequest(method, partTimeNormalHoursRoute(idx)).withCSRFToken
       .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
   "PartTimeNormalHours Controller" must {
@@ -70,7 +72,7 @@ class PartTimeNormalHoursControllerSpec extends SpecBaseWithApplication with Moc
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val view = application.injector.instanceOf[PartTimeHoursView]
+      val view = application.injector.instanceOf[PartTimeNormalHoursView]
 
       val request = getRequest("GET", 1)
 
@@ -81,14 +83,14 @@ class PartTimeNormalHoursControllerSpec extends SpecBaseWithApplication with Moc
       val dataRequest = DataRequest(request, userAnswers.id, userAnswers)
 
       contentAsString(result) mustEqual
-        view(form, period("2020,3,1", "2020,3,31"), 1)(dataRequest, messages).toString
+        view(form, period, 1)(dataRequest, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val date = LocalDate.of(2020, 3, 1)
+      val date = LocalDate.of(2020, 3, 31)
 
       val preValue = UsualHours(date, Hours(10.5))
 
@@ -96,7 +98,7 @@ class PartTimeNormalHoursControllerSpec extends SpecBaseWithApplication with Moc
 
       val application = applicationBuilder(userAnswers = Some(updatedAnswers)).build()
 
-      val view = application.injector.instanceOf[PartTimeHoursView]
+      val view = application.injector.instanceOf[PartTimeNormalHoursView]
 
       val request = getRequest("GET", 1)
 
@@ -105,7 +107,7 @@ class PartTimeNormalHoursControllerSpec extends SpecBaseWithApplication with Moc
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(preValue.hours), period("2020,3,1", "2020,3,31"), 1)(request, messages).toString
+        view(form.fill(preValue.hours), period, 1)(request, messages).toString
 
       application.stop()
     }
@@ -188,14 +190,14 @@ class PartTimeNormalHoursControllerSpec extends SpecBaseWithApplication with Moc
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[PartTimeHoursView]
+      val view = application.injector.instanceOf[PartTimeNormalHoursView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, period("2020,3,1", "2020,3,31"), 1)(request, messages).toString
+        view(boundForm, period, 1)(request, messages).toString
 
       application.stop()
     }

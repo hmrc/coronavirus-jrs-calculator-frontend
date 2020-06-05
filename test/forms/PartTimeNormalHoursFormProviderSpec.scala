@@ -26,8 +26,8 @@ class PartTimeNormalHoursFormProviderSpec extends DoubleFieldBehaviours {
   ".value" must {
 
     val fieldName = "value"
-    val invalidKey = "partTimeHours.error.nonNumeric"
-    val requiredKey = "partTimeHours.error.required"
+    val invalidKey = "partTimeNormalHours.error.nonNumeric"
+    val requiredKey = "partTimeNormalHours.error.required"
 
     behave like doubleField(
       form,

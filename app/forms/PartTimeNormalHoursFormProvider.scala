@@ -28,9 +28,9 @@ class PartTimeNormalHoursFormProvider @Inject() extends Mappings {
     Form(
       mapping(
         "value" -> double(
-          requiredKey = "partTimeHours.error.required",
-          nonNumericKey = "partTimeHours.error.nonNumeric"
-        ).verifying(minimumValue(0.0, "partTimeHours.error.min"))
-          .verifying(maximumValue(750.0, "partTimeHours.error.max"))
+          requiredKey = "partTimeNormalHours.error.required",
+          nonNumericKey = "partTimeNormalHours.error.nonNumeric"
+        ).verifying(minimumValue(0.0, "partTimeNormalHours.error.min"))
+          .verifying(maximumValue(750.0, "partTimeNormalHours.error.max"))
       )(Hours.apply)(Hours.unapply))
 }

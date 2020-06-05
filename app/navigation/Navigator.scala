@@ -168,11 +168,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     userAnswers
       .getV(PartTimePeriodsPage)
       .map { partTimePeriods =>
-        if (partTimePeriods.isDefinedAt(previousIdx)) {
-          routes.PartTimeNormalHoursController.onPageLoad(previousIdx)
-        } else {
-          routes.ErrorController.somethingWentWrong()
-        }
+        routes.PartTimeNormalHoursController.onPageLoad(previousIdx)
       }
       .getOrElse(routes.PartTimePeriodsController.onPageLoad())
   }

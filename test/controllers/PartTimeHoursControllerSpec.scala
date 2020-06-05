@@ -60,8 +60,7 @@ class PartTimeHoursControllerSpec extends SpecBaseWithApplication with MockitoSu
 
   val endDates: List[LocalDate] = partTimePeriods.map(_.period.end)
 
-  val partTimeHoursStart = LocalDate.of(2020, 3, 1)
-  val partTimeHoursEnd = LocalDate.of(2020, 3, 31)
+  val period: Periods = fullPeriod("2020,3,1", "2020,3,31")
 
   def getRequest(method: String, idx: Int) =
     FakeRequest(method, partTimeHoursRoute(idx)).withCSRFToken
@@ -84,14 +83,14 @@ class PartTimeHoursControllerSpec extends SpecBaseWithApplication with MockitoSu
       val dataRequest = DataRequest(request, userAnswers.id, userAnswers)
 
       contentAsString(result) mustEqual
-        view(form, partTimeHoursStart, partTimeHoursEnd, 1)(dataRequest, messages).toString
+        view(form, period, 1)(dataRequest, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val date = LocalDate.of(2020, 3, 1)
+      val date = LocalDate.of(2020, 3, 31)
 
       val preValue = PartTimeHours(date, Hours(10.5))
 
@@ -108,7 +107,7 @@ class PartTimeHoursControllerSpec extends SpecBaseWithApplication with MockitoSu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(preValue.hours), partTimeHoursStart, partTimeHoursEnd, 1)(request, messages).toString
+        view(form.fill(preValue.hours), period, 1)(request, messages).toString
 
       application.stop()
     }
@@ -198,7 +197,7 @@ class PartTimeHoursControllerSpec extends SpecBaseWithApplication with MockitoSu
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, partTimeHoursStart, partTimeHoursEnd, 1)(request, messages).toString
+        view(boundForm, period, 1)(request, messages).toString
 
       application.stop()
     }
