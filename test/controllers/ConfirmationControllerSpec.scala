@@ -94,7 +94,7 @@ class ConfirmationControllerSpec extends SpecBaseWithApplication with CoreTestDa
         0.0,
         0.0,
         regularPaymentWithFullPeriod(2000.00, 2000.00, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-20")),
-        Threshold(719.0, TaxYearEnding2020),
+        Threshold(719.0, TaxYearEnding2020, Monthly),
         NicCap(Amount(1600.0), Amount(121.58), Amount(200.80)),
         Payable
       ),
@@ -103,7 +103,7 @@ class ConfirmationControllerSpec extends SpecBaseWithApplication with CoreTestDa
         0.0,
         0.0,
         regularPaymentWithFullPeriod(2000.00, 2000.00, fullPeriodWithPaymentDate("2020-04-01", "2020-04-30", "2020-04-20")),
-        Threshold(732.0, TaxYearEnding2021),
+        Threshold(732.0, TaxYearEnding2021, Monthly),
         NicCap(Amount(1600.00), Amount(119.78), Amount(220.80)),
         Payable
       )
@@ -116,14 +116,14 @@ class ConfirmationControllerSpec extends SpecBaseWithApplication with CoreTestDa
       fullPeriodPensionBreakdown(
         32.64,
         regularPaymentWithFullPeriod(2000.00, 2000.00, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-20")),
-        Threshold(512.0, TaxYearEnding2020),
+        Threshold(512.0, TaxYearEnding2020, Monthly),
         512.0,
         DoesContribute
       ),
       fullPeriodPensionBreakdown(
         32.40,
         regularPaymentWithFullPeriod(2000.00, 2000.00, fullPeriodWithPaymentDate("2020-04-01", "2020-04-30", "2020-04-20")),
-        Threshold(520.0, TaxYearEnding2021),
+        Threshold(520.0, TaxYearEnding2021, Monthly),
         520.0,
         DoesContribute
       )
