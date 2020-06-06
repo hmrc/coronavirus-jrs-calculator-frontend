@@ -16,11 +16,20 @@
 
 package viewmodels
 
-import models.{AveragePayment, CylbPayment, FurloughBreakdown, FurloughCalculationResult, FurloughDates, NicBreakdown, NicCalculationResult, NicCategory, PaymentFrequency, PensionBreakdown, PensionCalculationResult, PensionStatus, Period, RegularPayment}
+import models.{AveragePayment, CylbPayment, FurloughBreakdown, FurloughCalculationResult, FurloughDates, NicBreakdown, NicCalculationResult, NicCategory, PaymentFrequency, PensionBreakdown, PensionCalculationResult, PensionStatus, Period, PhaseTwoFurloughCalculationResult, PhaseTwoNicCalculationResult, PhaseTwoPensionCalculationResult, RegularPayment}
 
-case class ConfirmationDataResult(metaData: ConfirmationMetadata, confirmationViewBreakdown: ConfirmationViewBreakdown)
+sealed trait ConfirmationDataResult
 
-case class ConfirmationViewBreakdown(furlough: FurloughCalculationResult, nic: NicCalculationResult, pension: PensionCalculationResult) {
+case class PhaseOneConfirmationDataResult(metaData: ConfirmationMetadata, confirmationViewBreakdown: ConfirmationViewBreakdown)
+    extends ConfirmationDataResult
+
+case class PhaseTwoConfirmationDataResult(metaData: ConfirmationMetadata, confirmationViewBreakdown: PhaseTwoConfirmationViewBreakdown)
+    extends ConfirmationDataResult
+
+sealed trait ViewBreakdown
+
+case class ConfirmationViewBreakdown(furlough: FurloughCalculationResult, nic: NicCalculationResult, pension: PensionCalculationResult)
+    extends ViewBreakdown {
   def zippedBreakdowns: Seq[(FurloughBreakdown, NicBreakdown, PensionBreakdown)] =
     (furlough.periodBreakdowns, nic.periodBreakdowns, pension.periodBreakdowns).zipped.toList
 
@@ -50,6 +59,12 @@ case class ConfirmationViewBreakdown(furlough: FurloughCalculationResult, nic: N
       )
   }
 }
+
+case class PhaseTwoConfirmationViewBreakdown(
+  furlough: PhaseTwoFurloughCalculationResult,
+  nic: PhaseTwoNicCalculationResult,
+  pension: PhaseTwoPensionCalculationResult)
+    extends ViewBreakdown
 
 case class ConfirmationMetadata(
   claimPeriod: Period,
