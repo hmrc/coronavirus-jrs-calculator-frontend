@@ -17,7 +17,7 @@
 package models
 
 import play.api.i18n.Messages
-import services.{FrequencyTaxYearThresholdMapping, NiRate, Threshold}
+import services.{FrequencyTaxYearThresholdMapping, NiRate, PensionRate, Threshold}
 import viewmodels.DetailedFurloughBreakdown
 import services.Calculators._
 
@@ -163,4 +163,38 @@ final case class PhaseTwoPensionBreakdown(
   paymentWithPeriod: PaymentWithPhaseTwoPeriod,
   threshold: Threshold,
   pensionStatus: PensionStatus)
-    extends PhaseTwoPeriodBreakdown
+    extends PhaseTwoPeriodBreakdown {
+  def isPartial = paymentWithPeriod.phaseTwoPeriod.periodWithPaymentDate.period.isInstanceOf[PartialPeriod]
+  def isPartTime = paymentWithPeriod.phaseTwoPeriod.isPartTime
+
+  def thresholdMessage(implicit messages: Messages): String =
+    (isPartial, isPartTime) match {
+      case (false, false) => messages("phaseTwoPensionBreakdown.l3", threshold.value.formatted("%.2f"))
+      case (true, false) =>
+        messages(
+          "phaseTwoPensionBreakdown.l3.partial",
+          threshold.value.formatted("%.2f"),
+          FrequencyTaxYearThresholdMapping.thresholdFor(threshold.frequency, threshold.taxYear, PensionRate()).value.formatted("%.2f"),
+          paymentWithPeriod.periodDays,
+          paymentWithPeriod.furloughDays
+        )
+      case (false, true) =>
+        messages(
+          "phaseTwoPensionBreakdown.l3.partial",
+          threshold.value.formatted("%.2f"),
+          FrequencyTaxYearThresholdMapping.thresholdFor(threshold.frequency, threshold.taxYear, PensionRate()).value.formatted("%.2f"),
+          paymentWithPeriod.phaseTwoPeriod.usual.formatted("%.2f"),
+          paymentWithPeriod.phaseTwoPeriod.furloughed.formatted("%.2f")
+        )
+      case (true, true) =>
+        messages(
+          "phaseTwoPensionBreakdown.l3.partial",
+          threshold.value.formatted("%.2f"),
+          FrequencyTaxYearThresholdMapping.thresholdFor(threshold.frequency, threshold.taxYear, PensionRate()).value.formatted("%.2f"),
+          paymentWithPeriod.periodDays,
+          paymentWithPeriod.furloughDays,
+          paymentWithPeriod.phaseTwoPeriod.usual.formatted("%.2f"),
+          paymentWithPeriod.phaseTwoPeriod.furloughed.formatted("%.2f")
+        )
+    }
+}w
