@@ -27,6 +27,7 @@
         h3: components.h3,
         p: components.p,
         confirmation: components.confirmation,
+        furloughBreakdown: includes.phaseTwoDetailedFurloughBreakdown,
         button: components.button,
         details: components.details,
         link: components.link,
@@ -74,7 +75,21 @@
     @details(
         summaryText = Messages("confirmation.breakdown.summary")
     ) {
-        @cvb
+        @for(messageKey <- cvb.detailedBreakdownMessageKeys) {
+            @p(Html(messages(messageKey)))
+        }
+
+        <p class="govuk-body">
+            @messages("phaseTwoDetailedBreakdown.p2")
+            <a href="@messages("phaseTwoDetailedBreakdown.p2.a.href")" target="_blank">@messages("phaseTwoDetailedBreakdown.p2.a")</a>
+        </p>
+
+        @p(Html(messages("phaseTwoDetailedBreakdown.p3")))
+
+        @for(detailedBreakdown <- cvb.detailedBreakdowns) {
+            @h3(Messages("phaseTwoDetailedBreakdown.h3", detailedBreakdown.payPeriodStart, detailedBreakdown.payPeriodEnd))
+            @furloughBreakdown(detailedBreakdown.furlough)
+        }
     }
 
     @h2(Html(messages("confirmation.nextSteps.heading")), classes = Some("govuk-heading-m"))

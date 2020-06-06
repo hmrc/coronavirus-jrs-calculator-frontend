@@ -16,7 +16,7 @@
 
 package viewmodels
 
-import models.{AveragePayment, CylbPayment, FurloughBreakdown, FurloughCalculationResult, FurloughDates, NicBreakdown, NicCalculationResult, NicCategory, PaymentFrequency, PensionBreakdown, PensionCalculationResult, PensionStatus, Period, PhaseTwoFurloughCalculationResult, PhaseTwoNicCalculationResult, PhaseTwoPensionCalculationResult, RegularPayment}
+import models.{AveragePayment, AveragePaymentWithPhaseTwoPeriod, CylbPayment, CylbPaymentWithPhaseTwoPeriod, FurloughBreakdown, FurloughCalculationResult, FurloughDates, NicBreakdown, NicCalculationResult, NicCategory, PaymentFrequency, PensionBreakdown, PensionCalculationResult, PensionStatus, Period, PhaseTwoFurloughBreakdown, PhaseTwoFurloughCalculationResult, PhaseTwoNicBreakdown, PhaseTwoNicCalculationResult, PhaseTwoPensionBreakdown, PhaseTwoPensionCalculationResult, RegularPayment, RegularPaymentWithPhaseTwoPeriod}
 
 sealed trait ConfirmationDataResult
 
@@ -64,7 +64,36 @@ case class PhaseTwoConfirmationViewBreakdown(
   furlough: PhaseTwoFurloughCalculationResult,
   nic: PhaseTwoNicCalculationResult,
   pension: PhaseTwoPensionCalculationResult)
-    extends ViewBreakdown
+    extends ViewBreakdown {
+  def zippedBreakdowns: Seq[(PhaseTwoFurloughBreakdown, PhaseTwoNicBreakdown, PhaseTwoPensionBreakdown)] =
+    (furlough.periodBreakdowns, nic.periodBreakdowns, pension.periodBreakdowns).zipped.toList
+
+  def detailedBreakdowns: Seq[PhaseTwoDetailedBreakdown] = zippedBreakdowns map { breakdowns =>
+    PhaseTwoDetailedBreakdown(
+      breakdowns._1.paymentWithPeriod.phaseTwoPeriod.periodWithPaymentDate.period,
+      breakdowns._1,
+      breakdowns._2,
+      breakdowns._3
+    )
+  }
+
+  def detailedBreakdownMessageKeys: Seq[String] = furlough.periodBreakdowns.head.paymentWithPeriod match {
+    case _: RegularPaymentWithPhaseTwoPeriod =>
+      Seq(
+        "phaseTwoDetailedBreakdown.p1.regular"
+      )
+    case _: AveragePaymentWithPhaseTwoPeriod =>
+      Seq(
+        "phaseTwoDetailedBreakdown.p1.average"
+      )
+    case _: CylbPaymentWithPhaseTwoPeriod =>
+      Seq(
+        "phaseTwoDetailedBreakdown.p1.cylb.1",
+        "phaseTwoDetailedBreakdown.p1.cylb.2",
+        "phaseTwoDetailedBreakdown.p1.cylb.3"
+      )
+  }
+}
 
 case class ConfirmationMetadata(
   claimPeriod: Period,

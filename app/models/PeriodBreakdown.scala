@@ -18,6 +18,7 @@ package models
 
 import services.Threshold
 import viewmodels.DetailedFurloughBreakdown
+import services.Calculators._
 
 sealed trait PeriodBreakdown {
   val grant: Amount
@@ -110,7 +111,10 @@ sealed trait PhaseTwoPeriodBreakdown {
 }
 
 final case class PhaseTwoFurloughBreakdown(grant: Amount, paymentWithPeriod: PaymentWithPhaseTwoPeriod, furloughCap: FurloughCap)
-    extends PhaseTwoPeriodBreakdown
+    extends PhaseTwoPeriodBreakdown {
+  def isCapped: Boolean = (paymentWithPeriod.referencePay.value * 0.8) > furloughCap.value
+  def calculatedFurlough: String = Amount(paymentWithPeriod.referencePay.value * 0.8).halfUp.value.formatted("%.2f")
+}
 
 final case class PhaseTwoNicBreakdown(
   grant: Amount,
