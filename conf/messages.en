@@ -708,21 +708,12 @@ phaseTwoFurloughBreakdown.furloughCap.p3 = Therefore we use the maximum furlough
 
 phaseTwoNicBreakdown.h4 = Employer National Insurance contributions
 phaseTwoNicBreakdown.l1 = Start with £{0} (furlough grant).
-phaseTwoNicBreakdown.l2 = Add £{0} (employer-funded pay).
-phaseTwoNicBreakdown.l3 = Add £{0} (employer top up).
-phaseTwoNicBreakdown.l4 = Add £{0} (additional pay).
-phaseTwoNicBreakdown.l5 = Round down to the nearest pound.
-phaseTwoNicBreakdown.l6.20 = Deduct £{0} (National Insurance contribution threshold for 19/20 tax year).
-phaseTwoNicBreakdown.l6.21 = Deduct £{0} (National Insurance contribution threshold for 20/21 tax year).
-phaseTwoNicBreakdown.l7 = Multiply by 13.8%.
-phaseTwoNicBreakdown.l8 = Divide by {0} (days in pay period).
-phaseTwoNicBreakdown.l9 = Multiply by {0} (furlough days).
-phaseTwoNicBreakdown.l10 = Divide by £{0} (furlough grant plus top up).
-phaseTwoNicBreakdown.l11 = Multiply by £{0} (furlough grant).
-phaseTwoNicBreakdown.nicCap.p1 = Calculated National Insurance contribution grant = £{0}
-phaseTwoNicBreakdown.nicCap.p2 = This exceeds the maximum National Insurance contribution grant for this pay period, which is:
-phaseTwoNicBreakdown.nicCap.l1 = £{0} furlough grant x 13.8% = £{1}.
-phaseTwoNicBreakdown.nicCap.p3 = Therefore we use the maximum National Insurance contribution grant amount.
+phaseTwoNicBreakdown.l2 = Round down to the nearest pound.
+phaseTwoNicBreakdown.l3 = Deduct £{0} (National Insurance contribution threshold for 20/21 tax year).
+phaseTwoNicBreakdown.l3.partial = Deduct £{0} (£{1} National Insurance contribution threshold for 20/21 tax year, divide by {2} days in pay period and multiply by {3} furlough days).
+phaseTwoNicBreakdown.l3.partTime = Deduct £{0} (£{1} National Insurance contribution threshold for 20/21 tax year, divide by {2} usual hours, multiply by {3} furlough hours).
+phaseTwoNicBreakdown.l3.partial.partTime = Deduct £{0} (£{1} National Insurance contribution threshold for 20/21 tax year, divide by {2} days in pay period and multiply by {3} furlough days, divide by {4} usual hours, multiply by {5} furlough hours).
+phaseTwoNicBreakdown.l4 = Multiply by 13.8%.
 phaseTwoNicBreakdown.total = Total NI grant for pay period = £{0}
 
 phaseTwoPensionBreakdown.h4 = Employer minimum pension contributions

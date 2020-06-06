@@ -16,7 +16,8 @@
 
 package models
 
-import services.Threshold
+import play.api.i18n.Messages
+import services.{FrequencyTaxYearThresholdMapping, NiRate, Threshold}
 import viewmodels.DetailedFurloughBreakdown
 import services.Calculators._
 
@@ -121,7 +122,41 @@ final case class PhaseTwoNicBreakdown(
   paymentWithPeriod: PaymentWithPhaseTwoPeriod,
   threshold: Threshold,
   nicCategory: NicCategory)
-    extends PhaseTwoPeriodBreakdown
+    extends PhaseTwoPeriodBreakdown {
+  def isPartial = paymentWithPeriod.phaseTwoPeriod.periodWithPaymentDate.period.isInstanceOf[PartialPeriod]
+  def isPartTime = paymentWithPeriod.phaseTwoPeriod.isPartTime
+
+  def thresholdMessage(implicit messages: Messages): String =
+    (isPartial, isPartTime) match {
+      case (false, false) => messages("phaseTwoNicBreakdown.l3", threshold.value.formatted("%.2f"))
+      case (true, false) =>
+        messages(
+          "phaseTwoNicBreakdown.l3.partial",
+          threshold.value.formatted("%.2f"),
+          FrequencyTaxYearThresholdMapping.thresholdFor(threshold.frequency, threshold.taxYear, NiRate()).value.formatted("%.2f"),
+          paymentWithPeriod.periodDays,
+          paymentWithPeriod.furloughDays
+        )
+      case (false, true) =>
+        messages(
+          "phaseTwoNicBreakdown.l3.partTime",
+          threshold.value.formatted("%.2f"),
+          FrequencyTaxYearThresholdMapping.thresholdFor(threshold.frequency, threshold.taxYear, NiRate()).value.formatted("%.2f"),
+          paymentWithPeriod.phaseTwoPeriod.usual.formatted("%.2f"),
+          paymentWithPeriod.phaseTwoPeriod.furloughed.formatted("%.2f")
+        )
+      case (true, true) =>
+        messages(
+          "phaseTwoNicBreakdown.l3.partial.partTime",
+          threshold.value.formatted("%.2f"),
+          FrequencyTaxYearThresholdMapping.thresholdFor(threshold.frequency, threshold.taxYear, NiRate()).value.formatted("%.2f"),
+          paymentWithPeriod.periodDays,
+          paymentWithPeriod.furloughDays,
+          paymentWithPeriod.phaseTwoPeriod.usual.formatted("%.2f"),
+          paymentWithPeriod.phaseTwoPeriod.furloughed.formatted("%.2f")
+        )
+    }
+}
 
 final case class PhaseTwoPensionBreakdown(
   grant: Amount,
