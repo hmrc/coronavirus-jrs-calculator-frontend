@@ -180,7 +180,7 @@ final case class PhaseTwoPensionBreakdown(
         )
       case (false, true) =>
         messages(
-          "phaseTwoPensionBreakdown.l3.partial",
+          "phaseTwoPensionBreakdown.l3.partTime",
           threshold.value.formatted("%.2f"),
           FrequencyTaxYearThresholdMapping.thresholdFor(threshold.frequency, threshold.taxYear, PensionRate()).value.formatted("%.2f"),
           paymentWithPeriod.phaseTwoPeriod.usual.formatted("%.2f"),
@@ -188,7 +188,7 @@ final case class PhaseTwoPensionBreakdown(
         )
       case (true, true) =>
         messages(
-          "phaseTwoPensionBreakdown.l3.partial",
+          "phaseTwoPensionBreakdown.l3.partial.partTime",
           threshold.value.formatted("%.2f"),
           FrequencyTaxYearThresholdMapping.thresholdFor(threshold.frequency, threshold.taxYear, PensionRate()).value.formatted("%.2f"),
           paymentWithPeriod.periodDays,
@@ -197,4 +197,4 @@ final case class PhaseTwoPensionBreakdown(
           paymentWithPeriod.phaseTwoPeriod.furloughed.formatted("%.2f")
         )
     }
-}w
+}

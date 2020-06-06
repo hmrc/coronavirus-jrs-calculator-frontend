@@ -29,6 +29,7 @@
         confirmation: components.confirmation,
         furloughBreakdown: includes.phaseTwoDetailedFurloughBreakdown,
         nicBreakdown: includes.phaseTwoDetailedNicBreakdown,
+        pensionBreakdown: includes.phaseTwoDetailedPensionBreakdown,
         button: components.button,
         details: components.details,
         link: components.link,
@@ -91,6 +92,7 @@
             @h3(Messages("phaseTwoDetailedBreakdown.h3", detailedBreakdown.payPeriodStart, detailedBreakdown.payPeriodEnd))
             @furloughBreakdown(detailedBreakdown.furlough)
             @nicBreakdown(detailedBreakdown.nic, detailedBreakdown.furlough.grant)
+            @pensionBreakdown(detailedBreakdown.pension, detailedBreakdown.furlough.grant)
         }
     }
 
