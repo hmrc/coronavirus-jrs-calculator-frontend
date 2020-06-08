@@ -41,6 +41,20 @@ class PeriodBreakdownSpec extends SpecBaseWithApplication with MustMatchers with
 
       breakdown.isCapped mustBe true
     }
+
+    "accurately calculate furlough" in {
+      val referencePay: Amount = Amount(1337.33)
+      val grant: Amount = Amount(2500.00)
+      val payment = RegularPaymentWithPhaseTwoPeriod(
+        Amount(1337.33),
+        referencePay,
+        PhaseTwoPeriod(fullPeriodWithPaymentDate("2020, 7, 1", "2020, 7, 31", "2020, 7, 31"), None, None))
+      val furloughCap = FullPeriodCap(2500.00)
+
+      val breakdown = PhaseTwoFurloughBreakdown(grant, payment, furloughCap)
+
+      breakdown.calculatedFurlough mustBe "1069.86"
+    }
   }
 
   "PhaseTwoNicBreakdown" must {
