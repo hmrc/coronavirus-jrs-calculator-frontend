@@ -334,6 +334,7 @@ furloughEndDate.error.min.max = The furlough end date must be at least 3 weeks a
 
 furloughStartDate.title = When was this employee furloughed?
 furloughStartDate.heading = When was this employee furloughed?
+furloughStartDate.1stJuly.heading = When was this employee originally furloughed?
 furloughStartDate.hint = This is the date this employee started furlough. It could be before or after the start date of this claim.
 furloughStartDate.p1 = We’re asking because your claim could include employees who were furloughed on different dates.
 
