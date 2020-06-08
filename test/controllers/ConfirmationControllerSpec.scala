@@ -22,13 +22,12 @@ import base.{CoreTestDataBuilder, SpecBaseWithApplication}
 import models.NicCategory.Payable
 import models.PaymentFrequency.Monthly
 import models.PensionStatus.DoesContribute
-import models.{Amount, FullPeriodCap, FurloughCalculationResult, FurloughOngoing, NicCalculationResult, NicCap, PensionCalculationResult, Period, TaxYearEnding2020, TaxYearEnding2021}
+import models.{Amount, FullPeriodCap, FurloughCalculationResult, FurloughOngoing, NicCalculationResult, NicCap, PensionCalculationResult, Period, PhaseTwoFurloughBreakdown, PhaseTwoFurloughCalculationResult, PhaseTwoNicBreakdown, PhaseTwoNicCalculationResult, PhaseTwoPensionBreakdown, PhaseTwoPensionCalculationResult, PhaseTwoPeriod, RegularPaymentWithPhaseTwoPeriod, TaxYearEnding2020, TaxYearEnding2021}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.Threshold
-import viewmodels.{ConfirmationMetadata, ConfirmationViewBreakdown}
-import views.html.ConfirmationView
-import views.html.ConfirmationViewWithDetailedBreakdowns
+import viewmodels.{ConfirmationMetadata, ConfirmationViewBreakdown, PhaseTwoConfirmationViewBreakdown}
+import views.html.{ConfirmationView, ConfirmationViewWithDetailedBreakdowns, PhaseTwoConfirmationView}
 
 class ConfirmationControllerSpec extends SpecBaseWithApplication with CoreTestDataBuilder {
 
@@ -66,6 +65,45 @@ class ConfirmationControllerSpec extends SpecBaseWithApplication with CoreTestDa
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual view(breakdown, meta.claimPeriod, frontendAppConfig.calculatorVersion)(request, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the phase two confirmation view with detailed breakdowns for a GET" in {
+      val application =
+        applicationBuilder(userAnswers = Some(phaseTwoJourney())).build()
+
+      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      val payment = RegularPaymentWithPhaseTwoPeriod(
+        Amount(2000.00),
+        Amount(2000.0),
+        PhaseTwoPeriod(fullPeriodWithPaymentDate("2020, 7, 1", "2020, 7, 31", "2020, 7, 31"), None, None))
+
+      val breakdown = PhaseTwoConfirmationViewBreakdown(
+        PhaseTwoFurloughCalculationResult(
+          1600.00,
+          Seq(PhaseTwoFurloughBreakdown(Amount(1600.0), payment, FullPeriodCap(2500.00)))
+        ),
+        PhaseTwoNicCalculationResult(
+          119.78,
+          Seq(PhaseTwoNicBreakdown(Amount(119.78), payment, Threshold(732.0, TaxYearEnding2021, Monthly), Payable))
+        ),
+        PhaseTwoPensionCalculationResult(
+          32.40,
+          Seq(PhaseTwoPensionBreakdown(Amount(32.40), payment, Threshold(520.0, TaxYearEnding2021, Monthly), DoesContribute))
+        )
+      )
+
+      val view = application.injector.instanceOf[PhaseTwoConfirmationView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual view(breakdown, period("2020, 7, 1", "2020, 7, 31"), frontendAppConfig.calculatorVersion)(
+        request,
+        messages).toString
 
       application.stop()
     }
