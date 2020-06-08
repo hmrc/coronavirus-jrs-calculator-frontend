@@ -719,7 +719,7 @@ phaseTwoNicBreakdown.total = Total NI grant for pay period = £{0}
 phaseTwoPensionBreakdown.h4 = Employer minimum pension contributions
 phaseTwoPensionBreakdown.l1 = Start with £{0} (furlough grant).
 phaseTwoPensionBreakdown.l2 = Round down to the nearest pound.
-phaseTwoPensionBreakdown.l3.full = Deduct £{0} (Lower Level of Qualifying Earnings for 20/21 tax year).
+phaseTwoPensionBreakdown.l3 = Deduct £{0} (Lower Level of Qualifying Earnings for 20/21 tax year).
 phaseTwoPensionBreakdown.l3.partial = Deduct £{0} (£{1} Lower Level of Qualifying Earnings for 20/21 tax year, divide by {2} days in pay period and multiply by {3} furlough days).
 phaseTwoPensionBreakdown.l3.partTime = Deduct £{0} (£{1} Lower Level of Qualifying Earnings for 20/21 tax year, divide by {2} usual hours, multiply by {3} furlough hours).
 phaseTwoPensionBreakdown.l3.partial.partTime = Deduct £{0} (£{1} Lower Level of Qualifying Earnings for 20/21 tax year, divide by {2} days in pay period and multiply by {3} furlough days, divide by {4} usual hours, multiply by {5} furlough hours).
