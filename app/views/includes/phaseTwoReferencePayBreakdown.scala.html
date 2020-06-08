@@ -101,7 +101,7 @@
 
     @p(Html(messages("phaseTwoReferencePayBreakdown.cylb.higherOf")))
     <ul class="govuk-list govuk-list--bullet">
-        <li>@messages("phaseTwoReferencePayBreakdown.cylb.higherOf.cylb", cylb.cylbBreakdown.referencePay.value.formatted("%.2f"))</li>
+        <li>@messages("phaseTwoReferencePayBreakdown.cylb.higherOf.cylb", cylb.basedOnHours)</li>
         <li>@messages("phaseTwoReferencePayBreakdown.cylb.higherOf.average", cylb.averagePayment.referencePay.value.formatted("%.2f"))</li>
     </ul>
 

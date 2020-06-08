@@ -27,6 +27,22 @@ import services.Threshold
 
 class PeriodBreakdownSpec extends SpecBaseWithApplication with MustMatchers with OptionValues with CoreTestDataBuilder {
 
+  "PhaseTwoFurloughBreakdown" must {
+    "detect if furlough has been capped" in {
+      val referencePay: Amount = Amount(5000.00)
+      val grant: Amount = Amount(2500.00)
+      val payment = RegularPaymentWithPhaseTwoPeriod(
+        Amount(5000.0),
+        referencePay,
+        PhaseTwoPeriod(fullPeriodWithPaymentDate("2020, 7, 1", "2020, 7, 31", "2020, 7, 31"), None, None))
+      val furloughCap = FullPeriodCap(2500.00)
+
+      val breakdown = PhaseTwoFurloughBreakdown(grant, payment, furloughCap)
+
+      breakdown.isCapped mustBe true
+    }
+  }
+
   "PhaseTwoNicBreakdown" must {
 
     val referencePay: Amount = Amount(300.00)

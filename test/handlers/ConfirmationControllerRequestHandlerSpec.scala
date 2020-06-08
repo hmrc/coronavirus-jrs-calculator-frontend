@@ -24,7 +24,7 @@ import models.PensionStatus.{DoesContribute, DoesNotContribute}
 import models.{Amount, FullPeriodCap, FurloughCalculationResult, NicCalculationResult, NicCap, PartialPeriodCap, PensionCalculationResult, TaxYearEnding2020, TaxYearEnding2021, UserAnswers}
 import services.Threshold
 import utils.CoreTestData
-import viewmodels.{ConfirmationViewBreakdown, PhaseOneConfirmationDataResult}
+import viewmodels.{ConfirmationViewBreakdown, PhaseOneConfirmationDataResult, PhaseTwoConfirmationDataResult}
 
 class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestData with ValidatedValues with CoreTestDataBuilder {
 
@@ -235,6 +235,10 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
   "take into account all cylb payments for weekly frequency with partial period as first period" in new ConfirmationControllerRequestHandler {
 
     (loadResultData(manyPeriods).value.asInstanceOf[PhaseOneConfirmationDataResult]).confirmationViewBreakdown.furlough.total mustBe 2402.63
+  }
+
+  "do phase two calculation if claimStartDate is on or after 1 July 2020" in new ConfirmationControllerRequestHandler {
+    loadResultData(phaseTwoJourney()).value.isInstanceOf[PhaseTwoConfirmationDataResult] mustBe true
   }
 
 }
