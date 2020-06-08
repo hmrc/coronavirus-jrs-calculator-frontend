@@ -24,7 +24,6 @@ import models.FurloughStatus
 import models.requests.DataRequest
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.FurloughStatusPage
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, Call}
 import play.api.test.CSRFTokenHelper._
