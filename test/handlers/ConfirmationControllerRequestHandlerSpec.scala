@@ -238,7 +238,7 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
   }
 
   "do phase two calculation if claimStartDate is on or after 1 July 2020" in new ConfirmationControllerRequestHandler {
-    loadResultData(phaseTwoJourney()).value.isInstanceOf[PhaseTwoConfirmationDataResult] mustBe true
+    loadResultData(phaseTwoJourney()).value mustBe a[PhaseTwoConfirmationDataResult]
   }
 
 }
