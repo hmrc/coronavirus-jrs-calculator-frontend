@@ -81,7 +81,7 @@ class FurloughStartDateControllerSpec extends SpecBaseWithApplication with Mocki
       application.stop()
     }
 
-    "return OK and the correct view for a GET with different heading if 1st July or after" in {
+    "return OK and the correct view for a GET with different contents if 1st July or after" in {
 
       val application = applicationBuilder(
         userAnswers = Some(
@@ -94,6 +94,7 @@ class FurloughStartDateControllerSpec extends SpecBaseWithApplication with Mocki
 
       status(result) mustEqual OK
       contentAsString(result) must include("When was this employee originally furloughed?")
+      contentAsString(result) must include("<title> When was this employee originally furloughed?")
 
       application.stop()
     }

@@ -29,7 +29,7 @@
 
 @(form: Form[_], claimStartDate: LocalDate)(implicit request: Request[_], messages: Messages)
 
-@govukLayout(pageTitle = Some(title(form, "furloughStartDate.title")), thisPage = FurloughStartDatePage) {
+@govukLayout(pageTitle = Some(title(form, if (claimStartDate.getMonthValue > 6) "furloughStartDate.1stJuly.title" else "furloughStartDate.title")), thisPage = FurloughStartDatePage) {
 
     @formHelper(action = FurloughStartDateController.onSubmit(), args = 'novalidate -> "novalidate") {
 
