@@ -17,27 +17,34 @@
 @import controllers.routes._
 @import models.FurloughStatus
 @import pages.FurloughStatusPage
+@import java.time.LocalDate
 
 @this(
         govukLayout: templates.GovukLayoutWrapper,
         formHelper: FormWithCSRF,
         errorSummary: components.errorSummary,
         inputRadio: components.inputRadio,
-        button: components.button
+        button: components.button,
+        h1: components.h1,
+        p: components.p
 )
 
-@(form: Form[_])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], claimStartDate: LocalDate)(implicit request: Request[_], messages: Messages)
 
-@govukLayout(pageTitle = Some(title(form, "furloughOngoing.title")), thisPage = FurloughStatusPage) {
+@govukLayout(pageTitle = Some(title(form, if (claimStartDate.getMonthValue > 6) "furloughOngoing.1stJuly.title" else "furloughOngoing.title")), thisPage = FurloughStatusPage) {
 
     @formHelper(action = FurloughOngoingController.onSubmit(), 'autoComplete -> "off", 'novalidate -> "novalidate") {
 
         @errorSummary(form.errors)
+        @h1(messages( if (claimStartDate.getMonthValue > 6) "furloughOngoing.1stJuly.heading" else "furloughOngoing.heading"))
+        @p(Html(messages(if (claimStartDate.getMonthValue > 6) "furloughOngoing.1stJuly.p1" else "")))
 
         @inputRadio(
             form = form,
-            legend = messages("furloughOngoing.heading"),
-            items = FurloughStatus.options(form)
+            legend = messages( if (claimStartDate.getMonthValue > 6) "furloughOngoing.1stJuly.heading" else "furloughOngoing.heading"),
+            legendAsHeading = false,
+            classes = "govuk-visually-hidden",
+            items = FurloughStatus.options(form, claimStartDate)
         )
 
         @button("site.continue")
