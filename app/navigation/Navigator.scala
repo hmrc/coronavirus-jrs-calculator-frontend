@@ -180,7 +180,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     userAnswers
       .getV(PartTimePeriodsPage)
       .map { _ =>
-        routes.PartTimeHoursController.onPageLoad(previousIdx + 1)
+        routes.PartTimeHoursController.onPageLoad(previousIdx)
       }
       .getOrElse(routes.PartTimePeriodsController.onPageLoad())
   }
