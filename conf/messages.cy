@@ -631,9 +631,9 @@ partTimeHours.heading.singleDay = What hours did this employee actually work on 
 partTimeHours.partial = Dyma’r dyddiadau o’r cyfnod cyflog {0} i {1} sy’n disgyn o fewn y cyfnod hawlio.
 partTimeHours.p1 = Hours
 partTimeHours.hint = Enter hours in decimal format
-partTimeHours.error.required = Enter the part time hours for this pay period
-partTimeHours.error.min = The part time hours cannot be negative
-partTimeHours.error.max = Enter a real part time hours
+partTimeHours.error.required = Enter the hours this employee actually worked in this pay period
+partTimeHours.error.min = Hours worked cannot be negative
+partTimeHours.error.max = Hours actually worked cannot be higher than hours usually worked
 partTimeHours.error.nonNumeric = Enter the part time hours using numbers
 
 partTimeNormalHours.title = Beth fyddai oriau arferol y cyflogai hwn wedi bod rhwng {0} a {1}?
@@ -643,9 +643,9 @@ partTimeNormalHours.heading.singleDay = What would this employee’s usual hours
 partTimeNormalHours.partial = Dyma’r dyddiadau o’r cyfnod cyflog {0} i {1} sy’n disgyn o fewn y cyfnod hawlio.
 partTimeNormalHours.p1 = Hours
 partTimeNormalHours.hint = Enter hours in decimal format
-partTimeNormalHours.error.required = Enter the usual hours for this pay period
-partTimeNormalHours.error.min = The usual hours cannot be negative
-partTimeNormalHours.error.max = Enter a real usual hours
+partTimeNormalHours.error.required = Enter this employee’s usual hours for this pay period
+partTimeNormalHours.error.min = Hours usually worked cannot be negative
+partTimeNormalHours.error.max = Number of hours entered is higher than the maximum possible
 partTimeNormalHours.error.nonNumeric = Enter the usual hours using numbers
 
 phaseTwoDetailedBreakdown.p1.regular = You told us this employee gets paid a regular amount each time. We’ve worked out their daily earnings and multiplied by the number of furlough days and furlough hours in each pay period. The furlough grant is 80% of this.
