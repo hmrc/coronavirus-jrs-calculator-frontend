@@ -28,8 +28,7 @@ object Period {
     def countDays: Int =
       (ChronoUnit.DAYS.between(period.start, period.end) + 1).toInt
 
-    def countHours: Int =
-      (ChronoUnit.DAYS.between(period.start, period.end) + 1).toInt * 24
+    def countHours: Int = countDays * 24
   }
 }
 
