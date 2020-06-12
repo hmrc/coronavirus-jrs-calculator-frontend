@@ -327,7 +327,7 @@ furloughOngoing.ongoing = Na, mae’n barhaus
 furloughOngoing.1stJuly.ended = Iawn
 furloughOngoing.1stJuly.ongoing = Na
 furloughOngoing.error.required = Dewiswch un o’r opsiynau isod
-furloughOngoing.1stJuly.p1 = O 1 Gorffennaf ymlaen, gallwch ddod â chyflogeion yn ôl i’r gwaith tra bod eu cyfnod ffyrlo’n parhau. Gallwch hawlio am eu horiau arferol llai’r oriau roeddent yn gweithio mewn gwirionedd.
+furloughOngoing.1stJuly.hint = O 1 Gorffennaf ymlaen, gallwch ddod â chyflogeion yn ôl i’r gwaith tra bod eu cyfnod ffyrlo’n parhau. Gallwch hawlio am eu horiau arferol llai’r oriau roeddent yn gweithio mewn gwirionedd.
 
 furloughEndDate.title = Pryd daeth ei ffyrlo i ben?
 furloughEndDate.heading = Pryd daeth ei ffyrlo i ben?
