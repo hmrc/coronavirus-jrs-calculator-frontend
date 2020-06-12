@@ -636,9 +636,9 @@ partTimeHours.error.max = Ni all yr oriau a weithiwyd mewn gwirionedd fod yn uwc
 partTimeHours.error.nonNumeric = Nodwch yr oriau rhan-amser gan ddefnyddio rhifau
 
 partTimeNormalHours.title = Beth fyddai oriau arferol y cyflogai hwn wedi bod rhwng {0} a {1}?
-partTimeNormalHours.title.singleDay = What would this employee’s usual hours have been on {0}?
+partTimeNormalHours.title.singleDay = Beth fyddai oriau arferol y cyflogai hwn wedi bod ar {0}?
 partTimeNormalHours.heading = Beth fyddai oriau arferol y cyflogai hwn wedi bod rhwng {0} a {1}?
-partTimeNormalHours.heading.singleDay = What would this employee’s usual hours have been on {0}?
+partTimeNormalHours.heading.singleDay = Beth fyddai oriau arferol y cyflogai hwn wedi bod ar {0}?
 partTimeNormalHours.partial = Dyma’r dyddiadau o’r cyfnod cyflog {0} i {1} sy’n disgyn o fewn y cyfnod hawlio.
 partTimeNormalHours.p1 = Awr
 partTimeNormalHours.hint = Nodwch oriau mewn fformat degol
