@@ -114,7 +114,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     userAnswer =>
       (userAnswer.getV(PartTimeQuestionPage), userAnswer.getV(ClaimPeriodStartPage)) match {
         case (Valid(PartTimeYes), _)           => routes.PartTimePeriodsController.onPageLoad()
-        case (Valid(PartTimeNo), Valid(start)) => skipNicAndPensionIfAugust(start)
+        case (Valid(PartTimeNo), Valid(start)) => skipNicAndPensionAfterJuly(start)
         case _                                 => routes.PartTimePeriodsController.onPageLoad()
     }
 
@@ -165,12 +165,12 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     (userAnswers.getV(PartTimePeriodsPage), userAnswers.getV(ClaimPeriodStartPage)) match {
       case (Valid(periods), _) if periods.isDefinedAt(previousIdx) => routes.PartTimeNormalHoursController.onPageLoad(previousIdx + 1)
       case (Valid(_), Valid(start)) =>
-        skipNicAndPensionIfAugust(start)
+        skipNicAndPensionAfterJuly(start)
       case _ => routes.PartTimePeriodsController.onPageLoad()
     }
   }
 
-  private def skipNicAndPensionIfAugust(start: LocalDate): Call =
+  private def skipNicAndPensionAfterJuly(start: LocalDate): Call =
     if (start.getMonthValue > 7) routes.ConfirmationController.onPageLoad() else routes.NicCategoryController.onPageLoad()
 
   private val partTimeNormalHoursRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
@@ -186,7 +186,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
     (userAnswers.getV(AdditionalPaymentPeriodsPage), userAnswers.getV(ClaimPeriodStartPage)) match {
       case (Valid(additionalPaymentPeriods), _) if additionalPaymentPeriods.isDefinedAt(previousIdx) =>
         routes.AdditionalPaymentAmountController.onPageLoad(previousIdx + 1)
-      case (Valid(_), Valid(start)) => skipNicAndPensionIfAugust(start)
+      case (Valid(_), Valid(start)) => skipNicAndPensionAfterJuly(start)
       case _                        => routes.AdditionalPaymentPeriodsController.onPageLoad()
   }
 
@@ -264,7 +264,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
   private def additionalPaymentStatusRoutes: UserAnswers => Call = { userAnswers =>
     (userAnswers.getV(AdditionalPaymentStatusPage), userAnswers.getV(ClaimPeriodStartPage)) match {
       case (Valid(AdditionalPaymentStatus.YesAdditionalPayments), _)           => routes.AdditionalPaymentPeriodsController.onPageLoad()
-      case (Valid(AdditionalPaymentStatus.NoAdditionalPayments), Valid(start)) => skipNicAndPensionIfAugust(start)
+      case (Valid(AdditionalPaymentStatus.NoAdditionalPayments), Valid(start)) => skipNicAndPensionAfterJuly(start)
       case _                                                                   => routes.AdditionalPaymentStatusController.onPageLoad()
     }
   }
