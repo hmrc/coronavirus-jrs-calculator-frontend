@@ -501,6 +501,23 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         ) mustBe routes.NicCategoryController.onPageLoad()
       }
 
+      "got to confirmation page from AdditionalPaymentAmountPage if claim started after July" in {
+        val additionalPaymentDates = List(
+          LocalDate.of(2020, 8, 15),
+          LocalDate.of(2020, 9, 15)
+        )
+
+        val userAnswers = emptyUserAnswers
+          .withClaimPeriodStart("2020, 8, 2")
+          .withAdditionalPaymentPeriods(additionalPaymentDates.map(_.toString))
+
+        navigator.nextPage(
+          AdditionalPaymentAmountPage,
+          userAnswers,
+          Some(2)
+        ) mustBe routes.ConfirmationController.onPageLoad()
+      }
+
       "go to AdditionalPaymentPeriods page after AdditionalPaymentStatusPage" in {
         navigator.nextPage(
           AdditionalPaymentStatusPage,
@@ -515,7 +532,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         navigator.nextPage(
           AdditionalPaymentStatusPage,
           emptyUserAnswers
-              .withClaimPeriodStart("2020, 7, 31")
+            .withClaimPeriodStart("2020, 7, 31")
             .withAdditionalPaymentStatus(AdditionalPaymentStatus.NoAdditionalPayments)
         ) mustBe routes.NicCategoryController.onPageLoad()
       }
@@ -524,7 +541,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         navigator.nextPage(
           AdditionalPaymentStatusPage,
           emptyUserAnswers
-              .withClaimPeriodStart("2020, 8, 1")
+            .withClaimPeriodStart("2020, 8, 1")
             .withAdditionalPaymentStatus(AdditionalPaymentStatus.NoAdditionalPayments)
         ) mustBe routes.ConfirmationController.onPageLoad()
       }

@@ -113,9 +113,9 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
   private def partTimeQuestionRoute: UserAnswers => Call =
     userAnswer =>
       (userAnswer.getV(PartTimeQuestionPage), userAnswer.getV(ClaimPeriodStartPage)) match {
-        case (Valid(PartTimeYes), _) => routes.PartTimePeriodsController.onPageLoad()
+        case (Valid(PartTimeYes), _)           => routes.PartTimePeriodsController.onPageLoad()
         case (Valid(PartTimeNo), Valid(start)) => skipNicAndPensionIfAugust(start)
-        case _ => routes.PartTimePeriodsController.onPageLoad()
+        case _                                 => routes.PartTimePeriodsController.onPageLoad()
     }
 
   private val payDateRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
@@ -182,17 +182,12 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
       .getOrElse(routes.PartTimePeriodsController.onPageLoad())
   }
 
-  private val additionalPaymentAmountRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
-    userAnswers
-      .getV(AdditionalPaymentPeriodsPage)
-      .map { additionalPaymentPeriods =>
-        if (additionalPaymentPeriods.isDefinedAt(previousIdx)) {
-          routes.AdditionalPaymentAmountController.onPageLoad(previousIdx + 1)
-        } else {
-          routes.NicCategoryController.onPageLoad()
-        }
-      }
-      .getOrElse(routes.AdditionalPaymentPeriodsController.onPageLoad())
+  private val additionalPaymentAmountRoutes: (Int, UserAnswers) => Call = (previousIdx, userAnswers) =>
+    (userAnswers.getV(AdditionalPaymentPeriodsPage), userAnswers.getV(ClaimPeriodStartPage)) match {
+      case (Valid(additionalPaymentPeriods), _) if additionalPaymentPeriods.isDefinedAt(previousIdx) =>
+        routes.AdditionalPaymentAmountController.onPageLoad(previousIdx + 1)
+      case (Valid(_), Valid(start)) => skipNicAndPensionIfAugust(start)
+      case _                        => routes.AdditionalPaymentPeriodsController.onPageLoad()
   }
 
   private val idxRoutes: Page => (Int, UserAnswers) => Call = {
