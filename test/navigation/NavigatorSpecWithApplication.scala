@@ -101,7 +101,16 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         navigator.nextPage(
           PartTimeQuestionPage,
           emptyUserAnswers
+            .withClaimPeriodStart("2020, 7, 31")
             .withPartTimeQuestion(PartTimeNo)) mustBe routes.NicCategoryController.onPageLoad()
+      }
+
+      "go to ConfirmationPage after PartTimeQuestionPage if `PartTimeNo` and claim started after July" in {
+        navigator.nextPage(
+          PartTimeQuestionPage,
+          emptyUserAnswers
+            .withClaimPeriodStart("2020, 8, 1")
+            .withPartTimeQuestion(PartTimeNo)) mustBe routes.ConfirmationController.onPageLoad()
       }
 
       "go to PartTimeQuestionPage after RegularPayAmountPage if phase two started" in {

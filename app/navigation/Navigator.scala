@@ -112,13 +112,11 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
 
   private def partTimeQuestionRoute: UserAnswers => Call =
     userAnswer =>
-      userAnswer
-        .getV(PartTimeQuestionPage)
-        .map {
-          case PartTimeYes => routes.PartTimePeriodsController.onPageLoad()
-          case PartTimeNo  => routes.NicCategoryController.onPageLoad()
-        }
-        .getOrElse(routes.PartTimeQuestionController.onPageLoad())
+      (userAnswer.getV(PartTimeQuestionPage), userAnswer.getV(ClaimPeriodStartPage)) match {
+        case (Valid(PartTimeYes), _) => routes.PartTimePeriodsController.onPageLoad()
+        case (Valid(PartTimeNo), Valid(start)) =>
+          if (start.getMonthValue > 7) routes.ConfirmationController.onPageLoad() else routes.NicCategoryController.onPageLoad()
+    }
 
   private val payDateRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
     (for {
