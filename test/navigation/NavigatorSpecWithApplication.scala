@@ -501,7 +501,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         ) mustBe routes.NicCategoryController.onPageLoad()
       }
 
-      "go to correct page after AdditionalPaymentStatusPage" in {
+      "go to AdditionalPaymentPeriods page after AdditionalPaymentStatusPage" in {
         navigator.nextPage(
           AdditionalPaymentStatusPage,
           emptyUserAnswers
@@ -509,14 +509,24 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
             .success
             .value
         ) mustBe routes.AdditionalPaymentPeriodsController.onPageLoad()
+      }
 
+      "go to Nic page after AdditionalPaymentStatusPage if NoAdditionalPayments" in {
         navigator.nextPage(
           AdditionalPaymentStatusPage,
           emptyUserAnswers
-            .set(AdditionalPaymentStatusPage, AdditionalPaymentStatus.NoAdditionalPayments)
-            .success
-            .value
+              .withClaimPeriodStart("2020, 7, 31")
+            .withAdditionalPaymentStatus(AdditionalPaymentStatus.NoAdditionalPayments)
         ) mustBe routes.NicCategoryController.onPageLoad()
+      }
+
+      "go to Confirmation page after AdditionalPaymentStatusPage if NoAdditionalPayments and after July" in {
+        navigator.nextPage(
+          AdditionalPaymentStatusPage,
+          emptyUserAnswers
+              .withClaimPeriodStart("2020, 8, 1")
+            .withAdditionalPaymentStatus(AdditionalPaymentStatus.NoAdditionalPayments)
+        ) mustBe routes.ConfirmationController.onPageLoad()
       }
 
       "go to TopUpStatusPage after PartialPayAfterFurloughPage if phase one" in {
