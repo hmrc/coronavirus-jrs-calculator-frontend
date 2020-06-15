@@ -116,6 +116,7 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
         case (Valid(PartTimeYes), _) => routes.PartTimePeriodsController.onPageLoad()
         case (Valid(PartTimeNo), Valid(start)) =>
           if (start.getMonthValue > 7) routes.ConfirmationController.onPageLoad() else routes.NicCategoryController.onPageLoad()
+        case _ => routes.PartTimePeriodsController.onPageLoad()
     }
 
   private val payDateRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
@@ -162,16 +163,12 @@ class Navigator @Inject()(appConfig: FrontendAppConfig)
   }
 
   private val partTimeHoursRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
-    userAnswers
-      .getV(PartTimePeriodsPage)
-      .map { partTimePeriods =>
-        if (partTimePeriods.isDefinedAt(previousIdx)) {
-          routes.PartTimeNormalHoursController.onPageLoad(previousIdx + 1)
-        } else {
-          routes.NicCategoryController.onPageLoad()
-        }
-      }
-      .getOrElse(routes.PartTimePeriodsController.onPageLoad())
+    (userAnswers.getV(PartTimePeriodsPage), userAnswers.getV(ClaimPeriodStartPage)) match {
+      case (Valid(periods), _) if periods.isDefinedAt(previousIdx) => routes.PartTimeNormalHoursController.onPageLoad(previousIdx + 1)
+      case (Valid(_), Valid(start)) =>
+        if (start.getMonthValue > 7) routes.ConfirmationController.onPageLoad() else routes.NicCategoryController.onPageLoad()
+      case _ => routes.PartTimePeriodsController.onPageLoad()
+    }
   }
 
   private val partTimeNormalHoursRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>

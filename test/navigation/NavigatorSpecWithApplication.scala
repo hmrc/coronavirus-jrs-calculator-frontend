@@ -24,6 +24,7 @@ import controllers.routes
 import models.ClaimPeriodQuestion._
 import models.PartTimeQuestion.{PartTimeNo, PartTimeYes}
 import models.PayMethod.{Regular, Variable}
+import models.PaymentFrequency.Monthly
 import models._
 import pages._
 
@@ -160,6 +161,38 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
           userAnswers,
           Some(1)
         ) mustBe routes.PartTimeNormalHoursController.onPageLoad(2)
+      }
+
+      "go to Nic after PartTimeHours if period not found" in {
+        val partTimePeriods: List[Periods] = List(fullPeriod("2020,7,1", "2020,7,8"), fullPeriod("2020,7,9", "2020,7,15"))
+        val userAnswers = mandatoryAnswersOnRegularMonthly.withPartTimePeriods(partTimePeriods)
+        navigator.nextPage(
+          PartTimeHoursPage,
+          userAnswers,
+          Some(3)
+        ) mustBe routes.NicCategoryController.onPageLoad()
+      }
+
+      "go to ConfirmationPage after PartTimeHours if period not found and claim started after July" in {
+        val partTimePeriods: List[Periods] = List(fullPeriod("2020,8,1", "2020,8,8"), fullPeriod("2020,8,9", "2020,8,15"))
+        val userAnswers = emptyUserAnswers
+          .withClaimPeriodStart("2020, 8, 1")
+          .withClaimPeriodEnd("2020, 8, 31")
+          .withFurloughStartDate("2020, 8, 1")
+          .withFurloughStatus()
+          .withPaymentFrequency(Monthly)
+          .withNiCategory()
+          .withPensionStatus()
+          .withPayMethod()
+          .withLastPayDate("2020, 8, 31")
+          .withPayDate(List("2020, 7, 29", "2020, 8, 31"))
+          .withPartTimePeriods(partTimePeriods)
+
+        navigator.nextPage(
+          PartTimeHoursPage,
+          userAnswers,
+          Some(3)
+        ) mustBe routes.ConfirmationController.onPageLoad()
       }
 
       "loop from PartTimeHours to PartTimeNormalHours if there are more PartTimePeriods to iterate" in {
