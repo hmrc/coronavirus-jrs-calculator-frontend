@@ -21,10 +21,10 @@ import cats.scalatest.ValidatedValues
 import models.NicCategory.{Nonpayable, Payable}
 import models.PaymentFrequency.Monthly
 import models.PensionStatus.{DoesContribute, DoesNotContribute}
-import models.{Amount, FullPeriodCap, FurloughCalculationResult, NicCalculationResult, NicCap, PartialPeriodCap, PensionCalculationResult, TaxYearEnding2020, TaxYearEnding2021, UserAnswers}
+import models.{Amount, FullPeriod, FullPeriodCap, FullPeriodCapWithPartTime, FullPeriodWithPaymentDate, FurloughCalculationResult, NicCalculationResult, NicCap, PartialPeriod, PartialPeriodCap, PartialPeriodWithPaymentDate, PaymentDate, PensionCalculationResult, Period, PhaseTwoFurloughBreakdown, PhaseTwoFurloughCalculationResult, PhaseTwoPeriod, RegularPaymentWithPhaseTwoPeriod, TaxYearEnding2020, TaxYearEnding2021, UserAnswers}
 import services.Threshold
 import utils.CoreTestData
-import viewmodels.{ConfirmationViewBreakdown, PhaseOneConfirmationDataResult, PhaseTwoConfirmationDataResult}
+import viewmodels._
 
 class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestData with ValidatedValues with CoreTestDataBuilder {
 
@@ -94,6 +94,55 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
 
     (loadResultData(dummyUserAnswers).value.asInstanceOf[PhaseOneConfirmationDataResult]).confirmationViewBreakdown mustBe expectedBreakdown
     (loadResultData(dummyUserAnswers).value.asInstanceOf[PhaseOneConfirmationDataResult]).metaData.claimPeriod mustBe expectedClaimPeriod
+  }
+
+  "do all calculations skipping Nic and pension if claim started after July" in new ConfirmationControllerRequestHandler {
+    val userAnswers =
+      emptyUserAnswers
+        .withClaimPeriodStart("2020, 8, 1")
+        .withClaimPeriodEnd("2020, 8, 31")
+        .withFurloughStartDate("2020, 8, 1")
+        .withFurloughStatus()
+        .withPaymentFrequency(Monthly)
+        .withNiCategory()
+        .withPensionStatus()
+        .withPayMethod()
+        .withLastPayDate("2020, 9, 20")
+        .withRegularPayAmount(2000.0)
+        .withPayDate(List("2020, 7, 29", "2020, 8, 31", "2020-09-30"))
+
+    val furlough =
+      PhaseTwoFurloughCalculationResult(
+        3102.4,
+        List(
+          PhaseTwoFurloughBreakdown(
+            Amount(1502.4),
+            RegularPaymentWithPhaseTwoPeriod(
+              Amount(2000.0),
+              Amount(1878),
+              PhaseTwoPeriod(
+                partialPeriodWithPaymentDate("2020-07-30", "2020-08-31", "2020-08-01", "2020-08-31", "2020-08-20"),
+                None,
+                None)),
+            PartialPeriodCap(2500.15, 31, 8, 80.65)
+          ),
+          PhaseTwoFurloughBreakdown(
+            Amount(1600.0),
+            RegularPaymentWithPhaseTwoPeriod(
+              Amount(2000.0),
+              Amount(2000),
+              PhaseTwoPeriod(fullPeriodWithPaymentDate("2020-09-01", "2020-09-30", "2020-09-20"), None, None)),
+            FullPeriodCap(2500.0)
+          )
+        )
+      )
+
+    val expectedBreakdown = ConfirmationViewBreakdownWithoutNicAndPension(furlough)
+
+    val expectedClaimPeriod = period("2020-08-01", "2020-08-31")
+
+    loadResultData(userAnswers).value.asInstanceOf[AfterJulyConfirmationDataResult].confirmationViewBreakdown mustBe expectedBreakdown
+    loadResultData(userAnswers).value.asInstanceOf[AfterJulyConfirmationDataResult].metaData.claimPeriod mustBe expectedClaimPeriod
   }
 
   "for a given user answer calculate furlough and empty results for ni and pension if do not apply" in new ConfirmationControllerRequestHandler {

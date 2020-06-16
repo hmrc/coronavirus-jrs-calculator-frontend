@@ -19,7 +19,7 @@ package base
 import java.time.LocalDate
 
 import models.PaymentFrequency.Monthly
-import models._
+import models.{PaymentWithPhaseTwoPeriod, _}
 import org.scalatest.TryValues
 import services.Threshold
 
@@ -42,6 +42,17 @@ trait CoreTestDataBuilder extends TryValues {
     referencePay: BigDecimal,
     period: PartialPeriodWithPaymentDate) =
     RegularPaymentWithPartialPeriod(Amount(nonFurloughPay), Amount(regularPay), Amount(referencePay), period)
+
+  def regularPaymentWithPhaseTwoPeriod(
+    nonFurloughPay: BigDecimal,
+    regularPay: BigDecimal,
+    start: String,
+    end: String,
+    payDate: String): PaymentWithPhaseTwoPeriod =
+    RegularPaymentWithPhaseTwoPeriod(
+      Amount(nonFurloughPay),
+      Amount(regularPay),
+      PhaseTwoPeriod(fullPeriodWithPaymentDate(start, end, payDate), None, None))
 
   def averagePaymentWithFullPeriod(
     referencePay: BigDecimal,
@@ -86,6 +97,13 @@ trait CoreTestDataBuilder extends TryValues {
 
   def fullPeriodFurloughBreakdown(grant: BigDecimal, payment: PaymentWithFullPeriod, cap: FurloughCap): FullPeriodFurloughBreakdown =
     FullPeriodFurloughBreakdown(
+      Amount(grant),
+      payment,
+      cap
+    )
+
+  def phaseTwoPeriodFurloughBreakdown(grant: BigDecimal, payment: PaymentWithPhaseTwoPeriod, cap: FurloughCap): PhaseTwoFurloughBreakdown =
+    PhaseTwoFurloughBreakdown(
       Amount(grant),
       payment,
       cap
