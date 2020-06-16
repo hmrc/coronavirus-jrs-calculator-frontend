@@ -174,6 +174,26 @@ class PayDateControllerSpec extends SpecBaseWithApplication with MockitoSugar {
       application.stop()
     }
 
+    "generate dates when not monthly" in {
+      val userAnswers = emptyUserAnswers
+        .withClaimPeriodStart("2020, 7, 1")
+        .withClaimPeriodEnd("2020, 7, 31")
+        .withFurloughStartDate("2020, 3, 20")
+        .withFurloughStatus()
+        .withPaymentFrequency(Weekly)
+        .withPayMethod()
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val result = route(application, postRequest(LocalDate.of(2020, 6, 26))).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual routes.PayPeriodsListController.onPageLoad().url
+
+      application.stop()
+    }
+
     "return a Bad Request and errors when invalid data is submitted" when {
 
       "data does not bind" in {
