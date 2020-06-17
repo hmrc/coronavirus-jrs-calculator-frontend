@@ -39,7 +39,7 @@ trait ConfirmationControllerRequestHandler
 
       (meta, bd) match {
         case (metadata: Metadata, Valid(breakdown: ViewBreakdown)) => confirmationResult(metadata, breakdown)
-        case (_, Invalid(_))                                => ???
+        case (_, Invalid(_))                                       => ???
       }
     }
 
@@ -48,7 +48,7 @@ trait ConfirmationControllerRequestHandler
       case (data: ConfirmationMetadata, b: ConfirmationViewBreakdown)         => PhaseOneConfirmationDataResult(data, b)
       case (data: ConfirmationMetadata, b: PhaseTwoConfirmationViewBreakdown) => PhaseTwoConfirmationDataResult(data, b)
       case (m: ConfirmationMetadataWithoutNicAndPension, b: ConfirmationViewBreakdownWithoutNicAndPension) =>
-        AfterJulyConfirmationDataResult(m, b)
+        ConfirmationDataResultWithoutNicAndPension(m, b)
     }
 
   private def breakdown(userAnswers: UserAnswers): AnswerV[ConfirmationViewBreakdown] =

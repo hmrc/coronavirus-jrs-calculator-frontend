@@ -27,7 +27,7 @@ case class PhaseOneConfirmationDataResult(metaData: ConfirmationMetadata, confir
 case class PhaseTwoConfirmationDataResult(metaData: ConfirmationMetadata, confirmationViewBreakdown: PhaseTwoConfirmationViewBreakdown)
     extends ConfirmationDataResult
 
-case class AfterJulyConfirmationDataResult(
+case class ConfirmationDataResultWithoutNicAndPension(
   metaData: ConfirmationMetadataWithoutNicAndPension,
   confirmationViewBreakdown: ConfirmationViewBreakdownWithoutNicAndPension)
     extends ConfirmationDataResult

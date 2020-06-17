@@ -141,8 +141,8 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
 
     val expectedClaimPeriod = period("2020-08-01", "2020-08-31")
 
-    loadResultData(userAnswers).value.asInstanceOf[AfterJulyConfirmationDataResult].confirmationViewBreakdown mustBe expectedBreakdown
-    loadResultData(userAnswers).value.asInstanceOf[AfterJulyConfirmationDataResult].metaData.claimPeriod mustBe expectedClaimPeriod
+    loadResultData(userAnswers).value.asInstanceOf[ConfirmationDataResultWithoutNicAndPension].confirmationViewBreakdown mustBe expectedBreakdown
+    loadResultData(userAnswers).value.asInstanceOf[ConfirmationDataResultWithoutNicAndPension].metaData.claimPeriod mustBe expectedClaimPeriod
   }
 
   "for a given user answer calculate furlough and empty results for ni and pension if do not apply" in new ConfirmationControllerRequestHandler {
