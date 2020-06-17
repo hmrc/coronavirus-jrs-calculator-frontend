@@ -104,8 +104,6 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
         .withFurloughStartDate("2020, 8, 1")
         .withFurloughStatus()
         .withPaymentFrequency(Monthly)
-        .withNiCategory()
-        .withPensionStatus()
         .withPayMethod()
         .withLastPayDate("2020, 9, 20")
         .withRegularPayAmount(2000.0)
