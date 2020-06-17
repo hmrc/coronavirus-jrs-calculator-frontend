@@ -138,20 +138,20 @@ class PayDateController @Inject()(
 
   private def shouldGenerate(userAnswers: UserAnswers, idx: Int): (Boolean, PaymentFrequency) =
     if (idx != 1) {
-      (false, Monthly)
+      false -> Monthly
     } else {
       extractPaymentFrequencyV(userAnswers) match {
-        case Valid(Monthly) => (false, Monthly)
-        case Valid(freq)    => (true, freq)
-        case Invalid(_)     => (false, Monthly)
+        case Valid(Monthly) => false -> Monthly
+        case Valid(freq)    => true  -> freq
+        case Invalid(_)     => false -> Monthly
       }
     }
 
   private def shouldRedirect(userAnswers: UserAnswers, idx: Int): Boolean =
     extractPaymentFrequencyV(userAnswers) match {
-      case Valid(Monthly)          => false
-      case Valid(freq) if idx != 1 => true
-      case _                       => false
+      case Valid(Monthly)       => false
+      case Valid(_) if idx != 1 => true
+      case _                    => false
     }
 
 }
