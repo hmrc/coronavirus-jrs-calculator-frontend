@@ -52,19 +52,23 @@ class PayDateController @Inject()(
     extends BaseController with I18nSupport with LocalDateHelpers with PeriodHelper with DataExtractor {
 
   def onPageLoad(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswersV(ClaimPeriodStartPage, FurloughStartDatePage) { (claimStartDate, furloughStartDate) =>
-      val effectiveStartDate = utils.LocalDateHelpers.latestOf(claimStartDate, furloughStartDate)
-      messageDateFrom(effectiveStartDate, request.userAnswers, idx).fold {
-        Logger.warn(s"onPageLoad messageDateFrom returned none for claimStartDate=$claimStartDate, payDates=${request.userAnswers.getList(
-          PayDatePage)}, idx=$idx")
-        Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-      } { messageDate =>
-        val preparedForm = request.userAnswers.getV(PayDatePage, Some(idx)) match {
-          case Invalid(_)   => form
-          case Valid(value) => form.fill(value)
-        }
+    if (shouldRedirect(request.userAnswers, idx)) {
+      Future.successful(Redirect(routes.PayDateController.onPageLoad(1)))
+    } else {
+      getRequiredAnswersV(ClaimPeriodStartPage, FurloughStartDatePage) { (claimStartDate, furloughStartDate) =>
+        val effectiveStartDate = utils.LocalDateHelpers.latestOf(claimStartDate, furloughStartDate)
+        messageDateFrom(effectiveStartDate, request.userAnswers, idx).fold {
+          Logger.warn(s"onPageLoad messageDateFrom returned none for claimStartDate=$claimStartDate, payDates=${request.userAnswers.getList(
+            PayDatePage)}, idx=$idx")
+          Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+        } { messageDate =>
+          val preparedForm = request.userAnswers.getV(PayDatePage, Some(idx)) match {
+            case Invalid(_)   => form
+            case Valid(value) => form.fill(value)
+          }
 
-        Future.successful(Ok(view(preparedForm, idx, messageDate)))
+          Future.successful(Ok(view(preparedForm, idx, messageDate)))
+        }
       }
     }
   }
@@ -118,7 +122,7 @@ class PayDateController @Inject()(
           case Valid(furlough) => {
             val endDates = generateEndDates(freq, payDate, furlough)
             for {
-              updatedAnswers <- Future.fromTry(userAnswers.setListBulk(PayDatePage, endDates))
+              updatedAnswers <- Future.fromTry(userAnswers.setList(PayDatePage, endDates))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(PayDatePage, updatedAnswers, Some(idx)))
           }
@@ -127,7 +131,7 @@ class PayDateController @Inject()(
         }
       case (false, _) =>
         for {
-          updatedAnswers <- Future.fromTry(userAnswers.setListWithInvalidation(PayDatePage, payDate, idx))
+          updatedAnswers <- Future.fromTry(userAnswers.setListItemWithInvalidation(PayDatePage, payDate, idx))
           _              <- sessionRepository.set(updatedAnswers)
         } yield Redirect(navigator.nextPage(PayDatePage, updatedAnswers, Some(idx)))
     }
@@ -141,6 +145,13 @@ class PayDateController @Inject()(
         case Valid(freq)    => (true, freq)
         case Invalid(_)     => (false, Monthly)
       }
+    }
+
+  private def shouldRedirect(userAnswers: UserAnswers, idx: Int): Boolean =
+    extractPaymentFrequencyV(userAnswers) match {
+      case Valid(Monthly)          => false
+      case Valid(freq) if idx != 1 => true
+      case _                       => false
     }
 
 }

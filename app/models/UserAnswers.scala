@@ -52,7 +52,7 @@ final case class UserAnswers(
   def getList[A](page: Gettable[A])(implicit rds: Reads[A]): Seq[A] =
     page.path.read[Seq[A]].reads(data).getOrElse(Seq.empty)
 
-  def setListWithInvalidation[A](page: Settable[A] with Gettable[A], value: A, idx: Int)(
+  def setListItemWithInvalidation[A](page: Settable[A] with Gettable[A], value: A, idx: Int)(
     implicit writes: Writes[A],
     rds: Reads[A]): Try[UserAnswers] = {
     val list = page.path.read[Seq[A]].reads(data).getOrElse(Seq.empty)
@@ -71,12 +71,8 @@ final case class UserAnswers(
     }
   }
 
-  def setListBulk[A](page: Settable[A], value: Seq[A])(implicit writes: Writes[A]): Try[UserAnswers] = {
-    val list: JsArray = JsArray(value.map { item =>
-      Json.toJson(item)
-    })
-
-    val updatedData = data.setObject(path(page, None), Json.toJson(list)) match {
+  def setList[A](page: Settable[A], value: Seq[A])(implicit writes: Writes[A]): Try[UserAnswers] = {
+    val updatedData = data.setObject(path(page, None), Json.toJson(value)) match {
       case JsSuccess(jsValue, _) =>
         Success(jsValue)
       case JsError(errors) =>
