@@ -107,26 +107,18 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
         .withPayMethod()
         .withLastPayDate("2020, 9, 20")
         .withRegularPayAmount(2000.0)
-        .withPayDate(List("2020, 7, 31", "2020, 8, 31", "2020-09-30"))
+        .withPayDate(List("2020, 7, 31", "2020, 8, 31"))
 
     val furlough =
       PhaseTwoFurloughCalculationResult(
-        3200.0,
+        1600.0,
         List(
           PhaseTwoFurloughBreakdown(
             Amount(1600.0),
             RegularPaymentWithPhaseTwoPeriod(
               Amount(2000.0),
               Amount(2000.0),
-              PhaseTwoPeriod(fullPeriodWithPaymentDate("2020-08-01", "2020-08-31", "2020-08-20"), None, None)),
-            FullPeriodCap(2500.0)
-          ),
-          PhaseTwoFurloughBreakdown(
-            Amount(1600.0),
-            RegularPaymentWithPhaseTwoPeriod(
-              Amount(2000.0),
-              Amount(2000.0),
-              PhaseTwoPeriod(fullPeriodWithPaymentDate("2020-09-01", "2020-09-30", "2020-09-20"), None, None)),
+              PhaseTwoPeriod(fullPeriodWithPaymentDate("2020-08-01", "2020-08-31", "2020-09-20"), None, None)),
             FullPeriodCap(2500.0)
           )
         )
