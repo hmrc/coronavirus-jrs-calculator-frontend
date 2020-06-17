@@ -29,21 +29,6 @@ import Calculators._
 trait ConfirmationControllerRequestHandler
     extends FurloughCalculator with NicCalculator with PensionCalculator with JourneyBuilder with ReferencePayCalculator {
 
-//  def loadResultData(userAnswers: UserAnswers): AnswerV[ConfirmationDataResult] =
-//    meta(userAnswers).map { meta =>
-//      val bd: AnswerV[ViewBreakdown] = if (meta.claimPeriod.start.isBefore(LocalDate.of(2020, 7, 1))) {
-//        breakdown(userAnswers)
-//      } else {
-//        phaseTwoBreakdown(userAnswers)
-//      }
-//
-//      bd match {
-//        case Valid(one: ConfirmationViewBreakdown)         => PhaseOneConfirmationDataResult(meta, one)
-//        case Valid(two: PhaseTwoConfirmationViewBreakdown) => PhaseTwoConfirmationDataResult(meta, two)
-//        case Invalid(e)                                    => ???
-//      }
-//    }
-
   def loadResultData(userAnswers: UserAnswers): AnswerV[ConfirmationDataResult] =
     meta(userAnswers).map { meta =>
       val bd: AnswerV[ViewBreakdown] = meta match {
@@ -53,15 +38,15 @@ trait ConfirmationControllerRequestHandler
       }
 
       (meta, bd) match {
-        case (m: Metadata, Valid(breakdown: ViewBreakdown)) => confirmationResult(m, breakdown)
+        case (metadata: Metadata, Valid(breakdown: ViewBreakdown)) => confirmationResult(metadata, breakdown)
         case (_, Invalid(_))                                => ???
       }
     }
 
   private def confirmationResult(metadata: Metadata, breakdown: ViewBreakdown): ConfirmationDataResult =
     (metadata, breakdown) match {
-      case (data: ConfirmationMetadata, b: PhaseTwoConfirmationViewBreakdown) => PhaseTwoConfirmationDataResult(data, b)
       case (data: ConfirmationMetadata, b: ConfirmationViewBreakdown)         => PhaseOneConfirmationDataResult(data, b)
+      case (data: ConfirmationMetadata, b: PhaseTwoConfirmationViewBreakdown) => PhaseTwoConfirmationDataResult(data, b)
       case (m: ConfirmationMetadataWithoutNicAndPension, b: ConfirmationViewBreakdownWithoutNicAndPension) =>
         AfterJulyConfirmationDataResult(m, b)
     }

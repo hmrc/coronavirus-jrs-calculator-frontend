@@ -43,17 +43,6 @@ trait CoreTestDataBuilder extends TryValues {
     period: PartialPeriodWithPaymentDate) =
     RegularPaymentWithPartialPeriod(Amount(nonFurloughPay), Amount(regularPay), Amount(referencePay), period)
 
-  def regularPaymentWithPhaseTwoPeriod(
-    nonFurloughPay: BigDecimal,
-    regularPay: BigDecimal,
-    start: String,
-    end: String,
-    payDate: String): PaymentWithPhaseTwoPeriod =
-    RegularPaymentWithPhaseTwoPeriod(
-      Amount(nonFurloughPay),
-      Amount(regularPay),
-      PhaseTwoPeriod(fullPeriodWithPaymentDate(start, end, payDate), None, None))
-
   def averagePaymentWithFullPeriod(
     referencePay: BigDecimal,
     period: FullPeriodWithPaymentDate,
