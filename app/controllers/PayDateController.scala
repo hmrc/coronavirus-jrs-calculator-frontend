@@ -24,7 +24,7 @@ import forms.PayDateFormProvider
 import handlers.{DataExtractor, ErrorHandler}
 import javax.inject.Inject
 import models.PaymentFrequency.Monthly
-import models.UserAnswers
+import models.{PaymentFrequency, UserAnswers}
 import navigation.Navigator
 import pages.{ClaimPeriodStartPage, FurloughStartDatePage, PayDatePage}
 import play.api.Logger
@@ -37,7 +37,6 @@ import utils.LocalDateHelpers
 import views.html.PayDateView
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 class PayDateController @Inject()(
   override val messagesApi: MessagesApi,
@@ -113,35 +112,35 @@ class PayDateController @Inject()(
     }
 
   private def saveAndRedirect(userAnswers: UserAnswers, payDate: LocalDate, idx: Int): Future[Result] =
-    extractPaymentFrequencyV(userAnswers) match {
-      case Valid(Monthly) =>
-        for {
-          updatedAnswers <- Future.fromTry(userAnswers.setListWithInvalidation(PayDatePage, payDate, idx))
-          _              <- sessionRepository.set(updatedAnswers)
-        } yield Redirect(navigator.nextPage(PayDatePage, updatedAnswers, Some(idx)))
-      case Valid(freq) =>
+    shouldGenerate(userAnswers, idx) match {
+      case (true, freq) =>
         extractFurloughWithinClaimV(userAnswers) match {
           case Valid(furlough) => {
             val endDates = generateEndDates(freq, payDate, furlough)
             for {
-              updatedAnswers <- Future.fromTry(setGeneratedEndDates(userAnswers, endDates))
+              updatedAnswers <- Future.fromTry(userAnswers.setListBulk(PayDatePage, endDates))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(PayDatePage, updatedAnswers, Some(idx)))
           }
-          case Invalid(_) => Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+          case Invalid(_) =>
+            Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
         }
+      case (false, _) =>
+        for {
+          updatedAnswers <- Future.fromTry(userAnswers.setListWithInvalidation(PayDatePage, payDate, idx))
+          _              <- sessionRepository.set(updatedAnswers)
+        } yield Redirect(navigator.nextPage(PayDatePage, updatedAnswers, Some(idx)))
     }
 
-  private def setGeneratedEndDates(userAnswers: UserAnswers, endDates: Seq[LocalDate]): Try[UserAnswers] = {
-    val zipped = endDates.zip(1 to endDates.length)
-
-    def rec(userAnswers: Try[UserAnswers], zippedDates: Seq[(LocalDate, Int)]): Try[UserAnswers] =
-      zippedDates match {
-        case Nil => userAnswers
-        case (date, idx) :: tail =>
-          rec(userAnswers.get.setListWithInvalidation(PayDatePage, date, idx), tail)
+  private def shouldGenerate(userAnswers: UserAnswers, idx: Int): (Boolean, PaymentFrequency) =
+    if (idx != 1) {
+      (false, Monthly)
+    } else {
+      extractPaymentFrequencyV(userAnswers) match {
+        case Valid(Monthly) => (false, Monthly)
+        case Valid(freq)    => (true, freq)
+        case Invalid(_)     => (false, Monthly)
       }
+    }
 
-    rec(Try(userAnswers), zipped)
-  }
 }

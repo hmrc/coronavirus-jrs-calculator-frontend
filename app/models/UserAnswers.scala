@@ -18,13 +18,13 @@ package models
 
 import java.time.LocalDateTime
 
+import cats.data.{NonEmptyChain, NonEmptyList, ValidatedNec}
+import cats.syntax.validated._
+import models.UserAnswers.AnswerV
 import play.api.libs.json._
 import queries.{Gettable, Query, Settable}
 
 import scala.util.{Failure, Success, Try}
-import cats.data.{NonEmptyChain, NonEmptyList, ValidatedNec}
-import cats.syntax.validated._
-import models.UserAnswers.AnswerV
 
 final case class UserAnswers(
   id: String,
@@ -68,6 +68,24 @@ final case class UserAnswers(
     updatedData.flatMap { d =>
       val updatedAnswers = copy(data = d)
       page.cleanup(Some(value), updatedAnswers)
+    }
+  }
+
+  def setListBulk[A](page: Settable[A], value: Seq[A])(implicit writes: Writes[A]): Try[UserAnswers] = {
+    val list: JsArray = JsArray(value.map { item =>
+      Json.toJson(item)
+    })
+
+    val updatedData = data.setObject(path(page, None), Json.toJson(list)) match {
+      case JsSuccess(jsValue, _) =>
+        Success(jsValue)
+      case JsError(errors) =>
+        Failure(JsResultException(errors))
+    }
+
+    updatedData.flatMap { d =>
+      val updatedAnswers = copy(data = d)
+      page.cleanup(None, updatedAnswers)
     }
   }
 
