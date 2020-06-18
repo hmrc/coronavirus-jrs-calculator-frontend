@@ -30,7 +30,33 @@ case class PhaseTwoConfirmationDataResult(metaData: ConfirmationMetadata, confir
 case class ConfirmationDataResultWithoutNicAndPension(
   metaData: ConfirmationMetadataWithoutNicAndPension,
   confirmationViewBreakdown: ConfirmationViewBreakdownWithoutNicAndPension)
-    extends ConfirmationDataResult
+    extends ConfirmationDataResult {
+
+  def detailedBreakdowns: Seq[NoNicAndPensionDetailedBreakdown] = confirmationViewBreakdown.furlough.periodBreakdowns map { breakdowns =>
+    import breakdowns._
+    NoNicAndPensionDetailedBreakdown(
+      paymentWithPeriod.phaseTwoPeriod.periodWithPaymentDate.period,
+      PhaseTwoFurloughBreakdown(grant, paymentWithPeriod, furloughCap)
+    )
+  }
+
+  def detailedBreakdownMessageKeys: Seq[String] = confirmationViewBreakdown.furlough.periodBreakdowns.head.paymentWithPeriod match {
+    case _: RegularPaymentWithPhaseTwoPeriod =>
+      Seq(
+        "phaseTwoDetailedBreakdown.p1.regular"
+      )
+    case _: AveragePaymentWithPhaseTwoPeriod =>
+      Seq(
+        "phaseTwoDetailedBreakdown.p1.average"
+      )
+    case _: CylbPaymentWithPhaseTwoPeriod =>
+      Seq(
+        "phaseTwoDetailedBreakdown.p1.cylb.1",
+        "phaseTwoDetailedBreakdown.p1.cylb.2",
+        "phaseTwoDetailedBreakdown.p1.cylb.3"
+      )
+  }
+}
 
 sealed trait ViewBreakdown {
   def toAuditBreakdown: AuditBreakdown
