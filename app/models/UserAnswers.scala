@@ -178,8 +178,36 @@ object UserAnswers {
 
   type AnswerV[A] = ValidatedNec[AnswerValidation, A]
 
-  def logErrors(nec: NonEmptyChain[AnswerValidation])(implicit logger: Logger): Unit = {}
-  def logWarnings(nec: NonEmptyChain[AnswerValidation])(implicit logger: Logger): Unit = {}
+  def logErrors(nec: NonEmptyChain[AnswerValidation])(implicit logger: Logger): Unit = {
+    logger.error(s"Encountered validation errors")
+    nec.toNonEmptyList.toList.foreach { validation =>
+      val err = validation.underlying.errors.headOption match {
+        case Some((path, errors)) => s"${path.toJsonString}; JSON error: ${errors.map(_.toString)}"
+        case None => ""
+      }
+      logger.error(s"""
+        | Encountered validation error: ${validation.message};
+        | Underlying error: $err;
+        | Answer data: ${Json.prettyPrint(validation.data)}
+        | """
+      )
+    }
+  }
+  def logWarnings(nec: NonEmptyChain[AnswerValidation])(implicit logger: Logger): Unit = {
+    logger.error(s"Encountered validation warnings")
+    nec.toNonEmptyList.toList.foreach { validation =>
+      val err = validation.underlying.errors.headOption match {
+        case Some((path, errors)) => s"${path.toJsonString}; JSON error: ${errors.map(_.toString)}"
+        case None => ""
+      }
+      logger.warn(s"""
+                      | Encountered validation error: ${validation.message};
+                      | Underlying error: $err;
+                      | Answer data: ${Json.prettyPrint(validation.data)}
+                      | """
+      )
+    }
+  }
 
   implicit lazy val reads: Reads[UserAnswers] = {
 
