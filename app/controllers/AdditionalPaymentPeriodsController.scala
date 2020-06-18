@@ -73,9 +73,10 @@ class AdditionalPaymentPeriodsController @Inject()(
             Future.successful(Ok(view(preparedForm, furlough.periodBreakdowns)))
         }
       }
-      .getOrElse(
+      .fold(nel => {
+        UserAnswers.logErrors(nel)
         Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-      )
+      }, identity)
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
