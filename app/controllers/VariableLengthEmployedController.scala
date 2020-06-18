@@ -48,14 +48,14 @@ class VariableLengthEmployedController @Inject()(
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
     extends BaseController {
 
-  implicit val logger: Logger = LoggerFactory.getLogger(getClass)
+  override implicit val logger: Logger = LoggerFactory.getLogger(getClass)
 
   val form: Form[EmployeeStarted] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     getRequiredAnswerV(ClaimPeriodStartPage) { claimStart =>
       val preparedForm = request.userAnswers.getV(EmployeeStartedPage) match {
-        case Invalid(e)   =>
+        case Invalid(e) =>
           UserAnswers.logWarnings(e)
           form
         case Valid(value) => form.fill(value)
