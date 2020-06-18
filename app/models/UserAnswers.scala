@@ -21,6 +21,7 @@ import java.time.LocalDateTime
 import cats.data.{NonEmptyChain, NonEmptyList, ValidatedNec}
 import cats.syntax.validated._
 import models.UserAnswers.AnswerV
+import org.slf4j.Logger
 import play.api.libs.json._
 import queries.{Gettable, Query, Settable}
 
@@ -177,7 +178,8 @@ object UserAnswers {
 
   type AnswerV[A] = ValidatedNec[AnswerValidation, A]
 
-  def logErrors(nec: NonEmptyChain[AnswerValidation]): Unit = {}
+  def logErrors(nec: NonEmptyChain[AnswerValidation])(implicit logger: Logger): Unit = {}
+  def logWarnings(nec: NonEmptyChain[AnswerValidation])(implicit logger: Logger): Unit = {}
 
   implicit lazy val reads: Reads[UserAnswers] = {
 
