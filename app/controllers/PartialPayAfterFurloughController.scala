@@ -21,6 +21,7 @@ import controllers.actions._
 import forms.FurloughPartialPayFormProvider
 import javax.inject.Inject
 import navigation.Navigator
+import org.slf4j.{Logger, LoggerFactory}
 import pages._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -99,4 +100,6 @@ class PartialPayAfterFurloughController @Inject()(
           )
       }
   }
+
+  override val logger: Logger = LoggerFactory.getLogger(getClass)
 }
