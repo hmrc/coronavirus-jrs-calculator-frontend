@@ -70,6 +70,7 @@ case class ConfirmationViewBreakdown(furlough: FurloughCalculationResult, nic: N
             )
         }
       }
+      .getOrElse(Seq())
 
   override def toAuditBreakdown: AuditBreakdown = {
     val auditFurlough = AuditCalculationResult(
@@ -111,24 +112,26 @@ case class PhaseTwoConfirmationViewBreakdown(
     )
   }
 
-  def detailedBreakdownMessageKeys: Seq[String] = furlough.periodBreakdowns.flatMap {
-    _.paymentWithPeriod match {
-      case _: RegularPaymentWithPhaseTwoPeriod =>
-        Seq(
-          "phaseTwoDetailedBreakdown.p1.regular"
-        )
-      case _: AveragePaymentWithPhaseTwoPeriod =>
-        Seq(
-          "phaseTwoDetailedBreakdown.p1.average"
-        )
-      case _: CylbPaymentWithPhaseTwoPeriod =>
-        Seq(
-          "phaseTwoDetailedBreakdown.p1.cylb.1",
-          "phaseTwoDetailedBreakdown.p1.cylb.2",
-          "phaseTwoDetailedBreakdown.p1.cylb.3"
-        )
-    }
-  }
+  def detailedBreakdownMessageKeys: Seq[String] =
+    furlough.periodBreakdowns.headOption
+      .map {
+        _.paymentWithPeriod match {
+          case _: RegularPaymentWithPhaseTwoPeriod =>
+            Seq(
+              "phaseTwoDetailedBreakdown.p1.regular"
+            )
+          case _: AveragePaymentWithPhaseTwoPeriod =>
+            Seq(
+              "phaseTwoDetailedBreakdown.p1.average"
+            )
+          case _: CylbPaymentWithPhaseTwoPeriod =>
+            Seq(
+              "phaseTwoDetailedBreakdown.p1.cylb.1",
+              "phaseTwoDetailedBreakdown.p1.cylb.2",
+              "phaseTwoDetailedBreakdown.p1.cylb.3"
+            )
+        }
+      }
       .getOrElse(Seq())
 
   override def toAuditBreakdown: AuditBreakdown = {
@@ -163,7 +166,6 @@ case class ConfirmationViewBreakdownWithoutNicAndPension(furlough: PhaseTwoFurlo
   )
 
   override def toAuditBreakdown: AuditBreakdown = AuditBreakdown(auditFurlough, None, None)
-  override def toAuditBreakdown: AuditBreakdown = ??? //TODO
 
   def detailedBreakdowns: Seq[NoNicAndPensionDetailedBreakdown] = furlough.periodBreakdowns map { breakdowns =>
     import breakdowns._

@@ -20,7 +20,10 @@ import java.time.LocalDate
 
 import base.SpecBaseWithApplication
 import forms.PartTimeQuestionFormProvider
-import models.PartTimeQuestion
+import models.{FurloughStatus, PartTimeQuestion}
+import models.PartTimeQuestion.PartTimeNo
+import models.PayMethod.Regular
+import models.PaymentFrequency.Monthly
 import models.requests.DataRequest
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
@@ -62,6 +65,33 @@ class PartTimeQuestionControllerSpec extends SpecBaseWithApplication with Mockit
 
       contentAsString(result) mustEqual
         view(form, claimStart)(dataRequest, messages).toString
+
+      application.stop()
+    }
+
+    "blah" in {
+      val userAnswers = emptyUserAnswers
+        .withRegularPayAmount(2000)
+        .withPayMethod(Regular)
+//        .withPartTimeQuestion(PartTimeNo)
+        .withLastPayDate("2020-09-03")
+        .withFurloughStatus(FurloughStatus.FurloughEnded)
+        .withFurloughStartDate("2020-08-01")
+        .withClaimPeriodEnd("2020-08-31")
+        .withFurloughEndDate("2020-08-31")
+        .withPaymentFrequency(Monthly)
+        .withClaimPeriodStart("2020-08-01")
+        .withPayDate(List("2020-07-31", "2020-08-31"))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request =
+        FakeRequest(POST, partTimeQuestionRoute)
+          .withFormUrlEncodedBody(("value", PartTimeQuestion.values.head.toString))
+
+      val result = route(application, request).value
+
+      redirectLocation(result).value mustEqual "/job-retention-scheme-calculator/part-time-periods"
 
       application.stop()
     }
