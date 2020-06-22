@@ -133,24 +133,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
           .onPageLoad()
       }
 
-      "blah" in {
-        val answersWithPartTime = emptyUserAnswers
-          .withRegularPayAmount(2000)
-          .withPayMethod(Regular)
-          .withPartTimeQuestion(PartTimeNo)
-          .withLastPayDate("2020-09-03")
-          .withFurloughStatus(FurloughStatus.FurloughEnded)
-          .withFurloughStartDate("2020-08-01")
-          .withClaimPeriodEnd("2020-08-31")
-          .withFurloughEndDate("2020-08-31")
-          .withPaymentFrequency(Monthly)
-          .withClaimPeriodStart("2020-08-01")
-          .withPayDate(List("2020-07-31", "2020-08-31"))
-
-        navigator
-          .nextPage(PartTimeQuestionPage, answersWithPartTime) mustBe routes.ConfirmationController.onPageLoad()
-      }
-
       "go to PartTimeQuestionPage after AnnualPayAmountPage if phase two started" in {
         val userAnswers = emptyUserAnswers.withClaimPeriodStart(LocalDate.now)
 

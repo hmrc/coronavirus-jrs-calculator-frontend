@@ -69,33 +69,6 @@ class PartTimeQuestionControllerSpec extends SpecBaseWithApplication with Mockit
       application.stop()
     }
 
-    "blah" in {
-      val userAnswers = emptyUserAnswers
-        .withRegularPayAmount(2000)
-        .withPayMethod(Regular)
-//        .withPartTimeQuestion(PartTimeNo)
-        .withLastPayDate("2020-09-03")
-        .withFurloughStatus(FurloughStatus.FurloughEnded)
-        .withFurloughStartDate("2020-08-01")
-        .withClaimPeriodEnd("2020-08-31")
-        .withFurloughEndDate("2020-08-31")
-        .withPaymentFrequency(Monthly)
-        .withClaimPeriodStart("2020-08-01")
-        .withPayDate(List("2020-07-31", "2020-08-31"))
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request =
-        FakeRequest(POST, partTimeQuestionRoute)
-          .withFormUrlEncodedBody(("value", PartTimeQuestion.values.head.toString))
-
-      val result = route(application, request).value
-
-      redirectLocation(result).value mustEqual "/job-retention-scheme-calculator/part-time-periods"
-
-      application.stop()
-    }
-
     "return OK and the correct view for a GET for phase two" in {
       val userAnswers = emptyUserAnswers.withClaimPeriodStart("2020, 7, 2")
 
