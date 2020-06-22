@@ -312,15 +312,15 @@ claimPeriodEnd.error.invalid = Nodwch ddyddiad dod i ben go iawn
 claimPeriodEnd.cannot.be.after.policyEnd = Ni all y dyddiad dod i ben fod ar ôl dyddiad dod i ben y cynllun ({0})
 claimPeriodEnd.cannot.be.after.14days = Ni all y dyddiad dod i ben fod yn fwy na 14 diwrnod ar ôl dyddiad heddiw
 claimPeriodEnd.cannot.be.after.july = Mae’n rhaid i’r hawliad ddechrau a dod i ben cyn y 1af o Orffennaf.
-claimPeriodEnd.cannot.be.of.same.month = Mae’n rhaid i’r hawliad ddechrau a dod i ben yn yr un mis calendr
+claimPeriodEnd.cannot.be.of.same.month = O 1 Gorffennaf ymlaen, mae’n rhaid i hawliadau ddechrau a dod i ben yn ystod yr un mis calendr
 claimPeriodEnd.cannot.be.before.claimStart = Ni all y dyddiad dod i ben fod cyn y dyddiad dechrau
 claimPeriodEnd.cannot.be.lessThan.7days = Mae’n rhaid i’r cyfnod hawlio fod yn gyfnod o 7 diwrnod o leiaf
 claimPeriodEnd.legend = Dyddiad dod i ben
 claimPeriodEnd.hint = Er enghraifft, 31 3 2020
 
 furloughOngoing.title = A yw ffyrlo’r cyflogai wedi dod i ben?
-furloughOngoing.1stJuly.title = A yw cyfnod ffyrlo’r cyflogai hwn wedi dod i ben?
-furloughOngoing.heading = A yw ffyrlo’r cyflogai wedi dod i ben?
+furloughOngoing.1stJuly.title = A yw cyfnod ffyrlo’r cyflogai hwn wedi dod i ben yn barhaol?
+furloughOngoing.heading = A yw cyfnod ffyrlo’r cyflogai hwn wedi dod i ben yn barhaol?
 furloughOngoing.1stJuly.heading = A yw cyfnod ffyrlo’r cyflogai hwn wedi dod i ben?
 furloughOngoing.ended = Iawn
 furloughOngoing.ongoing = Na, mae’n barhaus
@@ -339,8 +339,8 @@ furloughEndDate.error.required.two = Mae’n rhaid i ddyddiad dod i ben y ffyrlo
 furloughEndDate.error.required = Mae’n rhaid i ddyddiad dod i ben y ffyrlo gynnwys {0}
 furloughEndDate.error.invalid = Nodwch ddyddiad dod i ben go iawn y ffyrlo
 furloughEndDate.error.min.max = Mae’n rhaid i ddyddiad dod i ben y ffyrlo fod o leiaf 3 wythnos ar ôl i’r ffyrlo ddechrau a chyn diwedd yr hawliad
-furloughEndDate.error.claimPeriod = Enter a furlough end date within the claim period.
-furloughEndDate.error.beforeStart = The furlough end date cannot be before the furlough start date
+furloughEndDate.error.claimPeriod = Nodwch ddyddiad dod i ben y ffyrlo sydd o fewn y cyfnod hawlio.
+furloughEndDate.error.beforeStart = Ni all dyddiad dod i ben y ffyrlo fod cyn dyddiad dechrau’r ffyrlo
 
 furloughStartDate.title = Pryd cafodd y cyflogai hwn ei roi ar ffyrlo?
 furloughStartDate.1stJuly.title = Pryd cafodd y cyflogai hwn ei roi ar ffyrlo’n wreiddiol?
@@ -356,8 +356,8 @@ furloughStartDate.error.invalid = Nodwch ddyddiad dechrau go iawn y ffyrlo
 furloughStartDate.error.minimum = Mae’n rhaid i ddyddiad dechrau’r ffyrlo fod ar neu ar ôl {0}
 furloughStartDate.error.maximum = Mae’n rhaid i ddyddiad dechrau’r ffyrlo fod cyn {0}
 
-variableLengthEmployed.title = A oedd y cyflogai hwn yn gweithio i chi ar 1 Chwefror 2019 neu cyn hynny?
-variableLengthEmployed.heading = A oedd y cyflogai hwn yn gweithio i chi ar 1 Chwefror 2019 neu cyn hynny?
+variableLengthEmployed.title = A oedd y cyflogai hwn yn gweithio i chi ar {0} neu cyn hynny?
+variableLengthEmployed.heading = A oedd y cyflogai hwn yn gweithio i chi ar {0} neu cyn hynny?
 variableLengthEmployed.onOrBefore1Feb2019 = Iawn
 variableLengthEmployed.after1Feb2019 = Na
 variableLengthEmployed.error.required = Dewiswch un o’r opsiynau isod
@@ -632,7 +632,7 @@ partTimeHours.partial = Dyma’r dyddiadau o’r cyfnod cyflog {0} i {1} sy’n 
 partTimeHours.p1 = Awr
 partTimeHours.hint = Nodwch oriau mewn fformat degol
 partTimeHours.error.required = Nodwch yr oriau y bu’r cyflogai hwn yn gweithio mewn gwirionedd yn ystod y cyfnod cyflog hwn
-partTimeHours.error.min = Hours actually worked must be more than 0
+partTimeHours.error.min = Ni all yr oriau a weithiwyd fod yn negyddol
 partTimeHours.error.max = Ni all yr oriau a weithiwyd mewn gwirionedd fod yn uwch na’r oriau a weithir fel arfer
 partTimeHours.error.nonNumeric = Nodwch yr oriau rhan-amser gan ddefnyddio rhifau
 
@@ -644,7 +644,7 @@ partTimeNormalHours.partial = Dyma’r dyddiadau o’r cyfnod cyflog {0} i {1} s
 partTimeNormalHours.p1 = Awr
 partTimeNormalHours.hint = Nodwch oriau mewn fformat degol
 partTimeNormalHours.error.required = Nodwch oriau arferol y cyflogai hwn ar gyfer y cyfnod cyflog hwn
-partTimeNormalHours.error.min = Employee’s usual hours must be more than 0
+partTimeNormalHours.error.min = Mae’n rhaid i oriau arferol y cyflogai fod yn fwy na 0
 partTimeNormalHours.error.max = Mae nifer yr oriau a nodwyd yn uwch na’r uchafswm posibl
 partTimeNormalHours.error.nonNumeric = Nodwch yr oriau arferol gan ddefnyddio rhifau
 
@@ -737,14 +737,14 @@ phaseTwoPensionBreakdown.l3.partial.partTime = Didynnwch £{0} (£{1} Lefel Is o
 phaseTwoPensionBreakdown.l4 = Lluoswch â 3%.
 phaseTwoPensionBreakdown.total = Cyfanswm y grant pensiwn ar gyfer y cyfnod cyflog = £{0}
 
-confirmation.feedbackSurvey.label = What do you think of this service?
+confirmation.feedbackSurvey.label = Beth yw’ch barn am y gwasanaeth hwn?
 
-payPeriodsList.title = Are these pay periods correct?
-payPeriodsList.heading = Are these pay periods correct?
-payPeriodsList.p1 = We’ve worked them out based on your answers.
-payPeriodsList.li = From {0} to {1}
-payPeriodsList.p2 = Together they should cover your claim ({0} to {1}). They may be partly outside it.
-payPeriodsList.p3 = We’ve assumed the pay periods are regular. The calculator cannot be used for irregular pay periods.
-payPeriodsList.yes = Yes
-payPeriodsList.no = No - change details
-payPeriodsList.error.required = Select yes if these pay periods are correct
+payPeriodsList.title = A yw’r cyfnodau cyflog hyn yn gywir?
+payPeriodsList.heading = A yw’r cyfnodau cyflog hyn yn gywir?
+payPeriodsList.p1 = Rydym wedi’u cyfrifo ar sail eich atebion.
+payPeriodsList.li = O {0} i {1}
+payPeriodsList.p2 = At ei gilydd, dylent gwmpasu’ch hawliad ({0} i {1}). Efallai eu bod y tu allan iddo’n rhannol.
+payPeriodsList.p3 = Rydym wedi tybio bod y cyfnodau cyflog yn rheolaidd. Ni ellir defnyddio’r gyfrifiannell ar gyfer cyfnodau cyflog afreolaidd.
+payPeriodsList.yes = Iawn
+payPeriodsList.no = Na – newid manylion
+payPeriodsList.error.required = Dewiswch ‘Iawn’ os yw’r cyfnodau cyflog hyn yn gywir
