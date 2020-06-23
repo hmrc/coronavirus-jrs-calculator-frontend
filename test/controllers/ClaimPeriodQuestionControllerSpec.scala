@@ -21,6 +21,7 @@ import java.time.LocalDate
 import base.SpecBaseWithApplication
 import controllers.actions.FeatureFlag.FastTrackJourneyFlag
 import forms.ClaimPeriodQuestionFormProvider
+import models.BackJourneyEnabled
 import models.ClaimPeriodQuestion.ClaimOnSamePeriod
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
@@ -56,7 +57,7 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
 
       status(result) mustEqual OK
 
-      contentAsString(result) mustEqual view(form, claimStart, claimEnd)(getRequest, messages).toString
+      contentAsString(result) mustEqual view(form, claimStart, claimEnd, BackJourneyEnabled)(getRequest, messages).toString
 
       application.stop()
     }
@@ -78,7 +79,24 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(ClaimOnSamePeriod), claimStart, claimEnd)(getRequest, messages).toString
+        view(form.fill(ClaimOnSamePeriod), claimStart, claimEnd, BackJourneyEnabled)(getRequest, messages).toString
+
+      application.stop()
+    }
+
+    "render back link if back journey is enabled" in {
+      val userAnswers = dummyUserAnswers
+        .withClaimPeriodStart(claimStart.toString)
+        .withClaimPeriodEnd(claimEnd.toString)
+
+      val getRequest: FakeRequest[AnyContentAsEmpty.type] =
+        FakeRequest(GET, claimPeriodQuestionRoute).withCSRFToken
+          .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
+
+      val application = applicationBuilder(config = Map("fastTrackJourney.enabled" -> "true"), userAnswers = Some(userAnswers)).build()
+      val result = route(application, getRequest).value
+
+      contentAsString(result) must include("""id="back-link""")
 
       application.stop()
     }
@@ -146,7 +164,7 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseWithApplication with Moc
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, claimStart, claimEnd)(request, messages).toString
+        view(boundForm, claimStart, claimEnd, BackJourneyEnabled)(request, messages).toString
 
       application.stop()
     }
