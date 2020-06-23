@@ -16,14 +16,42 @@
 
 package services
 
-import handlers.DataExtractor
-import models.{BackJourneyDisabled, BackJourneyEnabled, UserAnswers}
+import cats.data.Validated.Valid
+import cats.data.{NonEmptyChain, NonEmptyList}
+import cats.implicits._
+import handlers.{DataExtractor, PayPeriodsListHandler}
+import models.UserAnswers.AnswerV
+import models.{AnswerValidation, BackJourneyDisabled, BackJourneyEnabled, BackJourneyStatus, Periods, UserAnswers}
+import play.api.libs.json.JsError
 
-trait BackLinkEnabler extends DataExtractor {
+trait BackLinkEnabler extends DataExtractor with PayPeriodsListHandler {
 
-  def backLinkStatus(userAnswers: UserAnswers) =
-    extractClaimPeriodStartV(userAnswers)
-      .map(_ => extractClaimPeriodEndV(userAnswers))
-      .fold(_ => BackJourneyDisabled, _ => BackJourneyEnabled)
+  def claimQuestionBackLinkStatus(userAnswers: UserAnswers): BackJourneyStatus =
+    (extractClaimPeriodStartV(userAnswers), extractClaimPeriodEndV(userAnswers))
+      .mapN((_, _) => BackJourneyEnabled)
+      .getOrElse(BackJourneyDisabled)
+
+  def furloughQuestionBackLinkStatus(userAnswers: UserAnswers) =
+    (extractClaimPeriodStartV(userAnswers), extractClaimPeriodEndV(userAnswers), extractFurloughPeriodV(userAnswers))
+      .mapN((_, _, _) => BackJourneyEnabled)
+      .getOrElse(BackJourneyDisabled)
+
+  def payPeriodQuestionBackLinkStatus(userAnswers: UserAnswers) =
+    (
+      extractClaimPeriodStartV(userAnswers),
+      extractClaimPeriodEndV(userAnswers),
+      extractFurloughPeriodV(userAnswers),
+      hasReusablePayPeriods(userAnswers))
+      .mapN((_, _, _, _) => BackJourneyEnabled)
+      .getOrElse(BackJourneyDisabled)
+
+  private def hasReusablePayPeriods(userAnswers: UserAnswers): AnswerV[Seq[Periods]] = {
+    val periods = extractPayPeriods(userAnswers)
+    if (periods.isEmpty)
+      NonEmptyChain
+        .fromNonEmptyList(NonEmptyList.fromListUnsafe(List(AnswerValidation(JsError("re-usable periods unavailable")))))
+        .invalid
+    else Valid(periods)
+  }
 
 }
