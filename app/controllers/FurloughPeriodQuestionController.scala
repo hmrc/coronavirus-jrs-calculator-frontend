@@ -32,7 +32,7 @@ import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
-import services.FurloughPeriodExtractor
+import services.{BackLinkEnabler, FurloughPeriodExtractor}
 import views.html.FurloughPeriodQuestionView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -49,7 +49,7 @@ class FurloughPeriodQuestionController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: FurloughPeriodQuestionView
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
-    extends BaseController with FurloughPeriodExtractor with FastJourneyUserAnswersHandler {
+    extends BaseController with FurloughPeriodExtractor with FastJourneyUserAnswersHandler with BackLinkEnabler {
 
   val form: Form[FurloughPeriodQuestion] = formProvider()
 
@@ -68,9 +68,19 @@ class FurloughPeriodQuestionController @Inject()(
 
           extractFurloughPeriodV(request.userAnswers) match {
             case Valid(FurloughOngoing(_)) =>
-              Future.successful(Ok(view(preparedForm, claimStart, furloughStart, furloughStatus, None)))
+              Future.successful(
+                Ok(
+                  view(preparedForm, claimStart, furloughStart, furloughStatus, None, furloughQuestionBackLinkStatus(request.userAnswers))))
             case Valid(FurloughEnded(_, end)) =>
-              Future.successful(Ok(view(preparedForm, claimStart, furloughStart, furloughStatus, Some(end))))
+              Future.successful(
+                Ok(
+                  view(
+                    preparedForm,
+                    claimStart,
+                    furloughStart,
+                    furloughStatus,
+                    Some(end),
+                    furloughQuestionBackLinkStatus(request.userAnswers))))
             case Invalid(errors) =>
               logger.error("Failed to extract furlough period.")
               UserAnswers.logErrors(errors)
@@ -101,9 +111,12 @@ class FurloughPeriodQuestionController @Inject()(
     formWithErrors: Form[FurloughPeriodQuestion])(implicit request: DataRequest[AnyContent]): Future[Result] =
     extractFurloughPeriodV(request.userAnswers) match {
       case Valid(FurloughOngoing(_)) =>
-        Future.successful(BadRequest(view(formWithErrors, claimStart, furloughStart, furloughStatus, None)))
+        Future.successful(
+          BadRequest(
+            view(formWithErrors, claimStart, furloughStart, furloughStatus, None, furloughQuestionBackLinkStatus(request.userAnswers))))
       case Valid(FurloughEnded(_, end)) =>
-        Future.successful(BadRequest(view(formWithErrors, claimStart, furloughStart, furloughStatus, Some(end))))
+        Future.successful(BadRequest(
+          view(formWithErrors, claimStart, furloughStart, furloughStatus, Some(end), furloughQuestionBackLinkStatus(request.userAnswers))))
       case Invalid(errors) =>
         UserAnswers.logErrors(errors)
         Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
