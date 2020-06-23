@@ -70,22 +70,6 @@ class PayPeriodQuestionController @Inject()(
         )
   }
 
-//  private def processSubmittedAnswer(
-//    request: DataRequest[AnyContent],
-//    value: PayPeriodQuestion
-//  ): Future[Result] =
-//    for {
-//      updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodQuestionPage, value))
-//      _              <- sessionRepository.set(updatedAnswers)
-//    } yield {
-//      updateJourney(updatedAnswers) match {
-//        case Valid(updatedJourney) =>
-//          Redirect(navigator.nextPage(PayPeriodQuestionPage, updatedJourney.updated))
-//        case Invalid(errors) =>
-//          InternalServerError(errorHandler.internalServerErrorTemplate(request))
-//      }
-//    }
-
   private def processSubmittedAnswer(request: DataRequest[AnyContent], value: PayPeriodQuestion): Future[Result] =
     for {
       updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodQuestionPage, value))
@@ -97,7 +81,7 @@ class PayPeriodQuestionController @Inject()(
             sessionRepository.set(updatedJourney.updated).map { _ =>
               Redirect(call)
             }
-          case Invalid(errors) =>
+          case Invalid(_) =>
             Future.successful {
               InternalServerError(errorHandler.internalServerErrorTemplate(request))
             }

@@ -60,7 +60,7 @@ class ClaimPeriodQuestionController @Inject()(
         val filledForm: Form[ClaimPeriodQuestion] =
           request.userAnswers.getV(ClaimPeriodQuestionPage).fold(_ => form, form.fill)
 
-        Future.successful(Ok(view(filledForm, claimStart, claimEnd, backLinkStatus(request.userAnswers))))
+        Future.successful(Ok(view(filledForm, claimStart, claimEnd, claimQuestionBackLinkStatus(request.userAnswers))))
       }
   }
 
@@ -71,7 +71,7 @@ class ClaimPeriodQuestionController @Inject()(
           .bindFromRequest()
           .fold(
             formWithErrors =>
-              Future.successful(BadRequest(view(formWithErrors, claimStart, claimEnd, backLinkStatus(request.userAnswers)))),
+              Future.successful(BadRequest(view(formWithErrors, claimStart, claimEnd, claimQuestionBackLinkStatus(request.userAnswers)))),
             value => processSubmittedAnswer(request, value)
           )
       }
