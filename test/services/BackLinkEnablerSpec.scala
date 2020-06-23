@@ -22,9 +22,10 @@ import utils.CoreTestData
 
 class BackLinkEnablerSpec extends SpecBase with CoreTestData {
 
-  "enable back link on claim question page if claim start and claim end exists" in new BackLinkEnabler {
+  "enable back link on claim & furlough question page if claim start and claim end exists" in new BackLinkEnabler {
     val answers = emptyUserAnswers.withClaimPeriodStart("2020,1,1").withClaimPeriodEnd("2020,2,1")
 
     backLinkStatus(answers) mustBe BackJourneyEnabled
+    backLinkStatus(emptyUserAnswers) mustBe BackJourneyDisabled
   }
 }

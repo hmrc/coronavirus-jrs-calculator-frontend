@@ -17,13 +17,13 @@
 package services
 
 import handlers.DataExtractor
-import models.{BackJourneyEnabled, UserAnswers}
+import models.{BackJourneyDisabled, BackJourneyEnabled, UserAnswers}
 
 trait BackLinkEnabler extends DataExtractor {
 
   def backLinkStatus(userAnswers: UserAnswers) =
     extractClaimPeriodStartV(userAnswers)
       .map(_ => extractClaimPeriodEndV(userAnswers))
-      .fold(_ => BackJourneyEnabled, _ => BackJourneyEnabled)
+      .fold(_ => BackJourneyDisabled, _ => BackJourneyEnabled)
 
 }
