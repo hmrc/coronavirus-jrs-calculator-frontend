@@ -22,7 +22,7 @@ import base.SpecBaseWithApplication
 import controllers.actions.FeatureFlag.FastTrackJourneyFlag
 import forms.FurloughPeriodQuestionFormProvider
 import models.ClaimPeriodQuestion.ClaimOnSamePeriod
-import models.FurloughPeriodQuestion
+import models.{BackJourneyDisabled, BackJourneyEnabled, FurloughPeriodQuestion}
 import models.FurloughPeriodQuestion.FurloughedOnSamePeriod
 import models.FurloughStatus.{FurloughEnded, FurloughOngoing}
 import models.requests.DataRequest
@@ -76,7 +76,7 @@ class FurloughPeriodQuestionControllerSpec extends SpecBaseWithApplication with 
       val dataRequest = DataRequest(getRequest, userAnswers.id, userAnswers)
 
       contentAsString(result) mustEqual
-        view(form, claimStart, furloughStart, furloughStatus, None)(dataRequest, messages).toString
+        view(form, claimStart, furloughStart, furloughStatus, None, BackJourneyEnabled)(dataRequest, messages).toString
 
       application.stop()
     }
@@ -99,7 +99,23 @@ class FurloughPeriodQuestionControllerSpec extends SpecBaseWithApplication with 
       val dataRequest = DataRequest(getRequest, userAnswersUpdated.id, userAnswersUpdated)
 
       contentAsString(result) mustEqual
-        view(form, claimStart, furloughStart, FurloughEnded, Some(furloughEnd))(dataRequest, messages).toString
+        view(form, claimStart, furloughStart, FurloughEnded, Some(furloughEnd), BackJourneyDisabled)(dataRequest, messages).toString
+
+      application.stop()
+    }
+
+    "render back link if enabled" in {
+      val answers = emptyUserAnswers
+        .withClaimPeriodStart(claimStart.toString)
+        .withFurloughStartDate(furloughStart.toString)
+        .withFurloughEndDate(furloughEnd.toString)
+        .withPayDate(List(furloughEnd.toString))
+
+      val application = applicationBuilder(userAnswers = Some(answers)).build()
+
+      val result = route(application, getRequest).value
+
+      contentAsString(result) must include("""id="back-link""")
 
       application.stop()
     }
@@ -138,7 +154,9 @@ class FurloughPeriodQuestionControllerSpec extends SpecBaseWithApplication with 
       val dataRequest = DataRequest(getRequest, userAnswersUpdated.id, userAnswersUpdated)
 
       contentAsString(result) mustEqual
-        view(form.fill(FurloughPeriodQuestion.values.head), claimStart, furloughStart, furloughStatus, None)(dataRequest, messages).toString
+        view(form.fill(FurloughPeriodQuestion.values.head), claimStart, furloughStart, furloughStatus, None, BackJourneyEnabled)(
+          dataRequest,
+          messages).toString
 
       application.stop()
     }
@@ -211,7 +229,7 @@ class FurloughPeriodQuestionControllerSpec extends SpecBaseWithApplication with 
       val dataRequest = DataRequest(request, userAnswers.id, userAnswers)
 
       contentAsString(result) mustEqual
-        view(boundForm, claimStart, furloughStart, furloughStatus, None)(dataRequest, messages).toString
+        view(boundForm, claimStart, furloughStart, furloughStatus, None, BackJourneyEnabled)(dataRequest, messages).toString
 
       application.stop()
     }
