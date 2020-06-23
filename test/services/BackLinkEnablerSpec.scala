@@ -17,7 +17,7 @@
 package services
 
 import base.SpecBase
-import models.{BackJourneyDisabled, BackJourneyEnabled, UserAnswers}
+import models.{BackJourneyDisabled, BackJourneyEnabled}
 import utils.CoreTestData
 
 class BackLinkEnablerSpec extends SpecBase with CoreTestData {
@@ -29,12 +29,17 @@ class BackLinkEnablerSpec extends SpecBase with CoreTestData {
     claimQuestionBackLinkStatus(emptyUserAnswers) mustBe BackJourneyDisabled
   }
 
-  "enable back link on furlough question page if claim start and claim end exists" in new BackLinkEnabler {
-    val answersWithClaim = emptyUserAnswers.withClaimPeriodStart("2020,1,1").withClaimPeriodEnd("2020,2,1")
-    val answers = answersWithClaim.withFurloughStartDate("2020,1,1").withFurloughEndDate("2020,2,1")
+  "enable back link on furlough question page if claim start&end, furlough start&end and furlough status exists" in new BackLinkEnabler {
+    val answers = emptyUserAnswers
+      .withClaimPeriodStart("2020,1,1")
+      .withClaimPeriodEnd("2020,2,1")
+      .withFurloughStartDate("2020,1,1")
+      .withFurloughEndDate("2020,2,1")
 
-    furloughQuestionBackLinkStatus(answers) mustBe BackJourneyEnabled
-    furloughQuestionBackLinkStatus(answersWithClaim) mustBe BackJourneyDisabled
+    val answersWithStatus = answers.withFurloughStatus()
+
+    furloughQuestionBackLinkStatus(answersWithStatus) mustBe BackJourneyEnabled
+    furloughQuestionBackLinkStatus(answers) mustBe BackJourneyDisabled
   }
 
   "enable back link on pay period question page if furlough start, furlough end and pay periods exists" in new BackLinkEnabler {

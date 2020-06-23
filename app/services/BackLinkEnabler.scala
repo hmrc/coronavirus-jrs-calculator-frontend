@@ -32,8 +32,12 @@ trait BackLinkEnabler extends DataExtractor with PayPeriodsListHandler {
       .getOrElse(BackJourneyDisabled)
 
   def furloughQuestionBackLinkStatus(userAnswers: UserAnswers) =
-    (extractClaimPeriodStartV(userAnswers), extractClaimPeriodEndV(userAnswers), extractFurloughPeriodV(userAnswers))
-      .mapN((_, _, _) => BackJourneyEnabled)
+    (
+      extractClaimPeriodStartV(userAnswers),
+      extractClaimPeriodEndV(userAnswers),
+      extractFurloughPeriodV(userAnswers),
+      extractFurloughStatusV(userAnswers))
+      .mapN((_, _, _, _) => BackJourneyEnabled)
       .getOrElse(BackJourneyDisabled)
 
   def payPeriodQuestionBackLinkStatus(userAnswers: UserAnswers) =
