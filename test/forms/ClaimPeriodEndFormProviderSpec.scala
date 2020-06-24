@@ -23,7 +23,6 @@ import forms.behaviours.DateBehaviours
 import forms.mappings.LocalDateFormatter
 import play.api.data.FormError
 import play.api.data.validation.{Invalid, Valid}
-import views.ViewUtils
 
 class ClaimPeriodEndFormProviderSpec extends SpecBaseWithApplication {
 
@@ -93,8 +92,7 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseWithApplication {
       result.errors shouldBe List(
         FormError(
           "endDate",
-          "claimPeriodEnd.cannot.be.after.policyEnd",
-          Seq(ViewUtils.dateToString(frontendAppConfig.schemeEndDate))
+          "claimPeriodEnd.cannot.be.lessThan.7days"
         ))
     }
 
