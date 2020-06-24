@@ -107,14 +107,17 @@ class FurloughPeriodQuestionControllerSpec extends SpecBaseWithApplication with 
     "render back link if enabled" in {
       val answers = emptyUserAnswers
         .withClaimPeriodStart(claimStart.toString)
+        .withClaimPeriodEnd(furloughEnd.toString)
         .withFurloughStartDate(furloughStart.toString)
         .withFurloughEndDate(furloughEnd.toString)
+        .withFurloughStatus(FurloughEnded)
         .withPayDate(List(furloughEnd.toString))
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
       val result = route(application, getRequest).value
 
+      status(result) mustEqual OK
       contentAsString(result) must include("""id="back-link""")
 
       application.stop()
