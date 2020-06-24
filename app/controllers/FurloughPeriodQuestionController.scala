@@ -69,18 +69,10 @@ class FurloughPeriodQuestionController @Inject()(
           extractFurloughPeriodV(request.userAnswers) match {
             case Valid(FurloughOngoing(_)) =>
               Future.successful(
-                Ok(
-                  view(preparedForm, claimStart, furloughStart, furloughStatus, None, furloughQuestionBackLinkStatus(request.userAnswers))))
+                Ok(view(preparedForm, claimStart, furloughStart, furloughStatus, None, backLinkStatus(request.userAnswers))))
             case Valid(FurloughEnded(_, end)) =>
               Future.successful(
-                Ok(
-                  view(
-                    preparedForm,
-                    claimStart,
-                    furloughStart,
-                    furloughStatus,
-                    Some(end),
-                    furloughQuestionBackLinkStatus(request.userAnswers))))
+                Ok(view(preparedForm, claimStart, furloughStart, furloughStatus, Some(end), backLinkStatus(request.userAnswers))))
             case Invalid(errors) =>
               logger.error("Failed to extract furlough period.")
               UserAnswers.logErrors(errors)
@@ -112,11 +104,10 @@ class FurloughPeriodQuestionController @Inject()(
     extractFurloughPeriodV(request.userAnswers) match {
       case Valid(FurloughOngoing(_)) =>
         Future.successful(
-          BadRequest(
-            view(formWithErrors, claimStart, furloughStart, furloughStatus, None, furloughQuestionBackLinkStatus(request.userAnswers))))
+          BadRequest(view(formWithErrors, claimStart, furloughStart, furloughStatus, None, backLinkStatus(request.userAnswers))))
       case Valid(FurloughEnded(_, end)) =>
-        Future.successful(BadRequest(
-          view(formWithErrors, claimStart, furloughStart, furloughStatus, Some(end), furloughQuestionBackLinkStatus(request.userAnswers))))
+        Future.successful(
+          BadRequest(view(formWithErrors, claimStart, furloughStart, furloughStatus, Some(end), backLinkStatus(request.userAnswers))))
       case Invalid(errors) =>
         UserAnswers.logErrors(errors)
         Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
