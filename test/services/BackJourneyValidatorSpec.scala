@@ -17,12 +17,12 @@
 package services
 
 import base.SpecBase
-import models.{BackJourneyDisabled, BackJourneyEnabled}
+import models.{BackFirstPage, BackToPreviousPage}
 import utils.CoreTestData
 
-class BackLinkEnablerSpec extends SpecBase with CoreTestData {
+class BackJourneyValidatorSpec extends SpecBase with CoreTestData {
 
-  "enable back link on fast journey question pages if claim start&end, furlough start&end&status and pay periods exists" in new BackLinkEnabler {
+  "enable back link on fast journey question pages if claim start&end, furlough start&end&status and pay periods exists" in new BackJourneyValidator {
     val answers = emptyUserAnswers
       .withFurloughStartDate("2020,1,1")
       .withFurloughEndDate("2020,2,1")
@@ -31,7 +31,10 @@ class BackLinkEnablerSpec extends SpecBase with CoreTestData {
       .withFurloughStatus()
       .withPayDate(List("2020,2,1"))
 
-    backLinkStatus(answers) mustBe BackJourneyEnabled
-    backLinkStatus(emptyUserAnswers) mustBe BackJourneyDisabled
+    validateBackJourney(answers) mustBe BackToPreviousPage
+    validateBackJourney(
+      emptyUserAnswers
+        .withClaimPeriodStart("2020,1,1")
+        .withClaimPeriodEnd("2020,2,1")) mustBe BackFirstPage
   }
 }

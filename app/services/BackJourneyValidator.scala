@@ -21,27 +21,27 @@ import cats.data.{NonEmptyChain, NonEmptyList}
 import cats.implicits._
 import handlers.{DataExtractor, PayPeriodsListHandler}
 import models.UserAnswers.AnswerV
-import models.{AnswerValidation, BackJourneyDisabled, BackJourneyEnabled, BackJourneyStatus, Periods, UserAnswers}
+import models.{AnswerValidation, BackFirstPage, BackJourneyValidation, BackToPreviousPage, Periods, UserAnswers}
 import play.api.libs.json.JsError
 
-trait BackLinkEnabler extends DataExtractor with PayPeriodsListHandler {
+trait BackJourneyValidator extends DataExtractor with PayPeriodsListHandler {
 
-  def backLinkStatus(userAnswers: UserAnswers): BackJourneyStatus =
-    (claimQuestionBackLinkStatus(userAnswers), furloughQuestionBackLinkStatus(userAnswers), payPeriodQuestionBackLinkStatus(userAnswers))
-      .mapN((_, _, _) => BackJourneyEnabled)
-      .getOrElse(BackJourneyDisabled)
+  def validateBackJourney(userAnswers: UserAnswers): BackJourneyValidation =
+    (claimQuestionBackValidation(userAnswers), furloughQuestionBackValidation(userAnswers), payPeriodQuestionBackValidation(userAnswers))
+      .mapN((_, _, _) => BackToPreviousPage)
+      .getOrElse(BackFirstPage)
 
-  private def claimQuestionBackLinkStatus(userAnswers: UserAnswers): AnswerV[BackJourneyStatus] =
+  private def claimQuestionBackValidation(userAnswers: UserAnswers): AnswerV[BackJourneyValidation] =
     (extractClaimPeriodStartV(userAnswers), extractClaimPeriodEndV(userAnswers))
-      .mapN((_, _) => BackJourneyEnabled)
+      .mapN((_, _) => BackToPreviousPage)
 
-  private def furloughQuestionBackLinkStatus(userAnswers: UserAnswers): AnswerV[BackJourneyStatus] =
+  private def furloughQuestionBackValidation(userAnswers: UserAnswers): AnswerV[BackJourneyValidation] =
     (extractFurloughPeriodV(userAnswers), extractFurloughStatusV(userAnswers))
-      .mapN((_, _) => BackJourneyEnabled)
+      .mapN((_, _) => BackToPreviousPage)
 
-  private def payPeriodQuestionBackLinkStatus(userAnswers: UserAnswers): AnswerV[BackJourneyStatus] =
+  private def payPeriodQuestionBackValidation(userAnswers: UserAnswers): AnswerV[BackJourneyValidation] =
     (extractFurloughPeriodV(userAnswers), hasReusablePayPeriods(userAnswers))
-      .mapN((_, _) => BackJourneyEnabled)
+      .mapN((_, _) => BackToPreviousPage)
 
   private def hasReusablePayPeriods(userAnswers: UserAnswers): AnswerV[Seq[Periods]] = {
     val periods = extractPayPeriods(userAnswers)

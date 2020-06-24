@@ -16,6 +16,6 @@
 
 package models
 
-sealed trait BackJourneyStatus
-case object BackJourneyEnabled extends BackJourneyStatus
-case object BackJourneyDisabled extends BackJourneyStatus
+sealed trait BackJourneyValidation
+case object BackToPreviousPage extends BackJourneyValidation
+case object BackFirstPage extends BackJourneyValidation

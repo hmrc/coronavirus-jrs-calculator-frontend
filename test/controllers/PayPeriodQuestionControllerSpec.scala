@@ -27,7 +27,7 @@ import models.FurloughStatus.FurloughOngoing
 import models.PayMethod.Regular
 import models.PaymentFrequency.Monthly
 import models.requests.DataRequest
-import models.{BackJourneyEnabled, PayPeriodQuestion, Period}
+import models.{PayPeriodQuestion, Period}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
@@ -82,7 +82,7 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
       val dataRequest = DataRequest(getRequest, baseUserAnswers.id, baseUserAnswers)
 
       contentAsString(result) mustEqual
-        view(form, payPeriods, BackJourneyEnabled)(dataRequest, messages).toString
+        view(form, payPeriods)(dataRequest, messages).toString
 
       application.stop()
     }
@@ -104,22 +104,7 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
       val dataRequest = DataRequest(getRequest, userAnswersUpdated.id, userAnswersUpdated)
 
       contentAsString(result) mustEqual
-        view(form.fill(PayPeriodQuestion.values.head), payPeriods, BackJourneyEnabled)(dataRequest, messages).toString
-
-      application.stop()
-    }
-
-    "render back link if back journey is enabled" in {
-      val userAnswers = baseUserAnswers.withPayPeriodQuestion(PayPeriodQuestion.values.head)
-
-      val getRequest: FakeRequest[AnyContentAsEmpty.type] =
-        FakeRequest(GET, payPeriodQuestionRoute).withCSRFToken
-          .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
-
-      val application = applicationBuilder(config = Map("fastTrackJourney.enabled" -> "true"), userAnswers = Some(userAnswers)).build()
-      val result = route(application, getRequest).value
-
-      contentAsString(result) must include("""id="back-link""")
+        view(form.fill(PayPeriodQuestion.values.head), payPeriods)(dataRequest, messages).toString
 
       application.stop()
     }
@@ -194,7 +179,7 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
       val dataRequest = DataRequest(request, baseUserAnswers.id, baseUserAnswers)
 
       contentAsString(result) mustEqual
-        view(boundForm, payPeriods, BackJourneyEnabled)(dataRequest, messages).toString
+        view(boundForm, payPeriods)(dataRequest, messages).toString
 
       application.stop()
     }

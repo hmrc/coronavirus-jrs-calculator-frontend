@@ -18,7 +18,7 @@ package controllers
 
 import cats.data.Validated.{Invalid, Valid}
 import handlers.ErrorHandler
-import models.UserAnswers
+import models.{BackFirstPage, BackToPreviousPage, UserAnswers}
 import models.UserAnswers.AnswerV
 import models.requests.DataRequest
 import navigation.Navigator
@@ -29,13 +29,14 @@ import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Reads
 import play.api.mvc.Result
+import services.BackJourneyValidator
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
 import scala.concurrent.Future
 
-trait BaseController extends FrontendBaseController with I18nSupport {
+trait BaseController extends FrontendBaseController with I18nSupport with BackJourneyValidator {
 
-  def logger: slf4j.Logger = LoggerFactory.getLogger(getClass)
+  override val logger: slf4j.Logger = LoggerFactory.getLogger(getClass)
 
   def navigator: Navigator
 
@@ -96,4 +97,8 @@ trait BaseController extends FrontendBaseController with I18nSupport {
       )
   }
 
+  def previousPageOrRedirect(view: Result)(implicit request: DataRequest[_]): Result = validateBackJourney(request.userAnswers) match {
+    case BackToPreviousPage => view
+    case BackFirstPage      => Redirect(routes.ClaimPeriodStartController.onPageLoad())
+  }
 }

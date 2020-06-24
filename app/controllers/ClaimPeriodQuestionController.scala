@@ -31,7 +31,6 @@ import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc._
 import repositories.SessionRepository
-import services.BackLinkEnabler
 import views.html.ClaimPeriodQuestionView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -48,7 +47,7 @@ class ClaimPeriodQuestionController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: ClaimPeriodQuestionView,
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
-    extends BaseController with FastJourneyUserAnswersHandler with BackLinkEnabler {
+    extends BaseController with FastJourneyUserAnswersHandler {
 
   override implicit val logger: Logger = LoggerFactory.getLogger(getClass)
 
@@ -60,7 +59,7 @@ class ClaimPeriodQuestionController @Inject()(
         val filledForm: Form[ClaimPeriodQuestion] =
           request.userAnswers.getV(ClaimPeriodQuestionPage).fold(_ => form, form.fill)
 
-        Future.successful(Ok(view(filledForm, claimStart, claimEnd, backLinkStatus(request.userAnswers))))
+        Future.successful(previousPageOrRedirect(Ok(view(filledForm, claimStart, claimEnd))))
       }
   }
 
@@ -70,8 +69,7 @@ class ClaimPeriodQuestionController @Inject()(
         form
           .bindFromRequest()
           .fold(
-            formWithErrors =>
-              Future.successful(BadRequest(view(formWithErrors, claimStart, claimEnd, backLinkStatus(request.userAnswers)))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, claimStart, claimEnd))),
             value => processSubmittedAnswer(request, value)
           )
       }
