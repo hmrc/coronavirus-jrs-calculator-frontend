@@ -18,11 +18,10 @@ package controllers
 
 import base.SpecBaseWithApplication
 import forms.VariableLengthEmployedFormProvider
+import models.EmployeeStarted
 import models.requests.DataRequest
-import models.{EmployeeStarted, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.EmployeeStartedPage
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, Call}
 import play.api.test.CSRFTokenHelper._
@@ -47,7 +46,10 @@ class VariableLengthEmployedControllerSpec extends SpecBaseWithApplication with 
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val userAnswers = emptyUserAnswers
+        .withClaimPeriodStart("2020,3,1")
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
         .build()
 
       val result = route(application, getRequest).value
@@ -66,7 +68,9 @@ class VariableLengthEmployedControllerSpec extends SpecBaseWithApplication with 
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(EmployeeStartedPage, EmployeeStarted.values.head).success.value
+      val userAnswers = emptyUserAnswers
+        .withClaimPeriodStart("2020,3,1")
+        .withEmployeeStartedOnOrBefore1Feb2019()
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -85,9 +89,11 @@ class VariableLengthEmployedControllerSpec extends SpecBaseWithApplication with 
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val userAnswers = emptyUserAnswers
+        .withClaimPeriodStart("2020,3,1")
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
           )
@@ -107,8 +113,10 @@ class VariableLengthEmployedControllerSpec extends SpecBaseWithApplication with 
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
+      val userAnswers = emptyUserAnswers
+        .withClaimPeriodStart("2020,3,1")
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
         FakeRequest(POST, variableLengthEmployedRoute).withCSRFToken

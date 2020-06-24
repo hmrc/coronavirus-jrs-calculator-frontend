@@ -18,16 +18,42 @@ package handlers
 
 import java.time.LocalDate
 
-import models.UserAnswers
+import cats.data.Validated.Valid
+import models.{PeriodWithPaymentDate, UserAnswers}
 import models.UserAnswers.AnswerV
 import pages._
 import services.PreviousYearPeriod
+import cats.syntax.apply._
 
 trait LastYearPayControllerRequestHandler extends DataExtractor with PreviousYearPeriod {
 
-  def getPayDatesV(userAnswers: UserAnswers): AnswerV[Seq[LocalDate]] = {
-    import cats.syntax.apply._
+  def getPayDatesV(userAnswers: UserAnswers): AnswerV[Seq[LocalDate]] =
+    (
+      userAnswers.getV(PaymentFrequencyPage),
+      getPeriodsWithPaymentDateV(userAnswers)
+    ).mapN { (frequency, periodsWithPayDates) =>
+      val datesWithDuplicates = periodsWithPayDates.flatMap(p => previousYearPayDate(frequency, p))
+      datesWithDuplicates.distinct
+    }
 
+  def dynamicCylbCutoff(userAnswers: UserAnswers): LocalDate = {
+    val date: AnswerV[LocalDate] = (
+      userAnswers.getV(PaymentFrequencyPage),
+      getPeriodsWithPaymentDateV(userAnswers)
+    ).mapN { (frequency, periodsWithPayDates) =>
+      cylbCutoff(frequency, periodsWithPayDates)
+    }
+
+    (
+      userAnswers.getV(ClaimPeriodStartPage),
+      date
+    ) match {
+      case (Valid(claimStart), Valid(cutoff)) if !claimStart.isBefore(LocalDate.of(2020, 7, 1)) => cutoff
+      case _                                                                                    => LocalDate.of(2019, 4, 6)
+    }
+  }
+
+  private def getPeriodsWithPaymentDateV(userAnswers: UserAnswers): AnswerV[Seq[PeriodWithPaymentDate]] =
     (
       userAnswers.getV(PaymentFrequencyPage),
       userAnswers.getV(LastPayDatePage),
@@ -35,10 +61,7 @@ trait LastYearPayControllerRequestHandler extends DataExtractor with PreviousYea
     ).mapN { (frequency, lastPayDay, furloughPeriod) =>
       val payDates = userAnswers.getList(PayDatePage)
       val periods = generatePeriodsWithFurlough(payDates, furloughPeriod)
-      val periodsWithPayDates = assignPayDates(frequency, periods, lastPayDay)
-      val datesWithDuplicates = periodsWithPayDates.flatMap(p => previousYearPayDate(frequency, p))
-      datesWithDuplicates.distinct
+      assignPayDates(frequency, periods, lastPayDay)
     }
-  }
 
 }

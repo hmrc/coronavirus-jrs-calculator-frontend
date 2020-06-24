@@ -50,9 +50,7 @@ class ClaimPeriodEndFormProvider @Inject()(appConfig: FrontendAppConfig) extends
   }
 
   val isMoreThan14daysInFuture: (LocalDate, LocalDate) => ValidationResult = (start, end) => {
-    val firstOfJuly = LocalDate.of(2020, 7, 1)
-
-    if (start.isBefore(firstOfJuly)) {
+    if (start.isBefore(appConfig.phaseTwoStartDate)) {
       Valid
     } else if (start.isBefore(appConfig.phaseTwoStartDate) && end.isAfter(LocalDate.now().plusDays(14))) {
       Invalid("claimPeriodEnd.cannot.be.after.14days")

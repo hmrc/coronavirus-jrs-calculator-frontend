@@ -19,13 +19,13 @@
 @import pages.EmployeeStartedPage
 
 @this(
-        govukLayout: templates.GovukLayoutWrapper,
-        formHelper: FormWithCSRF,
-        errorSummary: components.errorSummary,
-        inputRadio: components.inputRadio,
-        button: components.button,
-        h1: components.h1,
-        p: components.p
+govukLayout: templates.GovukLayoutWrapper,
+formHelper: FormWithCSRF,
+errorSummary: components.errorSummary,
+inputRadio: components.inputRadio,
+button: components.button,
+h1: components.h1,
+p: components.p
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
@@ -36,13 +36,15 @@
 
         @errorSummary(form.errors)
 
-        @h1("variableLengthEmployed.heading")
+        @h1(messages("variableLengthEmployed.heading"))
 
         @p(Html(messages("variableLengthEmployed.hint")))
 
         @inputRadio(
             form = form,
-            legend = "",
+            legend = messages("variableLengthEmployed.heading"),
+            legendAsHeading = false,
+            classes = "govuk-visually-hidden",
             items = EmployeeStarted.options(form)
         )
 

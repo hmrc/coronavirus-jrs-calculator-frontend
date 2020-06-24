@@ -28,6 +28,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.AuditService
 import viewmodels.{ConfirmationDataResultWithoutNicAndPension, PhaseOneConfirmationDataResult, PhaseTwoConfirmationDataResult}
 import views.html.{ConfirmationView, ConfirmationViewWithDetailedBreakdowns, PhaseTwoConfirmationView}
+import viewmodels.{ConfirmationDataResultWithoutNicAndPension, PhaseOneConfirmationDataResult, PhaseTwoConfirmationDataResult}
+import views.html.{ConfirmationView, ConfirmationViewWithDetailedBreakdowns, NoNicAndPensionConfirmationView, PhaseTwoConfirmationView}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,6 +43,7 @@ class ConfirmationController @Inject()(
   view: ConfirmationView,
   viewWithDetailedBreakdowns: ConfirmationViewWithDetailedBreakdowns,
   phaseTwoView: PhaseTwoConfirmationView,
+  noNicAndPensionView: NoNicAndPensionConfirmationView,
   auditService: AuditService,
   val navigator: Navigator
 )(implicit val errorHandler: ErrorHandler, ec: ExecutionContext)
@@ -60,12 +63,8 @@ class ConfirmationController @Inject()(
       case Valid(data: PhaseTwoConfirmationDataResult) =>
         auditService.sendCalculationPerformed(request.userAnswers, data.confirmationViewBreakdown)
         Future.successful(Ok(phaseTwoView(data.confirmationViewBreakdown, data.metaData.claimPeriod, config.calculatorVersion)))
-
-      case Valid(_: ConfirmationDataResultWithoutNicAndPension) =>
-        logger.error(
-          "Expected to find a PhaseOneConfirmationDataResult or a PhaseTwoConfirmationDataResult, found ConfirmationDataResultWithoutNicAndPension instead. ")
-        Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-
+      case Valid(data: ConfirmationDataResultWithoutNicAndPension) =>
+        Future.successful(Ok(noNicAndPensionView(data.confirmationViewBreakdown, data.metaData.claimPeriod, config.calculatorVersion)))
       case Invalid(e) =>
         UserAnswers.logErrors(e)(logger)
         Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))

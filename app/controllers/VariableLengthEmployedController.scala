@@ -25,10 +25,9 @@ import navigation.Navigator
 import org.slf4j.{Logger, LoggerFactory}
 import pages.EmployeeStartedPage
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.VariableLengthEmployedView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class VariableLengthEmployedController @Inject()(
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  navigator: Navigator,
+  override val navigator: Navigator,
   identify: IdentifierAction,
   feature: FeatureFlagActionProvider,
   getData: DataRetrievalAction,
@@ -45,7 +44,9 @@ class VariableLengthEmployedController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: VariableLengthEmployedView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport {
+    extends BaseController {
+
+  override implicit val logger: Logger = LoggerFactory.getLogger(getClass)
 
   implicit val logger: Logger = LoggerFactory.getLogger(getClass)
 
