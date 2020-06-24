@@ -35,9 +35,9 @@ class ClaimPeriodEndFormProvider @Inject()(appConfig: FrontendAppConfig) extends
   private def validEndDate(claimStart: LocalDate): Constraint[LocalDate] = Constraint { claimEndDate =>
     (
       isBeforeStart(claimStart, claimEndDate),
+      isDifferentCalendarMonth(claimStart, claimEndDate),
       isClaimLessThan7Days(claimStart, claimEndDate),
       isMoreThan14daysInFuture(claimStart, claimEndDate),
-      isDifferentCalendarMonth(claimStart, claimEndDate),
       isAfterPolicyEnd(claimEndDate),
     ) match {
       case (r @ Invalid(_), _, _, _, _) => r

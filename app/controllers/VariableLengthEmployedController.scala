@@ -48,8 +48,6 @@ class VariableLengthEmployedController @Inject()(
 
   override implicit val logger: Logger = LoggerFactory.getLogger(getClass)
 
-  implicit val logger: Logger = LoggerFactory.getLogger(getClass)
-
   val form: Form[EmployeeStarted] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
