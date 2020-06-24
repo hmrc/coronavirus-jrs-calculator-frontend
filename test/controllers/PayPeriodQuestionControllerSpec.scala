@@ -109,6 +109,21 @@ class PayPeriodQuestionControllerSpec extends SpecBaseWithApplication with Mocki
       application.stop()
     }
 
+    "render back link if back journey is enabled" in {
+      val userAnswers = baseUserAnswers.withPayPeriodQuestion(PayPeriodQuestion.values.head)
+
+      val getRequest: FakeRequest[AnyContentAsEmpty.type] =
+        FakeRequest(GET, payPeriodQuestionRoute).withCSRFToken
+          .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
+
+      val application = applicationBuilder(config = Map("fastTrackJourney.enabled" -> "true"), userAnswers = Some(userAnswers)).build()
+      val result = route(application, getRequest).value
+
+      contentAsString(result) must include("""id="back-link""")
+
+      application.stop()
+    }
+
     "redirect to 404 page for a GET if FastTrackJourneyFlag is disabled" in {
       val getRequest: FakeRequest[AnyContentAsEmpty.type] =
         FakeRequest(GET, payPeriodQuestionRoute).withCSRFToken
