@@ -15,7 +15,7 @@
  *@
 
 @import controllers.routes._
-@import models.PayPeriodQuestion
+@import models._
 @import pages.PayPeriodQuestionPage
 
 @this(
@@ -29,9 +29,10 @@
         p: components.p
 )
 
-@(form: Form[_], payPeriods: Seq[Period])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], payPeriods: Seq[Period], backStatus: BackJourneyStatus)(implicit request: Request[_], messages: Messages)
 
-@govukLayout(pageTitle = Some(title(form, "payPeriodQuestion.title")), showBackButton = false, thisPage = PayPeriodQuestionPage) {
+@govukLayout(pageTitle = Some(title(form, "payPeriodQuestion.title")),
+            showBackButton = backStatus == BackJourneyEnabled, thisPage = PayPeriodQuestionPage) {
 
     @formHelper(action = PayPeriodQuestionController.onSubmit(), 'autoComplete -> "off") {
 
