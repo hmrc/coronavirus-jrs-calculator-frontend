@@ -25,11 +25,13 @@ import javax.inject.Inject
 import models.PayPeriodQuestion
 import models.requests.DataRequest
 import navigation.Navigator
+import org.slf4j.{Logger, LoggerFactory}
 import pages.{PayDatePage, PayPeriodQuestionPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
+import services.BackLinkEnabler
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.PayPeriodQuestionView
 
@@ -47,8 +49,9 @@ class PayPeriodQuestionController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: PayPeriodQuestionView
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
-    extends FrontendBaseController with I18nSupport with FastJourneyUserAnswersHandler {
+    extends FrontendBaseController with I18nSupport with FastJourneyUserAnswersHandler with BackLinkEnabler {
 
+  override val logger: Logger = LoggerFactory.getLogger(getClass)
   val form: Form[PayPeriodQuestion] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (identify andThen feature(FastTrackJourneyFlag) andThen getData andThen requireData) {
@@ -57,7 +60,7 @@ class PayPeriodQuestionController @Inject()(
         case Invalid(e)   => form
         case Valid(value) => form.fill(value)
       }
-      Ok(view(preparedForm, generatePeriods(request.userAnswers.getList(PayDatePage))))
+      Ok(view(preparedForm, generatePeriods(request.userAnswers.getList(PayDatePage)), backLinkStatus(request.userAnswers)))
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen feature(FastTrackJourneyFlag) andThen getData andThen requireData).async {
@@ -65,7 +68,10 @@ class PayPeriodQuestionController @Inject()(
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, generatePeriods(request.userAnswers.getList(PayDatePage))))),
+          formWithErrors =>
+            Future.successful(
+              BadRequest(
+                view(formWithErrors, generatePeriods(request.userAnswers.getList(PayDatePage)), backLinkStatus(request.userAnswers)))),
           value => processSubmittedAnswer(request, value)
         )
   }
