@@ -26,28 +26,22 @@ import play.api.libs.json.JsError
 
 trait BackLinkEnabler extends DataExtractor with PayPeriodsListHandler {
 
-  def claimQuestionBackLinkStatus(userAnswers: UserAnswers): BackJourneyStatus =
+  def backLinkStatus(userAnswers: UserAnswers): BackJourneyStatus =
+    (claimQuestionBackLinkStatus(userAnswers), furloughQuestionBackLinkStatus(userAnswers), payPeriodQuestionBackLinkStatus(userAnswers))
+      .mapN((_, _, _) => BackJourneyEnabled)
+      .getOrElse(BackJourneyDisabled)
+
+  private def claimQuestionBackLinkStatus(userAnswers: UserAnswers): AnswerV[BackJourneyStatus] =
     (extractClaimPeriodStartV(userAnswers), extractClaimPeriodEndV(userAnswers))
       .mapN((_, _) => BackJourneyEnabled)
-      .getOrElse(BackJourneyDisabled)
 
-  def furloughQuestionBackLinkStatus(userAnswers: UserAnswers) =
-    (
-      extractClaimPeriodStartV(userAnswers),
-      extractClaimPeriodEndV(userAnswers),
-      extractFurloughPeriodV(userAnswers),
-      extractFurloughStatusV(userAnswers))
-      .mapN((_, _, _, _) => BackJourneyEnabled)
-      .getOrElse(BackJourneyDisabled)
+  private def furloughQuestionBackLinkStatus(userAnswers: UserAnswers): AnswerV[BackJourneyStatus] =
+    (extractFurloughPeriodV(userAnswers), extractFurloughStatusV(userAnswers))
+      .mapN((_, _) => BackJourneyEnabled)
 
-  def payPeriodQuestionBackLinkStatus(userAnswers: UserAnswers) =
-    (
-      extractClaimPeriodStartV(userAnswers),
-      extractClaimPeriodEndV(userAnswers),
-      extractFurloughPeriodV(userAnswers),
-      hasReusablePayPeriods(userAnswers))
-      .mapN((_, _, _, _) => BackJourneyEnabled)
-      .getOrElse(BackJourneyDisabled)
+  private def payPeriodQuestionBackLinkStatus(userAnswers: UserAnswers): AnswerV[BackJourneyStatus] =
+    (extractFurloughPeriodV(userAnswers), hasReusablePayPeriods(userAnswers))
+      .mapN((_, _) => BackJourneyEnabled)
 
   private def hasReusablePayPeriods(userAnswers: UserAnswers): AnswerV[Seq[Periods]] = {
     val periods = extractPayPeriods(userAnswers)

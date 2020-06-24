@@ -22,35 +22,16 @@ import utils.CoreTestData
 
 class BackLinkEnablerSpec extends SpecBase with CoreTestData {
 
-  "enable back link on claim question page if claim start and claim end exists" in new BackLinkEnabler {
-    val answers = emptyUserAnswers.withClaimPeriodStart("2020,1,1").withClaimPeriodEnd("2020,2,1")
-
-    claimQuestionBackLinkStatus(answers) mustBe BackJourneyEnabled
-    claimQuestionBackLinkStatus(emptyUserAnswers) mustBe BackJourneyDisabled
-  }
-
-  "enable back link on furlough question page if claim start&end, furlough start&end and furlough status exists" in new BackLinkEnabler {
-    val answers = emptyUserAnswers
-      .withClaimPeriodStart("2020,1,1")
-      .withClaimPeriodEnd("2020,2,1")
-      .withFurloughStartDate("2020,1,1")
-      .withFurloughEndDate("2020,2,1")
-
-    val answersWithStatus = answers.withFurloughStatus()
-
-    furloughQuestionBackLinkStatus(answersWithStatus) mustBe BackJourneyEnabled
-    furloughQuestionBackLinkStatus(answers) mustBe BackJourneyDisabled
-  }
-
-  "enable back link on pay period question page if furlough start, furlough end and pay periods exists" in new BackLinkEnabler {
+  "enable back link on fast journey question pages if claim start&end, furlough start&end&status and pay periods exists" in new BackLinkEnabler {
     val answers = emptyUserAnswers
       .withFurloughStartDate("2020,1,1")
       .withFurloughEndDate("2020,2,1")
       .withClaimPeriodStart("2020,1,1")
       .withClaimPeriodEnd("2020,2,1")
+      .withFurloughStatus()
       .withPayDate(List("2020,2,1"))
 
-    payPeriodQuestionBackLinkStatus(answers) mustBe BackJourneyEnabled
-    payPeriodQuestionBackLinkStatus(emptyUserAnswers) mustBe BackJourneyDisabled
+    backLinkStatus(answers) mustBe BackJourneyEnabled
+    backLinkStatus(emptyUserAnswers) mustBe BackJourneyDisabled
   }
 }
