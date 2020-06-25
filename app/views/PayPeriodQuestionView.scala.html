@@ -32,7 +32,7 @@
 @(form: Form[_], payPeriods: Seq[Period])(implicit request: Request[_], messages: Messages)
 
 @govukLayout(pageTitle = Some(title(form, "payPeriodQuestion.title")),
-            showBackButton = false, thisPage = PayPeriodQuestionPage) {
+            showBackButton = true, thisPage = PayPeriodQuestionPage) {
 
     @formHelper(action = PayPeriodQuestionController.onSubmit(), 'autoComplete -> "off") {
 

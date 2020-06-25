@@ -57,7 +57,7 @@ class FurloughPeriodQuestionController @Inject()(
 
   def onPageLoad(): Action[AnyContent] = (identify andThen feature(FastTrackJourneyFlag) andThen getData andThen requireData).async {
     implicit request =>
-      getRequiredAnswersOrRestartV(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
+      getRequiredAnswersOrRestartJourneyV(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
         getRequiredAnswerV(ClaimPeriodStartPage) { claimStart =>
           val preparedForm = request.userAnswers.getV(FurloughPeriodQuestionPage) match {
             case Invalid(err) =>

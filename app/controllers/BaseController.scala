@@ -97,7 +97,7 @@ trait BaseController extends FrontendBaseController with I18nSupport with BackJo
       )
   }
 
-  def getRequiredAnswersOrRestartV[A, B](
+  def getRequiredAnswersOrRestartJourneyV[A, B](
     pageA: QuestionPage[A],
     pageB: QuestionPage[B],
     idxA: Option[Int] = None,
