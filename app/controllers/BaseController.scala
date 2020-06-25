@@ -91,6 +91,31 @@ trait BaseController extends FrontendBaseController with I18nSupport with BackJo
         nel => {
           logger.error(s"[BaseController][getRequiredAnswers] Failed to retrieve expected data for page: $pageB")
           UserAnswers.logErrors(nel)(logger)
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+        },
+        identity
+      )
+  }
+
+  def getRequiredAnswersOrRestartV[A, B](
+    pageA: QuestionPage[A],
+    pageB: QuestionPage[B],
+    idxA: Option[Int] = None,
+    idxB: Option[Int] = None
+  )(
+    f: (A, B) => Future[Result]
+  )(implicit request: DataRequest[_], readsA: Reads[A], readsB: Reads[B], errorHandler: ErrorHandler): Future[Result] = {
+
+    import cats.syntax.apply._
+
+    (getAnswerV(pageA, idxA), getAnswerV(pageB, idxB))
+      .mapN { (ansA, ansB) =>
+        f(ansA, ansB)
+      }
+      .fold(
+        nel => {
+          logger.error(s"[BaseController][getRequiredAnswers] Failed to retrieve expected data for page: $pageB")
+          UserAnswers.logErrors(nel)(logger)
           Future.successful(previousPageOrRedirect(InternalServerError(errorHandler.internalServerErrorTemplate)))
         },
         identity

@@ -32,7 +32,7 @@ import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
-import services.{BackJourneyValidator, FurloughPeriodExtractor}
+import services.FurloughPeriodExtractor
 import views.html.FurloughPeriodQuestionView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -57,7 +57,7 @@ class FurloughPeriodQuestionController @Inject()(
 
   def onPageLoad(): Action[AnyContent] = (identify andThen feature(FastTrackJourneyFlag) andThen getData andThen requireData).async {
     implicit request =>
-      getRequiredAnswersV(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
+      getRequiredAnswersOrRestartV(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
         getRequiredAnswerV(ClaimPeriodStartPage) { claimStart =>
           val preparedForm = request.userAnswers.getV(FurloughPeriodQuestionPage) match {
             case Invalid(err) =>
