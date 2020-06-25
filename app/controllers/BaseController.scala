@@ -91,7 +91,7 @@ trait BaseController extends FrontendBaseController with I18nSupport with BackJo
         nel => {
           logger.error(s"[BaseController][getRequiredAnswers] Failed to retrieve expected data for page: $pageB")
           UserAnswers.logErrors(nel)(logger)
-          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+          Future.successful(previousPageOrRedirect(InternalServerError(errorHandler.internalServerErrorTemplate)))
         },
         identity
       )

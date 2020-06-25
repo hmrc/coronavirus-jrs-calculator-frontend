@@ -85,10 +85,10 @@ class FurloughPeriodQuestionControllerSpec extends SpecBaseWithApplication with 
       val userAnswersUpdated = emptyUserAnswers
         .withClaimPeriodStart(claimStart.toString)
         .withClaimPeriodEnd(furloughEnd.toString)
-//        .withFurloughStartDate(furloughStart.toString)
-//        .withFurloughEndDate(furloughEnd.toString)
+        .withFurloughStartDate(furloughStart.toString)
+        .withFurloughEndDate(furloughEnd.toString)
         .withFurloughStatus(FurloughEnded)
-//        .withPayDate(List(furloughEnd.toString))
+        .withPayDate(List(furloughEnd.toString))
 
       val application = applicationBuilder(userAnswers = Some(userAnswersUpdated)).build()
 
