@@ -23,7 +23,6 @@ import forms.behaviours.DateBehaviours
 import forms.mappings.LocalDateFormatter
 import play.api.data.FormError
 import play.api.data.validation.{Invalid, Valid}
-import views.ViewUtils
 
 class ClaimPeriodEndFormProviderSpec extends SpecBaseWithApplication {
 
@@ -127,7 +126,9 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseWithApplication {
 
       val result = form.bind(data)
 
-      result.errors shouldBe List()
+      val expected = List(FormError("endDate", List("claimPeriodEnd.cannot.be.after.14days")))
+
+      result.errors shouldBe expected
     }
 
     "fail with invalid dates - if start and end are not of the same calendar month" in {
