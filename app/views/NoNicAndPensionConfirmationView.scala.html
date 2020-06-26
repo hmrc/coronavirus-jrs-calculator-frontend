@@ -39,14 +39,14 @@ featureFlag: FeatureFlagHelper
 
 @(cvb: ConfirmationViewBreakdownWithoutNicAndPension, claimPeriod: Period, version: String)(implicit request: Request[_], messages: Messages)
 
-@govukLayout(pageTitle = Some(titleNoForm("confirmation.title")), showBackButton = false, thisPage = ConfirmationPage) {
+@govukLayout(pageTitle = Some(titleNoForm("confirmation.no.nic.pension.title")), showBackButton = false, thisPage = ConfirmationPage) {
 
 @confirmation {
 
-@h1(Html(messages("confirmation.heading")), classes = Some(""))
+@h1(Html(messages("confirmation.no.nic.pension.heading")), classes = Some(""))
 
 <div class="furlough-heading">
-    <p>@messages("confirmation.confirmation.p1")</p>
+    <p>@messages("confirmation.no.nic.pension.p1")</p>
     <p class="govuk-panel__title">&pound;@cvb.furlough.total.formatted("%.2f")</p>
 </div>
 
@@ -62,46 +62,10 @@ featureFlag: FeatureFlagHelper
 
 @p(Html(messages("confirmation.disclaimer")))
 
-@p{
-<a id="print-link" class="govuk-link" href="">@messages("confirmation.print.this.page")</a>
-}
-
-@h2(Html(messages("confirmation.explanation.heading")), classes = Some("govuk-heading-m"))
-
-@p(Html(messages("confirmation.explanation.p")))
-
-    @details(
-        summaryText = Messages("confirmation.breakdown.summary")
-        ) {
-            @for(messageKey <- cvb.detailedBreakdownMessageKeys) {
-            @p(Html(messages(messageKey)))
-        }
-
-        <p class="govuk-body">
-            @messages("phaseTwoDetailedBreakdown.p2")
-            <a class="govuk-link" href="@messages("phaseTwoDetailedBreakdown.p2.a.href")" target="_blank">@messages("phaseTwoDetailedBreakdown.p2.a")</a>
-        </p>
-
-        @p(Html(messages("phaseTwoDetailedBreakdown.p3")))
-
-        @for(detailedBreakdown <- cvb.detailedBreakdowns) {
-            @h3(Messages("phaseTwoDetailedBreakdown.h3", detailedBreakdown.payPeriodStart, detailedBreakdown.payPeriodEnd))
-            @furloughBreakdown(detailedBreakdown.furlough)
-        }
-    }
-
-
-    <p class="govuk-body">
-        @messages("phaseTwoDetailedBreakdown.p2")
-        <a class="govuk-link" href="@messages(" phaseTwoDetailedBreakdown.p2.a.href")"
-        target="_blank">@messages("phaseTwoDetailedBreakdown.p2.a")</a>
-    </p>
-
-@p(Html(messages("phaseTwoDetailedBreakdown.p3")))
-
 @h2(Html(messages("confirmation.nextSteps.heading")), classes = Some("govuk-heading-m"))
 
 <ul class="govuk-list govuk-list--number">
+    <li><a id="print-link" class="govuk-link" href="">@messages("confirmation.print.this.page")</a> @messages("confirmation.no.nic.pension.nextSteps.li.0.1")</li>
     <li>
         @messages("confirmation.nextSteps.li.1", dateToStringWithoutYear(claimPeriod.start),
         dateToStringWithoutYear(claimPeriod.end))
@@ -121,6 +85,39 @@ featureFlag: FeatureFlagHelper
         "confirmation.nextSteps.li.4.2", true)))
     </li>
 </ul>
+
+@h2(Html(messages("confirmation.explanation.heading")), classes = Some("govuk-heading-m"))
+
+@p(Html(messages("confirmation.explanation.p")))
+
+@details(
+summaryText = Messages("confirmation.breakdown.summary")
+) {
+@for(messageKey <- cvb.detailedBreakdownMessageKeys) {
+@p(Html(messages(messageKey)))
+}
+
+<p class="govuk-body">
+    @messages("phaseTwoDetailedBreakdown.p2")
+    <a class="govuk-link" href="@messages("phaseTwoDetailedBreakdown.p2.a.href")" target="_blank">@messages("phaseTwoDetailedBreakdown.p2.a")</a>
+</p>
+
+@p(Html(messages("phaseTwoDetailedBreakdown.p3")))
+
+@for(detailedBreakdown <- cvb.detailedBreakdowns) {
+@h3(Messages("phaseTwoDetailedBreakdown.h3", detailedBreakdown.payPeriodStart, detailedBreakdown.payPeriodEnd))
+@furloughBreakdown(detailedBreakdown.furlough)
+}
+}
+
+
+<p class="govuk-body">
+    @messages("phaseTwoDetailedBreakdown.p2")
+    <a class="govuk-link" href="@messages(" phaseTwoDetailedBreakdown.p2.a.href")"
+    target="_blank">@messages("phaseTwoDetailedBreakdown.p2.a")</a>
+</p>
+
+@p(Html(messages("phaseTwoDetailedBreakdown.p3")))
 
 @button(messages("confirmation.startAgain"), href = if(featureFlag(FastTrackJourneyFlag)) Some(routes.ClaimPeriodQuestionController.onPageLoad()) else Some(routes.ClaimPeriodStartController.onPageLoad()) , classes = Some("govuk-button"))
 

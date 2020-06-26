@@ -281,6 +281,10 @@ confirmation.webchat = Webchat help (opens in a new tab).
 
 
 confirmation.no.nic.pension.insert.t1 = From 1 August, you can no longer claim employer National Insurance and pension contributions for the time the employee is on furlough.
+confirmation.no.nic.pension.title = What you can claim for this employee
+confirmation.no.nic.pension.heading = What you can claim for this employee
+confirmation.no.nic.pension.p1 = Furlough grant
+confirmation.no.nic.pension.nextSteps.li.0.1 = for your records
 
 claimPeriodStart.title = What’s the start date of this claim?
 claimPeriodStart.heading = What’s the start date of this claim?
