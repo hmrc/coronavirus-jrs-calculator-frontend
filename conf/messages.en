@@ -279,6 +279,9 @@ confirmation.nextSteps.li.4.2 = Job Retention Scheme online claim service (opens
 confirmation.startAgain = Start another calculation
 confirmation.webchat = Webchat help (opens in a new tab).
 
+
+confirmation.no.nic.pension.insert.t1 = From 1 August, you can no longer claim employer National Insurance and pension contributions for the time the employee is on furlough.
+
 claimPeriodStart.title = What’s the start date of this claim?
 claimPeriodStart.heading = What’s the start date of this claim?
 claimPeriodStart.p1 = If it’s your first claim, the claim period starts from the date the first employee started furlough.
