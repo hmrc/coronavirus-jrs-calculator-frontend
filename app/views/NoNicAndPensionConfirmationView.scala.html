@@ -77,6 +77,8 @@ featureFlag: FeatureFlagHelper
     </li>
 </ul>
 
+@button(messages("confirmation.startAgain"), href = if(featureFlag(FastTrackJourneyFlag)) Some(routes.ClaimPeriodQuestionController.onPageLoad()) else Some(routes.ClaimPeriodStartController.onPageLoad()) , classes = Some("govuk-button"))
+
 @h2(Html(messages("confirmation.explanation.heading")), classes = Some("govuk-heading-m"))
 
 @p(Html(messages("confirmation.explanation.p")))
@@ -109,8 +111,6 @@ summaryText = Messages("confirmation.breakdown.summary")
 </p>
 
 @p(Html(messages("phaseTwoDetailedBreakdown.p3")))
-
-@button(messages("confirmation.startAgain"), href = if(featureFlag(FastTrackJourneyFlag)) Some(routes.ClaimPeriodQuestionController.onPageLoad()) else Some(routes.ClaimPeriodStartController.onPageLoad()) , classes = Some("govuk-button"))
 
 @p(Html(link(appConfig.webchatHelpUrl, "confirmation.webchat", true)))
 
