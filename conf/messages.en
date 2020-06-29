@@ -291,6 +291,8 @@ confirmation.no.nic.pension.nextSteps.li.3.2 = Work out how much you can claim i
 confirmation.no.nic.pension.nextSteps.li.4 = Add all the results together to get the total amount you can claim.
 confirmation.no.nic.pension.nextSteps.li.4.1 = Make a claim using {0}.
 confirmation.no.nic.pension.nextSteps.li.4.2 = Job Retention Scheme online claim service (opens in a new window or tab).
+confirmation.no.nic.pension.breakdown.summary = Breakdown of calculations
+confirmation.no.nic.pension.disclaimer = The results of the calculation rely on the accuracy of the information you entered, for which you are responsible. You cannot claim for more money than you are going to pay out under the scheme.
 
 
 
@@ -669,6 +671,7 @@ phaseTwoDetailedBreakdown.p1.cylb.1 = You told us your employee gets paid a vari
 phaseTwoDetailedBreakdown.p1.cylb.2 = Method 1: we’ve taken the amounts they were paid for equivalent pay periods in 2019 and applied this to the number of furlough days and furlough hours in each pay period.
 phaseTwoDetailedBreakdown.p1.cylb.3 = Method 2: we’ve worked out their average daily earnings in the last tax year, by dividing their total pay by the number of calendar days between 6 April 2019 and the day before furlough (or 5 April 2020 if later). Then we’ve multiplied that by the number of furlough days and furlough hours in each pay period.
 phaseTwoDetailedBreakdown.p2 = There’s a maximum amount you can claim for furlough grant and Employer National Insurance contributions. If this affects your claim, we’ve adjusted the calculations. 
+phaseTwoDetailedBreakdown.no.nic.pension.p2 = There’s a maximum amount you can claim. If this affects your claim, we’ve adjusted the calculations.
 phaseTwoDetailedBreakdown.p2.a = Work out the maximum wage amount you can claim (opens in new tab).
 phaseTwoDetailedBreakdown.p2.a.href = https://www.gov.uk/guidance/calculate-how-much-you-can-claim-using-the-coronavirus-job-retention-scheme#eighty-percent
 phaseTwoDetailedBreakdown.p3 = Calculations are rounded to the nearest penny unless otherwise stated.

@@ -79,38 +79,28 @@ featureFlag: FeatureFlagHelper
 
 @button(messages("confirmation.startAgain"), href = if(featureFlag(FastTrackJourneyFlag)) Some(routes.ClaimPeriodQuestionController.onPageLoad()) else Some(routes.ClaimPeriodStartController.onPageLoad()) , classes = Some("govuk-button"))
 
-@h2(Html(messages("confirmation.explanation.heading")), classes = Some("govuk-heading-m"))
+@h2(Html(messages("confirmation.no.nic.pension.breakdown.summary")), classes = Some("govuk-heading-m"))
 
-@p(Html(messages("confirmation.explanation.p")))
 
-@details(
-summaryText = Messages("confirmation.breakdown.summary")
-) {
+
 @for(messageKey <- cvb.detailedBreakdownMessageKeys) {
-@p(Html(messages(messageKey)))
+    @p(Html(messages(messageKey)))
 }
 
 <p class="govuk-body">
-    @messages("phaseTwoDetailedBreakdown.p2")
-    <a class="govuk-link" href="@messages("phaseTwoDetailedBreakdown.p2.a.href")" target="_blank">@messages("phaseTwoDetailedBreakdown.p2.a")</a>
+    @messages("phaseTwoDetailedBreakdown.no.nic.pension.p2")
 </p>
 
 @p(Html(messages("phaseTwoDetailedBreakdown.p3")))
 
 @for(detailedBreakdown <- cvb.detailedBreakdowns) {
-@h3(Messages("phaseTwoDetailedBreakdown.h3", detailedBreakdown.payPeriodStart, detailedBreakdown.payPeriodEnd))
-@furloughBreakdown(detailedBreakdown.furlough)
+    @h3(Messages("phaseTwoDetailedBreakdown.h3", detailedBreakdown.payPeriodStart, detailedBreakdown.payPeriodEnd))
+    @furloughBreakdown(detailedBreakdown.furlough)
 }
-}
+<hr>
+<br>
 
-
-<p class="govuk-body">
-    @messages("phaseTwoDetailedBreakdown.p2")
-    <a class="govuk-link" href="@messages(" phaseTwoDetailedBreakdown.p2.a.href")"
-    target="_blank">@messages("phaseTwoDetailedBreakdown.p2.a")</a>
-</p>
-
-@p(Html(messages("phaseTwoDetailedBreakdown.p3")))
+<p class="govuk-body">@messages("confirmation.no.nic.pension.disclaimer")</p>
 
 @p(Html(link(appConfig.webchatHelpUrl, "confirmation.webchat", true)))
 
