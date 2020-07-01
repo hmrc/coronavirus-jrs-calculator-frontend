@@ -20,12 +20,14 @@ import java.time.LocalDate
 
 import com.google.inject.{Inject, Singleton}
 import play.api.Configuration
+import pureconfig.{CamelCase, ConfigFieldMapping}
+import pureconfig.generic.ProductHint
 import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 
 import scala.util.Try
 
 @Singleton
-class FrontendAppConfig @Inject()(val configuration: Configuration) {
+class FrontendAppConfig @Inject()(val configuration: Configuration) extends SchemeConfiguration {
 
   lazy val host: String = configuration.get[String]("host")
   lazy val appName: String = configuration.get[String]("appName")
@@ -68,11 +70,6 @@ class FrontendAppConfig @Inject()(val configuration: Configuration) {
   lazy val termsConditions: String = host + configuration.get[String]("urls.footer.termsConditions")
   lazy val govukHelp: String = configuration.get[String]("urls.footer.govukHelp")
 
-  lazy val schemeStartDate: LocalDate = LocalDate.parse(configuration.get[String]("scheme.startDate"))
-  lazy val schemeEndDate: LocalDate = LocalDate.parse(configuration.get[String]("scheme.endDate"))
-
-  lazy val phaseTwoStartDate: LocalDate = LocalDate.parse(configuration.get[String]("scheme.phaseTwoStartDate"))
-
   lazy val calculatorVersion: String = configuration.get[String]("calculator.version")
 
   val confirmationWithDetailedBreakdowns: Boolean = configuration.get[Boolean]("confirmationWithDetailedBreakdowns.enabled")
@@ -93,3 +90,17 @@ class FrontendAppConfig @Inject()(val configuration: Configuration) {
   val jobRetentionScheme: String = "https://www.gov.uk/guidance/claim-for-wages-through-the-coronavirus-job-retention-scheme"
 
 }
+
+import pureconfig.ConfigSource
+import pureconfig.generic.auto._ // Do not remove this
+
+trait SchemeConfiguration {
+  implicit def hint[A]: ProductHint[A] = ProductHint[A](ConfigFieldMapping(CamelCase, CamelCase))
+  lazy val schemeConf: SchemeConf = ConfigSource.default.at("scheme").loadOrThrow[SchemeConf]
+
+  lazy val schemeStartDate = LocalDate.parse(schemeConf.startDate)
+  lazy val schemeEndDate = LocalDate.parse(schemeConf.endDate)
+  lazy val phaseTwoStartDate = LocalDate.parse(schemeConf.phaseTwoStartDate)
+}
+
+final case class SchemeConf(startDate: String, endDate: String, phaseTwoStartDate: String)
