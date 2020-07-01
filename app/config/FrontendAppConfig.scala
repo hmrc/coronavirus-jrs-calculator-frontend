@@ -67,13 +67,6 @@ class FrontendAppConfig @Inject()(val configuration: Configuration)
   lazy val privacy: String = host + configuration.get[String]("urls.footer.privacy")
   lazy val termsConditions: String = host + configuration.get[String]("urls.footer.termsConditions")
   lazy val govukHelp: String = configuration.get[String]("urls.footer.govukHelp")
-
-  lazy val calculatorVersion: String = configuration.get[String]("calculator.version")
-
-  val confirmationWithDetailedBreakdowns: Boolean = configuration.get[Boolean]("confirmationWithDetailedBreakdowns.enabled")
-
-  val fastTrackJourneyEnabled: Boolean = configuration.get[Boolean]("fastTrackJourney.enabled")
-
 }
 
 import pureconfig.ConfigSource
@@ -89,6 +82,10 @@ trait SchemeConfiguration extends CamelCaseConf {
 
 trait MongoConfiguration extends CamelCaseConf {
   lazy val mongoConf: MongoConf = ConfigSource.default.at("mongodb").loadOrThrow[MongoConf]
+}
+
+trait CalculatorVersionConfiguration extends CamelCaseConf {
+  lazy val calculatorVersionConf: String = ConfigSource.default.at("calculator.version").loadOrThrow[String]
 }
 
 final case class SchemeConf(startDate: String, endDate: String, phaseTwoStartDate: String)
