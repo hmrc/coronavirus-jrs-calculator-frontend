@@ -117,7 +117,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
       "go to PartTimeQuestionPage after RegularPayAmountPage if phase two started" in {
         val userAnswers = emptyUserAnswers.withClaimPeriodStart(LocalDate.now)
 
-        val appConf = new FrontendAppConfig(conf) {
+        val appConf = new FrontendAppConfig() {
           override lazy val phaseTwoStartDate: LocalDate = LocalDate.now
         }
         val navigator = new Navigator(appConf)
@@ -136,7 +136,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
       "go to PartTimeQuestionPage after AnnualPayAmountPage if phase two started" in {
         val userAnswers = emptyUserAnswers.withClaimPeriodStart(LocalDate.now)
 
-        val appConf = new FrontendAppConfig(conf) {
+        val appConf = new FrontendAppConfig() {
           override lazy val phaseTwoStartDate: LocalDate = LocalDate.now
         }
         val navigator = new Navigator(appConf)

@@ -51,10 +51,8 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseControllerSpecs with
   val mockRepository = mock[SessionRepository]
   val dataRetrieval: Option[UserAnswers] => FakeDataRetrievalAction = stubbedAnswer => new FakeDataRetrievalAction(stubbedAnswer)
 
-  def controller(stubbedAnswer: UserAnswers = emptyUserAnswers, stubbedFlag: Option[(String, Any)] = None) = {
-    val stubbedConfig: Configuration =
-      stubbedFlag.map(f => Configuration.apply(configValues(f): _*)).getOrElse(app.injector.instanceOf[Configuration])
-    implicit val appConf: FrontendAppConfig = new FrontendAppConfig(stubbedConfig)
+  def controller(stubbedAnswer: UserAnswers = emptyUserAnswers) = {
+    implicit val appConf: FrontendAppConfig = new FrontendAppConfig()
     def flagProvider() = new FeatureFlagActionProviderImpl()
 
     new AdditionalPaymentAmountController(
