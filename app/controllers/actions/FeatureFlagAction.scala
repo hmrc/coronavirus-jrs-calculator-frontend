@@ -17,7 +17,6 @@
 package controllers.actions
 
 import com.google.inject.{Inject, Singleton}
-import config.FrontendAppConfig
 import handlers.ErrorHandler
 import models.requests.IdentifierRequest
 import play.api.mvc.Results.{Redirect, _}
@@ -51,8 +50,7 @@ trait FeatureFlagActionProvider {
   def apply(flag: FeatureFlag): ActionFilter[IdentifierRequest] = apply(Some(flag))
 }
 
-class FeatureFlagActionProviderImpl @Inject()(implicit appConf: FrontendAppConfig, ec: ExecutionContext, eh: ErrorHandler)
-    extends FeatureFlagActionProvider {
+class FeatureFlagActionProviderImpl @Inject()(implicit ec: ExecutionContext, eh: ErrorHandler) extends FeatureFlagActionProvider {
   override def apply(flag: Option[FeatureFlag] = None): ActionFilter[IdentifierRequest] =
     new FeatureFlagAction(flag, eh, ec)
 }
