@@ -19,7 +19,7 @@ package config
 import pureconfig.{CamelCase, ConfigFieldMapping}
 import pureconfig.generic.ProductHint
 
-//TODO do not need this application.conf is changed from camel case to kebab-case
+//TODO do not need this if application.conf is changed from camel case to kebab-case
 trait CamelCaseConf {
   implicit def hint[A]: ProductHint[A] = ProductHint[A](ConfigFieldMapping(CamelCase, CamelCase))
 }
