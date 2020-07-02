@@ -19,7 +19,6 @@ package controllers
 import java.time.LocalDate
 
 import base.SpecBaseControllerSpecs
-import config.FrontendAppConfig
 import controllers.actions._
 import forms.AdditionalPaymentAmountFormProvider
 import models.requests.{DataRequest, OptionalDataRequest}
