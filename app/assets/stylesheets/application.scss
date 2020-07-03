@@ -112,6 +112,25 @@ $govuk-assets-path: "/job-retention-scheme-calculator/assets/lib/govuk-frontend/
   font-size: 1rem;
 
   > .global-bar-message-container {
+
+    position: relative;
+
+    button.dismiss {
+      position: absolute;
+      top: 20px;
+      right: 5px;
+      width: 120px;
+      height: 20px;
+      line-height: 20px;
+      color: #FFF;
+      border: 0;
+      background: transparent;
+    }
+
+    button.dismiss:hover {
+      cursor: pointer;
+    }
+
     a, a:hover, a:link, a:active {
       color: #FFF;
     }
