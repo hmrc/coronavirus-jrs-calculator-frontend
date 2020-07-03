@@ -27,20 +27,20 @@ import pureconfig.generic.auto._ // Do not remove this
 @Singleton
 class FrontendAppConfig() extends UrlConfiguration with SchemeConfiguration with MongoConfiguration {
 
-  private val configSource = ConfigSource.default
+  private val configSource: String => ConfigSource = ConfigSource.default.at _
   private val serviceIdentifier = "jrsc"
 
-  private val contactHost = configSource.at("contact-frontend.host").loadOrThrow[String]
+  private val contactHost = configSource("contact-frontend.host").loadOrThrow[String]
 
-  lazy val host: String = configSource.at("host").loadOrThrow[String]
+  lazy val host: String = configSource("host").loadOrThrow[String]
 
-  lazy val appName: String = configSource.at("appName").loadOrThrow[String]
+  lazy val appName: String = configSource("appName").loadOrThrow[String]
 
   def reportAccessibilityIssueUrl(problemPageUri: String): String =
     s"$contactHost/contact/accessibility-unauthenticated?service=$serviceIdentifier&userAction=${SafeRedirectUrl(host + problemPageUri).encodedUrl}"
 
   val gtmContainer: Option[String] = (Try {
-    configSource.at("gtm.container").loadOrThrow[String]
+    configSource("gtm.container").loadOrThrow[String]
   } map {
     case "main"         => Some("GTM-NDJKHWK")
     case "transitional" => Some("GTM-TSFTCWZ")
@@ -51,22 +51,22 @@ class FrontendAppConfig() extends UrlConfiguration with SchemeConfiguration with
   val contactStandaloneForm = s"$contactHost/contact/contact-hmrc-unauthenticated?service=$serviceIdentifier"
   val betaFeedbackUrl = s"$contactHost/contact/beta-feedback-unauthenticated?service=$serviceIdentifier"
 
-  lazy val timeout: Int = configSource.at("timeout.timeout").loadOrThrow[Int]
-  lazy val countdown: Int = configSource.at("timeout.countdown").loadOrThrow[Int]
+  lazy val timeout: Int = configSource("timeout.timeout").loadOrThrow[Int]
+  lazy val countdown: Int = configSource("timeout.countdown").loadOrThrow[Int]
 
-  lazy val authUrl: String = configSource.at("auth").loadOrThrow[Service].baseUrl
-  lazy val loginUrl: String = configSource.at("urls.login").loadOrThrow[String]
-  lazy val loginContinueUrl: String = configSource.at("urls.loginContinue").loadOrThrow[String]
+  lazy val authUrl: String = configSource("auth").loadOrThrow[Service].baseUrl
+  lazy val loginUrl: String = configSource("urls.login").loadOrThrow[String]
+  lazy val loginContinueUrl: String = configSource("urls.loginContinue").loadOrThrow[String]
 
-  private val feedbackSurveyFEUrl: String = configSource.at("microservice.services.feedback-survey.url").loadOrThrow[String]
+  private val feedbackSurveyFEUrl: String = configSource("microservice.services.feedback-survey.url").loadOrThrow[String]
   val feedbackUrl: String = s"$feedbackSurveyFEUrl/$serviceIdentifier"
 
-  lazy val languageTranslationEnabled: Boolean = configSource.at("features.welsh-translation").loadOrThrow[Boolean]
+  lazy val languageTranslationEnabled: Boolean = configSource("features.welsh-translation").loadOrThrow[Boolean]
 
-  lazy val cookies: String = host + configSource.at("urls.footer.cookies").loadOrThrow[String]
-  lazy val privacy: String = host + configSource.at("urls.footer.privacy").loadOrThrow[String]
-  lazy val termsConditions: String = host + configSource.at("urls.footer.termsConditions").loadOrThrow[String]
-  lazy val govukHelp: String = configSource.at("urls.footer.govukHelp").loadOrThrow[String]
+  lazy val cookies: String = host + configSource("urls.footer.cookies").loadOrThrow[String]
+  lazy val privacy: String = host + configSource("urls.footer.privacy").loadOrThrow[String]
+  lazy val termsConditions: String = host + configSource("urls.footer.termsConditions").loadOrThrow[String]
+  lazy val govukHelp: String = configSource("urls.footer.govukHelp").loadOrThrow[String]
 }
 
 trait SchemeConfiguration extends CamelCaseConf {
