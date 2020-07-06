@@ -32,25 +32,17 @@ link: components.link
 
 @govukLayout(pageTitle = Some(titleNoForm("resetCalculation.title")), showBackButton = false,  thisPage = ResetCalculationPage) {
 
-@confirmation {
 
-@h1(Html(messages("resetCalculation.h1")), classes = Some(""))
+@h1(Html(messages("resetCalculation.h1")), classes = Some("govuk-heading-xl"))
 
-<div class="furlough-heading">
-    <p>@messages("resetCalculation.p1")</p>
-</div>
+@p(Html(messages("resetCalculation.p1")))
 
-}
 
-@p {
-<span class="govuk-!-font-weight-bold">@messages("resetCalculation.p2")</span>
-}
+@h2(Html(messages("resetCalculation.p2")), classes = Some("govuk-heading-m"))
 
 @p(Html(messages("resetCalculation.p3")))
 
-@button(messages("confirmation.startAgain"), href = Some(routes.ClaimPeriodStartController.onPageLoad()), classes = Some("govuk-button"))
+@button(messages("resetCalculation.button"), href = Some(routes.ClaimPeriodStartController.onPageLoad()), classes = Some("govuk-button"))
 
-<hr>
-<br>
 }
 
