@@ -94,6 +94,7 @@ $govuk-assets-path: "/job-retention-scheme-calculator/assets/lib/govuk-frontend/
 .govuk-header {
   > .govuk-header__container.govuk-width-container.no-border {
     border-bottom: none !important;
+    padding-bottom: 10px;
   }
 }
 
@@ -103,7 +104,7 @@ $govuk-assets-path: "/job-retention-scheme-calculator/assets/lib/govuk-frontend/
   margin-top: -10px;
   text-align: left;
   height: 60px;
-  background-color: rgb(43, 56, 314);
+  background-color: #2B358B;
 
   font-family: "GDS Transport",Arial,sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -140,7 +141,7 @@ $govuk-assets-path: "/job-retention-scheme-calculator/assets/lib/govuk-frontend/
     }
 
     p.global-bar-message {
-      padding: 0;
+      padding: 10px 0 0 0;
       margin: 0;
       color: #FFF;
       font-weight: bold;
