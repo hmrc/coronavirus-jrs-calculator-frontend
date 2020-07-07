@@ -25,7 +25,6 @@ import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
 class PreviousYearPeriodSpec extends SpecBase with CoreTestDataBuilder {
 
   "return previous year date for a given date of this year" in new PreviousYearPeriod {
-    fullPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 7", "2020, 3, 7")
 
     previousYearPayDate(Weekly, fullPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 7", "2020, 3, 7")) mustBe Seq(
       LocalDate.of(2019, 3, 2),
@@ -52,6 +51,21 @@ class PreviousYearPeriodSpec extends SpecBase with CoreTestDataBuilder {
 
     previousYearPayDate(Monthly, fullPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 31")) mustBe Seq(
       LocalDate.of(2019, 3, 31))
+  }
+
+  "return 2019 periods for a given 2020 period" in new PreviousYearPeriod {
+    previousYearPeriod(Weekly, fullPeriod("2020, 7, 1", "2020, 7, 7")) mustBe Seq(
+      period("2019, 6, 26", "2019, 7, 2"),
+      period("2019, 7, 3", "2019, 7, 9")
+    )
+
+    previousYearPeriod(Weekly, partialPeriod("2020, 7, 1" -> "2020, 7, 7", "2020, 7, 3" -> "2020, 7, 7")) mustBe Seq(
+      period("2019, 7, 3", "2019, 7, 9")
+    )
+
+    previousYearPeriod(Monthly, fullPeriod("2020, 7, 1", "2020, 7, 31")) mustBe Seq(
+      period("2019, 7, 1", "2019, 7, 31")
+    )
   }
 
   def extract(duration: CylbDuration): (Int, Int, Int) =

@@ -19,7 +19,7 @@ package services
 import java.time.LocalDate
 
 import models.PaymentFrequency.{Monthly, _}
-import models.{CylbDuration, FullPeriodWithPaymentDate, PartialPeriodWithPaymentDate, PaymentFrequency, Period, PeriodWithPaymentDate}
+import models.{CylbDuration, FullPeriodWithPaymentDate, PartialPeriodWithPaymentDate, PaymentFrequency, Period, PeriodWithPaymentDate, Periods}
 
 trait PreviousYearPeriod {
 
@@ -31,6 +31,27 @@ trait PreviousYearPeriod {
       case (_, 0) =>
         Seq(lastYear(paymentFrequency, withPaymentDate.paymentDate.value).minusDays(paymentFrequencyDays(paymentFrequency)))
       case _ => calculateDatesForPreviousYear(paymentFrequency, withPaymentDate.paymentDate.value)
+    }
+  }
+
+  def previousYearPeriod(frequency: PaymentFrequency, period: Periods): Seq[Period] = {
+    val cylbDuration = CylbDuration(frequency, period)
+
+    (cylbDuration.previousPeriodDays, cylbDuration.equivalentPeriodDays) match {
+      case (0, _) => Seq(lastYearPeriod(frequency, period.period))
+      case (_, 0) =>
+        val lastYear = lastYearPeriod(frequency, period.period)
+        val start = lastYear.start.minusDays(paymentFrequencyDays(frequency))
+        val end = lastYear.end.minusDays(paymentFrequencyDays(frequency))
+        Seq(Period(start, end))
+      case _ =>
+        val lastYear = lastYearPeriod(frequency, period.period)
+        val start = lastYear.start.minusDays(paymentFrequencyDays(frequency))
+        val end = lastYear.end.minusDays(paymentFrequencyDays(frequency))
+        Seq(
+          Period(start, end),
+          lastYear
+        )
     }
   }
 
@@ -57,5 +78,14 @@ trait PreviousYearPeriod {
     case _ =>
       val date = payDateThisYear.minusDays(364)
       if (date.isBefore(LocalDate.of(2019, 3, 1))) date.plusDays(1) else date
+  }
+
+  private def lastYearPeriod(frequency: PaymentFrequency, period: Period): Period = frequency match {
+    case Monthly => Period(period.start.minusYears(1), period.end.minusYears(1))
+    case _ =>
+      val start =
+        if (period.start.minusDays(364).isBefore(LocalDate.of(2019, 3, 1))) period.start.minusDays(363) else period.start.minusDays(364)
+      val end = if (period.end.minusDays(364).isBefore(LocalDate.of(2019, 3, 1))) period.end.minusDays(363) else period.end.minusDays(364)
+      Period(start, end)
   }
 }

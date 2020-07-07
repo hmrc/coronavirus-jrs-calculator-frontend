@@ -19,7 +19,7 @@ package handlers
 import java.time.LocalDate
 
 import cats.data.Validated.Valid
-import models.{PeriodWithPaymentDate, UserAnswers}
+import models.{Period, PeriodWithPaymentDate, UserAnswers}
 import models.UserAnswers.AnswerV
 import pages._
 import services.PreviousYearPeriod
@@ -35,6 +35,8 @@ trait LastYearPayControllerRequestHandler extends DataExtractor with PreviousYea
       val datesWithDuplicates = periodsWithPayDates.flatMap(p => previousYearPayDate(frequency, p))
       datesWithDuplicates.distinct
     }
+
+  def getLastYearPeriods(userAnswers: UserAnswers): AnswerV[Seq[Period]] = ???
 
   def dynamicCylbCutoff(userAnswers: UserAnswers): LocalDate = {
     val date: AnswerV[LocalDate] = (
