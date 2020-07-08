@@ -36,7 +36,16 @@ trait LastYearPayControllerRequestHandler extends DataExtractor with PreviousYea
       datesWithDuplicates.distinct
     }
 
-  def getLastYearPeriods(userAnswers: UserAnswers): AnswerV[Seq[Period]] = ???
+  def getLastYearPeriods(userAnswers: UserAnswers): AnswerV[Seq[Period]] =
+    (
+      userAnswers.getV(PaymentFrequencyPage),
+      extractFurloughWithinClaimV(userAnswers),
+    ).mapN { (frequency, furlough) =>
+      val endDates = userAnswers.getList(PayDatePage)
+      val periods = generatePeriodsWithFurlough(endDates, furlough)
+      val periodsWithDuplicates = periods.flatMap(p => previousYearPeriod(frequency, p))
+      periodsWithDuplicates.distinct
+    }
 
   def dynamicCylbCutoff(userAnswers: UserAnswers): LocalDate = {
     val date: AnswerV[LocalDate] = (
