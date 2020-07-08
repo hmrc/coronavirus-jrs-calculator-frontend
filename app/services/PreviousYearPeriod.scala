@@ -23,17 +23,6 @@ import models.{CylbDuration, FullPeriodWithPaymentDate, PartialPeriodWithPayment
 
 trait PreviousYearPeriod {
 
-  def previousYearPayDate(paymentFrequency: PaymentFrequency, withPaymentDate: PeriodWithPaymentDate): Seq[LocalDate] = {
-    val cylbDuration = CylbDuration(paymentFrequency, withPaymentDate.period)
-
-    (cylbDuration.previousPeriodDays, cylbDuration.equivalentPeriodDays) match {
-      case (0, _) => Seq(lastYear(paymentFrequency, withPaymentDate.paymentDate.value))
-      case (_, 0) =>
-        Seq(lastYear(paymentFrequency, withPaymentDate.paymentDate.value).minusDays(paymentFrequencyDays(paymentFrequency)))
-      case _ => calculateDatesForPreviousYear(paymentFrequency, withPaymentDate.paymentDate.value)
-    }
-  }
-
   def previousYearPeriod(frequency: PaymentFrequency, period: Periods): Seq[Period] = {
     val cylbDuration = CylbDuration(frequency, period)
 
@@ -61,23 +50,11 @@ trait PreviousYearPeriod {
     val cylbDuration = CylbDuration(frequency, periodWithPaymentDate.period)
 
     (cylbDuration.previousPeriodDays, cylbDuration.equivalentPeriodDays) match {
-      case (0, _) => lastYear(frequency, periodWithPaymentDate.period.period.start).plusDays(1)
-      case _      => calculateDatesForPreviousYear(frequency, periodWithPaymentDate.period.period.start).head.plusDays(1)
+      case (0, _) =>
+        lastYearPeriod(frequency, periodWithPaymentDate.period.period).start.plusDays(1)
+      case _ =>
+        lastYearPeriod(frequency, periodWithPaymentDate.period.period).start.minusDays(paymentFrequencyDays(frequency)).plusDays(1)
     }
-  }
-
-  private def calculateDatesForPreviousYear(paymentFrequency: PaymentFrequency, payDateThisYear: LocalDate): Seq[LocalDate] = {
-    val payDateTwo = lastYear(paymentFrequency, payDateThisYear)
-    val payDateOne = payDateTwo.minusDays(paymentFrequencyDays(paymentFrequency))
-
-    Seq(payDateOne, payDateTwo)
-  }
-
-  private def lastYear(paymentFrequency: PaymentFrequency, payDateThisYear: LocalDate): LocalDate = paymentFrequency match {
-    case Monthly => payDateThisYear.minusYears(1)
-    case _ =>
-      val date = payDateThisYear.minusDays(364)
-      if (date.isBefore(LocalDate.of(2019, 3, 1))) date.plusDays(1) else date
   }
 
   private def lastYearPeriod(frequency: PaymentFrequency, period: Period): Period = frequency match {
