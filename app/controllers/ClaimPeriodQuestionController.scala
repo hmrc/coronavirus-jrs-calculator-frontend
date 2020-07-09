@@ -51,12 +51,19 @@ class ClaimPeriodQuestionController @Inject()(
 
   val form: Form[ClaimPeriodQuestion] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswersV(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStart, claimEnd) =>
-      val filledForm: Form[ClaimPeriodQuestion] =
-        request.userAnswers.getV(ClaimPeriodQuestionPage).fold(_ => form, form.fill)
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
+    val referer = request.headers.toSimpleMap.get("Referer")
+    val predicate = referer.isDefined && referer.getOrElse("").endsWith("/confirmation") && request.userAnswers.data.keys.isEmpty
 
-      Future.successful(previousPageOrRedirect(Ok(view(filledForm, claimStart, claimEnd))))
+    if (predicate) {
+      Future.successful(Redirect(routes.ResetCalculationController.onPageLoad()))
+    } else {
+      getRequiredAnswersV(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStart, claimEnd) =>
+        val filledForm: Form[ClaimPeriodQuestion] =
+          request.userAnswers.getV(ClaimPeriodQuestionPage).fold(_ => form, form.fill)
+
+        Future.successful(previousPageOrRedirect(Ok(view(filledForm, claimStart, claimEnd))))
+      }
     }
   }
 
