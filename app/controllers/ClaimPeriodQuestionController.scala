@@ -28,6 +28,7 @@ import org.slf4j.{Logger, LoggerFactory}
 import pages.{ClaimPeriodEndPage, ClaimPeriodQuestionPage, ClaimPeriodStartPage}
 import play.api.data.Form
 import play.api.i18n.MessagesApi
+import play.api.libs.json.JsObject
 import play.api.mvc._
 import repositories.SessionRepository
 import views.html.ClaimPeriodQuestionView
@@ -52,19 +53,9 @@ class ClaimPeriodQuestionController @Inject()(
   val form: Form[ClaimPeriodQuestion] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
-    val referer = request.headers.toSimpleMap.get("Referer")
-    val predicate = referer.isDefined && referer.getOrElse("").endsWith("/confirmation") && request.userAnswers.data.keys.isEmpty
-
-    if (predicate) {
-      Future.successful(Redirect(routes.ResetCalculationController.onPageLoad()))
-    } else {
-      getRequiredAnswersV(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStart, claimEnd) =>
-        val filledForm: Form[ClaimPeriodQuestion] =
-          request.userAnswers.getV(ClaimPeriodQuestionPage).fold(_ => form, form.fill)
-
-        Future.successful(previousPageOrRedirect(Ok(view(filledForm, claimStart, claimEnd))))
-      }
-    }
+    if (backJourneyPredicate(request.headers.toSimpleMap.get("Referer"), request.userAnswers.data))
+        Future.successful(Redirect(routes.ResetCalculationController.onPageLoad()))
+      else processOnLoad
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -78,6 +69,14 @@ class ClaimPeriodQuestionController @Inject()(
     }
   }
 
+  private def processOnLoad(implicit request: DataRequest[AnyContent]): Future[Result] =
+    getRequiredAnswersV(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStart, claimEnd) =>
+      val filledForm: Form[ClaimPeriodQuestion] =
+        request.userAnswers.getV(ClaimPeriodQuestionPage).fold(_ => form, form.fill)
+
+      Future.successful(previousPageOrRedirect(Ok(view(filledForm, claimStart, claimEnd))))
+    }
+
   private def processSubmittedAnswer(request: DataRequest[AnyContent], value: ClaimPeriodQuestion): Future[Result] =
     for {
       updatedAnswers <- Future.fromTry(request.userAnswers.set(ClaimPeriodQuestionPage, value))
@@ -88,9 +87,11 @@ class ClaimPeriodQuestionController @Inject()(
         case Valid(updatedJourney) =>
           sessionRepository.set(updatedJourney.updated)
           Redirect(call)
-        case Invalid(errors) =>
+        case Invalid(_) =>
           InternalServerError(errorHandler.internalServerErrorTemplate(request))
       }
-
     }
+
+  private val backJourneyPredicate: (Option[String], JsObject) => Boolean =
+    (referer, data) => referer.isDefined && referer.getOrElse("").endsWith("/confirmation") && data.keys.isEmpty
 }
