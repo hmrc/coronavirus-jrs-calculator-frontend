@@ -54,8 +54,8 @@ class ClaimPeriodQuestionController @Inject()(
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
     if (backJourneyPredicate(request.headers.toSimpleMap.get("Referer"), request.userAnswers.data))
-        Future.successful(Redirect(routes.ResetCalculationController.onPageLoad()))
-      else processOnLoad
+      Future.successful(Redirect(routes.ResetCalculationController.onPageLoad()))
+    else processOnLoad
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -92,6 +92,6 @@ class ClaimPeriodQuestionController @Inject()(
       }
     }
 
-  private val backJourneyPredicate: (Option[String], JsObject) => Boolean =
+  protected val backJourneyPredicate: (Option[String], JsObject) => Boolean =
     (referer, data) => referer.isDefined && referer.getOrElse("").endsWith("/confirmation") && data.keys.isEmpty
 }
