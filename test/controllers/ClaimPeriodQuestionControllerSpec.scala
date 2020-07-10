@@ -140,7 +140,7 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Moc
     "redirect to fast-journey-reset if going back from fast journey" in {
       val controller = new ClaimPeriodQuestionController(messagesApi, mockSessionRepository, navigator,
         identifier, dataRetrieval, dataRequired, formProvider, component, view) {
-        override protected val backJourneyPredicate: (Option[String], JsObject) => Boolean = (_, _) => true
+        override protected val didNotReuseDates: (Option[String], JsObject) => Boolean = (_, _) => true
       }
 
       val getRequest: FakeRequest[AnyContentAsEmpty.type] =

@@ -53,7 +53,7 @@ class ClaimPeriodQuestionController @Inject()(
   val form: Form[ClaimPeriodQuestion] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
-    if (backJourneyPredicate(request.headers.toSimpleMap.get("Referer"), request.userAnswers.data))
+    if (didNotReuseDates(request.headers.toSimpleMap.get("Referer"), request.userAnswers.data))
       Future.successful(Redirect(routes.ResetCalculationController.onPageLoad()))
     else processOnLoad
   }
@@ -92,6 +92,6 @@ class ClaimPeriodQuestionController @Inject()(
       }
     }
 
-  protected val backJourneyPredicate: (Option[String], JsObject) => Boolean =
+  protected val didNotReuseDates: (Option[String], JsObject) => Boolean =
     (referer, data) => referer.isDefined && referer.getOrElse("").endsWith("/confirmation") && data.keys.isEmpty
 }
