@@ -622,8 +622,8 @@ payPeriodQuestion.useDifferentPayPeriod = Na
 payPeriodQuestion.error.required = Dewiswch un o’r opsiynau isod
 payPeriodQuestion.period.text = o {0} i {1}
 
-partTimePeriods.title = Pryd dechreuodd y cyflogai hwn weithio yn ystod y cyfnod hawlio?
-partTimePeriods.heading = Pryd dechreuodd y cyflogai hwn weithio yn ystod y cyfnod hawlio?
+partTimePeriods.title = When was this employee flexibly furloughed during the claim period?
+partTimePeriods.heading = When was this employee flexibly furloughed during the claim period?
 partTimePeriods.hint = Dewiswch bob un sy’n berthnasol.
 partTimePeriods.fullPeriod = Cyfnod cyflog: {0} i {1}
 partTimePeriods.partialPeriod = Cyfnod cyflog: {0} to {1} (rhannol)
