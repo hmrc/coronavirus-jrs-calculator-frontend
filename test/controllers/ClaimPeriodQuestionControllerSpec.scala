@@ -35,7 +35,6 @@ import views.html.ClaimPeriodQuestionView
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-
 class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
@@ -48,8 +47,16 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Moc
   lazy val claimPeriodQuestionRoute = routes.ClaimPeriodQuestionController.onPageLoad().url
 
   val view = app.injector.instanceOf[ClaimPeriodQuestionView]
-  val controller = new ClaimPeriodQuestionController(messagesApi, mockSessionRepository, navigator, identifier, dataRetrieval, dataRequired,
-    formProvider, component, view)
+  val controller = new ClaimPeriodQuestionController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view)
 
   "ClaimPeriodQuestion Controller" must {
 
@@ -87,8 +94,16 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Moc
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val controller = new ClaimPeriodQuestionController(messagesApi, mockSessionRepository, new FakeNavigator(onwardRoute),
-        identifier, dataRetrieval, dataRequired, formProvider, component, view)
+      val controller = new ClaimPeriodQuestionController(
+        messagesApi,
+        mockSessionRepository,
+        new FakeNavigator(onwardRoute),
+        identifier,
+        dataRetrieval,
+        dataRequired,
+        formProvider,
+        component,
+        view)
 
       val request =
         FakeRequest(POST, claimPeriodQuestionRoute)
@@ -138,8 +153,16 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Moc
     }
 
     "redirect to fast-journey-reset if going back from fast journey" in {
-      val controller = new ClaimPeriodQuestionController(messagesApi, mockSessionRepository, navigator,
-        identifier, dataRetrieval, dataRequired, formProvider, component, view) {
+      val controller = new ClaimPeriodQuestionController(
+        messagesApi,
+        mockSessionRepository,
+        navigator,
+        identifier,
+        dataRetrieval,
+        dataRequired,
+        formProvider,
+        component,
+        view) {
         override protected val didNotReuseDates: (Option[String], JsObject) => Boolean = (_, _) => true
       }
 
