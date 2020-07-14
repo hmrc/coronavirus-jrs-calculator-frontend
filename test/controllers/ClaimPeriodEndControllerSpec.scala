@@ -151,6 +151,8 @@ class ClaimPeriodEndControllerSpec extends SpecBaseControllerSpecs with MockitoS
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
+      when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
+
       val result = controller.onSubmit()(request)
 
       status(result) mustEqual BAD_REQUEST
