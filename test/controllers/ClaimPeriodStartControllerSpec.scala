@@ -64,15 +64,8 @@ class ClaimPeriodStartControllerSpec extends SpecBaseControllerSpecs with Mockit
 
   val view = app.injector.instanceOf[ClaimPeriodStartView]
 
-  val controller = new ClaimPeriodStartController(
-    messagesApi,
-    mockSessionRepository,
-    navigator,
-    identifier,
-    dataRetrieval,
-    formProvider,
-    component,
-    view)
+  val controller =
+    new ClaimPeriodStartController(messagesApi, mockSessionRepository, navigator, identifier, dataRetrieval, formProvider, component, view)
 
   "ClaimPeriodStart Controller" must {
 

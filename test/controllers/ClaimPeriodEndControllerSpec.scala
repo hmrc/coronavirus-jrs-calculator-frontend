@@ -58,7 +58,9 @@ class ClaimPeriodEndControllerSpec extends SpecBaseControllerSpecs with MockitoS
       .withClaimPeriodStart(claimStart.toString)
 
   val view = app.injector.instanceOf[ClaimPeriodEndView]
-  val controller = new ClaimPeriodEndController(messagesApi, mockSessionRepository,
+  val controller = new ClaimPeriodEndController(
+    messagesApi,
+    mockSessionRepository,
     navigator,
     identifier,
     dataRetrieval,
