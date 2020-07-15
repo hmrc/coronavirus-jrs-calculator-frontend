@@ -26,7 +26,7 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{EmployeeStartDatePage, FurloughStartDatePage}
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.CSRFTokenHelper._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -36,8 +36,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class EmployeeStartDateControllerSpec extends SpecBaseControllerSpecs with MockitoSugar {
-
-  def onwardRoute = Call("GET", "/foo")
 
   val validAnswer = LocalDate.of(2020, 2, 1)
   val furloughStart = LocalDate.of(2020, 3, 18)
