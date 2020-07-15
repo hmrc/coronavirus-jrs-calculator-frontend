@@ -22,13 +22,11 @@ import base.SpecBaseControllerSpecs
 import forms.ClaimPeriodEndFormProvider
 import models.UserAnswers
 import models.requests.DataRequest
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage}
 import play.api.data.Form
-import play.api.inject.bind
 import play.api.libs.json.{JsString, Json}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.CSRFTokenHelper._

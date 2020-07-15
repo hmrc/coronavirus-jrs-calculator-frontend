@@ -93,7 +93,9 @@ class ConfirmationControllerSpec extends SpecBaseControllerSpecs with CoreTestDa
       )
 
       status(result) mustEqual OK
-      contentAsString(result) mustEqual phaseTwoView(breakdown, period("2020, 7, 1", "2020, 7, 31"), calculatorVersionConf)(request, messages).toString
+      contentAsString(result) mustEqual phaseTwoView(breakdown, period("2020, 7, 1", "2020, 7, 31"), calculatorVersionConf)(
+        request,
+        messages).toString
     }
   }
 

@@ -177,7 +177,6 @@ class FurloughPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with 
     "redirect to Session Expired for a GET if no existing data is found" in {
       when(mockSessionRepository.get(any())) thenReturn Future.successful(None)
 
-      val request = FakeRequest(GET, furloughPeriodQuestionRoute)
       val result = controller.onPageLoad()(getRequest)
 
       status(result) mustEqual SEE_OTHER
