@@ -27,10 +27,7 @@ import play.api.test.Helpers._
 
 class LanguageSwitchControllerSpec extends SpecBaseControllerSpecs with MustMatchers with OptionValues with ScalaFutures with MockitoSugar {
 
-  def languageSwitchController(appConf: FrontendAppConfig) = new LanguageSwitchController(
-    appConf,
-    messagesApi,
-    component)
+  def languageSwitchController(appConf: FrontendAppConfig) = new LanguageSwitchController(appConf, messagesApi, component)
 
   "switching language when translation is enabled" should {
     "should set the language to Cymraeg" in {

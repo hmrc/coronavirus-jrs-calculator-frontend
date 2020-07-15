@@ -32,11 +32,7 @@ class IndexControllerSpec extends SpecBaseControllerSpecs with MockitoSugar {
 
   lazy val getKeepAliveRequest = FakeRequest(GET, keepAliveRoute)
 
-  val controller = new IndexController(
-    identifier,
-    dataRetrieval,
-    mockSessionRepository,
-    component)
+  val controller = new IndexController(identifier, dataRetrieval, mockSessionRepository, component)
 
   "StartAgainController Controller" must {
 
