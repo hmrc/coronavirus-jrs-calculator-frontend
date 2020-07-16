@@ -84,7 +84,6 @@ class PartTimeHoursControllerSpec extends SpecBaseControllerSpecs with MockitoSu
     component,
     view)
 
-
   "PartTimeHours Controller" must {
     "return OK and the correct view for a GET" in {
       when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
