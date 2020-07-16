@@ -48,33 +48,12 @@ class PartialPayAfterFurloughControllerSpec extends SpecBaseWithApplication with
   val claimPeriodStart = LocalDate.of(2020, 3, 27)
   val claimPeriodEnd = LocalDate.of(2020, 4, 6)
   val userAnswers = UserAnswers(userAnswersId)
-    .set(PayDatePage, payPeriod1, Some(1))
-    .success
-    .value
-    .set(PayDatePage, payPeriod2, Some(2))
-    .success
-    .value
-    .set(PayDatePage, payPeriod3, Some(3))
-    .success
-    .value
-    .set(PayDatePage, payPeriod4, Some(4))
-    .success
-    .value
-    .set(ClaimPeriodStartPage, claimPeriodStart)
-    .success
-    .value
-    .set(ClaimPeriodEndPage, claimPeriodEnd)
-    .success
-    .value
-    .set(FurloughStartDatePage, furloughStartDate)
-    .success
-    .value
-    .set(FurloughStartDatePage, furloughEndDate)
-    .success
-    .value
-    .set(PaymentFrequencyPage, Weekly)
-    .success
-    .value
+    .withPayDate(List(payPeriod1, payPeriod2, payPeriod2, payPeriod4).map(_.toString))
+    .withClaimPeriodStart(claimPeriodStart.toString)
+    .withClaimPeriodEnd(claimPeriodEnd.toString)
+    .withFurloughStartDate(furloughStartDate.toString)
+    .withFurloughEndDate(furloughEndDate.toString)
+    .withPaymentFrequency(Weekly)
 
   def onwardRoute = Call("GET", "/foo")
 
