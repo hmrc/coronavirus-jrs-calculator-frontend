@@ -27,7 +27,7 @@ import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.AuditService
 import viewmodels.{ConfirmationDataResultWithoutNicAndPension, PhaseOneConfirmationDataResult, PhaseTwoConfirmationDataResult}
-import views.html.{ConfirmationViewWithDetailedBreakdowns, NoNicAndPensionConfirmationView, PhaseTwoConfirmationView, SeptemberConfirmationView}
+import views.html.{ConfirmationViewWithDetailedBreakdowns, NoNicAndPensionConfirmationView, OctoberConfirmationView, PhaseTwoConfirmationView, SeptemberConfirmationView}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,6 +41,7 @@ class ConfirmationController @Inject()(
   phaseTwoView: PhaseTwoConfirmationView,
   noNicAndPensionView: NoNicAndPensionConfirmationView,
   septemberConfirmationView: SeptemberConfirmationView,
+  octoberConfirmationView: OctoberConfirmationView,
   auditService: AuditService,
   val navigator: Navigator
 )(implicit val errorHandler: ErrorHandler, ec: ExecutionContext)
@@ -61,6 +62,8 @@ class ConfirmationController @Inject()(
           case 9 =>
             Future.successful(
               Ok(septemberConfirmationView(data.confirmationViewBreakdown, data.metaData.claimPeriod, calculatorVersionConf)))
+          case 10 =>
+            Future.successful(Ok(octoberConfirmationView(data.confirmationViewBreakdown, data.metaData.claimPeriod, calculatorVersionConf)))
           case _ => Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
         }
       case Invalid(e) =>
