@@ -23,6 +23,7 @@ import java.util.Locale
 import com.google.inject.Inject
 import models._
 import play.api.i18n.Messages
+import services.Calculators._
 
 class FurloughCapHelper @Inject()() {
 
@@ -91,5 +92,74 @@ class FurloughCapHelper @Inject()() {
           value.formatted("%.2f")
         )
     }
+
+  def calculationForSept(cap: FurloughCap)(implicit messages: Messages): String =
+    cap match {
+      case FullPeriodCap(value) =>
+        messages("furloughBreakdown.furloughCap.fullPeriodCap", seventy(value))
+      case FullPeriodCapWithPartTime(value, unadjusted, usual, furloughed) =>
+        messages(
+          "phaseTwoFurloughBreakdown.furloughCap.fullPeriodCap.partTime",
+          seventy(unadjusted),
+          usual.formatted("%.2f"),
+          furloughed.formatted("%.2f"),
+          seventy(value)
+        )
+      case PeriodSpansMonthCap(value, monthOneFurloughDays, monthOne, monthOneDaily, monthTwoFurloughDays, monthTwo, monthTwoDaily) =>
+        messages(
+          "furloughBreakdown.furloughCap.periodSpansMonthCap",
+          monthOneFurloughDays,
+          Month.of(monthOne).getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+          seventy(monthOneDaily),
+          monthTwoFurloughDays,
+          Month.of(monthTwo).getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+          seventy(monthTwoDaily),
+          seventy(value)
+        )
+      case PeriodSpansMonthCapWithPartTime(
+          value,
+          monthOneFurloughDays,
+          monthOne,
+          monthOneDaily,
+          monthTwoFurloughDays,
+          monthTwo,
+          monthTwoDaily,
+          _,
+          usual,
+          furloughed) =>
+        messages(
+          "phaseTwoFurloughBreakdown.furloughCap.periodSpansMonthCap.partTime",
+          monthOneFurloughDays,
+          Month.of(monthOne).getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+          seventy(monthOneDaily),
+          monthTwoFurloughDays,
+          Month.of(monthTwo).getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+          seventy(monthTwoDaily),
+          usual.formatted("%.2f"),
+          furloughed.formatted("%.2f"),
+          seventy(value)
+        )
+      case PartialPeriodCap(value, furloughDays, month, dailyCap) =>
+        messages(
+          "furloughBreakdown.furloughCap.partialPeriodCap",
+          furloughDays,
+          Month.of(month).getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+          seventy(dailyCap),
+          seventy(value)
+        )
+      case PartialPeriodCapWithPartTime(value, furloughDays, month, dailyCap, _, usual, furloughed) =>
+        messages(
+          "phaseTwoFurloughBreakdown.furloughCap.partialPeriodCap.partTime",
+          furloughDays,
+          Month.of(month).getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+          seventy(dailyCap),
+          usual.formatted("%.2f"),
+          furloughed.formatted("%.2f"),
+          seventy(value)
+        )
+    }
+
+  private def seventy(in: BigDecimal): String =
+    Amount((in / 80) * 70).halfUp.value.formatted("%.2f")
 
 }
