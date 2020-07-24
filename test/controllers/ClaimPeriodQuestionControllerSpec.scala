@@ -19,23 +19,23 @@ package controllers
 import java.time.LocalDate
 
 import base.SpecBaseControllerSpecs
+import controllers.actions.DataRetrievalActionImpl
 import forms.ClaimPeriodQuestionFormProvider
 import models.ClaimPeriodQuestion.ClaimOnSamePeriod
+import models.UserAnswers
 import navigation.FakeNavigator
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.JsObject
 import play.api.mvc.{AnyContentAsEmpty, Call}
 import play.api.test.CSRFTokenHelper._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.UserAnswerPersistence
 import views.html.ClaimPeriodQuestionView
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with MockitoSugar {
+class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -47,16 +47,24 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Moc
   lazy val claimPeriodQuestionRoute = routes.ClaimPeriodQuestionController.onPageLoad().url
 
   val view = app.injector.instanceOf[ClaimPeriodQuestionView]
-  val controller = new ClaimPeriodQuestionController(
-    messagesApi,
-    mockSessionRepository,
-    navigator,
-    identifier,
-    dataRetrieval,
-    dataRequired,
-    formProvider,
-    component,
-    view)
+
+  def controller(stubbedAnswers: Option[UserAnswers] = Some(emptyUserAnswers)) =
+    new ClaimPeriodQuestionController(
+      messagesApi,
+      mockSessionRepository,
+      navigator,
+      identifier,
+      new DataRetrievalActionImpl(mockSessionRepository) {
+        override protected val identifierRetrieval: String => Future[Option[UserAnswers]] =
+          _ => Future.successful(stubbedAnswers)
+      },
+      dataRequired,
+      formProvider,
+      component,
+      view
+    ) {
+      override val userAnswerPersistence = new UserAnswerPersistence(_ => Future.successful(true))
+    }
 
   "ClaimPeriodQuestion Controller" must {
 
@@ -66,9 +74,7 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Moc
         FakeRequest(GET, claimPeriodQuestionRoute).withCSRFToken
           .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
-      when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
-
-      val result = controller.onPageLoad()(getRequest)
+      val result = controller(Some(userAnswers)).onPageLoad()(getRequest)
 
       status(result) mustEqual OK
       contentAsString(result) mustEqual view(form, claimStart, claimEnd)(getRequest, messages).toString
@@ -84,9 +90,7 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Moc
         FakeRequest(GET, claimPeriodQuestionRoute).withCSRFToken
           .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
-      when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
-
-      val result = controller.onPageLoad()(getRequest)
+      val result = controller(Some(userAnswers)).onPageLoad()(getRequest)
 
       status(result) mustEqual OK
       contentAsString(result) mustEqual
@@ -94,16 +98,27 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Moc
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val userAnswers = dummyUserAnswers
+        .withClaimPeriodStart(claimStart.toString)
+        .withClaimPeriodEnd(claimEnd.toString)
+        .withClaimPeriodQuestion(ClaimOnSamePeriod)
+
       val controller = new ClaimPeriodQuestionController(
         messagesApi,
         mockSessionRepository,
         new FakeNavigator(onwardRoute),
         identifier,
-        dataRetrieval,
+        new DataRetrievalActionImpl(mockSessionRepository) {
+          override protected val identifierRetrieval: String => Future[Option[UserAnswers]] =
+            _ => Future.successful(Some(userAnswers))
+        },
         dataRequired,
         formProvider,
         component,
-        view)
+        view
+      ) {
+        override val userAnswerPersistence = new UserAnswerPersistence(_ => Future.successful(true))
+      }
 
       val request =
         FakeRequest(POST, claimPeriodQuestionRoute)
@@ -116,6 +131,11 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Moc
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
+      val userAnswers = dummyUserAnswers
+        .withClaimPeriodStart(claimStart.toString)
+        .withClaimPeriodEnd(claimEnd.toString)
+        .withClaimPeriodQuestion(ClaimOnSamePeriod)
+
       val request =
         FakeRequest(POST, claimPeriodQuestionRoute).withCSRFToken
           .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
@@ -123,7 +143,7 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Moc
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val result = controller.onSubmit()(request)
+      val result = controller(Some(userAnswers)).onSubmit()(request)
 
       status(result) mustEqual BAD_REQUEST
       contentAsString(result) mustEqual
@@ -132,10 +152,7 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Moc
 
     "redirect to Session Expired for a GET if no existing data is found" in {
       val request = FakeRequest(GET, claimPeriodQuestionRoute)
-
-      when(mockSessionRepository.get(any())) thenReturn Future.successful(None)
-
-      val result = controller.onPageLoad()(request)
+      val result = controller(None).onPageLoad()(request)
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
@@ -146,7 +163,7 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Moc
         FakeRequest(POST, claimPeriodQuestionRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
-      val result = controller.onSubmit()(request)
+      val result = controller(None).onSubmit()(request)
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
@@ -158,11 +175,15 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Moc
         mockSessionRepository,
         navigator,
         identifier,
-        dataRetrieval,
+        new DataRetrievalActionImpl(mockSessionRepository) {
+          override protected val identifierRetrieval: String => Future[Option[UserAnswers]] =
+            _ => Future.successful(Some(emptyUserAnswers))
+        },
         dataRequired,
         formProvider,
         component,
-        view) {
+        view
+      ) {
         override protected val didNotReuseDates: (Option[String], JsObject) => Boolean = (_, _) => true
       }
 
@@ -170,7 +191,6 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Moc
         FakeRequest(GET, claimPeriodQuestionRoute).withCSRFToken
           .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
-      when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(emptyUserAnswers))
       val result = controller.onPageLoad()(getRequest)
 
       status(result) mustEqual SEE_OTHER
