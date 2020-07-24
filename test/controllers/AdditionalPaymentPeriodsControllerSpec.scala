@@ -70,21 +70,23 @@ class AdditionalPaymentPeriodsControllerSpec extends SpecBaseControllerSpecs wit
 
   val view = app.injector.instanceOf[AdditionalPaymentPeriodsView]
 
-  def controller(stubbedAnswers: Option[UserAnswers] = Some(emptyUserAnswers)) = new AdditionalPaymentPeriodsController(
-    messagesApi,
-    mockSessionRepository,
-    navigator,
-    identifier,
-    new DataRetrievalActionImpl(mockSessionRepository) {
-      override protected val identifierRetrieval: String => Future[Option[UserAnswers]] =
-        _ => Future.successful(stubbedAnswers)
-    },
-    dataRequired,
-    formProvider,
-    component,
-    view) {
-    override val userAnswerPersistence = new UserAnswerPersistence(_ => Future.successful(true))
-  }
+  def controller(stubbedAnswers: Option[UserAnswers] = Some(emptyUserAnswers)) =
+    new AdditionalPaymentPeriodsController(
+      messagesApi,
+      mockSessionRepository,
+      navigator,
+      identifier,
+      new DataRetrievalActionImpl(mockSessionRepository) {
+        override protected val identifierRetrieval: String => Future[Option[UserAnswers]] =
+          _ => Future.successful(stubbedAnswers)
+      },
+      dataRequired,
+      formProvider,
+      component,
+      view
+    ) {
+      override val userAnswerPersistence = new UserAnswerPersistence(_ => Future.successful(true))
+    }
 
   "AdditionalPaymentPeriodsController" must {
     "return OK and the correct view for a GET" in {

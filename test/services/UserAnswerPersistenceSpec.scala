@@ -20,17 +20,16 @@ import java.time.LocalDate
 
 import base.SpecBaseControllerSpecs
 import models.{AdditionalPayment, Amount, UserAnswers}
-import org.scalatest.concurrent.Eventually
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Seconds, Span}
 import pages.AdditionalPaymentAmountPage
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.Success
 
-class UserAnswerPersistenceSpec extends SpecBaseControllerSpecs with Eventually {
+class UserAnswerPersistenceSpec extends SpecBaseControllerSpecs with ScalaFutures {
 
-  override implicit val patienceConfig: PatienceConfig = PatienceConfig(scaled(Span(5, Seconds)))
+  override implicit val patienceConfig: PatienceConfig = PatienceConfig(scaled(Span(5, Seconds)), scaled(Span(1, Seconds)))
 
   "persist a user answer" in {
     val additionalPaymentPeriod = LocalDate.of(2020, 3, 31)
@@ -40,12 +39,11 @@ class UserAnswerPersistenceSpec extends SpecBaseControllerSpecs with Eventually 
 
     val userAnswers = emptyUserAnswers
     val expectedAnswers = userAnswers.withAdditionalPaymentAmount(additionalPayment, Some(1))
+    val eventualAnswers = new UserAnswerPersistence(stubbedPersistence)
+      .persistAnswer(userAnswers, AdditionalPaymentAmountPage, additionalPayment, Some(1))
 
-    eventually {
-      val eventualAnswers = new UserAnswerPersistence(stubbedPersistence)
-        .persistAnswer(userAnswers, AdditionalPaymentAmountPage, additionalPayment, Some(1))
-
-      eventualAnswers.value mustBe Some(Success(expectedAnswers))
+    whenReady(eventualAnswers) { res =>
+      res mustBe expectedAnswers
     }
   }
 }

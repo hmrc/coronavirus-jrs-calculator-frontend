@@ -24,16 +24,10 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class UserAnswerPersistence(persist: UserAnswers => Future[Boolean])(implicit ec: ExecutionContext) {
 
-  def persistAnswer[A](userAnswers: UserAnswers, questionPage: QuestionPage[A], answer: A, idx: Option[Int])(implicit writes: Writes[A]) =
+  def persistAnswer[A](userAnswers: UserAnswers, questionPage: QuestionPage[A], answer: A, idx: Option[Int])(
+    implicit writes: Writes[A]): Future[UserAnswers] =
     for {
       updatedAnswers <- Future.fromTry(userAnswers.set(questionPage, answer, idx))
       _              <- persist(updatedAnswers)
     } yield updatedAnswers
-
-//  def persistUserAnswer[A](userAnswers: UserAnswers, questionPage: QuestionPage[A], answer: A, idx: Option[Int])
-//                          (fn: UserAnswers => Future[Boolean])(implicit writes: Writes[A]) =
-//    for {
-//      updatedAnswers <- Future.fromTry(userAnswers.set(questionPage, answer, idx))
-//      _              <- fn(updatedAnswers)
-//    } yield updatedAnswers
 }
