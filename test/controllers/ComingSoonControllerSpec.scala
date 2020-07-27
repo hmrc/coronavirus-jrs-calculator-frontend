@@ -37,10 +37,17 @@ class ComingSoonControllerSpec extends SpecBaseControllerSpecs {
 
     val view = app.injector.instanceOf[ComingSoonView]
 
-    val controller = new ComingSoonController(messagesApi, identifier, new DataRetrievalActionImpl(mockSessionRepository) {
-      override protected val identifierRetrieval: String => Future[Option[UserAnswers]] =
-        _ => Future.successful(Some(emptyUserAnswers))
-    }, dataRequired, component, view)
+    val controller = new ComingSoonController(
+      messagesApi,
+      identifier,
+      new DataRetrievalActionImpl(mockSessionRepository) {
+        override protected val identifierRetrieval: String => Future[Option[UserAnswers]] =
+          _ => Future.successful(Some(emptyUserAnswers))
+      },
+      dataRequired,
+      component,
+      view
+    )
 
     "return OK and the correct view for a GET" in {
       val result = controller.onPageLoad()(getRequest)

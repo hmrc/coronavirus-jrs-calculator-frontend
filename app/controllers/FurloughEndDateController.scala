@@ -78,7 +78,7 @@ class FurloughEndDateController @Inject()(
                 .persistAnswer(request.userAnswers, FurloughEndDatePage, value, None)
                 .map { updatedAnswers =>
                   Redirect(navigator.nextPage(FurloughEndDatePage, updatedAnswers, None))
-                }
+              }
           )
       }
     }

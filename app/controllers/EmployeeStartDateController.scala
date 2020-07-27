@@ -70,7 +70,7 @@ class EmployeeStartDateController @Inject()(
               .persistAnswer(request.userAnswers, EmployeeStartDatePage, value, None)
               .map { updatedAnswers =>
                 Redirect(navigator.nextPage(EmployeeStartDatePage, updatedAnswers, None))
-              }
+            }
         )
     }
   }

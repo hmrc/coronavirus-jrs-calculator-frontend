@@ -61,19 +61,21 @@ class EmployeeStartDateControllerSpec extends SpecBaseControllerSpecs {
 
   val view = app.injector.instanceOf[EmployeeStartDateView]
 
-  def controller(stubbedAnswers: Option[UserAnswers] = Some(emptyUserAnswers)) = new EmployeeStartDateController(
-    messagesApi,
-    mockSessionRepository,
-    navigator,
-    identifier,
-    new DataRetrievalActionImpl(mockSessionRepository) {
-      override protected val identifierRetrieval: String => Future[Option[UserAnswers]] =
-        _ => Future.successful(stubbedAnswers)
-    },
-    dataRequired,
-    formProvider,
-    component,
-    view)
+  def controller(stubbedAnswers: Option[UserAnswers] = Some(emptyUserAnswers)) =
+    new EmployeeStartDateController(
+      messagesApi,
+      mockSessionRepository,
+      navigator,
+      identifier,
+      new DataRetrievalActionImpl(mockSessionRepository) {
+        override protected val identifierRetrieval: String => Future[Option[UserAnswers]] =
+          _ => Future.successful(stubbedAnswers)
+      },
+      dataRequired,
+      formProvider,
+      component,
+      view
+    )
 
   "EmployeeStartDate Controller" must {
     "return OK and the correct view for a GET" in {

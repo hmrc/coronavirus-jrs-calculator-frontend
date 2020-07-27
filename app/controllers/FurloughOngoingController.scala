@@ -66,7 +66,7 @@ class FurloughOngoingController @Inject()(
               .persistAnswer(request.userAnswers, FurloughStatusPage, value, None)
               .map { updatedAnswers =>
                 Redirect(navigator.nextPage(FurloughStatusPage, updatedAnswers, None))
-              }
+            }
         )
     }
   }
