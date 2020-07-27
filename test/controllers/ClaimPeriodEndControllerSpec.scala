@@ -23,8 +23,6 @@ import controllers.actions.DataRetrievalActionImpl
 import forms.ClaimPeriodEndFormProvider
 import models.UserAnswers
 import models.requests.DataRequest
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
 import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage}
 import play.api.data.Form
 import play.api.libs.json.{JsString, Json}
