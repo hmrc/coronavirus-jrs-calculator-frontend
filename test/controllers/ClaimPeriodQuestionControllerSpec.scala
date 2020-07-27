@@ -37,8 +37,6 @@ import scala.concurrent.Future
 
 class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs {
 
-  def onwardRoute = Call("GET", "/foo")
-
   private val formProvider = new ClaimPeriodQuestionFormProvider()
   private val form = formProvider()
   private val claimStart = LocalDate.now
@@ -106,7 +104,7 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs {
       val controller = new ClaimPeriodQuestionController(
         messagesApi,
         mockSessionRepository,
-        new FakeNavigator(onwardRoute),
+        navigator,
         identifier,
         new DataRetrievalActionImpl(mockSessionRepository) {
           override protected val identifierRetrieval: String => Future[Option[UserAnswers]] =
@@ -127,7 +125,7 @@ class ClaimPeriodQuestionControllerSpec extends SpecBaseControllerSpecs {
       val result = controller.onSubmit()(request)
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual onwardRoute.url
+      redirectLocation(result).value mustEqual "/job-retention-scheme-calculator/furlough-period-question"
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
