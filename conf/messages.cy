@@ -191,6 +191,11 @@ rootPage.beforeYouStart.p1.l6 = nifer yr oriau a weithiwyd (os yn gymwys, ar ôl
 rootPage.beforeYouStart.p1.l7 = swm a dalwyd i gyflogai ar gyfer oriau a weithiwyd (os yn gymwys, ar ôl 1 Gorffennaf)
 rootPage.beforeYouStart.p1.l8 = taliadau ychwanegol (megis cildyrnau, bonysau dewisol, taliadau nad ydynt yn arian parod)
 rootPage.beforeYouStart.p1.l9 = dyddiad dod i ben y ffyrlo, os nad yw’n barhaus
+rootPage.beforeYouStart.p2 = From 1 July, if the employee is flexibly furloughed, you'll also need:
+rootPage.beforeYouStart.p2.l1 = employee's usual hours (opens in new tab)
+rootPage.beforeYouStart.p2.l2 = actual hours worked
+rootPage.beforeYouStart.p2.l3 = hours furloughed
+rootPage.beforeYouStart.p3 = Steps to take before calculating your claim (opens in new tab)
 
 payDate.title = Beth yw diwedd y cyfnod cyflog nesaf ar ôl {0}?
 payDate.heading = Beth yw diwedd y cyfnod cyflog nesaf ar ôl {0}?
