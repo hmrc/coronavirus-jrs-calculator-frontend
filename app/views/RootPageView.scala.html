@@ -79,11 +79,11 @@
     @p(Html(Messages("rootPage.beforeYouStart.p2")))
 
     <ul class="govuk-list govuk-list--bullet">
-        <li>@messages("rootPage.beforeYouStart.p2.l1")</li>
+        <li>@Html(Messages("rootPage.beforeYouStart.p2.l1", link(appConfig.usualHours,"rootPage.beforeYouStart.p2.l1.link", "target", Some("_blank"))))</li>
         <li>@messages("rootPage.beforeYouStart.p2.l2")</li>
         <li>@messages("rootPage.beforeYouStart.p2.l3")</li>
     </ul>
 
-    @p(Html(Messages("rootPage.beforeYouStart.p3")))
+    @p(Html(Messages("rootPage.beforeYouStart.p3", link(appConfig.stepsBeforeCalculation, "rootPage.beforeYouStart.p3.link", "target", Some("_blank")))))
 
 }
