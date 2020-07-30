@@ -210,6 +210,7 @@ payDate.error.invalid = Nodwch ddyddiad go iawn
 payDate.error.mustBeBefore = Mae’n rhaid i’r dyddiad fod cyn {0}
 payDate.error.mustBeAfter = Mae’n rhaid i’r dyddiad fod ar ôl {0}
 payDate.firstP = Dyma ddiwedd y cyfnod cyflog diwethaf cyn naill ai dyddiad dechrau’r hawliad neu ddyddiad dechrau’r ffyrlo, p’un bynnag yw’r hwyraf.
+payDate.firstP2 = We'll use this date to work out all the pay periods that cover your claim.
 payDate.p = Dyma’r diwrnod olaf yn y cyfnod cyflog, nid y dyddiad y cafodd ei gyflog.
 payDate.details.title = Beth yw cyfnod cyflog?
 payDate.details.content =  ‘Cyfnod cyflog’ yw’r cyfnod o amser y caiff y cyflogai ei dalu amdano, megis cyfnod wythnosol neu fisol. Pan ofynnwn am ddyddiad dod i ben cyfnod cyflog, dyna’r diwrnod olaf y cafodd ei dalu amdano. Mae’n wahanol i’r ‘dyddiad cyflog’, sef y dyddiad y mae’r cyflogai’n cael ei gyflog mewn gwirionedd.
