@@ -425,7 +425,7 @@ annualPayAmount.title.onOrBefore1Feb2019 = What did this employee earn from 6 Ap
 annualPayAmount.heading.onOrBefore1Feb2019 = What did this employee earn from 6 April 2019 to {0}?
 annualPayAmount.error.required = Enter a valid amount
 annualPayAmount.error.invalid = Enter a valid amount
-annualPayAmount.p1 = This is the total amount before deductions.
+annualPayAmount.p1 = This is the gross amount they earned.
 annualPayAmount.p2 = Do not include discretionary payments, non-cash payments or non-monetary benefits.
 
 comingSoon.title = We are unable to do this calculation at the moment
