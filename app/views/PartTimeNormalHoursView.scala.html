@@ -60,7 +60,7 @@
 
         @h1(messages(headingKey, titleAndHeadingArgs: _*))
 
-        @if(true) {
+        @if(period.isInstanceOf[PartialPeriod]) {
             @p(Html(messages("partTimeNormalHours.partial", dateToStringWithoutYear(period.period.start), dateToString(period.period.end))))
 
             @details(
