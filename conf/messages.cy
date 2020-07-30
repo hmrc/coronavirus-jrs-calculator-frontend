@@ -332,9 +332,8 @@ claimPeriodStart.hint = Er enghraifft, 1 3 2020
 
 claimPeriodEnd.title = Beth yw dyddiad dod i ben yr hawliad hwn?
 claimPeriodEnd.heading = Beth yw dyddiad dod i ben yr hawliad hwn?
-claimPeriodEnd.p1 = Dylai hwn fod yn ddyddiad sy’n cyd-fynd â rhediad cyflogres. Gall fod yn unrhyw ddyddiad hyd at 14 diwrnod o ddyddiad heddiw.
-claimPeriodEnd.p2 = Sylwer nad yw’r un peth â dyddiad dod i ben y ffyrlo – gall ffyrlo fod yn barhaus ar ddiwedd y cyfnod hawlio.
-claimPeriodEnd.p3 = Os yw’r ffyrlo yn barhaus pan ddaw’r cyfnod hawlio i ben, gwnewch hawliad arall yn nes ymlaen i gwmpasu’r amser hwn.
+claimPeriodEnd.p1 = Sylwer nad yw’r un peth â dyddiad dod i ben y ffyrlo – gall ffyrlo fod yn barhaus ar ddiwedd y cyfnod hawlio.
+claimPeriodEnd.p2 = Os yw’r ffyrlo yn barhaus pan ddaw’r cyfnod hawlio i ben, gwnewch hawliad arall yn nes ymlaen i gwmpasu’r amser hwn.
 claimPeriodEnd.details.title = Beth yw cyfnod hawlio?
 claimPeriodEnd.details.p1 = Rydych yn cyflwyno hawliad o dan y Cynllun Cadw Swyddi yn sgil Coronafeirws am gyfnod pan mae un neu fwy o’ch cyflogeion ar ffyrlo. Dyma’r cyfnod hawlio.
 claimPeriodEnd.details.p2 = Sicrhewch eich bod yn cynnwys yr holl gyflogeion yr effeithir arnynt mewn un hawliad, gan gynnwys cyflogeion sy’n dechrau ffyrlo neu’n ei orffen ar wahanol ddyddiadau o fewn y cyfnod hawlio.
