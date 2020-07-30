@@ -667,11 +667,15 @@ partTimeQuestion.partTimeYes = Iawn
 partTimeQuestion.partTimeNo = Na
 partTimeQuestion.error.required = Dewiswch un o’r opsiynau isod
 
+partTimeNormalHours.whatToInclude.summary = Work out your employee's usual hours
+partTimeNormalHours.whatToInclude.text = Find {0}
+partTimeNormalHours.whatToInclude.link = examples of how to calculate your employees' wages'.(opens in new tab)
+partTimeNormalHours.title = What would this employee’s usual hours have been for the pay period {0} to {1}?
 partTimeHours.title = Pa oriau wnaeth y cyflogai hwn weithio mewn gwirionedd rhwng {0} a {1}?
 partTimeHours.title.singleDay = Pa oriau a wnaeth y cyflogai hwn weithio mewn gwirionedd ar {0}?
 partTimeHours.heading = Pa oriau wnaeth y cyflogai hwn weithio mewn gwirionedd rhwng {0} a {1}?
 partTimeHours.heading.singleDay = Pa oriau a wnaeth y cyflogai hwn weithio mewn gwirionedd ar {0}?
-partTimeHours.partial = Dyma’r dyddiadau o’r cyfnod cyflog {0} i {1} sy’n disgyn o fewn y cyfnod hawlio.
+partTimeNormalHours.partial = This is the total number of hours they would have been expected to work during this pay period if they had not been furloughed. To calculate this, you need to read the guidance
 partTimeHours.p1 = Awr
 partTimeHours.hint = Nodwch oriau mewn fformat degol
 partTimeHours.error.required = Nodwch yr oriau y bu’r cyflogai hwn yn gweithio mewn gwirionedd yn ystod y cyfnod cyflog hwn
