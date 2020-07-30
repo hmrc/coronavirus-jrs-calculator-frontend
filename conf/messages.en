@@ -156,8 +156,8 @@ errorPage.p1 = Try again later.
 unauthorised.title = You cannot access this service with this account
 unauthorised.heading = You cannot access this service with this account
 
-payMethod.title = How is this employee paid?
-payMethod.heading = How is this employee paid?
+payMethod.title = How was this employee paid before their furlough started?
+payMethod.heading = How was this employee paid before their furlough started?
 payMethod.regular= A regular amount each time
 payMethod.variable = A variable amount each time
 payMethod.error.required = Select one of the options below
