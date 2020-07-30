@@ -324,8 +324,8 @@ confirmation.october.eligibility = To be eligible for the grant you must pay fur
 
 claimPeriodStart.title = What’s the start date of this claim?
 claimPeriodStart.heading = What’s the start date of this claim?
-claimPeriodStart.p1 = If it’s your first claim, the claim period starts from the date the first employee started furlough.
-claimPeriodStart.p2 = If it’s a subsequent claim, make sure the claim period doesn’t overlap your previous claim.
+claimPeriodStart.p1 = From 1 July, claims must start and end in the same calendar month.
+claimPeriodStart.p2 = Make sure the claim periods do not overlap.
 claimPeriodStart.error.required.all = Enter the start date of this claim
 claimPeriodStart.error.required.two = The start date must include {0} and {1}
 claimPeriodStart.error.required = The start date must include {0}
