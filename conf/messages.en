@@ -670,11 +670,10 @@ partTimeQuestion.partTimeYes = Yes
 partTimeQuestion.partTimeNo = No
 partTimeQuestion.error.required = Select one of the options below
 
-partTimeHours.title = What hours did this employee actually work between {0} and {1}?
+partTimeHours.title = What hours did this employee actually work in the pay period {0} and {1}?
 partTimeHours.title.singleDay = What hours did this employee actually work on {0}?
 partTimeHours.heading = What hours did this employee actually work between {0} and {1}?
 partTimeHours.heading.singleDay = What hours did this employee actually work on {0}?
-partTimeHours.partial = These are the dates from the pay period {0} to {1} that fall inside the claim period.
 partTimeHours.p1 = Hours
 partTimeHours.hint = Enter hours in decimal format
 partTimeHours.error.required = Enter the hours this employee actually worked in this pay period
