@@ -330,6 +330,7 @@ claimPeriodStart.error.invalid = Nodwch ddyddiad dechrau go iawn
 claimPeriodStart.error.outofrange = Nodwch ddyddiad rhwng {0} a {1}
 claimPeriodStart.legend = Dyddiad dechrau
 claimPeriodStart.hint = Er enghraifft, 1 3 2020
+confirmation.breakdown.heading = Breakdown of calculations
 
 claimPeriodEnd.title = Beth yw dyddiad dod i ben yr hawliad hwn?
 claimPeriodEnd.heading = Beth yw dyddiad dod i ben yr hawliad hwn?
