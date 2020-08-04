@@ -193,7 +193,7 @@ rootPage.beforeYouStart.p1.l8 = taliadau ychwanegol (megis cildyrnau, bonysau de
 rootPage.beforeYouStart.p1.l9 = dyddiad dod i ben y ffyrlo, os nad yw’n barhaus
 rootPage.beforeYouStart.p2 = From 1 July, if the employee is flexibly furloughed, you'll also need:
 rootPage.beforeYouStart.p2.l1 = {0}
-rootPage.beforeYouStart.p2.l1.link = employee's usual hours (opens in new tab)
+rootPage.beforeYouStart.p2.l1.link = oriau arferol y cyflogai (yn agor tab newydd)
 rootPage.beforeYouStart.p2.l2 = yr oriau gwirioneddol a weithiwyd
 rootPage.beforeYouStart.p2.l3 = yr oriau ar ffyrlo
 rootPage.beforeYouStart.p3 = {0}
@@ -332,7 +332,7 @@ claimPeriodStart.error.outofrange = Nodwch ddyddiad rhwng {0} a {1}
 claimPeriodStart.legend = Dyddiad dechrau
 claimPeriodStart.hint = Er enghraifft, 1 3 2020
 confirmation.breakdown.heading = Breakdown of calculations
-confirmation.breakdown.p2 = You told us
+confirmation.breakdown.p2 = Rhoesoch wybod i ni fod eich cyflogai yn cael cyflog
 
 claimPeriodEnd.title = Beth yw dyddiad dod i ben yr hawliad hwn?
 claimPeriodEnd.heading = Beth yw dyddiad dod i ben yr hawliad hwn?
