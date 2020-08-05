@@ -309,7 +309,7 @@ confirmation.september.p2 = (Cyfradd mis Medi: 70% o gyflogau)
 confirmation.september.inset.p1.1 = Mae’n rhaid i chi dalu
 confirmation.september.inset.p1.2 = in addition to the furlough grant of £{0}. This adds up to 80% of their usual wage (£{1}).
 confirmation.september.inset.p2 = Er mwyn bod yn gymwys ar gyfer y grant, mae’n rhaid i chi dalu o leiaf 80% o’u cyflog arferol i’ch cyflogeion am y cyfnod y maent ar ffyrlo. Gallwch ddewis talu mwy na hyn, ond does dim rhaid i chi wneud hynny.
-confirmation.september.eligibility = Er mwyn bod yn gymwys ar gyfer y grant mae’n rhaid i chi dalu 80% o gyflog cyflogeion sydd ar ffyrlo am y cyfnod y maent ar ffyrlo (hyd at uchafswm o £2,500 y mis). £{amount} yw’r swm y mae’n rhaid i chi ei dalu i’r cyflogai hwn yn ogystal â’r grant.
+confirmation.september.eligibility = To be eligible for the grant you must pay furloughed employees 80% of their wages for the time they are furloughed (up to a cap of £2,500 per month). The amount you must pay this employee in addition to the grant is
 
 confirmation.october.title = Yr hyn y gallwch ei hawlio ar gyfer y cyflogai hwn
 confirmation.october.heading = Yr hyn y gallwch ei hawlio ar gyfer y cyflogai hwn
