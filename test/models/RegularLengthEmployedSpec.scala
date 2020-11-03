@@ -28,10 +28,10 @@ class RegularLengthEmployedSpec extends WordSpec with MustMatchers with ScalaChe
 
     "deserialise valid values" in {
 
-      val gen = Gen.oneOf(RegularLengthEmployed.values.toSeq)
+      val gen = Gen.oneOf(RegularLengthEmployed.values)
 
       forAll(gen) { regularLengthEmployed =>
-        JsString(RegularLengthEmployed.toString).validate[RegularLengthEmployed].asOpt.value mustEqual regularLengthEmployed
+        JsString(regularLengthEmployed.toString).validate[RegularLengthEmployed].asOpt.value mustEqual regularLengthEmployed
       }
     }
 
@@ -46,10 +46,10 @@ class RegularLengthEmployedSpec extends WordSpec with MustMatchers with ScalaChe
 
     "serialise" in {
 
-      val gen = Gen.oneOf(RegularLengthEmployed.values.toSeq)
+      val gen = Gen.oneOf(RegularLengthEmployed.values)
 
       forAll(gen) { regularLengthEmployed =>
-        Json.toJson(regularLengthEmployed) mustEqual JsString(RegularLengthEmployed.toString)
+        Json.toJson(regularLengthEmployed) mustEqual JsString(regularLengthEmployed.toString)
       }
     }
   }

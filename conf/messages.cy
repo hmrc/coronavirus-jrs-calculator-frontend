@@ -844,9 +844,9 @@ month.10 = Hydref
 month.11 = Tachwedd
 month.12 = Rhagfyr
 
-regularLengthEmployed.title = Has this employee started on or before 19/3/2020 ?
-regularLengthEmployed.heading = Has this employee started on or before 19/3/2020 ?
-regularLengthEmployed.yes = yes
-regularLengthEmployed.no = no
-regularLengthEmployed.checkYourAnswersLabel = Has this employee started on or before 19/3/2020 ?
+regularLengthEmployed.title = Was this employee working for you on or before 19 March 2020?
+regularLengthEmployed.heading = Was this employee working for you on or before 19 March 2020?
+regularLengthEmployed.p1 = We need this to calculate average pay based on when this employee started work.
+regularLengthEmployed.yes = Yes
+regularLengthEmployed.no = No
 regularLengthEmployed.error.required = Select one of the options below
