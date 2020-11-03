@@ -23,9 +23,7 @@
         formHelper: FormWithCSRF,
         errorSummary: components.errorSummary,
         inputRadio: components.inputRadio,
-        button: components.button,
-        h1: components.h1,
-        p: components.p
+        button: components.button
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
@@ -36,15 +34,10 @@
 
         @errorSummary(form.errors)
 
-        @h1(messages("regularLengthEmployed.heading"))
-
-        @p(Html(messages("regularLengthEmployed.p1")))
-
         @inputRadio(
             form = form,
             legend = messages("regularLengthEmployed.heading"),
-            legendAsHeading = false,
-            classes = "govuk-visually-hidden",
+            legendAsHeading = true,
             items = RegularLengthEmployed.options(form)
         )
 
