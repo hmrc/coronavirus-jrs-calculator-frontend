@@ -417,7 +417,7 @@ employeeStartDate.error.required = Mae’n rhaid i ddyddiad dechrau’r cyflogai
 employeeStartDate.error.invalid = Nodwch ddyddiad go iawn
 employeeStartDate.hint = Er enghraifft, 28 11 2019
 employeeStartDate.error.min = Mae’n rhaid i ddyddiad dechrau’r cyflogai fod ar neu ar ôl {0}
-employeeStartDate.error.max = Mae’n rhaid i ddyddiad dechrau’r cyflogai fod cyn iddo ddechrau ei ffyrlo, ar neu cyn 19 Mawrth 2020
+employeeStartDate.error.max = Mae’n rhaid i ddyddiad dechrau’r cyflogai fod cyn iddo ddechrau ei ffyrlo, ar neu cyn {0}
 
 annualPayAmount.title.after1Feb2019 = Faint y mae’r cyflogai hwn wedi’i ennill ers iddo ddechrau tan {0}?
 annualPayAmount.heading.after1Feb2019 = Faint y mae’r cyflogai hwn wedi’i ennill ers iddo ddechrau tan {0}?
