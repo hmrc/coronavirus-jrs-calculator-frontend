@@ -871,3 +871,7 @@ employeeRTISubmission.heading = Was an RTI submission made for this employee on 
 employeeRTISubmission.yes = Yes
 employeeRTISubmission.no = No
 employeeRTISubmission.error.required = Select one of the options below
+
+furloughInLastTaxYear.title = Has this employee had any previous periods of furlough which start in the 2019/20 tax year?
+furloughInLastTaxYear.heading = Has this employee had any previous periods of furlough which start in the 2019/20 tax year?
+furloughInLastTaxYear.error.required = Select one of the options below
