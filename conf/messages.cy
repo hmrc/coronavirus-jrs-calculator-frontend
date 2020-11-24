@@ -191,6 +191,9 @@ rootPage.h3.who.can.not.use.l4 = heb fod mewn cyflogaeth barhaus cyn i’w ffyrl
 rootPage.h3.who.can.not.use.l5 = wedi dychwelyd o absenoldeb megis absenoldeb mamolaeth yn ystod y 3 mis diwethaf (os yw’r cyfnod hawlio ym mis Gorffennaf neu’n gynt)
 rootPage.h3.who.can.not.use.l6 = yn cael cyfraniadau pensiwn y cyflogwr y tu allan i gynllun pensiwn cofrestru awtomatig
 rootPage.h3.who.can.not.use.l7 = daeth ei ffyrlo i ben ac yna dechreuodd ei ffyrlo eto yn ystod yr un cyfnod hawlio
+rootPage.h3.who.can.not.use.l8 = cawsant eu talu ar ffurf amrywiol ac maent wedi bod ar fwy nag un cyfnod o ffyrlo lle’r oedd unrhyw ran o’r cyfnodau ffyrlo yn ystod blwyddyn dreth 2019/20
+rootPage.h3.who.can.not.use.l9 = cawsant eu cyflogi cyn 6 Ebrill 2020 ac nid oeddent yn gymwys ar gyfer grant cyntaf y Cynllun Cadw Swyddi yn sgil Coronafeirws oherwydd yr amod Gwybodaeth Amser Real
+rootPage.h3.who.can.not.use.l10 = roedd ganddynt ddyddiad dechrau a oedd yn rhan o’r ffordd drwy’r cyfnod cyflog cyfatebol yn y flwyddyn flaenorol
 
 rootPage.p4 = Yn yr achosion hyn, cyfrifwch yr hyn y gallwch ei hawlio â llaw gan ddefnyddio’r {0} neu ceisiwch gyngor proffesiynol.
 rootPage.p4.link = arweiniad cyfrifo
