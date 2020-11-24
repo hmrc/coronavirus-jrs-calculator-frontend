@@ -184,12 +184,13 @@ rootPage.h3.who.can.use.l3 = y mwyafrif o gyflogeion sy’n cael eu talu’n wyt
 rootPage.h3.who.can.use.l4 = cyflogeion sydd wedi dychwelyd o absenoldeb statudol, megis absenoldeb mamolaeth, o 1 Awst ymlaen
 
 rootPage.h3.who.can.not.use.heading = Ni ellir defnyddio’r gyfrifiannell ar gyfer cyflogeion os yw’r canlynol yn wir:
-rootPage.h3.who.can.not.use.l1 = have an annual pay period
-rootPage.h3.who.can.not.use.l2 = maent wedi’u trosglwyddo o dan reoliadau Trosglwyddo Ymgymeriadau Diogelu Cyflogaeth (TUPE)
-rootPage.h3.who.can.not.use.l3 = heb fod mewn cyflogaeth barhaus cyn i’w ffyrlo ddechrau
-rootPage.h3.who.can.not.use.l4 = wedi dychwelyd o absenoldeb megis absenoldeb mamolaeth yn ystod y 3 mis diwethaf (os yw’r cyfnod hawlio ym mis Gorffennaf neu’n gynt)
-rootPage.h3.who.can.not.use.l5 = yn cael cyfraniadau pensiwn y cyflogwr y tu allan i gynllun pensiwn cofrestru awtomatig
-rootPage.h3.who.can.not.use.l6 = daeth ei ffyrlo i ben ac yna dechreuodd ei ffyrlo eto yn ystod yr un cyfnod hawlio
+rootPage.h3.who.can.not.use.l1 = gwnaethant ddechrau cyfnod rhybudd neu roedd yn ofynnol iddynt ddychwelyd i’r gwaith yn ystod cyfnod rhybudd i weithio yn yr un cyfnod hawlio, ar neu ar ôl 1 Rhagfyr 2020
+rootPage.h3.who.can.not.use.l2 = have an annual pay period
+rootPage.h3.who.can.not.use.l3 = maent wedi’u trosglwyddo o dan reoliadau Trosglwyddo Ymgymeriadau Diogelu Cyflogaeth (TUPE)
+rootPage.h3.who.can.not.use.l4 = heb fod mewn cyflogaeth barhaus cyn i’w ffyrlo ddechrau
+rootPage.h3.who.can.not.use.l5 = wedi dychwelyd o absenoldeb megis absenoldeb mamolaeth yn ystod y 3 mis diwethaf (os yw’r cyfnod hawlio ym mis Gorffennaf neu’n gynt)
+rootPage.h3.who.can.not.use.l6 = yn cael cyfraniadau pensiwn y cyflogwr y tu allan i gynllun pensiwn cofrestru awtomatig
+rootPage.h3.who.can.not.use.l7 = daeth ei ffyrlo i ben ac yna dechreuodd ei ffyrlo eto yn ystod yr un cyfnod hawlio
 
 rootPage.p4 = Yn yr achosion hyn, cyfrifwch yr hyn y gallwch ei hawlio â llaw gan ddefnyddio’r {0} neu ceisiwch gyngor proffesiynol.
 rootPage.p4.link = arweiniad cyfrifo
