@@ -35,17 +35,24 @@ trait EmployeeTypeUtil extends FeatureSwitching {
     type2aEmployeeResult: Option[T] = None,
     type2bEmployeeResult: Option[T] = None)(implicit request: DataRequest[_], appConfig: FrontendAppConfig): Option[T] =
     request.userAnswers.getV(RegularLengthEmployedPage) match {
-      case Valid(RegularLengthEmployed.Yes) => type1EmployeeResult
+      case Valid(RegularLengthEmployed.Yes) =>
+        logger.debug("[EmployeeTypeUtil][regularPayResolver] Type 1 Employee")
+        type1EmployeeResult
       case Valid(RegularLengthEmployed.No) =>
         request.userAnswers.getV(OnPayrollBefore30thOct2020Page) match {
-          case Valid(true)  => type2aEmployeeResult
-          case Valid(false) => type2bEmployeeResult
+          case Valid(true) =>
+            logger.debug("[EmployeeTypeUtil][regularPayResolver] Type 2a Employee")
+            type2aEmployeeResult
+          case Valid(false) =>
+            logger.debug("[EmployeeTypeUtil][regularPayResolver] Type 2b Employee")
+            type2bEmployeeResult
           case _ =>
             if (isEnabled(ExtensionTwoNewStarterFlow)) {
               val logMsg = "[EmployeeTypeService][regularPayResolver] no valid answer for OnPayrollBefore30thOct2020Page"
               logger.debug(logMsg)
               None
             } else {
+              logger.debug("[EmployeeTypeUtil][regularPayResolver] Type 2a Employee - ExtensionTwoNewStarterFlow disabled")
               type2aEmployeeResult
             }
         }
@@ -67,10 +74,13 @@ trait EmployeeTypeUtil extends FeatureSwitching {
          request.userAnswers.getV(EmployeeRTISubmissionPage),
          request.userAnswers.getV(OnPayrollBefore30thOct2020Page)) match {
           case (Valid(startDate), rtiAns, _) if startDate.isBefore(feb1st2020) | rtiAns == Valid(EmployeeRTISubmission.Yes) =>
+            logger.debug("[EmployeeTypeUtil][variablePayResolver] Type 4 Employee")
             type4EmployeeResult
           case (Valid(_), _, Valid(true)) =>
+            logger.debug("[EmployeeTypeUtil][variablePayResolver] Type 5a Employee")
             type5aEmployeeResult
           case (Valid(_), _, Valid(false)) =>
+            logger.debug("[EmployeeTypeUtil][variablePayResolver] Type 5b Employee")
             type5bEmployeeResult
           case _ =>
             if (isEnabled(ExtensionTwoNewStarterFlow)) {
@@ -78,6 +88,7 @@ trait EmployeeTypeUtil extends FeatureSwitching {
               logger.warn(logMsg)
               None
             } else {
+              logger.debug("[EmployeeTypeUtil][variablePayResolver] Type 5a Employee - ExtensionTwoNewStarterFlow disabled")
               type5aEmployeeResult
             }
         }
