@@ -55,7 +55,7 @@ class RegularPayAmountControllerISpec extends IntegrationSpecBase with CustomMat
 
     "enters a valid answer" when {
 
-      "redirect to LastPayDate page" in {
+      "redirect to PartTimeQuestion page" in {
 
         val ans = Salary(BigDecimal(123.45))
 

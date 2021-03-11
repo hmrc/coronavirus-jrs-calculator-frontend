@@ -253,6 +253,7 @@ reviewPayDates.error.required = Dewiswch ‘Iawn’ os reviewPayDates
 
 regularPayAmount.title = What was the employee paid in the last pay period ending on or before {0}?
 regularPayAmount.heading = What was the employee paid in the last pay period ending on or before {0}?
+regularPayAmount.label = What was the employee paid in the last pay period ending on or before {0}?
 regularPayAmount.p1 = This is the gross amount paid in the last pay period ending on or before {0}, before deductions.
 regularPayAmount.p2 = Peidiwch â chynnwys taliadau dewisol, taliadau nad ydynt yn arian parod na buddiannau nad ydynt yn ariannol.
 regularPayAmount.inset = Os dechreuodd y cyflogai hwn ei gyflogaeth gyda chi yn ystod y cyfnod cyflog hwn, nodwch y swm y byddai wedi’i gael pe bai’n gyfnod cyflog llawn.
