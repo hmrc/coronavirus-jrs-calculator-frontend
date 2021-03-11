@@ -25,7 +25,7 @@ import models.{EmployeeRTISubmission, EmployeeStarted, RegularLengthEmployed}
 import pages._
 import play.api.Logger.logger
 import uk.gov.hmrc.http.InternalServerException
-import utils.LocalDateHelpers.feb1st2020
+import utils.LocalDateHelpers.{feb1st2020, july1st2020}
 import utils.PagerDutyHelper.PagerDutyKeys.EMPLOYEE_TYPE_COULD_NOT_BE_RESOLVED
 
 trait EmployeeTypeUtil extends FeatureSwitching {
@@ -34,11 +34,11 @@ trait EmployeeTypeUtil extends FeatureSwitching {
     type1EmployeeResult: Option[T] = None,
     type2aEmployeeResult: Option[T] = None,
     type2bEmployeeResult: Option[T] = None)(implicit request: DataRequest[_], appConfig: FrontendAppConfig): Option[T] =
-    request.userAnswers.getV(RegularLengthEmployedPage) match {
-      case Valid(RegularLengthEmployed.Yes) =>
+    (request.userAnswers.getV(RegularLengthEmployedPage), request.userAnswers.getV(ClaimPeriodStartPage)) match {
+      case (Valid(RegularLengthEmployed.Yes), _) =>
         logger.debug("[EmployeeTypeUtil][regularPayResolver] Type 1 Employee")
         type1EmployeeResult
-      case Valid(RegularLengthEmployed.No) =>
+      case (Valid(RegularLengthEmployed.No), _) =>
         request.userAnswers.getV(OnPayrollBefore30thOct2020Page) match {
           case Valid(true) =>
             logger.debug("[EmployeeTypeUtil][regularPayResolver] Type 2a Employee")
@@ -56,6 +56,11 @@ trait EmployeeTypeUtil extends FeatureSwitching {
               type2aEmployeeResult
             }
         }
+      case (_, Valid(startDate)) if startDate.isBefore(july1st2020) =>
+        val logMsg = "[EmployeeTypeService][regularPayResolver] phase 1 journeys do not see RegularLengthEmployedPage"
+        logger.debug(logMsg)
+        type1EmployeeResult
+
       case _ =>
         val logMsg = "[EmployeeTypeService][regularPayResolver] no valid answer for RegularLengthEmployedPage"
         logger.debug(logMsg)
