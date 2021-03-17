@@ -17,7 +17,6 @@
 package navigation
 
 import java.time.LocalDate
-
 import base.{CoreTestDataBuilder, SpecBaseControllerSpecs}
 import config.featureSwitch.{ExtensionTwoNewStarterFlow, FeatureSwitching, StatutoryLeaveFlow}
 import controllers.routes
@@ -310,7 +309,20 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         navigator.nextPage(AnnualPayAmountPage, userAnswers) mustBe routes.PartTimeQuestionController.onPageLoad()
       }
 
-      "go to StatutoryLeave page AnnualPayAmountPage if May onwards claim" in {
+      "go to PartTimeQuestionPage after AnnualPayAmountPage if May onwards claim AND Stat Leave journey is disabled" in {
+
+        disable(StatutoryLeaveFlow)
+
+        val userAnswers = emptyUserAnswers
+          .withClaimPeriodStart(LocalDate.of(2021, 5, 1))
+
+        navigator.nextPage(AnnualPayAmountPage, userAnswers) mustBe routes.PartTimeQuestionController.onPageLoad()
+      }
+
+      "go to StatutoryLeavePage after AnnualPayAmountPage if May onwards claim AND Stat Leave journey is enabled" in {
+
+        enable(StatutoryLeaveFlow)
+
         val userAnswers = emptyUserAnswers
           .withClaimPeriodStart(LocalDate.of(2021, 5, 1))
 
