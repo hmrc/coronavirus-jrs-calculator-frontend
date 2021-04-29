@@ -114,23 +114,18 @@ case class PhaseTwoConfirmationViewBreakdown(furlough: PhaseTwoFurloughCalculati
     )
   }
 
-  def detailedBreakdownMessageKeys(
-    isNewStarterType5: Boolean)(implicit messages: Messages, dataRequest: DataRequest[_], appConfig: FrontendAppConfig): Seq[String] = {
+  def detailedBreakdownMessageKeys(implicit messages: Messages, dataRequest: DataRequest[_], appConfig: FrontendAppConfig): Seq[String] = {
     val helper = new BeenOnStatutoryLeaveHelper()
     furlough.periodBreakdowns.headOption
       .map {
         _.paymentWithPeriod match {
           case _: RegularPaymentWithPhaseTwoPeriod =>
             Seq(
-              messages("phaseTwoDetailedBreakdown.p1.regular")
-            )
-          case _: AveragePaymentWithPhaseTwoPeriod if isNewStarterType5 =>
-            Seq(
-              messages("phaseTwoReferencePayBreakdown.extension.p1")
+              messages("phaseTwoDetailedBreakdown.p1.regular", EightyPercent.value)
             )
           case _: AveragePaymentWithPhaseTwoPeriod =>
             Seq(
-              messages("phaseTwoDetailedBreakdown.p1.average", helper.boundaryStart(), helper.boundaryEnd())
+              messages("phaseTwoDetailedBreakdown.p1.average", helper.boundaryStart(), helper.boundaryEnd(), EightyPercent.value)
             )
           case _: CylbPaymentWithPhaseTwoPeriod =>
             Seq(
@@ -186,7 +181,9 @@ case class ConfirmationViewBreakdownWithoutNicAndPension(furlough: PhaseTwoFurlo
   }
 
   def detailedBreakdownMessageKeys(
+    furloughRate: FurloughGrantRate,
     isNewStarterType5: Boolean)(implicit messages: Messages, dataRequest: DataRequest[_], appConfig: FrontendAppConfig): Seq[String] = {
+
     val helper = new BeenOnStatutoryLeaveHelper()
 
     furlough.periodBreakdowns.headOption
@@ -194,19 +191,19 @@ case class ConfirmationViewBreakdownWithoutNicAndPension(furlough: PhaseTwoFurlo
         _.paymentWithPeriod match {
           case _: RegularPaymentWithPhaseTwoPeriod =>
             Seq(
-              messages("phaseTwoDetailedBreakdown.p1.regular")
+              messages("phaseTwoDetailedBreakdown.p1.regular", furloughRate.value)
             )
-          case avg: AveragePaymentWithPhaseTwoPeriod if isNewStarterType5 =>
+          case _: AveragePaymentWithPhaseTwoPeriod if isNewStarterType5 =>
             Seq(
-              messages("phaseTwoDetailedBreakdown.no.nic.p1.extension", helper.boundaryStart(), helper.boundaryEnd())
+              messages("phaseTwoDetailedBreakdown.no.nic.p1.extension", helper.boundaryStart(), helper.boundaryEnd(), furloughRate.value)
             )
           case _: AveragePaymentWithPhaseTwoPeriod =>
             Seq(
-              messages("phaseTwoDetailedBreakdown.p1.average", helper.boundaryStart(), helper.boundaryEnd())
+              messages("phaseTwoDetailedBreakdown.p1.average", helper.boundaryStart(), helper.boundaryEnd(), furloughRate.value)
             )
           case _: CylbPaymentWithPhaseTwoPeriod =>
             Seq(
-              messages("phaseTwoDetailedBreakdown.no.nic.pension.p1.cylb.1"),
+              messages("phaseTwoDetailedBreakdown.no.nic.pension.p1.cylb.1", furloughRate.value),
               messages("phaseTwoDetailedBreakdown.no.nic.pension.p1.cylb.2"),
               messages("phaseTwoDetailedBreakdown.no.nic.pension.p1.cylb.3", helper.boundaryEnd())
             )
@@ -229,58 +226,6 @@ case class ConfirmationViewBreakdownWithoutNicAndPension(furlough: PhaseTwoFurlo
         type5bEmployeeResult = Some(messages("phaseTwoDetailedBreakdown.statLeave", start, end))
       )
     } else None
-
-  def detailedBreakdownMessageKeysSept()(implicit messages: Messages,
-                                         dataRequest: DataRequest[_],
-                                         appConfig: FrontendAppConfig): Seq[String] = {
-    val helper = new BeenOnStatutoryLeaveHelper()
-    furlough.periodBreakdowns.headOption
-      .map {
-        _.paymentWithPeriod match {
-          case _: RegularPaymentWithPhaseTwoPeriod =>
-            Seq(
-              messages("phaseTwoDetailedBreakdown.september.p1.regular")
-            )
-          case _: AveragePaymentWithPhaseTwoPeriod =>
-            Seq(
-              messages("phaseTwoDetailedBreakdown.september.p1.average")
-            )
-          case _: CylbPaymentWithPhaseTwoPeriod =>
-            Seq(
-              messages("phaseTwoDetailedBreakdown.september.no.nic.pension.p1.cylb.1"),
-              messages("phaseTwoDetailedBreakdown.no.nic.pension.p1.cylb.2"),
-              messages("phaseTwoDetailedBreakdown.no.nic.pension.p1.cylb.3", helper.boundaryEnd())
-            )
-        }
-      }
-      .getOrElse(Seq())
-  }
-
-  def detailedBreakdownMessageKeysOct()(implicit messages: Messages,
-                                        dataRequest: DataRequest[_],
-                                        appConfig: FrontendAppConfig): Seq[String] = {
-    val helper = new BeenOnStatutoryLeaveHelper()
-    furlough.periodBreakdowns.headOption
-      .map {
-        _.paymentWithPeriod match {
-          case _: RegularPaymentWithPhaseTwoPeriod =>
-            Seq(
-              messages("phaseTwoDetailedBreakdown.october.p1.regular")
-            )
-          case _: AveragePaymentWithPhaseTwoPeriod =>
-            Seq(
-              messages("phaseTwoDetailedBreakdown.october.p1.average")
-            )
-          case _: CylbPaymentWithPhaseTwoPeriod =>
-            Seq(
-              messages("phaseTwoDetailedBreakdown.october.no.nic.pension.p1.cylb.1"),
-              messages("phaseTwoDetailedBreakdown.no.nic.pension.p1.cylb.2"),
-              messages("phaseTwoDetailedBreakdown.no.nic.pension.p1.cylb.3", helper.boundaryEnd())
-            )
-        }
-      }
-      .getOrElse(Seq())
-  }
 }
 
 sealed trait Metadata

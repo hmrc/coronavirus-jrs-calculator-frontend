@@ -22,32 +22,47 @@ import utils.ValueFormatter
 
 object JRSExtensionConfirmationMessages extends ValueFormatter {
 
-  object RegularType1 {
+  val heading = "Claim amount for this employee"
 
-    val heading = "What you can claim for this employee"
+  object ConfirmationBlock {
+    def p1(percent: Int) = s"($percent% of their wages)"
+    def p2(claimPeriod: Period)(implicit messages: Messages) =
+      s"Claim period: ${dateToStringWithoutYear(claimPeriod.start)} to ${dateToString(claimPeriod.end)}"
+    def claimAmount(amount: BigDecimal) = currencyFormatter(amount)
+  }
 
-    val dateAndCalculatorVersion = (todaysDate: String) => s"Calculated on: $todaysDate (Calculator Version v2)"
+  object AdditionalPaymentBlock {
+    def p1(topup: BigDecimal) =
+      s"You must pay this employee an additional ${currencyFormatter(topup)} to be eligible for this grant. This is because employees must be paid at least 80% of their wages."
+    val p2 =
+      "To be eligible for the grant you must pay employees at least 80% of their wages for the time they are furloughed. You can choose to pay more than this but do not have to."
+    val stillPayNICandPension =
+      "You cannot claim for employer National Insurance and pension contributions, but the employer must still pay these"
+  }
 
-    val indent = "You cannot claim for employer National Insurance and pension contributions, but the employer must still pay these"
+  def dateAndCalculatorVersion(todaysDate: String, version: String) = s"Calculated on: $todaysDate (Calculator Version v$version)"
 
-    val disclaimerTopPage = {
-      "The results of the calculation rely on the accuracy of the information you entered, for which you are responsible. " +
-        "You cannot claim for more money than you are going to pay out under the scheme."
+  val disclaimerTopPage = {
+    "The results of the calculation rely on the accuracy of the information you entered, for which you are responsible. " +
+      "You cannot claim for more money than you are going to pay out under the scheme."
+  }
+
+  val h2NextSteps = "Next steps"
+
+  def nextStepsListMessages(messageNumber: Int, period: Period)(implicit messages: Messages): String =
+    messageNumber match {
+      case 1 => "Print or save a copy of this page for your records"
+      case 2 => "Make a note of the amount you can claim for this employee and the claim period."
+      case 3 =>
+        s"Use the calculator again for any other employees furloughed within this claim period ${dateToStringWithoutYear(period.start)} " +
+          s"to ${dateToString(period.`end`)} and make a note of the results."
+      case 4 => "Add all the results for each employee furloughed in this claim period together to get the total amount you can claim."
+      case 5 => "Make a claim through the Coronavirus Job Retention Scheme (opens in a new window or tab)."
+      case _ => s"This number $messageNumber is not valid. Are you sure there are that many bullets?"
     }
 
-    def nextStepsListMessages(messageNumber: Int, period: Period)(implicit messages: Messages): String =
-      messageNumber match {
-        case 1 => "Print or save a copy of this page for your records"
-        case 2 => "Make a note of the amount you can claim for this employee and the claim period."
-        case 3 =>
-          s"Use the calculator again for any other employees furloughed within this claim period ${dateToStringWithoutYear(period.start)} " +
-            s"to ${dateToString(period.`end`)} and make a note of the results."
-        case 4 => "Add all the results for each employee furloughed in this claim period together to get the total amount you can claim."
-        case 5 => "Make a claim through the Coronavirus Job Retention Scheme (opens in a new window or tab)."
-        case _ => s"This number $messageNumber is not valid. Are you sure there are that many bullets?"
-      }
+  object RegularType1 {
 
-    val h2NextSteps               = "Next steps"
     val h2BreakdownOfCalculations = "Breakdown of calculations"
 
     val breakDownParagraphOne
@@ -67,8 +82,7 @@ object JRSExtensionConfirmationMessages extends ValueFormatter {
 
     val h4ParagraphOne = "Take the pay in pay period:"
 
-    def calculatePayListMessages(messageNumber: Int, pay: BigDecimal, daysInPeriod: Int, numberOfDaysFurloughed: Int)(
-      implicit messages: Messages): String =
+    def calculatePayListMessages(messageNumber: Int, pay: BigDecimal, daysInPeriod: Int, numberOfDaysFurloughed: Int): String =
       messageNumber match {
         case 1 => s"Start with ${currencyFormatter(pay)} (from pay period)."
         case 2 => s"Divide by $daysInPeriod (number of days in the pay period)."
@@ -80,8 +94,7 @@ object JRSExtensionConfirmationMessages extends ValueFormatter {
 
     val h4FurloughGrant = "Furlough grant"
 
-    def furloughGrantListMessages(messageNumber: Int, pay: BigDecimal, generosityPercentage: BigDecimal)(
-      implicit messages: Messages): String =
+    def furloughGrantListMessages(messageNumber: Int, pay: BigDecimal, generosityPercentage: BigDecimal): String =
       messageNumber match {
         case 1 => s"Take ${currencyFormatter(pay)} (pay based on furlough days)."
         case 2 => s"Multiply by $generosityPercentage%"
@@ -134,30 +147,6 @@ object JRSExtensionConfirmationMessages extends ValueFormatter {
 
   object VariableExtensionType5 {
 
-    val heading = "What you can claim for this employee"
-
-    val dateAndCalculatorVersion = (todaysDate: String) => s"Calculated on: $todaysDate (Calculator Version v2)"
-
-    val indent = "You cannot claim for employer National Insurance and pension contributions, but the employer must still pay these"
-
-    val disclaimerTopPage = {
-      "The results of the calculation rely on the accuracy of the information you entered, for which you are responsible. " +
-        "You cannot claim for more money than you are going to pay out under the scheme."
-    }
-
-    def nextStepsListMessages(messageNumber: Int, period: Period)(implicit messages: Messages): String =
-      messageNumber match {
-        case 1 => "Print or save a copy of this page for your records"
-        case 2 => "Make a note of the amount you can claim for this employee and the claim period."
-        case 3 =>
-          s"Use the calculator again for any other employees furloughed within this claim period ${dateToStringWithoutYear(period.start)} " +
-            s"to ${dateToString(period.`end`)} and make a note of the results."
-        case 4 => "Add all the results for each employee furloughed in this claim period together to get the total amount you can claim."
-        case 5 => "Make a claim through the Coronavirus Job Retention Scheme (opens in a new window or tab)."
-        case _ => s"This number $messageNumber is not valid. Are you sure there are that many bullets?"
-      }
-
-    val h2NextSteps               = "Next steps"
     val h2BreakdownOfCalculations = "Breakdown of calculations"
 
     def breakdownP1(boundaryStart: String, boundaryEnd: String) =
@@ -190,8 +179,7 @@ object JRSExtensionConfirmationMessages extends ValueFormatter {
 
     val h4FurloughGrant = "Furlough grant"
 
-    def furloughGrantListMessages(messageNumber: Int, pay: BigDecimal, generosityPercentage: BigDecimal)(
-      implicit messages: Messages): String =
+    def furloughGrantListMessages(messageNumber: Int, pay: BigDecimal, generosityPercentage: BigDecimal): String =
       messageNumber match {
         case 1 => s"Take ${currencyFormatter(pay)} (pay based on furlough days)."
         case 2 => s"Multiply by $generosityPercentage%"
