@@ -64,10 +64,6 @@ lazy val root = (project in file("."))
     scalafmtOnCompile in Test := true,
     evictionWarningOptions in update :=
       EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-    resolvers ++= Seq(
-      Resolver.bintrayRepo("hmrc", "releases"),
-      Resolver.jcenterRepo
-    ),
     // concatenate js
     Concat.groups := Seq(
       "javascripts/application.js" ->
