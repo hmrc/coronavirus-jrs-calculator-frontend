@@ -32,7 +32,7 @@ trait BaseSelectors {
   val indent                                               = "div.govuk-inset-text"
   val detail                                               = ".govuk-details__summary-text"
   val nthIndent: Int => String                             = i => s"div.govuk-inset-text:nth-of-type($i)"
-  val hint                                                 = "main span.govuk-hint"
+  val hint                                                 = "#value-hint"
   val bullet: Int => String                                = i => s"main ul.govuk-list.govuk-list--bullet li:nth-of-type($i)"
   def bullet(section: String, i: Int)                      = s"main $section ul.govuk-list.govuk-list--bullet li:nth-of-type($i)"
   val numbered: Int => String                              = i => s"main ol.govuk-list.govuk-list--number li:nth-of-type($i)"
