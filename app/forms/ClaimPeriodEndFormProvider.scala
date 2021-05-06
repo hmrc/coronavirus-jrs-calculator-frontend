@@ -38,19 +38,29 @@ class ClaimPeriodEndFormProvider @Inject()() extends Mappings with SchemeConfigu
      isDifferentCalendarMonth(claimStart, claimEndDate),
      isMoreThan14daysInFuture(claimStart, claimEndDate),
      isClaimLessThan7Days(claimStart, claimEndDate),
-     isAfterPolicyEnd(claimEndDate)) match {
-      case (r @ Invalid(_), _, _, _, _) => r
-      case (_, r @ Invalid(_), _, _, _) => r
-      case (_, _, r @ Invalid(_), _, _) => r
-      case (_, _, _, r @ Invalid(_), _) => r
-      case (_, _, _, _, r @ Invalid(_)) => r
-      case _                            => Valid
+     isAfterPolicyEnd(claimEndDate),
+     isSameYear(claimStart, claimEndDate)) match {
+      case (r @ Invalid(_), _, _, _, _, _) => r
+      case (_, r @ Invalid(_), _, _, _, _) => r
+      case (_, _, r @ Invalid(_), _, _, _) => r
+      case (_, _, _, r @ Invalid(_), _, _) => r
+      case (_, _, _, _, r @ Invalid(_), _) => r
+      case (_, _, _, _, _, r @ Invalid(_)) => r
+      case _                               => Valid
     }
   }
 
   val isMoreThan14daysInFuture: (LocalDate, LocalDate) => ValidationResult = (start, end) => {
     if (start.isBefore(phaseTwoStartDate) && end.isAfter(LocalDate.now().plusDays(14))) {
       Invalid("claimPeriodEnd.cannot.be.after.14days")
+    } else {
+      Valid
+    }
+  }
+
+  val isSameYear: (LocalDate, LocalDate) => ValidationResult = (start, end) => {
+    if (start.getYear != end.getYear) {
+      Invalid("claimPeriodEnd.cannot.be.different.years")
     } else {
       Valid
     }
