@@ -14,18 +14,29 @@
  * limitations under the License.
  *@
 
-@this()
+@this(
+        inset: components.panelIndent,
+        p: components.p
+)
 
-@(content: Seq[Html], isWarning: Boolean = false, numberList: Boolean = false, classes: String = "govuk-list")(implicit messages: Messages)
+@(calculation: PhaseTwoFurloughCalculationResult, percentage: FurloughGrantRate = EightyPercent)(implicit messages: Messages)
 
- @if(numberList) {
-  <ol class="@classes govuk-list--number @if(isWarning){govuk-warning-text__text govuk-!-margin-top-5}">@bullets</ol>
- } else {
-  <ul class="@classes govuk-list--bullet @if(isWarning){govuk-warning-text__text govuk-!-margin-top-5}">@bullets</ul>
- }
+@inset {
 
-@bullets = {
- @content.map { bullet =>
-  <li>@bullet</li>
- }
+    @if(percentage == EightyPercent) {
+
+        @p {
+            @messages("confirmation.no.nic.pension.insert.t1")
+        }
+
+    } else {
+
+        @p {
+            @messages(s"confirmation.additionalPayment.inset.p1", s"£${calculation.diffAtRate(percentage).formatted("%.2f")}")
+        }
+
+        @p {
+            @messages("confirmation.no.nic.pension.insert.t1")
+        }
+    }
 }

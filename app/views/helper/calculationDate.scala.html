@@ -14,18 +14,19 @@
  * limitations under the License.
  *@
 
-@this()
+@import java.time.LocalDate
 
-@(content: Seq[Html], isWarning: Boolean = false, numberList: Boolean = false, classes: String = "govuk-list")(implicit messages: Messages)
+@this(
+        strong: components.strong,
+        p: components.p
+)
 
- @if(numberList) {
-  <ol class="@classes govuk-list--number @if(isWarning){govuk-warning-text__text govuk-!-margin-top-5}">@bullets</ol>
- } else {
-  <ul class="@classes govuk-list--bullet @if(isWarning){govuk-warning-text__text govuk-!-margin-top-5}">@bullets</ul>
- }
+@(version: String)(implicit messages: Messages)
 
-@bullets = {
- @content.map { bullet =>
-  <li>@bullet</li>
- }
+@p {
+    @strong { @messages("confirmation.calculated.on") }
+    @dateToString(LocalDate.now())
+    @Html(messages("confirmation.date.version", version))
 }
+
+@p(Html(messages("confirmation.disclaimer")))
