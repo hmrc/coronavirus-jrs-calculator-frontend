@@ -379,6 +379,7 @@ claimPeriodEnd.cannot.be.after.july = Nodwch ddyddiad dod i ben cyn 1 Gorffennaf
 claimPeriodEnd.cannot.be.of.same.month = O 1 Gorffennaf ymlaen, mae’n rhaid i hawliadau ddechrau a dod i ben yn ystod yr un mis calendr
 claimPeriodEnd.cannot.be.before.claimStart = Ni all y dyddiad dod i ben fod cyn y dyddiad dechrau
 claimPeriodEnd.cannot.be.lessThan.7days = Mae’n rhaid i’r cyfnod hawlio fod yn gyfnod o 7 diwrnod o leiaf
+claimPeriodEnd.cannot.be.different.years = The claim period end date must be in the same year as the claim period start date
 claimPeriodEnd.legend = Dyddiad dod i ben
 claimPeriodEnd.hint = Er enghraifft, 31 3 2020
 

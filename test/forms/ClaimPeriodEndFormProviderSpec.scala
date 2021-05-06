@@ -150,6 +150,24 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
 
       result.errors shouldBe List(FormError("endDate", "claimPeriodEnd.cannot.be.of.same.month"))
     }
+
+    "fail with invalid dates - if start and end are not of the same calendar year" in {
+
+      val now = LocalDate.of(2020, 8, 15)
+
+      val form = new ClaimPeriodEndFormProvider()(now)
+
+      val data = Map(
+        "endDate.day"   -> now.getDayOfMonth.toString,
+        "endDate.month" -> now.getMonthValue.toString,
+        "endDate.year"  -> now.plusYears(1).getYear.toString
+      )
+
+      val result = form.bind(data)
+
+      result.errors shouldBe List(FormError("endDate", "claimPeriodEnd.cannot.be.different.years"))
+    }
+
   }
 
   "start and end should be of the same calendar month starting from June 2020" in {
