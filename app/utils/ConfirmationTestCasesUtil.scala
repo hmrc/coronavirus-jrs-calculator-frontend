@@ -17,30 +17,43 @@
 package utils
 
 import cats.data.Validated.Valid
+import handlers.DataExtractor
 import models.EmployeeStarted.OnOrBefore1Feb2019
-import models.UserAnswers
 import models.UserAnswers.AnswerV
+import models.{PayMethod, PaymentFrequency, UserAnswers}
 import pages._
+import play.api.Logger.logger
 import viewmodels.{ConfirmationDataResult, ConfirmationDataResultWithoutNicAndPension}
 
+import java.time.{LocalDate, YearMonth}
 import scala.util.matching.Regex
 
 /**
- * For integration testing purposes only.
- */
-
+  * For integration testing purposes only.
+  */
 //scalastyle:off
-object ConfirmationTestCasesUtil {
+object ConfirmationTestCasesUtil extends FileUtil with YearMonthHelper with DataExtractor {
 
-  var testCases: Seq[String] = Seq()
+  var testCases: Map[YearMonth, String] = Map()
 
-  def printOutConfirmationTestCases(userAnswers: UserAnswers, result: AnswerV[ConfirmationDataResult], numberOfCases: Int = 10): String = {
+  def writeConfirmationTestCasesToFile(userAnswers: UserAnswers, result: AnswerV[ConfirmationDataResult]): String = {
+
+    val claimYearMonth: YearMonth =
+      userAnswers.getV(ClaimPeriodEndPage).map((x: LocalDate) => x.getYearMonth).toOption.getOrElse(YearMonth.of(2000, 1))
+
+    val payType =
+      userAnswers.getV(PayMethodPage).map((x: PayMethod) => x.toString).toOption.getOrElse("Unknown pay type")
+
+    val payFrequency =
+      userAnswers.getV(PaymentFrequencyPage).map((x: PaymentFrequency) => x.toString).toOption.getOrElse("Unknown pay frequency")
+
+    val statutoryLeaveData = extractStatutoryLeaveData(userAnswers).toOption
 
     val date: Regex = """(\d{4})-(\d{2})-(\d{2})""".r
 
-    val periodDate: Regex = """Period\("(\d{4})-(\d{2})-(\d{2})"""".r
-    val periodDateSecond: Regex = """.toLocalDate,"(\d{4})-(\d{2})-(\d{2})"""".r
-    val usualHoursRegex: Regex = """UsualHours\("(\d{4})-(\d{2})-(\d{2})"""".r
+    val periodDate: Regex         = """Period\("(\d{4})-(\d{2})-(\d{2})"""".r
+    val periodDateSecond: Regex   = """.toLocalDate,"(\d{4})-(\d{2})-(\d{2})"""".r
+    val usualHoursRegex: Regex    = """UsualHours\("(\d{4})-(\d{2})-(\d{2})"""".r
     val partTimeHoursRegex: Regex = """PartTimeHours\("(\d{4})-(\d{2})-(\d{2})"""".r
 
     val text =s"""emptyUserAnswers
@@ -68,7 +81,6 @@ object ConfirmationTestCasesUtil {
                  |      ${userAnswers.getO(ClaimPeriodStartPage).flatMap(x => x.toOption.map(x => ".withClaimPeriodStart(" + x.toString.replace("Valid(", "") + ")")).getOrElse("")}
                  |      ${".withLastYear(" + userAnswers.getList(LastYearPayPage).toString.replace("Valid(", "").replaceAll("\\)\\), LastYearPayment\\(",",").replaceAll("LastYearPayment\\(","").replaceAll(",Amount\\("," -> ") + ")"}
                  |      ${userAnswers.getO(FurloughInLastTaxYearPage).flatMap(x => x.toOption.map(x => ".withFurloughInLastTaxYear(" + x.toString.replace("Valid(", "") + ")")).getOrElse("")}
-                 |      ${userAnswers.getO(StatutoryLeavePayPage).flatMap(x => x.toOption.map(x => ".withStatutoryLeavePay(" + x.toString.replace("Valid(", "") + ")")).getOrElse("")}
                  |      ${userAnswers.getO(PayPeriodsListPage).flatMap(x => x.toOption.map(x => ".withPayPeriodsList(PayPeriodsList." + x.getClass.getSimpleName.replace("Valid(", "").replace("$", "") + ")")).getOrElse("")}
                  |      ${userAnswers.getO(PartTimePeriodsPage).flatMap(x => x.toOption.map(x => ".withPartTimePeriods(" + x.toString.replace("Valid(", "") + ")")).getOrElse("")}
                  |      ${userAnswers.getO(PayMethodPage).flatMap(x => x.toOption.map(x => ".withPayMethod(PayMethod." + x.getClass.getSimpleName.replace("Valid(", "").replace("$", "") + ")")).getOrElse("")}
@@ -80,6 +92,7 @@ object ConfirmationTestCasesUtil {
                  |      ${userAnswers.getO(RegularLengthEmployedPage).flatMap(x => x.toOption.map(x => ".withRegularLengthEmployed(RegularLengthEmployed." + x.getClass.getSimpleName.replace("Valid(", "").replace("$", "") + ")")).getOrElse("")}
                  |      ${".withPayDate(" + userAnswers.getList(PayDatePage).toString.replace("Valid(", "") + ")"}
                  |      ${userAnswers.getO(LastYearPayPage).flatMap(x => x.toOption.map(x => ".withPayDate(" + x.toString.replace("Valid(", "") + ")")).getOrElse("")}
+                 |      ${statutoryLeaveData.flatMap(oData => oData.map(data => s".withStatutoryLeaveData(${data.days}, ${data.pay})")).getOrElse("")}
                  |      ${".withUsualHours(" + userAnswers.getList(PartTimeNormalHoursPage).toString.replace("Valid(", "") + ")"}
                  |      ${".withPartTimeHours(" + userAnswers.getList(PartTimeHoursPage).toString.replace("Valid(", "") + ")"}
                  |""".stripMargin.replaceAll("\n\n", "\n")
@@ -104,15 +117,16 @@ object ConfirmationTestCasesUtil {
         case partTimeHours => addLocalDate(partTimeHours)
       })
 
-    testCases = testCases ++ Seq(finalResult)
+    testCases = testCases ++ Map(claimYearMonth -> finalResult)
 
-    if(testCases.length >= numberOfCases){
-      println("Test cases done. See Outcome.")
-      println("#############################")
-      println(testCases.mkString(","))
-      Thread.sleep(30000)
-      println("#############################")
-      testCases = Seq()
+    testCases.foreach { testCase =>
+      val path     = s"it/controllers/scenarios/generatedUserAnswers/${testCase._1.stringFmt}/"
+      val filename = s"$payType${payFrequency.capitalize}"
+      val testCaseNoEmptyLine = testCase._2.replaceAll("(?m)(^\\s*$\\r?\\n)+", "")
+      val caseContent: String = s"$testCaseNoEmptyLine, \n"
+
+      writeFile(filename, caseContent, path, true)
+      logger.debug(s"[ConfirmationTestCasesUtil][writeConfirmationTestCasesToFile] test case written to $filename")
     }
 
     finalResult

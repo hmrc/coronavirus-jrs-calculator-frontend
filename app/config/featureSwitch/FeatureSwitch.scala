@@ -26,7 +26,8 @@ object FeatureSwitch {
     WelshLanguageFeature,
     ShowNewStartPage,
     ExtensionTwoNewStarterFlow,
-    StatutoryLeaveFlow
+    StatutoryLeaveFlow,
+    WriteConfirmationTestCasesToFile
   )
 
   val booleanFeatureSwitches: Seq[BooleanFeatureSwitch]       = switches.collect { case a: BooleanFeatureSwitch => a }
@@ -73,4 +74,9 @@ object ExtensionTwoNewStarterFlow extends BooleanFeatureSwitch {
 object StatutoryLeaveFlow extends BooleanFeatureSwitch {
   override val name: String        = s"$prefix.statutoryLeaveFlow"
   override val displayText: String = "Enables the Statutory Leave flow (if selected)"
+}
+
+object WriteConfirmationTestCasesToFile extends BooleanFeatureSwitch {
+  override val name: String        = s"$prefix.writeConfirmationTestCasesToFile"
+  override val displayText: String = "writes the confirmation test cases to file"
 }
