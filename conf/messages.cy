@@ -195,10 +195,10 @@ rootPage.h3.who.can.not.use.heading = Ni ellir defnyddio’r gyfrifiannell ar gy
 rootPage.h3.who.can.not.use.l1 = gwnaethant ddechrau cyfnod rhybudd neu roedd yn ofynnol iddynt ddychwelyd i’r gwaith yn ystod cyfnod rhybudd i weithio yn yr un cyfnod hawlio, ar neu ar ôl 1 Rhagfyr 2020
 rootPage.h3.who.can.not.use.l2 = mae ganddynt gyfnod cyflog blynyddol
 rootPage.h3.who.can.not.use.l3 = maent wedi’u trosglwyddo o dan reoliadau Trosglwyddo Ymgymeriadau Diogelu Cyflogaeth (TUPE)
-rootPage.h3.who.can.not.use.l4 = heb fod mewn cyflogaeth barhaus cyn i’w ffyrlo ddechrau
-rootPage.h3.who.can.not.use.l5 = wedi dychwelyd o absenoldeb megis absenoldeb mamolaeth yn ystod y 3 mis diwethaf (os yw’r cyfnod hawlio ym mis Gorffennaf 2020 neu’n gynt)
-rootPage.h3.who.can.not.use.l6 = yn cael cyfraniadau pensiwn y cyflogwr y tu allan i gynllun pensiwn cofrestru awtomatig
-rootPage.h3.who.can.not.use.l7 = daeth ei ffyrlo i ben ac yna dechreuodd ei ffyrlo eto yn ystod yr un cyfnod hawlio
+rootPage.h3.who.can.not.use.l4 = ni chawsant eu cyflogi’n barhaus cyn i’w ffyrlo
+rootPage.h3.who.can.not.use.l5 = maent wedi dychwelyd o absenoldeb megis absenoldeb mamolaeth yn ystod y 3 mis diwethaf (os yw’r cyfnod hawlio ym mis Gorffennaf 2020 neu’n gynt)
+rootPage.h3.who.can.not.use.l6 = maent yn cael cyfraniadau pensiwn y cyflogwr y tu allan i gynllun pensiwn cofrestru awtomatig
+rootPage.h3.who.can.not.use.l7 = daeth eu ffyrlo i ben ac yna dechreuodd eu ffyrlo eto yn ystod yr un cyfnod hawlio
 rootPage.h3.who.can.not.use.l8 = cawsant eu talu ar ffurf amrywiol ac maent wedi bod ar fwy nag un cyfnod o ffyrlo lle’r oedd unrhyw ran o’r cyfnodau ffyrlo yn ystod blwyddyn dreth 2019/20
 rootPage.h3.who.can.not.use.l9 = mae ganddynt gyflog amrywiol, gwnaethant ddechrau gweithio cyn 6 Ebrill 2020 ac nid oeddent ar gyflogres eu cyflogwr ar neu cyn 19 Mawrth 2020
 rootPage.h3.who.can.not.use.l10 = gwnaethant ddechrau gweithio i’w cyflogwr yn ystod cyfnod calendr ym mlwyddyn dreth 2019-20 sy’n cydfynd â’r holl gyfnod neu ran ohono
@@ -275,7 +275,7 @@ pensionContribution.error.required = Dewiswch ‘Iawn’ os ydych yn talu cyfran
 
 confirmation.title = Yr hyn y gallwch ei hawlio ar gyfer y cyflogai hwn
 confirmation.heading = Yr hyn y gallwch ei hawlio ar gyfer y cyflogai hwn
-confirmation.heading.percent = (Cyfradd yr Estyniad i’r Cynllun Cadw Swyddi yn sgil Coronafeirws: {0}% o gyflogau)
+confirmation.heading.percent = (Cyfradd yr Estyniad i’r Cynllun Cadw Swyddi yn sgil Coronafeirws: {0}% o’r cyflog)
 confirmation.heading.claimPeriod = Claim period: {0} to {1}
 confirmation.confirmation.p1 = Y swm a delir i’r cyflogai hwn sydd ar ffyrlo
 confirmation.confirmation.p2 = Cyfraniadau Yswiriant Gwladol y cyflogwr
@@ -320,19 +320,19 @@ confirmation.nextSteps.li.3.2 = Cyfrifwch y cyfanswm y gallwch ei hawlio ar gyfe
 confirmation.nextSteps.li.4.1 = Gwnewch hawliad gan ddefnyddio {0}
 confirmation.nextSteps.li.4.2 = gwasanaeth hawlio ar-lein y Cynllun Cadw Swyddi yn sgil Coronafeirws (yn agor ffenestr neu dab newydd).
 confirmation.startAgain = Dechrau cyfrifiad arall
-confirmation.webchat = Help drwy gael sgwrs dros y we (yn agor ffenestr neu dab newydd)
+confirmation.webchat = Help drwy gael sgwrs dros y we (yn agor dab newydd)
 
-confirmation.no.nic.pension.insert.t1 = Ni allwch hawlio cyfraniadau Yswiriant Gwladol a chyfraniadau pensiwn y cyflogwr, ond mae’n rhaid i’r cyflogwr dalu’r rhain o hyd
+confirmation.no.nic.pension.insert.t1 = Ni allwch hawlio cyfraniadau Yswiriant Gwladol na chyfraniadau pensiwn y cyflogwr, ond mae’n rhaid i’r cyflogwr dalu’r rhain o hyd
 confirmation.no.nic.pension.title = Yr hyn y gallwch ei hawlio ar gyfer y cyflogai hwn
 confirmation.no.nic.pension.heading = Yr hyn y gallwch ei hawlio ar gyfer y cyflogai hwn
 confirmation.no.nic.pension.p1 = Grant ffyrlo
-confirmation.no.nic.pension.nextSteps.li.1 = eich cofnodion
+confirmation.no.nic.pension.nextSteps.li.1 = ar gyfer eich cofnodion.
 confirmation.no.nic.pension.nextSteps.li.2 = Gwnewch nodyn o’r swm y gallwch ei hawlio ar gyfer y cyflogai hwn a’r cyfnod hawlio.
-confirmation.no.nic.pension.nextSteps.li.3 = Defnyddiwch y gyfrifiannell eto ar gyfer unrhyw gyflogeion eraill sydd ar ffyrlo yn ystod y cyfnod hawlio hwn {0} i {1}, a gwnewch nodyn o’r canlyniadau.
+confirmation.no.nic.pension.nextSteps.li.3 = Defnyddiwch y gyfrifiannell eto ar gyfer unrhyw gyflogeion eraill sydd ar ffyrlo yn ystod y cyfnod hawlio hwn o {0} i {1}, a gwnewch nodyn o’r canlyniadau.
 confirmation.no.nic.pension.nextSteps.li.3.2 = Cyfrifwch y cyfanswm y gallwch ei hawlio ar gyfer cyfraniadau Yswiriant Gwladol y cyflogwr (yn agor ffenestr neu dab newydd).
 confirmation.no.nic.pension.nextSteps.li.4 = Ychwanegwch yr holl ganlyniadau ar gyfer pob cyflogai a roddwyd ar ffyrlo yn ystod y cyfnod hawlio hwn at ei gilydd i gael y cyfanswm y gallwch ei hawlio.
-confirmation.no.nic.pension.nextSteps.li.4.1 = Gwneud hawliad drwy’r {0}
-confirmation.no.nic.pension.nextSteps.li.4.2 = Cynllun Cadw Swyddi yn sgil Coronafeirws (yn agor tab newydd)
+confirmation.no.nic.pension.nextSteps.li.4.1 = Gwnewch hawliad drwy’r {0}
+confirmation.no.nic.pension.nextSteps.li.4.2 = Cynllun Cadw Swyddi yn sgil Coronafeirws (yn agor ffenestr neu dab newydd)
 confirmation.no.nic.pension.breakdown.summary = Dadansoddiad o gyfrifiadau
 confirmation.no.nic.pension.disclaimer = Mae canlyniadau’r cyfrifiad yn dibynnu ar gywirdeb yr wybodaeth a nodwyd gennych, yr ydych yn gyfrifol amdani. Ni allwch hawlio am fwy o arian nag yr ydych yn mynd i’w dalu allan o dan y cynllun.
 
@@ -598,10 +598,10 @@ referencePayBreakdown.cylb.twoPeriods.p1 = Yn {0}, mae’r dyddiadau hyn yn gorg
 referencePayBreakdown.cylb.p2.march2021 = Gan fod yr hawliad hwn ar gyfer {0} mae’n rhaid i chi ddefnyddio’r dull ‘edrych yn ôl ar galendr’ i edrych yn ôl at 2019.
 
 referencePayBreakdown.cylb.twoPeriods = Mae dyddiadau’r flwyddyn ddiwethaf yn gorgyffwrdd â dau gyfnod cyflog, felly yng nghyfnod un:
-referencePayBreakdown.cylb.l1 = Dechreuwch gyda £{0} (o ddyddiad cyflog {1} y flwyddyn ddiwethaf).
+referencePayBreakdown.cylb.l1 = Dechreuwch gyda £{0} (o ddyddiad cyflog {1}).
 referencePayBreakdown.cylb.l2 = Rhannwch â {0} (nifer y diwrnodau yn y cyfnod cyflog).
 referencePayBreakdown.cylb.l3 = Lluoswch â {0} (o ddiwrnodau ffyrlo).
-referencePayBreakdown.cylb.periodTotal = Cyfanswm ar gyfer cyfnod un = £{0}
+referencePayBreakdown.cylb.periodTotal = Cyfanswm ar gyfer y cyfnod = £{0}
 referencePayBreakdown.cylb.then = Yna:
 referencePayBreakdown.cylb.thenPeriodTwo = Yna, yng nghyfnod dau:
 referencePayBreakdown.cylb.addTotals = Yna, dylech ychwanegu’r cyfansymiau o’r ddau gyfnod cyflog (£{0} + £{1}).
@@ -612,16 +612,16 @@ referencePayBreakdown.cylb.higherOf.average = £{0} (dull 2: cyflog cyfartalog y
 
 furloughBreakdown.h4 = Grant ffyrlo
 furloughBreakdown.l1 = Cymerwch £{0} (cyflog yn seiliedig ar ddiwrnodau ffyrlo).
-furloughBreakdown.l2 = Lluoswch â 80%.
+furloughBreakdown.l2 = Lluoswch ag 80%.
 furloughBreakdown.total = Cyfanswm y grant ffyrlo ar gyfer y cyfnod cyflog = £{0}
 furloughBreakdown.furloughCap.p1 = Grant ffyrlo wedi’i gyfrifo = £{0}
-furloughBreakdown.furloughCap.p2 = Mae’r grant ffyrlo amcangyfrifedig yn fwy na’r grant ffyrlo uchaf ar gyfer y cyfnod cyflog hwn. Oherwydd hyn, mae’n rhaid i chi ddefnyddio’r grant ffyrlo uchaf, sef £{0}.
+furloughBreakdown.furloughCap.p2 = Mae’r grant ffyrlo wedi’i gyfrifo yn fwy na’r grant ffyrlo uchaf ar gyfer y cyfnod cyflog hwn. Oherwydd hyn, mae’n rhaid i chi ddefnyddio’r grant ffyrlo uchaf, sef {0}.
 furloughBreakdown.furloughCap.fullPeriodCap = £{0}
 furloughBreakdown.seventyPercent.furloughCap.fullPeriodCap = £{0} (uchafswm mis {1})
 furloughBreakdown.sixtyPercent.furloughCap.fullPeriodCap = £{0} (uchafswm mis {1})
 furloughBreakdown.furloughCap.periodSpansMonthCap = {0} o ddiwrnodau ffyrlo ym mis {1} ar £{2} + {3} o ddiwrnodau ffyrlo ym mis {4} ar £{5} = £{6}.
 furloughBreakdown.furloughCap.partialPeriodCap ={0} o ddiwrnodau ffyrlo ym mis {1} ar £{2} = £{3}
-furloughBreakdown.furloughCap.p3 = Grant ffyrlo gwirioneddol = £{0}
+furloughBreakdown.furloughCap.p3 = Grant ffyrlo gwirioneddol = {0}
 
 nicBreakdown.h4 = Cyfraniadau Yswiriant Gwladol y cyflogwr
 nicBreakdown.l1 = Dechreuwch gyda £{0} (grant ffyrlo).
@@ -728,11 +728,11 @@ phaseTwoDetailedBreakdown.no.nic.p1.extension = Gwnaethoch roi gwybod i ni fod e
 
 # ----------------------------------------------------------
 
-phaseTwoDetailedBreakdown.p1.cylb.1 = Rhoesoch wybod i ni fod eich cyflogai yn cael cyflog amrywiol bob tro a’i fod wedi gweithio i chi am fwy na 12 mis. Mae’r cyflogai wedi gweithio yn ystod y cyfnod hawlio. Mae 2 ddull y gallwn eu defnyddio i gyfrifo cyflog. Rydym wedi defnyddio’r un a roddodd y ffigur uchaf. Mae’r grant ffyrlo yn 80% o hyn.
+phaseTwoDetailedBreakdown.p1.cylb.1 = Rhoesoch wybod i ni fod eich cyflogai yn cael cyflog amrywiol bob tro a’i fod wedi gweithio i chi am fwy na 12 mis. Mae 2 ddull y gallwn eu defnyddio i gyfrifo cyflog. Rydym wedi defnyddio’r un a roddodd y ffigur uchaf. Mae’r grant ffyrlo yn 80% o hyn.
 phaseTwoDetailedBreakdown.p1.cylb.2 = Dull 1: rydym wedi defnyddio’r dull ‘edrych yn ôl ar y calendr’ i ystyried y symiau a dalwyd i’r cyflogai yn ystod cyfnodau cyflog cyfatebol. Yna, gwnaethom ddefnyddio hyn wrth ystyried nifer y diwrnodau ffyrlo ym mhob cyfnod cyflog.
 phaseTwoDetailedBreakdown.p1.cylb.3 = Dull 2: rydym wedi cyfrifo ei enillion dyddiol cyfartalog yn ystod y flwyddyn dreth ddiwethaf, drwy rannu cyfanswm ei gyflog â nifer y diwrnodau calendr rhwng 6 Ebrill 2019 a’r diwrnod cyn y ffyrlo (neu 5 Ebrill 2020 os yw hynny’n hwyrach). Yna, rydym wedi lluosi hynny â nifer y diwrnodau ffyrlo ac oriau ffyrlo ym mhob cyfnod cyflog.
-phaseTwoDetailedBreakdown.no.nic.pension.p1.cylb.1 = Rhoesoch wybod i ni fod eich cyflogai yn cael cyflog amrywiol bob tro a’i fod wedi gweithio i chi am fwy na 12 mis. Mae’r cyflogai wedi gweithio yn ystod y cyfnod hawlio. Mae 2 ddull y gallwn eu defnyddio i gyfrifo cyflog. Rydym wedi defnyddio’r un a roddodd y ffigur uchaf. Mae’r grant ffyrlo yn {0}% o hyn.
-phaseTwoDetailedBreakdown.no.nic.pension.p1.cylb.2 = Dull 1: rydym wedi ystyried y symiau a dalwyd iddo ar gyfer cyfnodau cyflog cyfatebol yn y flwyddyn dreth flaenorol, ac wedi defnyddio’r rhain wrth ystyried nifer y diwrnodau ffyrlo a’r oriau ffyrlo ym mhob cyfnod cyflog.
+phaseTwoDetailedBreakdown.no.nic.pension.p1.cylb.1 = Rhoesoch wybod i ni fod eich cyflogai yn cael cyflog amrywiol bob tro a’i fod wedi gweithio i chi am fwy na 12 mis. Mae 2 ddull y gallwn eu defnyddio i gyfrifo cyflog. Rydym wedi defnyddio’r un a roddodd y ffigur uchaf. Mae’r grant ffyrlo yn {0}% o hyn.
+phaseTwoDetailedBreakdown.no.nic.pension.p1.cylb.2 = Dull 1: rydym wedi defnyddio’r dull ‘edrych yn ôl ar y calendr’ i ystyried y symiau a dalwyd i’r cyflogai yn ystod cyfnodau cyflog cyfatebol. Yna, gwnaethom ddefnyddio hyn wrth ystyried nifer y diwrnodau ffyrlo ym mhob cyfnod cyflog.
 phaseTwoDetailedBreakdown.no.nic.pension.p1.cylb.3 = Dull 2: rydym wedi cyfrifo ei enillion dyddiol cyfartalog yn ystod y flwyddyn dreth ddiwethaf, drwy rannu cyfanswm ei gyflog â nifer y diwrnodau calendr rhwng 6 Ebrill 2019 a {0}. Yna, rydym wedi lluosi hynny â nifer y diwrnodau ffyrlo ym mhob cyfnod cyflog.
 phaseTwoDetailedBreakdown.p2 = Mae yna uchafswm y gallwch ei hawlio am grant ffyrlo a chyfraniadau Yswiriant Gwladol y cyflogwr. Os yw hyn yn effeithio ar eich hawliad, rydym wedi addasu’r cyfrifiadau.
 phaseTwoDetailedBreakdown.no.nic.pension.p2 = Mae yna uchafswm y gallwch chi ei hawlio. Os yw hyn yn effeithio ar eich cais, rydym wedi addasu’r cyfrifiadau.
@@ -779,10 +779,10 @@ phaseTwoReferencePayBreakdown.extension.p1 = cymerwch gyfanswm cyflog y cyflogai
 
 phaseTwoReferencePayBreakdown.cylb.p1 = Dull 1: cymerwch gyflog y cyflogai o’r un dyddiadau yn {0}.
 phaseTwoReferencePayBreakdown.cylb.twoPeriods = Mae dyddiadau’r flwyddyn ddiwethaf yn gorgyffwrdd â dau gyfnod cyflog, felly yng nghyfnod un:
-phaseTwoReferencePayBreakdown.cylb.l1 = Dechreuwch gyda £{0} (o ddyddiad cyflog {1} y flwyddyn ddiwethaf).
+phaseTwoReferencePayBreakdown.cylb.l1 = Dechreuwch gyda £{0} (o ddyddiad cyflog {1}).
 phaseTwoReferencePayBreakdown.cylb.l2 = Rhannwch â {0} (nifer y diwrnodau yn y cyfnod cyflog).
 phaseTwoReferencePayBreakdown.cylb.l3 = Lluoswch â {0} (o ddiwrnodau ffyrlo).
-phaseTwoReferencePayBreakdown.cylb.periodOneTotal = Cyfanswm ar gyfer cyfnod un = £{0}
+phaseTwoReferencePayBreakdown.cylb.periodOneTotal = Cyfanswm ar gyfer y cyfnod = £{0}
 phaseTwoReferencePayBreakdown.cylb.then = Yna:
 phaseTwoReferencePayBreakdown.cylb.thenPeriodTwo = Yna, yng nghyfnod dau:
 phaseTwoReferencePayBreakdown.cylb.periodTwoTotal = Cyfanswm ar gyfer cyfnod dau = £{0}
@@ -801,14 +801,15 @@ phaseTwoReferencePayBreakdown.cylb.higherOf.result = Cyfanswm cyflog yn seiliedi
 phaseTwoFurloughBreakdown.h4 = Grant ffyrlo
 phaseTwoFurloughBreakdown.l1 = Cymerwch £{0} (cyflog yn seiliedig ar ddiwrnodau ffyrlo).
 phaseTwoFurloughBreakdown.l1.partTime = Cymerwch £{0} (cyflog yn seiliedig ar yr oriau a weithiwyd yn ystod y cyfnod cyflog hwn).
-phaseTwoFurloughBreakdown.l2 = Lluoswch â {0}%.
+phaseTwoFurloughBreakdown.l2 = Lluoswch ag {0}%.
 phaseTwoFurloughBreakdown.total = Cyfanswm y grant ffyrlo ar gyfer y cyfnod cyflog = £{0}
 phaseTwoFurloughBreakdown.furloughCap.p1 = Grant ffyrlo wedi’i gyfrifo = £{0}
-phaseTwoFurloughBreakdown.furloughCap.p2 = Mae’r grant ffyrlo amcangyfrifedig yn fwy na’r grant ffyrlo uchaf ar gyfer y cyfnod cyflog hwn. Oherwydd hyn, mae’n rhaid i chi ddefnyddio’r grant ffyrlo uchaf, sef £{0}.
+
+phaseTwoFurloughBreakdown.furloughCap.p2 = Mae’r grant ffyrlo wedi’i gyfrifo yn fwy na’r grant ffyrlo uchaf ar gyfer y cyfnod cyflog hwn. Oherwydd hyn, mae’n rhaid i chi ddefnyddio’r grant ffyrlo uchaf, sef {0}.
 phaseTwoFurloughBreakdown.furloughCap.fullPeriodCap.partTime = £{0} wedi’u rhannu â {1} o oriau arferol wedi’u lluosi â {2} o oriau ffyrlo = £{3}
 phaseTwoFurloughBreakdown.furloughCap.periodSpansMonthCap.partTime = {0} o ddiwrnodau ffyrlo yn {1} ar £{2} + {3} o ddiwrnodau ffyrlo yn {4} ar £{5} wedi’u rhannu â {6} o oriau arferol wedi’u lluosi â {7} o oriau arferol = £{8}.
 phaseTwoFurloughBreakdown.furloughCap.partialPeriodCap.partTime = {0} o ddiwrnodau ffyrlo yn {1} ar £{2} wedi’u rhannu â {3} o oriau arferol wedi’u lluosi â {4} o oriau ffyrlo = £{5}.
-phaseTwoFurloughBreakdown.furloughCap.p3 = Grant ffyrlo gwirioneddol = £{0}
+phaseTwoFurloughBreakdown.furloughCap.p3 = Grant ffyrlo gwirioneddol = {0}
 
 phaseTwoNicBreakdown.h4 = Cyfraniadau Yswiriant Gwladol y cyflogwr
 phaseTwoNicBreakdown.l1 = Dechreuwch gyda £{0} (grant ffyrlo).
@@ -916,7 +917,7 @@ startPage.whatCanYouClaim.table.julyEmp = 10% hyd at £312.50
 startPage.whatCanYouClaim.table.augSepEmp = 20% hyd at £625
 
 startPage.whatCanYouClaim.p3 = Er mwyn bod yn gymwys ar gyfer y grant, mae’n rhaid i chi dalu o leiaf 80% o’u cyflog i’ch cyflogeion am y cyfnod y maent ar ffyrlo. Gallwch ddewis talu mwy na hyn iddynt, ond nid oes rhaid i chi wneud hynny.
-startPage.whatCanYouClaim.p4 = Ni allwch hawlio cyfraniadau Yswiriant Gwladol a chyfraniadau pensiwn y cyflogwr, ond mae’n rhaid i’r cyflogwr dalu’r rhain o hyd.
+startPage.whatCanYouClaim.p4 = Ni allwch hawlio cyfraniadau Yswiriant Gwladol na chyfraniadau pensiwn y cyflogwr, ond mae’n rhaid i’r cyflogwr dalu’r rhain o hyd.
 
 startPage.about.h2 = Ynglŷn â’r gyfrifiannell
 startPage.about.p1 = Defnyddiwch y gyfrifiannell hon i gyfrifo’r ffigurau y bydd eu hangen arnoch pan fyddwch yn hawlio drwy’r Cynllun Cadw Swyddi yn sgil Coronafeirws.
@@ -932,10 +933,10 @@ startPage.about.whoCannotUse.h3 = Ni ellir defnyddio’r gyfrifiannell ar gyfer 
 startPage.about.whoCannotUse.l1 = gwnaethant ddechrau cyfnod rhybudd neu roedd yn ofynnol iddynt ddychwelyd i’r gwaith yn ystod cyfnod rhybudd i weithio yn yr un cyfnod hawlio, ar neu ar ôl 1 Rhagfyr 2020
 startPage.about.whoCannotUse.l2 = mae ganddynt gyfnod cyflog blynyddol
 startPage.about.whoCannotUse.l3 = maent wedi’u trosglwyddo o dan reoliadau Trosglwyddo Ymgymeriadau Diogelu Cyflogaeth (TUPE)
-startPage.about.whoCannotUse.l4 = heb fod mewn cyflogaeth barhaus cyn i’w ffyrlo ddechrau
-startPage.about.whoCannotUse.l5 = wedi dychwelyd o absenoldeb megis absenoldeb mamolaeth yn ystod y 3 mis diwethaf (os yw’r cyfnod hawlio ym mis Gorffennaf 2020 neu’n gynt)
-startPage.about.whoCannotUse.l6 = yn cael cyfraniadau pensiwn y cyflogwr y tu allan i gynllun pensiwn cofrestru awtomatig
-startPage.about.whoCannotUse.l7 = daeth ei ffyrlo i ben ac yna dechreuodd ei ffyrlo eto yn ystod yr un cyfnod hawlio
+startPage.about.whoCannotUse.l4 = ni chawsant eu cyflogi’n barhaus cyn i’w ffyrlo
+startPage.about.whoCannotUse.l5 = maent wedi dychwelyd o absenoldeb megis absenoldeb mamolaeth yn ystod y 3 mis diwethaf (os yw’r cyfnod hawlio ym mis Gorffennaf 2020 neu’n gynt)
+startPage.about.whoCannotUse.l6 = maent yn cael cyfraniadau pensiwn y cyflogwr y tu allan i gynllun pensiwn cofrestru awtomatig
+startPage.about.whoCannotUse.l7 = daeth eu ffyrlo i ben ac yna dechreuodd eu ffyrlo eto yn ystod yr un cyfnod hawlio
 startPage.about.whoCannotUse.l8 = cawsant eu talu ar ffurf amrywiol ac maent wedi bod ar fwy nag un cyfnod o ffyrlo lle’r oedd unrhyw ran o’r cyfnodau ffyrlo yn ystod blwyddyn dreth 2019/20
 startPage.about.whoCannotUse.l9 = mae ganddynt gyflog amrywiol, gwnaethant ddechrau gweithio cyn 6 Ebrill 2020 ac nid oeddent ar gyflogres eu cyflogwr ar neu cyn 19 Mawrth 2020
 startPage.about.whoCannotUse.l10 = gwnaethant ddechrau gweithio i’w cyflogwr yn ystod cyfnod calendr ym mlwyddyn dreth 2019-20 sy’n cydfynd â’r holl gyfnod neu ran ohono
