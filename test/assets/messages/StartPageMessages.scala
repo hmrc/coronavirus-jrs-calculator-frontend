@@ -90,7 +90,7 @@ object StartPageMessages {
     val bullet5 = "regular payment amounts"
     val bullet6 = "additional payments (such as tips, discretionary bonuses, non-cash payments)"
     val bullet7 = "date furlough ended, if it is not ongoing"
-    val p2      = "From 1 July, if the employee is flexibly furloughed, you will also need:"
+    val p2      = "From 1 July 2020, if the employee is flexibly furloughed, you will also need:"
     object JulyOnwardBullets {
       val bullet1 = "employee’s usual hours"
       val bullet2 = "actual hours worked"
