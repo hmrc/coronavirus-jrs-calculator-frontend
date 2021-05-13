@@ -83,7 +83,7 @@ class FurloughCapHelper @Inject()() {
         messages(
           "furloughBreakdown.furloughCap.partialPeriodCap",
           furloughDays,
-          Month.of(month).getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+          messages(s"month.$month"),
           dailyCap.formatted("%.2f"),
           value.formatted("%.2f")
         )
@@ -91,7 +91,7 @@ class FurloughCapHelper @Inject()() {
         messages(
           "phaseTwoFurloughBreakdown.furloughCap.partialPeriodCap.partTime",
           furloughDays,
-          Month.of(month).getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+          messages(s"month.$month"),
           dailyCap.formatted("%.2f"),
           usual.formatted("%.2f"),
           furloughed.formatted("%.2f"),
@@ -148,7 +148,7 @@ class FurloughCapHelper @Inject()() {
         messages(
           "furloughBreakdown.furloughCap.partialPeriodCap",
           furloughDays,
-          Month.of(month).getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+          messages(s"month.$month"),
           seventy(dailyCap),
           seventy(value)
         )
@@ -156,7 +156,7 @@ class FurloughCapHelper @Inject()() {
         messages(
           "phaseTwoFurloughBreakdown.furloughCap.partialPeriodCap.partTime",
           furloughDays,
-          Month.of(month).getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+          messages(s"month.$month"),
           seventy(dailyCap),
           usual.formatted("%.2f"),
           furloughed.formatted("%.2f"),
@@ -213,7 +213,7 @@ class FurloughCapHelper @Inject()() {
         messages(
           "furloughBreakdown.furloughCap.partialPeriodCap",
           furloughDays,
-          Month.of(month).getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+          messages(s"month.$month"),
           sixty(dailyCap),
           sixty(value)
         )
@@ -221,7 +221,7 @@ class FurloughCapHelper @Inject()() {
         messages(
           "phaseTwoFurloughBreakdown.furloughCap.partialPeriodCap.partTime",
           furloughDays,
-          Month.of(month).getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+          messages(s"month.$month"),
           sixty(dailyCap),
           usual.formatted("%.2f"),
           furloughed.formatted("%.2f"),
