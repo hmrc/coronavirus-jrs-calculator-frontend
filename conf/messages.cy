@@ -187,7 +187,7 @@ rootPage.p3 = Bydd yn rhaid i chi ddefnyddio’r gyfrifiannell ar gyfer pob cyfl
 
 rootPage.h3.who.can.use.heading = Gallwch ddefnyddio’r gyfrifiannell hon ar gyfer y canlynol:
 rootPage.h3.who.can.use.l1 = cyflogeion sydd ar ffyrlo llawn ac felly sydd heb weithio unrhyw oriau
-rootPage.h3.who.can.use.l2 = cyflogeion a ddaeth yn ôl i’r gwaith am rai o’u horiau arferol o 1 Gorffennaf ymlaen
+rootPage.h3.who.can.use.l2 = cyflogeion a ddaeth yn ôl i’r gwaith am rai o’u horiau arferol o 1 Gorffennaf 2020 ymlaen
 rootPage.h3.who.can.use.l3 = y mwyafrif o gyflogeion sy’n cael eu talu’n wythnosol, bob pythefnos, bob pedair wythnos neu’n fisol mewn cyfnodau cyflog sefydlog
 rootPage.h3.who.can.use.l4 = cyflogeion sydd wedi dychwelyd o absenoldeb statudol o 1 Awst 2020 ymlaen, er enghraifft, absenoldeb mamolaeth
 
@@ -219,7 +219,7 @@ rootPage.beforeYouStart.p1.l6 = nifer yr oriau a weithiwyd (os yn gymwys, ar ôl
 rootPage.beforeYouStart.p1.l7 = swm a dalwyd i gyflogai ar gyfer oriau a weithiwyd (os yn gymwys, ar ôl 1 Gorffennaf)
 rootPage.beforeYouStart.p1.l8 = taliadau ychwanegol (megis cildyrnau, bonysau dewisol, taliadau nad ydynt yn arian parod)
 rootPage.beforeYouStart.p1.l9 = dyddiad dod i ben y ffyrlo, os nad yw’n barhaus
-rootPage.beforeYouStart.p2 = O 1 Gorffennaf ymlaen, os yw’r cyflogai ar ffyrlo hyblyg, bydd hefyd angen y canlynol arnoch:
+rootPage.beforeYouStart.p2 = O 1 Gorffennaf 2020 ymlaen, os yw’r cyflogai ar ffyrlo hyblyg, bydd hefyd angen y canlynol arnoch:
 rootPage.beforeYouStart.p2.l1 = {0}
 rootPage.beforeYouStart.p2.l1.link = oriau arferol y cyflogai
 rootPage.beforeYouStart.p2.l2 = yr oriau gwirioneddol a weithiwyd
@@ -342,7 +342,7 @@ confirmation.additionalPayment.eligibility = Er mwyn bod yn gymwys ar gyfer y gr
 
 claimPeriodStart.title = Beth yw dyddiad dechrau’r hawliad hwn?
 claimPeriodStart.heading = Beth yw dyddiad dechrau’r hawliad hwn?
-claimPeriodStart.p1 = O 1 Gorffennaf ymlaen, mae’n rhaid i hawliadau ddechrau a dod i ben yn ystod yr un mis calendr.
+claimPeriodStart.p1 = O 1 Gorffennaf 2020 ymlaen, mae’n rhaid i hawliadau ddechrau a dod i ben yn ystod yr un mis calendr.
 claimPeriodStart.p2 = Os yw’n hawliad dilynol, gwnewch yn siŵr nad yw’r cyfnod hawlio yn gorgyffwrdd â’ch hawliad blaenorol.
 claimPeriodStart.error.required.all = Nodwch ddyddiad dechrau’r hawliad hwn
 claimPeriodStart.error.required.two = Mae’n rhaid i’r dyddiad dechrau gynnwys {0} a {1}
@@ -374,7 +374,7 @@ claimPeriodEnd.error.invalid = Nodwch ddyddiad dod i ben go iawn
 claimPeriodEnd.cannot.be.after.policyEnd = Ni all y dyddiad dod i ben fod ar ôl dyddiad dod i ben y cynllun ({0})
 claimPeriodEnd.cannot.be.after.14days = Ni all y dyddiad dod i ben fod yn fwy na 14 diwrnod ar ôl dyddiad heddiw
 claimPeriodEnd.cannot.be.after.july = Nodwch ddyddiad dod i ben cyn 1 Gorffennaf. (O fis Gorffennaf ymlaen, mae’n rhaid i hawliadau ddechrau a dod i ben yn yr un mis calendr).
-claimPeriodEnd.cannot.be.of.same.month = O 1 Gorffennaf ymlaen, mae’n rhaid i hawliadau ddechrau a dod i ben yn ystod yr un mis calendr
+claimPeriodEnd.cannot.be.of.same.month = O 1 Gorffennaf 2020 ymlaen, mae’n rhaid i hawliadau ddechrau a dod i ben yn ystod yr un mis calendr
 claimPeriodEnd.cannot.be.before.claimStart = Ni all y dyddiad dod i ben fod cyn y dyddiad dechrau
 claimPeriodEnd.cannot.be.lessThan.7days = Mae’n rhaid i’r cyfnod hawlio fod yn gyfnod o 7 diwrnod o leiaf
 claimPeriodEnd.cannot.be.different.years = The claim period end date must be in the same year as the claim period start date
@@ -925,7 +925,7 @@ startPage.about.p2 = Bydd yn rhaid i chi ddefnyddio’r gyfrifiannell ar gyfer p
 
 startPage.about.whoCanUse.h3 = Gallwch ddefnyddio’r gyfrifiannell hon ar gyfer y canlynol:
 startPage.about.whoCanUse.l1 = cyflogeion sydd ar ffyrlo llawn ac felly sydd heb weithio unrhyw oriau
-startPage.about.whoCanUse.l2 = cyflogeion a ddaeth yn ôl i’r gwaith am rai o’u horiau arferol o 1 Gorffennaf ymlaen
+startPage.about.whoCanUse.l2 = cyflogeion a ddaeth yn ôl i’r gwaith am rai o’u horiau arferol o 1 Gorffennaf 2020 ymlaen
 startPage.about.whoCanUse.l3 = y mwyafrif o gyflogeion sy’n cael eu talu’n wythnosol, bob pythefnos, bob pedair wythnos neu’n fisol mewn cyfnodau cyflog sefydlog
 startPage.about.whoCanUse.l4 = cyflogeion sydd wedi dychwelyd o absenoldeb statudol o 1 Awst 2020 ymlaen, er enghraifft, absenoldeb mamolaeth
 

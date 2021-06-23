@@ -52,7 +52,7 @@ object StartPageMessages {
     object UseItFor {
       val h3      = "You can use this calculator for:"
       val bullet1 = "employees who are fully furloughed and therefore not working any hours"
-      val bullet2 = "employees brought back to work for some of their normal hours from 1 July"
+      val bullet2 = "employees brought back to work for some of their normal hours from 1 July 2020"
       val bullet3 = "most employees who are paid weekly, two weekly, four weekly or monthly in fixed pay periods"
       val bullet4 = "employees who have returned from statutory leave from 1 August 2020 onwards, for example, maternity leave"
     }
