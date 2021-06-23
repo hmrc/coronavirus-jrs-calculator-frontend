@@ -273,10 +273,10 @@ pensionContribution.error.required = Dewiswch ‘Iawn’ os ydych yn talu cyfran
 # ConfirmationPage Messages
 # ----------------------------------------------------------
 
-confirmation.title = Yr hyn y gallwch ei hawlio ar gyfer y cyflogai hwn
-confirmation.heading = Yr hyn y gallwch ei hawlio ar gyfer y cyflogai hwn
-confirmation.heading.percent = (Cyfradd yr Estyniad i’r Cynllun Cadw Swyddi yn sgil Coronafeirws: {0}% o’r cyflog)
-confirmation.heading.claimPeriod = Claim period: {0} to {1}
+confirmation.title = Swm yr hawliad ar gyfer y cyflogai hwn
+confirmation.heading = Swm yr hawliad ar gyfer y cyflogai hwn
+confirmation.heading.percent = ({0}}% o’i gyflog)
+confirmation.heading.claimPeriod = Cyfnod hawlio: {0} i {1}
 confirmation.confirmation.p1 = Y swm a delir i’r cyflogai hwn sydd ar ffyrlo
 confirmation.confirmation.p2 = Cyfraniadau Yswiriant Gwladol y cyflogwr
 confirmation.confirmation.p3 = Isafswm cyfraniadau pensiwn y cyflogwr
@@ -323,8 +323,8 @@ confirmation.startAgain = Dechrau cyfrifiad arall
 confirmation.webchat = Help drwy gael sgwrs dros y we (yn agor dab newydd)
 
 confirmation.no.nic.pension.insert.t1 = Ni allwch hawlio cyfraniadau Yswiriant Gwladol na chyfraniadau pensiwn y cyflogwr, ond mae’n rhaid i’r cyflogwr dalu’r rhain o hyd
-confirmation.no.nic.pension.title = Yr hyn y gallwch ei hawlio ar gyfer y cyflogai hwn
-confirmation.no.nic.pension.heading = Yr hyn y gallwch ei hawlio ar gyfer y cyflogai hwn
+confirmation.no.nic.pension.title = Swm yr hawliad ar gyfer y cyflogai hwn
+confirmation.no.nic.pension.heading = Swm yr hawliad ar gyfer y cyflogai hwn
 confirmation.no.nic.pension.p1 = Grant ffyrlo
 confirmation.no.nic.pension.nextSteps.li.1 = ar gyfer eich cofnodion.
 confirmation.no.nic.pension.nextSteps.li.2 = Gwnewch nodyn o’r swm y gallwch ei hawlio ar gyfer y cyflogai hwn a’r cyfnod hawlio.
