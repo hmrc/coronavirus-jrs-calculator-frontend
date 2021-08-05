@@ -20,8 +20,6 @@ GET         /service-unavailable                             controllers.ErrorCo
 
 GET         /error                                           controllers.ErrorController.somethingWentWrong
 
-GET         /accessibility-statement                         controllers.AccessibilityStatementController.onPageLoad(problemPageUri: String)
-
 GET         /restart-service                                 controllers.StartAgainController.startAgain
 
 GET         /claim-period-start                              controllers.ClaimPeriodStartController.onPageLoad()

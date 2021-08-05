@@ -14,9 +14,8 @@
  * limitations under the License.
  *@
 
-@import views.components.FooterLinks
 @import pages.Page
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTrackingConsentSnippet
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcTrackingConsentSnippet, hmrcStandardFooter}
 
 @this(
     govukLayout: GovukLayout,
@@ -27,9 +26,8 @@
     languageSelection: components.languageSelection,
     link: components.link,
     appConfig: config.FrontendAppConfig,
-    footerLinks: FooterLinks,
-    footer: components.govukFooter,
-    hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet
+    hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
+    hmrcStandardFooter: hmrcStandardFooter
 )
 
 @(
@@ -94,10 +92,6 @@
 </div>
 }
 
-@footerBlock = {
-    @footer(Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
-}
-
 @headerblock = {
   @if(showResearch) {
     @siteHeader(timeout, hasGlobalBar = true)
@@ -122,6 +116,5 @@
   bodyEndBlock = None,
   scriptsBlock = Some(scripts),
   headerBlock = Some(headerblock),
-  footerItems = Seq.empty,
-  footerBlock = Some(footerBlock)
+  footerBlock = Some(hmrcStandardFooter())
 )(content)
