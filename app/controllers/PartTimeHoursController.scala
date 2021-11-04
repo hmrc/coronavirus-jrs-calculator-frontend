@@ -46,9 +46,9 @@ class PartTimeHoursController @Inject()(
   def onPageLoad(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     getRequiredAnswerOrRedirectV(PartTimePeriodsPage) { partTimePeriods =>
       withValidPartTimePeriod(partTimePeriods, idx) { partTimePeriod =>
-        val usuals: Seq[UsualHours] = request.userAnswers.getList(PartTimeNormalHoursPage)
+        val usuals: Seq[UsualHours] = request.userAnswers.getList(PartTimeNormalHoursPage)(UsualHours.format)
         val form                    = formProvider(usuals, partTimePeriod)
-        val preparedForm = request.userAnswers.getV(PartTimeHoursPage, Some(idx)) match {
+        val preparedForm = request.userAnswers.getV(PartTimeHoursPage, Some(idx))(PartTimeHours.format) match {
           case Invalid(e)   => form
           case Valid(value) => form.fill(value.hours)
         }
@@ -61,7 +61,7 @@ class PartTimeHoursController @Inject()(
   def onSubmit(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     getRequiredAnswerOrRedirectV(PartTimePeriodsPage) { partTimePeriods =>
       withValidPartTimePeriod(partTimePeriods, idx) { partTimePeriod =>
-        val usuals: Seq[UsualHours] = request.userAnswers.getList(PartTimeNormalHoursPage)
+        val usuals: Seq[UsualHours] = request.userAnswers.getList(PartTimeNormalHoursPage)(UsualHours.format)
         formProvider(usuals, partTimePeriod)
           .bindFromRequest()
           .fold(

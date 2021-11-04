@@ -19,6 +19,8 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.NicCategoryFormProvider
+import models.NicCategory
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.NicCategoryPage
@@ -61,7 +63,7 @@ class NicCategoryController @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(NicCategoryPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(NicCategoryPage, value)(NicCategory.writes))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(NicCategoryPage, updatedAnswers))
       )

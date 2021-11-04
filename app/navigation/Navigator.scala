@@ -32,7 +32,7 @@ import pages.{PayDatePage, _}
 import play.api.Logger
 import play.api.mvc.Call
 import services.PartialPayExtractor
-import utils.LocalDateHelpers
+import utils.{LocalDateHelpers, LoggerUtil}
 import utils.LocalDateHelpers._
 
 import java.time.LocalDate
@@ -41,9 +41,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
     extends LastYearPayControllerRequestHandler with LocalDateHelpers with PartialPayExtractor with SchemeConfiguration
-    with FeatureSwitching {
-
-  implicit val logger: slf4j.Logger = LoggerFactory.getLogger(getClass)
+    with FeatureSwitching with LoggerUtil {
 
   private[this] val normalRoutes: Page => UserAnswers => Call = {
     case ClaimPeriodStartPage =>
@@ -154,7 +152,7 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
       val endDate = userAnswers
         .getV(FurloughEndDatePage)
         .fold(nel => {
-          UserAnswers.logWarnings(nel)
+          UserAnswers.logWarnings(nel)(logger.logger)
           claimEndDate
         }, { furloughEndDate =>
           earliestOf(claimEndDate, furloughEndDate)
@@ -185,7 +183,7 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
   private[this] val lastYearPayRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
     getLastYearPeriods(userAnswers).fold(
       nel => {
-        UserAnswers.logErrors(nel)
+        UserAnswers.logErrors(nel)(logger.logger)
         routes.ErrorController.somethingWentWrong()
       }, { periods =>
         periods.lift.apply(previousIdx) match {
@@ -259,7 +257,7 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
       case TopUpPeriodsPage      => routes.TopUpPeriodsController.onPageLoad()
       case PartTimePeriodsPage   => routes.PartTimePeriodsController.onPageLoad()
       case p =>
-        Logger.warn(s"can't find the route for the page: $p")
+        logger.warn(s"can't find the route for the page: $p")
         routes.ErrorController.internalServerError()
     }
 
@@ -279,7 +277,7 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
       case Valid(FurloughStatus.FurloughEnded)   => routes.FurloughEndDateController.onPageLoad()
       case Valid(FurloughStatus.FurloughOngoing) => routes.PaymentFrequencyController.onPageLoad()
       case Invalid(err) =>
-        UserAnswers.logWarnings(err)
+        UserAnswers.logWarnings(err)(logger.logger)
         routes.FurloughOngoingController.onPageLoad()
     }
   }
@@ -456,15 +454,15 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
               }
               case Valid(_) => routes.AnnualPayAmountController.onPageLoad()
               case Invalid(err) =>
-                UserAnswers.logErrors(err)
+                UserAnswers.logErrors(err)(logger.logger)
                 routes.EmployeeStartDateController.onPageLoad()
             }
           case Invalid(err) =>
-            UserAnswers.logErrors(err)
+            UserAnswers.logErrors(err)(logger.logger)
             routes.VariableLengthEmployedController.onPageLoad()
         }
       case Invalid(err) =>
-        UserAnswers.logErrors(err)
+        UserAnswers.logErrors(err)(logger.logger)
         routes.PayMethodController.onPageLoad()
     }
   }
@@ -497,7 +495,7 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
       case Valid(FurloughPeriodQuestion.FurloughedOnSamePeriod)      => routes.PayPeriodQuestionController.onPageLoad()
       case Valid(FurloughPeriodQuestion.FurloughedOnDifferentPeriod) => routes.FurloughStartDateController.onPageLoad()
       case Invalid(e) =>
-        UserAnswers.logErrors(e)
+        UserAnswers.logErrors(e)(logger.logger)
         routes.FurloughPeriodQuestionController.onPageLoad()
     }
   }
@@ -508,7 +506,7 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
         .getV(ClaimPeriodQuestionPage)
         .fold(
           nel => {
-            UserAnswers.logErrors(nel)
+            UserAnswers.logErrors(nel)(logger.logger)
             routes.ClaimPeriodQuestionController.onPageLoad()
           }, {
             case ClaimPeriodQuestion.ClaimOnSamePeriod      => routes.FurloughPeriodQuestionController.onPageLoad()

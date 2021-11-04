@@ -31,12 +31,11 @@ import play.api.libs.json.Reads
 import play.api.mvc.Result
 import services.BackJourneyValidator
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.LoggerUtil
 
 import scala.concurrent.Future
 
-trait BaseController extends FrontendBaseController with I18nSupport with BackJourneyValidator {
-
-  override val logger: slf4j.Logger = LoggerFactory.getLogger(getClass)
+trait BaseController extends FrontendBaseController with I18nSupport with BackJourneyValidator with LoggerUtil {
 
   def navigator: Navigator
 
@@ -57,7 +56,7 @@ trait BaseController extends FrontendBaseController with I18nSupport with BackJo
       case Invalid(errors) =>
         // TODO (flav): Discuss with team if we want to display errors on the page.
         logger.error(s"[BaseController][getRequiredAnswer] Failed to retrieve expected data for page: $page")
-        UserAnswers.logWarnings(errors)(logger)
+        UserAnswers.logWarnings(errors)(logger.logger)
         Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
     }
 
@@ -67,8 +66,8 @@ trait BaseController extends FrontendBaseController with I18nSupport with BackJo
       case Valid(ans) => f(ans)
       case Invalid(errors) =>
         val requiredPage = navigator.routeFor(page)
-        Logger.error(s"Failed to retrieve expected data for page: $page, redirecting to $requiredPage")
-        Logger.error(errors.toChain.toList.mkString("\n"))
+        logger.error(s"Failed to retrieve expected data for page: $page, redirecting to $requiredPage")
+        logger.error(errors.toChain.toList.mkString("\n"))
         Future.successful(Redirect(requiredPage))
     }
 
@@ -92,7 +91,7 @@ trait BaseController extends FrontendBaseController with I18nSupport with BackJo
       .fold(
         nel => {
           logger.error(s"[BaseController][getRequiredAnswers] Failed to retrieve expected data for page: $pageB")
-          UserAnswers.logErrors(nel)(logger)
+          UserAnswers.logErrors(nel)(logger.logger)
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
         },
         identity
@@ -120,7 +119,7 @@ trait BaseController extends FrontendBaseController with I18nSupport with BackJo
       .fold(
         nel => {
           logger.error(s"[BaseController][getRequiredAnswers] Failed to retrieve expected data for page: $pageB")
-          UserAnswers.logErrors(nel)(logger)
+          UserAnswers.logErrors(nel)(logger.logger)
           Future.successful(previousPageOrRedirect(InternalServerError(errorHandler.internalServerErrorTemplate)))
         },
         identity

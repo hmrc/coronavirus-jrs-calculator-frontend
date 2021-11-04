@@ -17,11 +17,11 @@
 package controllers
 
 import java.time.LocalDate
-
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.TopUpPeriodsFormProvider
 import handlers.FurloughCalculationHandler
+
 import javax.inject.Inject
 import models.{TopUpPeriod, UserAnswers}
 import navigation.Navigator
@@ -31,6 +31,7 @@ import pages.TopUpPeriodsPage
 import play.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.Writes
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -113,7 +114,7 @@ class TopUpPeriodsController @Inject()(
 
   private def saveAndRedirect(userAnswers: UserAnswers, topUpPeriods: List[TopUpPeriod]) =
     for {
-      updatedAnswers <- Future.fromTry(userAnswers.set(TopUpPeriodsPage, topUpPeriods))
+      updatedAnswers <- Future.fromTry(userAnswers.set(TopUpPeriodsPage, topUpPeriods)(Writes.iterableWrites2))
       _              <- sessionRepository.set(updatedAnswers)
     } yield Redirect(navigator.nextPage(TopUpPeriodsPage, updatedAnswers))
 }

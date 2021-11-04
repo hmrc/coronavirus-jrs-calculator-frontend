@@ -16,6 +16,8 @@
 
 package utils
 
+import play.api.libs.json.{Format, JsString, Reads, Writes, __}
+
 import java.time.LocalDate
 
 trait LocalDateHelpers {
@@ -55,4 +57,12 @@ object LocalDateHelpers extends LocalDateHelpers {
     def isEqualOrBefore(localDate: LocalDate) = value.compareTo(localDate) <= 0
   }
 
+}
+
+object LocalDateImplicits {
+  val writes: Writes[LocalDate] = Writes { d =>
+    JsString(d.toString)
+  }
+  val reads: Reads[LocalDate]            = __.read[String].map(LocalDate.parse(_))
+  implicit val format: Format[LocalDate] = Format(reads, writes)
 }

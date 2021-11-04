@@ -16,13 +16,14 @@
 
 package services
 
-import java.time.LocalDate
 import models.NonFurloughPay.determineNonFurloughPay
 import models.{Amount, AveragePayment, AveragePaymentWithPhaseTwoPeriod, CylbBreakdown, CylbDuration, CylbPayment, CylbPaymentWithFullPeriod, CylbPaymentWithPartialPeriod, CylbPaymentWithPhaseTwoPeriod, FullPeriodWithPaymentDate, LastYearPayment, NonFurloughPay, OnePeriodCylb, PartialPeriodWithPaymentDate, PaymentFrequency, PeriodWithPaymentDate, PhaseTwoPeriod, TwoPeriodCylb}
-import play.api.Logger.logger
 import services.Calculators.AmountRounding
+import utils.LoggerUtil
 
-trait CylbCalculator extends PreviousYearPeriod with Calculators {
+import java.time.LocalDate
+
+trait CylbCalculator extends PreviousYearPeriod with Calculators with LoggerUtil {
 
   def calculateCylb(averagePayment: AveragePayment,
                     nonFurloughPay: NonFurloughPay,

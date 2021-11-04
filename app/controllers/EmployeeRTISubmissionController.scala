@@ -19,6 +19,8 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.EmployeeRTISubmissionFormProvider
+import models.EmployeeRTISubmission
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.EmployeeRTISubmissionPage
@@ -61,7 +63,7 @@ class EmployeeRTISubmissionController @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(EmployeeRTISubmissionPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(EmployeeRTISubmissionPage, value)(EmployeeRTISubmission.writes))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(EmployeeRTISubmissionPage, updatedAnswers))
       )

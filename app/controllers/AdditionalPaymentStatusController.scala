@@ -34,17 +34,15 @@ import views.html.AdditionalPaymentStatusView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AdditionalPaymentStatusController @Inject()(
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  navigator: Navigator,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  formProvider: AdditionalPaymentStatusFormProvider,
-  val controllerComponents: MessagesControllerComponents,
-  view: AdditionalPaymentStatusView
-)(implicit ec: ExecutionContext)
+class AdditionalPaymentStatusController @Inject()(override val messagesApi: MessagesApi,
+                                                  sessionRepository: SessionRepository,
+                                                  navigator: Navigator,
+                                                  identify: IdentifierAction,
+                                                  getData: DataRetrievalAction,
+                                                  requireData: DataRequiredAction,
+                                                  formProvider: AdditionalPaymentStatusFormProvider,
+                                                  val controllerComponents: MessagesControllerComponents,
+                                                  view: AdditionalPaymentStatusView)(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with FurloughCalculationHandler {
 
   val form: Form[AdditionalPaymentStatus] = formProvider()
@@ -66,7 +64,7 @@ class AdditionalPaymentStatusController @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           userAnswerPersistence
-            .persistAnswer(request.userAnswers, AdditionalPaymentStatusPage, value, None)
+            .persistAnswer(request.userAnswers, AdditionalPaymentStatusPage, value, None)(AdditionalPaymentStatus.writes)
             .map { updatedAnswers =>
               Redirect(navigator.nextPage(AdditionalPaymentStatusPage, updatedAnswers, None))
           }

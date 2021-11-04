@@ -17,17 +17,18 @@
 package controllers
 
 import java.time.LocalDate
-
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.PartTimePeriodsFormProvider
 import handlers.ErrorHandler
+
 import javax.inject.Inject
 import models.UserAnswers
 import navigation.Navigator
 import pages.{PartTimePeriodsPage, PayDatePage}
 import play.api.data.Form
 import play.api.i18n.MessagesApi
+import play.api.libs.json.Writes
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import services.{FurloughPeriodExtractor, PeriodHelper}
@@ -101,7 +102,7 @@ class PartTimePeriodsController @Inject()(
         val selectedPeriods = generatePeriodsWithFurlough(endDates, furlough).filter(p => selectedEndDates.contains(p.period.end)).toList
 
         for {
-          updatedAnswers <- Future.fromTry(userAnswers.set(PartTimePeriodsPage, selectedPeriods))
+          updatedAnswers <- Future.fromTry(userAnswers.set(PartTimePeriodsPage, selectedPeriods)(Writes.iterableWrites2))
           _              <- sessionRepository.set(updatedAnswers)
         } yield Redirect(navigator.nextPage(PartTimePeriodsPage, updatedAnswers))
       case Invalid(e) => Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))

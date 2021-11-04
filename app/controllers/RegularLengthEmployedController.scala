@@ -63,7 +63,7 @@ class RegularLengthEmployedController @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(RegularLengthEmployedPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(RegularLengthEmployedPage, value)(RegularLengthEmployed.writes))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(RegularLengthEmployedPage, updatedAnswers))
       )

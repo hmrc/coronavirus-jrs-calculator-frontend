@@ -110,7 +110,8 @@ class FurloughPeriodQuestionController @Inject()(
     value: FurloughPeriodQuestion
   ): Future[Result] =
     for {
-      updatedAnswers <- userAnswerPersistence.persistAnswer(request.userAnswers, FurloughPeriodQuestionPage, value, None)
+      updatedAnswers <- userAnswerPersistence.persistAnswer(request.userAnswers, FurloughPeriodQuestionPage, value, None)(
+        FurloughPeriodQuestion.writes)
       call = navigator.nextPage(FurloughPeriodQuestionPage, updatedAnswers, None)
       result <- evaluate(request, updatedAnswers, call)
     } yield result

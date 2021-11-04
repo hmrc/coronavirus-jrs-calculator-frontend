@@ -19,6 +19,8 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.PensionContributionFormProvider
+import models.PensionStatus
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.PensionStatusPage
@@ -61,7 +63,7 @@ class PensionContributionController @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PensionStatusPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PensionStatusPage, value)(PensionStatus.writes))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PensionStatusPage, updatedAnswers))
       )

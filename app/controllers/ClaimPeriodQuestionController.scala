@@ -83,7 +83,7 @@ class ClaimPeriodQuestionController @Inject()(
 
   private def processSubmittedAnswer(request: DataRequest[AnyContent], value: ClaimPeriodQuestion): Future[Result] =
     userAnswerPersistence
-      .persistAnswer(request.userAnswers, ClaimPeriodQuestionPage, value, None)
+      .persistAnswer(request.userAnswers, ClaimPeriodQuestionPage, value, None)(ClaimPeriodQuestion.writes)
       .map { updatedAnswers =>
         {
           Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedAnswers, None))

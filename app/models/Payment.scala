@@ -17,6 +17,7 @@
 package models
 
 import java.time.LocalDate
+import play.api.data.format.Formats.localDateFormat
 import play.api.libs.json.{Format, Json}
 import services.{AveragePayCalculator, PeriodHelper}
 import services.Calculators._
@@ -47,18 +48,21 @@ object NonFurloughPay extends PeriodHelper {
 case class LastYearPayment(date: LocalDate, amount: Amount)
 
 object LastYearPayment {
+  import utils.LocalDateImplicits.format
   implicit val defaultFormat: Format[LastYearPayment] = Json.format[LastYearPayment]
 }
 
 case class AdditionalPayment(date: LocalDate, amount: Amount)
 
 object AdditionalPayment {
+  import utils.LocalDateImplicits.format
   implicit val defaultFormat: Format[AdditionalPayment] = Json.format[AdditionalPayment]
 }
 
 case class TopUpPayment(date: LocalDate, amount: Amount)
 
 object TopUpPayment {
+  import utils.LocalDateImplicits.format
   implicit val defaultFormat: Format[TopUpPayment] = Json.format[TopUpPayment]
 }
 

@@ -7,14 +7,13 @@ object AppDependencies {
   val bootstrapVersion = "5.16.0"
 
   val compile = Seq(
-    play.sbt.PlayImport.ws,
-    "org.reactivemongo"             %% "play2-reactivemongo"            % "1.0.7-play28",
+    "org.reactivemongo"             %% "play2-reactivemongo"            % "0.19.7-play28",
+    "uk.gov.hmrc"                   %% "play-conditional-form-mapping"  % s"1.10.0$playSuffix",
     "uk.gov.hmrc"                   %% s"bootstrap-frontend$playSuffix" % bootstrapVersion,
     "uk.gov.hmrc"                   %% "play-frontend-hmrc"             % s"1.22.0$playSuffix",
     "org.typelevel"                 %% "cats-core"                      % "2.6.0",
     "com.softwaremill.quicklens"    %% "quicklens"                      % "1.5.0",
-    "com.github.pureconfig"         %% "pureconfig"                     % "0.13.0",
-    "com.fasterxml.jackson.module"  %% "jackson-module-scala"           % "2.12.5"
+    "com.github.pureconfig"         %% "pureconfig"                     % "0.13.0"
   )
 
   val scalatestVersion = "3.2.10"
@@ -37,8 +36,8 @@ object AppDependencies {
 
   def apply(): Seq[ModuleID] = compile ++ test
 
-  val akkaVersion = "2.5.23"
-  val akkaHttpVersion = "10.0.15"
+  val akkaVersion = "2.6.14"
+  val akkaHttpVersion = "10.1.14"
 
   val overrides = Seq(
     "com.typesafe.akka" %% "akka-stream" % akkaVersion,

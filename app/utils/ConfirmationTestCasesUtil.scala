@@ -22,7 +22,6 @@ import models.EmployeeStarted.OnOrBefore1Feb2019
 import models.UserAnswers.AnswerV
 import models.{PayMethod, PaymentFrequency, UserAnswers}
 import pages._
-import play.api.Logger.logger
 import viewmodels.{ConfirmationDataResult, ConfirmationDataResultWithoutNicAndPension}
 
 import java.time.{LocalDate, YearMonth}
@@ -32,7 +31,7 @@ import scala.util.matching.Regex
   * For integration testing purposes only.
   */
 //scalastyle:off
-object ConfirmationTestCasesUtil extends FileUtil with YearMonthHelper with DataExtractor {
+object ConfirmationTestCasesUtil extends FileUtil with YearMonthHelper with DataExtractor with LoggerUtil {
 
   var testCases: Map[YearMonth, String] = Map()
 

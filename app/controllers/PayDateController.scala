@@ -16,13 +16,10 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.PayDateFormProvider
 import handlers.{DataExtractor, ErrorHandler}
-import javax.inject.Inject
 import models.PaymentFrequency.Monthly
 import models.{PaymentFrequency, UserAnswers}
 import navigation.Navigator
@@ -33,9 +30,11 @@ import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import services.PeriodHelper
-import utils.LocalDateHelpers
+import utils.{LocalDateHelpers, LoggerUtil}
 import views.html.PayDateView
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PayDateController @Inject()(
@@ -49,7 +48,7 @@ class PayDateController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: PayDateView
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
-    extends BaseController with I18nSupport with LocalDateHelpers with PeriodHelper with DataExtractor {
+    extends BaseController with I18nSupport with LocalDateHelpers with PeriodHelper with DataExtractor with LoggerUtil {
 
   def onPageLoad(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     if (shouldRedirect(request.userAnswers, idx)) {
@@ -58,7 +57,7 @@ class PayDateController @Inject()(
       getRequiredAnswersV(ClaimPeriodStartPage, FurloughStartDatePage) { (claimStartDate, furloughStartDate) =>
         val effectiveStartDate = utils.LocalDateHelpers.latestOf(claimStartDate, furloughStartDate)
         messageDateFrom(effectiveStartDate, request.userAnswers, idx).fold {
-          Logger.warn(s"onPageLoad messageDateFrom returned none for claimStartDate=$claimStartDate, payDates=${request.userAnswers.getList(
+          logger.warn(s"onPageLoad messageDateFrom returned none for claimStartDate=$claimStartDate, payDates=${request.userAnswers.getList(
             PayDatePage)}, idx=$idx")
           Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
         } { messageDate =>
@@ -97,7 +96,7 @@ class PayDateController @Inject()(
         .fold(
           formWithErrors => {
             messageDate.fold {
-              Logger.warn(s"onSubmit messageDateFrom returned none for claimStartDate=$claimStartDate, payDates=${request.userAnswers
+              logger.warn(s"onSubmit messageDateFrom returned none for claimStartDate=$claimStartDate, payDates=${request.userAnswers
                 .getList(PayDatePage)}, idx=$idx")
               Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
             } { messageDate =>

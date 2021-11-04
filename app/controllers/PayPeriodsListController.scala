@@ -18,6 +18,7 @@ package controllers
 
 import controllers.actions._
 import forms.PayPeriodsListFormProvider
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.PayPeriodsListPage
@@ -30,7 +31,7 @@ import views.html.PayPeriodsListView
 import scala.concurrent.{ExecutionContext, Future}
 import cats.data.Validated.{Invalid, Valid}
 import handlers.PayPeriodsListHandler
-import models.UserAnswers
+import models.{PayPeriodsList, UserAnswers}
 
 class PayPeriodsListController @Inject()(
   override val messagesApi: MessagesApi,
@@ -78,7 +79,7 @@ class PayPeriodsListController @Inject()(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, periods, claimPeriod))),
                 value =>
                   for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodsListPage, value))
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodsListPage, value)(PayPeriodsList.writes))
                     _              <- sessionRepository.set(updatedAnswers)
                   } yield Redirect(navigator.nextPage(PayPeriodsListPage, updatedAnswers))
               )

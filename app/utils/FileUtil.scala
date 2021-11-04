@@ -16,10 +16,9 @@
 
 package utils
 
-import play.api.Logger.logger
 import java.io.{BufferedWriter, File, FileWriter}
 
-trait FileUtil {
+trait FileUtil extends LoggerUtil {
 
   def writeFile(filename: String, string: String, path: String = "", append: Boolean = false): Unit = {
     new File(path).mkdirs()

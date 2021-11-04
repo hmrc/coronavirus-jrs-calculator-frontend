@@ -70,7 +70,7 @@ class PayPeriodQuestionController @Inject()(
 
   private def processSubmittedAnswer(request: DataRequest[AnyContent], value: PayPeriodQuestion): Future[Result] =
     for {
-      updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodQuestionPage, value))
+      updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodQuestionPage, value)(PayPeriodQuestion.writes))
       _              <- sessionRepository.set(updatedAnswers)
       call = navigator.nextPage(PayPeriodQuestionPage, updatedAnswers)
       updatedJourney <- {

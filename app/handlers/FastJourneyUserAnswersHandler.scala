@@ -24,7 +24,7 @@ import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
 import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnSamePeriod}
 import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
 import models.UserAnswers.AnswerV
-import models.{GenericValidationError, UserAnswers}
+import models.{FurloughStatus, GenericValidationError, PaymentFrequency, UserAnswers}
 import org.slf4j.{Logger, LoggerFactory}
 import pages._
 import play.api.libs.json.{JsError, Json}
@@ -167,7 +167,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
   private val keepPaymentFrequency: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli(answersState =>
     for {
       frequency     <- extractPaymentFrequencyV(answersState.original).toOption
-      withFrequency <- answersState.updated.set(PaymentFrequencyPage, frequency).toOption
+      withFrequency <- answersState.updated.set(PaymentFrequencyPage, frequency)(PaymentFrequency.writes).toOption
     } yield UserAnswersState(withFrequency, answersState.original))
 
   private val keepLastPayDate: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli(answersState =>
@@ -182,7 +182,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
   private val keepFurloughStatus: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli(answersState =>
     for {
       status     <- extractFurloughStatusV(answersState.original).toOption
-      withStatus <- answersState.updated.set(FurloughStatusPage, status).toOption
+      withStatus <- answersState.updated.set(FurloughStatusPage, status)(FurloughStatus.writes).toOption
     } yield UserAnswersState(withStatus, answersState.original))
 
   private val keepPayPeriodData = keepPaymentFrequency andThen keepPayPeriod andThen keepLastPayDate

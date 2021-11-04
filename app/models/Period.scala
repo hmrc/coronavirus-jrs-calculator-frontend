@@ -32,6 +32,7 @@ final case class Period(start: LocalDate, end: LocalDate) {
 }
 
 object Period {
+  import utils.LocalDateImplicits.format
   implicit val defaultFormat: Format[Period] = Json.format
   implicit class Counter(period: Period) {
     def countDays: Int =
@@ -48,7 +49,7 @@ sealed trait Periods {
 final case class FullPeriod(period: Period) extends Periods
 
 object FullPeriod {
-  implicit val defaultFormat: Format[FullPeriod] = Json.format
+  implicit val defaultFormat: Format[FullPeriod] = Json.format[FullPeriod]
 }
 final case class PartialPeriod(original: Period, partial: Period) extends Periods {
   override val period          = original
@@ -57,7 +58,7 @@ final case class PartialPeriod(original: Period, partial: Period) extends Period
 }
 
 object PartialPeriod {
-  implicit val defaultFormat: Format[PartialPeriod] = Json.format
+  implicit val defaultFormat: Format[PartialPeriod] = Json.format[PartialPeriod]
 }
 
 object Periods {

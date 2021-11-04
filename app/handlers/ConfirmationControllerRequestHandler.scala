@@ -21,7 +21,6 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.syntax.apply._
 import models.UserAnswers.AnswerV
 import models._
-import play.api.Logger.logger
 import services._
 import viewmodels._
 import utils.LocalDateHelpers._

@@ -17,7 +17,6 @@
 package viewmodels
 
 import java.time.LocalDate
-
 import config.FrontendAppConfig
 import models.requests.DataRequest
 import pages.EmployeeStartDatePage
@@ -25,16 +24,16 @@ import play.api.Logger
 import play.api.i18n.Messages
 import uk.gov.hmrc.http.InternalServerException
 import utils.LocalDateHelpers._
-import utils.{EmployeeTypeUtil, KeyDatesUtil}
+import utils.{EmployeeTypeUtil, KeyDatesUtil, LoggerUtil}
 
-class NumberOfStatLeaveDaysHelper extends EmployeeTypeUtil with KeyDatesUtil {
+class NumberOfStatLeaveDaysHelper extends EmployeeTypeUtil with KeyDatesUtil with LoggerUtil {
 
   def boundaryStartDate()(implicit request: DataRequest[_], appConfig: FrontendAppConfig, messages: Messages): LocalDate = {
 
     val employeeStartDate: Option[LocalDate] = request.userAnswers.getV(EmployeeStartDatePage).toOption
 
     def latestOfEmployeeStartDateOrDefaultDate(defaultDate: LocalDate): Option[LocalDate] = {
-      Logger.debug(
+      logger.debug(
         s"[NumberOfDaysOnStatLeaveHelper][latestOfEmployeeStartDateOrDefaultDate] " +
           s"\n - defaultDate: $defaultDate" +
           s"\n - employeeStartDate: $employeeStartDate")

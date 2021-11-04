@@ -25,11 +25,13 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.CheckboxItem
 import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 import views.ViewUtils._
+import play.api.data.format.Formats.localDateFormat
 
 case class TopUpPeriod(date: LocalDate, furloughGrant: Amount)
 
 object TopUpPeriod {
-  implicit val defaultFormat: Format[TopUpPeriod] = Json.format
+  import utils.LocalDateImplicits.format
+  implicit val defaultFormat: Format[TopUpPeriod] = Json.format[TopUpPeriod]
 }
 
 object TopUpPeriods {

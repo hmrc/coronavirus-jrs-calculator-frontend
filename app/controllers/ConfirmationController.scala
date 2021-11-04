@@ -77,7 +77,7 @@ class ConfirmationController @Inject()(
       case Invalid(e) =>
         auditService.sendCalculationFailed(request.userAnswers)
         PagerDutyHelper.alert(CALCULATION_FAILED)
-        UserAnswers.logErrors(e)(logger)
+        UserAnswers.logErrors(e)(logger.logger)
         Redirect(routes.ErrorController.somethingWentWrong())
     }
   }

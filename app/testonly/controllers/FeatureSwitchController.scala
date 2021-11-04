@@ -19,12 +19,12 @@ package testonly.controllers
 import config.FrontendAppConfig
 import config.featureSwitch.FeatureSwitch._
 import config.featureSwitch._
-import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import testonly.controllers.routes.FeatureSwitchController
 import testonly.views.html.feature_switch
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import utils.LoggerUtil
 
 import javax.inject.Inject
 import scala.collection.immutable.ListMap
@@ -32,7 +32,7 @@ import scala.collection.immutable.ListMap
 class FeatureSwitchController @Inject()(controllerComponents: MessagesControllerComponents,
                                         view: feature_switch,
                                         implicit val appConfig: FrontendAppConfig)
-    extends FrontendController(controllerComponents) with FeatureSwitching with I18nSupport {
+    extends FrontendController(controllerComponents) with FeatureSwitching with I18nSupport with LoggerUtil {
 
   def show: Action[AnyContent] = Action { implicit req =>
     val bfs: Map[BooleanFeatureSwitch, Boolean]         = ListMap(booleanFeatureSwitches map (switch => switch        -> isEnabled(switch)): _*)
@@ -51,7 +51,7 @@ class FeatureSwitchController @Inject()(controllerComponents: MessagesController
       case (Some(k), v) => k -> v
     }
 
-    Logger.debug(s"[FeatureSwitchController][submit] frontendFeatureSwitches > $frontendFeatureSwitches")
+    logger.debug(s"[submit] frontendFeatureSwitches > $frontendFeatureSwitches")
 
     val bfs: Map[BooleanFeatureSwitch, Boolean]    = frontendFeatureSwitches.collect { case (a: BooleanFeatureSwitch, b)     => a -> b.toBoolean }
     val cfs: Map[CustomValueFeatureSwitch, String] = frontendFeatureSwitches.collect { case (a: CustomValueFeatureSwitch, b) => a -> b }
@@ -63,8 +63,8 @@ class FeatureSwitchController @Inject()(controllerComponents: MessagesController
           case (k, Some(v)) => k -> v
         }
 
-    Logger.debug(s"[FeatureSwitchController][submit] booleanFeatureSwitches > $bfs")
-    Logger.debug(s"[FeatureSwitchController][submit] customValueFeatureSwitches > $cfs")
+    logger.debug(s"[submit] booleanFeatureSwitches > $bfs")
+    logger.debug(s"[submit] customValueFeatureSwitches > $cfs")
 
     booleanFeatureSwitches.foreach(fs => if (bfs.exists(_._1 == fs)) enable(fs) else disable(fs))
     cfs.foreach(fs => setValue(fs._1, fs._2))
