@@ -47,19 +47,19 @@ object NonFurloughPay extends PeriodHelper {
 case class LastYearPayment(date: LocalDate, amount: Amount)
 
 object LastYearPayment {
-  implicit val defaultFormat: Format[LastYearPayment] = Json.format
+  implicit val defaultFormat: Format[LastYearPayment] = Json.format[LastYearPayment]
 }
 
 case class AdditionalPayment(date: LocalDate, amount: Amount)
 
 object AdditionalPayment {
-  implicit val defaultFormat: Format[AdditionalPayment] = Json.format
+  implicit val defaultFormat: Format[AdditionalPayment] = Json.format[AdditionalPayment]
 }
 
 case class TopUpPayment(date: LocalDate, amount: Amount)
 
 object TopUpPayment {
-  implicit val defaultFormat: Format[TopUpPayment] = Json.format
+  implicit val defaultFormat: Format[TopUpPayment] = Json.format[TopUpPayment]
 }
 
 sealed trait CylbBreakdown {

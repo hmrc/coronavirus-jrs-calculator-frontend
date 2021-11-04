@@ -8,7 +8,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val appName: String = "coronavirus-jrs-calculator-frontend"
 
-val silencerVersion = "1.6.0"
+val silencerVersion = "1.7.6"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
@@ -39,13 +39,12 @@ lazy val root = (project in file("."))
     )
   )
   .settings(
-    scalaVersion := "2.12.10",
+    scalaVersion := "2.12.15",
     name := appName,
     RoutesKeys.routesImport += "models._",
     TwirlKeys.templateImports ++= Seq(
       "play.twirl.api.HtmlFormat",
       "uk.gov.hmrc.govukfrontend.views.html.components._",
-      "uk.gov.hmrc.govukfrontend.views.html.helpers._",
       "views.ViewUtils._",
       "models.Mode",
       "controllers.routes._"
