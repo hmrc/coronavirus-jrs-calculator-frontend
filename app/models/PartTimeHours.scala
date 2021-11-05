@@ -19,7 +19,6 @@ package models
 import play.api.libs.json._
 
 import java.time.LocalDate
-import utils.LocalDateImplicits.format
 
 case class PartTimeHours(date: LocalDate, hours: Hours)
 

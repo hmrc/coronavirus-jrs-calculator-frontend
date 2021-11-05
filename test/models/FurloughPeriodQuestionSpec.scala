@@ -19,10 +19,12 @@ package models
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalatest.{MustMatchers, OptionValues, WordSpec}
+import org.scalatest.OptionValues
+import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsError, JsString, Json}
 
-class FurloughPeriodQuestionSpec extends WordSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues {
+class FurloughPeriodQuestionSpec extends PlaySpec with ScalaCheckPropertyChecks {
 
   "FurloughPeriodQuestion" must {
 

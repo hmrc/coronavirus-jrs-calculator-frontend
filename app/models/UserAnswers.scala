@@ -60,7 +60,7 @@ final case class UserAnswers(
     val amendedList = list.patch(idx - 1, Seq(value), list.size)
 
     val updatedData =
-      data.setObject(path(page, None), Json.toJson(amendedList)(Writes.iterableWrites2)) match {
+      data.setObject(path(page, None), Json.toJson(amendedList)) match {
         case JsSuccess(jsValue, _) =>
           Success(jsValue)
         case JsError(errors) =>
@@ -75,7 +75,7 @@ final case class UserAnswers(
 
   def setList[A](page: Settable[A], value: Seq[A])(implicit writes: Writes[A]): Try[UserAnswers] = {
     val updatedData =
-      data.setObject(path = path(page, None), value = Json.toJson(value)(Writes.iterableWrites2)) match {
+      data.setObject(path = path(page, None), value = Json.toJson(value)) match {
         case JsSuccess(jsValue, _) =>
           Success(jsValue)
         case JsError(errors) =>

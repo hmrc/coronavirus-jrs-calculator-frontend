@@ -28,11 +28,9 @@ import models.{FurloughStatus, GenericValidationError, PaymentFrequency, UserAns
 import org.slf4j.{Logger, LoggerFactory}
 import pages._
 import play.api.libs.json.{JsError, Json}
-import utils.UserAnswersHelper
+import utils.{LoggerUtil, UserAnswersHelper}
 
-trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper {
-
-  implicit def logger: Logger = LoggerFactory.getLogger(getClass)
+trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper with LoggerUtil {
 
   def claimQuestion(userAnswer: UserAnswers): AnswerV[UserAnswersState] =
     userAnswer.getV(ClaimPeriodQuestionPage) map {
@@ -45,7 +43,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
       case Valid(ClaimOnSamePeriod)      => processFurloughQuestion(UserAnswersState(userAnswer, userAnswer))
       case Valid(ClaimOnDifferentPeriod) => UserAnswersState(userAnswer.copy(data = Json.obj()), userAnswer).validNec
       case inv @ Invalid(err) =>
-        UserAnswers.logWarnings(err)
+        UserAnswers.logWarnings(err)(logger.logger)
         inv
     }
 
@@ -64,7 +62,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
           )
 
       case inv @ Invalid(err) =>
-        UserAnswers.logWarnings(err)
+        UserAnswers.logWarnings(err)(logger.logger)
         inv
     }
 
@@ -83,7 +81,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
           )
 
       case Invalid(err) =>
-        UserAnswers.logWarnings(err)
+        UserAnswers.logWarnings(err)(logger.logger)
         Valid(answer)
     }
 
@@ -111,7 +109,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
             )
           )
       case inv @ Invalid(err) =>
-        UserAnswers.logWarnings(err)
+        UserAnswers.logWarnings(err)(logger.logger)
         inv
     }
 
@@ -140,7 +138,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
           )
 
       case Invalid(err) =>
-        UserAnswers.logWarnings(err)
+        UserAnswers.logWarnings(err)(logger.logger)
         Valid(answer)
     }
 
@@ -167,7 +165,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
   private val keepPaymentFrequency: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli(answersState =>
     for {
       frequency     <- extractPaymentFrequencyV(answersState.original).toOption
-      withFrequency <- answersState.updated.set(PaymentFrequencyPage, frequency)(PaymentFrequency.writes).toOption
+      withFrequency <- answersState.updated.set(PaymentFrequencyPage, frequency).toOption
     } yield UserAnswersState(withFrequency, answersState.original))
 
   private val keepLastPayDate: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli(answersState =>
@@ -182,7 +180,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
   private val keepFurloughStatus: Kleisli[Option, UserAnswersState, UserAnswersState] = Kleisli(answersState =>
     for {
       status     <- extractFurloughStatusV(answersState.original).toOption
-      withStatus <- answersState.updated.set(FurloughStatusPage, status)(FurloughStatus.writes).toOption
+      withStatus <- answersState.updated.set(FurloughStatusPage, status).toOption
     } yield UserAnswersState(withStatus, answersState.original))
 
   private val keepPayPeriodData = keepPaymentFrequency andThen keepPayPeriod andThen keepLastPayDate

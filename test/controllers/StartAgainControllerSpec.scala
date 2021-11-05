@@ -19,7 +19,7 @@ package controllers
 import java.time.LocalDate
 
 import base.SpecBaseControllerSpecs
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.ClaimPeriodStartPage

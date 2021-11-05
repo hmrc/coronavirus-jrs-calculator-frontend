@@ -61,7 +61,7 @@ class PayPeriodsListController @Inject()(
 
             Ok(view(preparedForm, periods, claimPeriod))
           case Invalid(err) =>
-            UserAnswers.logErrors(err)(logger)
+            UserAnswers.logErrors(err)(logger.logger)
             Redirect(routes.ErrorController.somethingWentWrong())
         }
     }
@@ -79,12 +79,12 @@ class PayPeriodsListController @Inject()(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, periods, claimPeriod))),
                 value =>
                   for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodsListPage, value)(PayPeriodsList.writes))
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodsListPage, value))
                     _              <- sessionRepository.set(updatedAnswers)
                   } yield Redirect(navigator.nextPage(PayPeriodsListPage, updatedAnswers))
               )
           case Invalid(err) =>
-            UserAnswers.logErrors(err)(logger)
+            UserAnswers.logErrors(err)(logger.logger)
             Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
         }
     }

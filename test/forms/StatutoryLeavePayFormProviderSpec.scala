@@ -50,7 +50,7 @@ class StatutoryLeavePayFormProviderSpec extends BigDecimalFieldBehaviours with G
 
       val result = form(referencePay).bind(data)
 
-      result.errors shouldBe Seq(FormError(fieldName, moreThan0Key))
+      result.errors mustBe Seq(FormError(fieldName, moreThan0Key))
     }
 
     "reject negative numbers" in {
@@ -59,7 +59,7 @@ class StatutoryLeavePayFormProviderSpec extends BigDecimalFieldBehaviours with G
 
       val result = form(referencePay).bind(data)
 
-      result.errors shouldBe Seq(FormError(fieldName, moreThan0Key))
+      result.errors mustBe Seq(FormError(fieldName, moreThan0Key))
     }
 
     behave like bigDecimalFieldWithMax(

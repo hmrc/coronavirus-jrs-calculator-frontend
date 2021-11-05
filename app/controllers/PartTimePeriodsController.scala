@@ -102,7 +102,7 @@ class PartTimePeriodsController @Inject()(
         val selectedPeriods = generatePeriodsWithFurlough(endDates, furlough).filter(p => selectedEndDates.contains(p.period.end)).toList
 
         for {
-          updatedAnswers <- Future.fromTry(userAnswers.set(PartTimePeriodsPage, selectedPeriods)(Writes.iterableWrites2))
+          updatedAnswers <- Future.fromTry(userAnswers.set(PartTimePeriodsPage, selectedPeriods))
           _              <- sessionRepository.set(updatedAnswers)
         } yield Redirect(navigator.nextPage(PartTimePeriodsPage, updatedAnswers))
       case Invalid(e) => Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))

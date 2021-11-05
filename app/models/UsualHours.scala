@@ -16,10 +16,9 @@
 
 package models
 
-import java.time.LocalDate
-
 import play.api.libs.json.Json
-import utils.LocalDateImplicits.format
+
+import java.time.LocalDate
 
 case class UsualHours(date: LocalDate, hours: Hours)
 

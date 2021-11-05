@@ -23,7 +23,7 @@ import forms.FurloughPartialPayFormProvider
 import models.PaymentFrequency.Weekly
 import models.requests.DataRequest
 import models.{FurloughPartialPay, UserAnswers}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages._

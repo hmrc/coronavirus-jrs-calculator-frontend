@@ -81,7 +81,7 @@ class PaymentFrequencyController @Inject()(
             )),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PaymentFrequencyPage, value)(PaymentFrequency.writes))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PaymentFrequencyPage, value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PaymentFrequencyPage, updatedAnswers))
       )

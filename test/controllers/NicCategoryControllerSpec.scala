@@ -20,7 +20,7 @@ import base.SpecBaseControllerSpecs
 import forms.NicCategoryFormProvider
 import models.requests.DataRequest
 import models.{NicCategory, UserAnswers}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.NicCategoryPage

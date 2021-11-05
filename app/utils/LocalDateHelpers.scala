@@ -58,11 +58,3 @@ object LocalDateHelpers extends LocalDateHelpers {
   }
 
 }
-
-object LocalDateImplicits {
-  val writes: Writes[LocalDate] = Writes { d =>
-    JsString(d.toString)
-  }
-  val reads: Reads[LocalDate]            = __.read[String].map(LocalDate.parse(_))
-  implicit val format: Format[LocalDate] = Format(reads, writes)
-}

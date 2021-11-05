@@ -17,12 +17,11 @@
 package generators
 
 import java.time.LocalDate
-
 import models._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 import pages._
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsValue, Json, Writes}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 
@@ -30,7 +29,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[StatutoryLeavePayPage.type]
-        value <- arbitrary[Amount].map(Json.toJson(_))
+        value <- arbitrary[Amount].map(Json.toJson(_)(Amount.format))
       } yield (page, value)
     }
 
@@ -111,7 +110,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[PartTimeHoursPage.type]
-        value <- arbitrary[PartTimeHours].map(Json.toJson(_))
+        value <- arbitrary[PartTimeHours].map(Json.toJson(_)(PartTimeHours.format))
       } yield (page, value)
     }
 
@@ -191,7 +190,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[PartialPayBeforeFurloughPage.type]
-        value <- arbitrary[FurloughPartialPay].map(Json.toJson(_))
+        value <- arbitrary[FurloughPartialPay].map(Json.toJson(_)(FurloughPartialPay.format))
       } yield (page, value)
     }
 
@@ -199,7 +198,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[PartialPayAfterFurloughPage.type]
-        value <- arbitrary[FurloughPartialPay].map(Json.toJson(_))
+        value <- arbitrary[FurloughPartialPay].map(Json.toJson(_)(FurloughPartialPay.format))
       } yield (page, value)
     }
 
@@ -207,7 +206,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[AnnualPayAmountPage.type]
-        value <- arbitrary[AnnualPayAmount].map(Json.toJson(_))
+        value <- arbitrary[AnnualPayAmount].map(Json.toJson(_)(AnnualPayAmount.format))
       } yield (page, value)
     }
 
@@ -287,7 +286,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[RegularPayAmountPage.type]
-        value <- arbitrary[Salary].map(Json.toJson(_))
+        value <- arbitrary[Salary].map(Json.toJson(_)(Salary.format))
       } yield (page, value)
     }
 

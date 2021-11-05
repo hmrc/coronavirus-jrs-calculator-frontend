@@ -62,9 +62,9 @@
 
     @nextSteps(claimPeriod)
 
-    @button(messages("confirmation.startAgain"), href = Some(routes.ClaimPeriodQuestionController.onPageLoad()), classes = Some("govuk-button"))
+    @button(messages("confirmation.startAgain"), href = Some(routes.ClaimPeriodQuestionController.onPageLoad().url), classes = Some("govuk-button"))
 
-    @h2(Html(messages("confirmation.no.nic.pension.breakdown.summary")), classes = Some("govuk-heading-m"))
+    @h2("confirmation.no.nic.pension.breakdown.summary", classes = Some("govuk-heading-m"))
 
     @for(text <- cvb.detailedBreakdownMessageKeys(furloughRate, isNewStarterType5)) {
         @p(Html(text))

@@ -4,10 +4,12 @@ import generators.ModelGenerators
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalatest.{MustMatchers, OptionValues, WordSpec}
+import org.scalatest.OptionValues
+import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsError, JsString, Json}
 
-class $className$Spec extends WordSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues with ModelGenerators {
+class $className$Spec extends PlaySpec with ScalaCheckPropertyChecks with ModelGenerators {
 
   "$className$" must {
 

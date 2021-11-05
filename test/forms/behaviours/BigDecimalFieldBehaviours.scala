@@ -25,14 +25,14 @@ trait BigDecimalFieldBehaviours extends FieldBehaviours {
     "bind all big decimal values with decimal places <= 2" in {
       forAll(positiveBigDecimalsWith2dp -> "bigDecimals") { bigDecimal: BigDecimal =>
         val result = form.bind(Map(fieldName -> bigDecimal.toString)).apply(fieldName)
-        result.errors shouldEqual Seq.empty
+        result.errors mustEqual Seq.empty
       }
     }
 
     "not bind all big decimal values with decimal places > 2" in {
       forAll(positiveBigDecimalsWithMoreThan2dp -> "bigDecimals") { bigDecimal: BigDecimal =>
         val result = form.bind(Map(fieldName -> bigDecimal.toString)).apply(fieldName)
-        result.errors shouldEqual Seq(FormError("value", "amount.error.max.2.decimals"))
+        result.errors mustEqual Seq(FormError("value", "amount.error.max.2.decimals"))
       }
     }
 
@@ -40,7 +40,7 @@ trait BigDecimalFieldBehaviours extends FieldBehaviours {
 
       forAll(nonNumerics -> "nonNumeric") { nonNumeric =>
         val result = form.bind(Map(fieldName -> nonNumeric)).apply(fieldName)
-        result.errors shouldEqual Seq(error)
+        result.errors mustEqual Seq(error)
       }
     }
   }
@@ -50,21 +50,21 @@ trait BigDecimalFieldBehaviours extends FieldBehaviours {
     "bind all big decimal values with decimal places <= 2" in {
       forAll(positiveBigDecimalsWithMaxAnd2DP(max) -> "bigDecimals") { bigDecimal =>
         val result = form.bind(Map(fieldName -> bigDecimal.toString)).apply(fieldName)
-        result.errors shouldEqual Seq.empty
+        result.errors mustEqual Seq.empty
       }
     }
 
     "not bind all big decimal values with decimal places > 2" in {
       forAll(positiveBigDecimalsWithMaxAndMoreThan2DP(max) -> "bigDecimals") { bigDecimal: BigDecimal =>
         val result = form.bind(Map(fieldName -> bigDecimal.toString)).apply(fieldName)
-        result.errors shouldEqual Seq(FormError("value", "amount.error.max.2.decimals"))
+        result.errors mustEqual Seq(FormError("value", "amount.error.max.2.decimals"))
       }
     }
 
     "not bind non-numeric numbers" in {
       forAll(nonNumerics -> "nonNumeric") { nonNumeric =>
         val result = form.bind(Map(fieldName -> nonNumeric)).apply(fieldName)
-        result.errors shouldEqual Seq(error)
+        result.errors mustEqual Seq(error)
       }
     }
   }

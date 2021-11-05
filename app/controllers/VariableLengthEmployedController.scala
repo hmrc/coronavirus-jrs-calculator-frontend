@@ -45,8 +45,6 @@ class VariableLengthEmployedController @Inject()(
 )(implicit ec: ExecutionContext)
     extends BaseController {
 
-  override implicit val logger: Logger = LoggerFactory.getLogger(getClass)
-
   val form: Form[EmployeeStarted] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
@@ -65,8 +63,9 @@ class VariableLengthEmployedController @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(EmployeeStartedPage, value)(EmployeeStarted.writes))
-            _              <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future
+              .fromTry(request.userAnswers.set(EmployeeStartedPage, value))
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(EmployeeStartedPage, updatedAnswers))
         }
       )

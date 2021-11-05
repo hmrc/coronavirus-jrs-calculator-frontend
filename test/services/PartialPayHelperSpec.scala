@@ -22,9 +22,7 @@ import org.slf4j.{Logger, LoggerFactory}
 
 class PartialPayHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreTestDataBuilder {
 
-  val partialPayExtactor: PartialPayExtractor = new PartialPayExtractor {
-    override val logger: Logger = LoggerFactory.getLogger(getClass)
-  }
+  val partialPayExtactor: PartialPayExtractor = new PartialPayExtractor {}
 
   "PartialPayHelper" when {
 

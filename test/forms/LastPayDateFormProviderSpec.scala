@@ -37,7 +37,7 @@ class LastPayDateFormProviderSpec extends DateBehaviours with GuiceOneAppPerSuit
   lazy val form    = new LastPayDateFormProvider()(minimiumDate)
   val minimiumDate = LocalDate.now()
 
-  ".value" should {
+  ".value" must {
 
     behave like dateFieldWithMin(form,
                                  "value",

@@ -32,8 +32,7 @@ final case class Period(start: LocalDate, end: LocalDate) {
 }
 
 object Period {
-  import utils.LocalDateImplicits.format
-  implicit val defaultFormat: Format[Period] = Json.format
+  implicit val defaultFormat: Format[Period] = Json.format[Period]
   implicit class Counter(period: Period) {
     def countDays: Int =
       (ChronoUnit.DAYS.between(period.start, period.end) + 1).toInt

@@ -17,13 +17,14 @@
 package models
 
 import java.time.{LocalDate, LocalDateTime}
-
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
+import org.scalatest.OptionValues
+import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 
-class MongoDateTimeFormatsSpec extends FreeSpec with MustMatchers with OptionValues with MongoDateTimeFormats {
+class MongoDateTimeFormatsSpec extends PlaySpec with MongoDateTimeFormats {
 
-  "a LocalDateTime" - {
+  "a LocalDateTime" must {
 
     val date = LocalDate.of(2018, 2, 1).atStartOfDay
 

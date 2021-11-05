@@ -25,7 +25,7 @@ import models.PayMethod.Regular
 import models.PaymentFrequency.Monthly
 import models.requests.DataRequest
 import models.{Amount, FullPeriodCap, FurloughBreakdown, TopUpPeriod}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.AnyContentAsEmpty

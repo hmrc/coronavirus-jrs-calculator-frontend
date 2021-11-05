@@ -29,6 +29,7 @@ import pages.{PartTimeQuestionPage, QuestionPage, TopUpPeriodsPage, _}
 import play.api.libs.json.Writes
 import queries.Settable
 
+import java.time.LocalDate
 import scala.annotation.tailrec
 
 trait UserAnswersBuilder extends CoreTestDataBuilder {
@@ -44,29 +45,36 @@ trait UserAnswersBuilder extends CoreTestDataBuilder {
     def withFurloughStatus(status: FurloughStatus = FurloughOngoing): UserAnswers =
       userAnswers.setValue(FurloughStatusPage, status)
 
-    def withFurloughStartDate(startDate: String): UserAnswers =
-      userAnswers.setValue(FurloughStartDatePage, startDate.toLocalDate)
+    def withFurloughStartDate(startDate: LocalDate): UserAnswers =
+      userAnswers.setValue(FurloughStartDatePage, startDate)
+    def withFurloughStartDate(startDate: String): UserAnswers = withFurloughStartDate(startDate.toLocalDate)
 
-    def withFurloughEndDate(endDate: String): UserAnswers =
-      userAnswers.setValue(FurloughEndDatePage, endDate.toLocalDate)
+    def withFurloughEndDate(endDate: LocalDate): UserAnswers =
+      userAnswers.setValue(FurloughEndDatePage, endDate)
+    def withFurloughEndDate(endDate: String): UserAnswers = withFurloughEndDate(endDate.toLocalDate)
 
     def withFurloughInLastTaxYear(answer: Boolean): UserAnswers =
       userAnswers.setValue(FurloughInLastTaxYearPage, answer)
 
-    def withEmployeeStartDate(startDate: String): UserAnswers =
-      userAnswers.setValue(EmployeeStartDatePage, startDate.toLocalDate)
+    def withEmployeeStartDate(startDate: LocalDate): UserAnswers =
+      userAnswers.setValue(EmployeeStartDatePage, startDate)
+    def withEmployeeStartDate(startDate: String): UserAnswers = withEmployeeStartDate(startDate.toLocalDate)
 
-    def withFirstFurloughDate(date: String): UserAnswers =
-      userAnswers.setValue(FirstFurloughDatePage, date.toLocalDate)
+    def withFirstFurloughDate(date: LocalDate): UserAnswers =
+      userAnswers.setValue(FirstFurloughDatePage, date)
+    def withFirstFurloughDate(date: String): UserAnswers = withFirstFurloughDate(date.toLocalDate)
 
-    def withLastPayDate(date: String): UserAnswers =
-      userAnswers.setValue(LastPayDatePage, date.toLocalDate)
+    def withLastPayDate(date: LocalDate): UserAnswers =
+      userAnswers.setValue(LastPayDatePage, date)
+    def withLastPayDate(date: String): UserAnswers = withLastPayDate(date.toLocalDate)
 
-    def withClaimPeriodEnd(date: String): UserAnswers =
-      userAnswers.setValue(ClaimPeriodEndPage, date.toLocalDate)
+    def withClaimPeriodEnd(date: LocalDate): UserAnswers =
+      userAnswers.setValue(ClaimPeriodEndPage, date)
+    def withClaimPeriodEnd(date: String): UserAnswers = withClaimPeriodEnd(date.toLocalDate)
 
-    def withClaimPeriodStart(date: String): UserAnswers =
-      userAnswers.setValue(ClaimPeriodStartPage, date.toLocalDate)
+    def withClaimPeriodStart(date: LocalDate): UserAnswers =
+      userAnswers.setValue(ClaimPeriodStartPage, date)
+    def withClaimPeriodStart(date: String): UserAnswers = withClaimPeriodStart(date.toLocalDate)
 
     def withPayMethod(method: PayMethod = Regular): UserAnswers =
       userAnswers.setValue(PayMethodPage, method)

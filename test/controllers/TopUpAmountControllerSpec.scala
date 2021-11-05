@@ -22,7 +22,7 @@ import base.{CoreTestDataBuilder, SpecBaseControllerSpecs}
 import forms.TopUpAmountFormProvider
 import models.requests.DataRequest
 import models.{Amount, TopUpPayment, TopUpPeriod}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.AnyContentAsEmpty

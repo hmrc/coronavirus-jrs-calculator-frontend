@@ -108,16 +108,16 @@ class AuditService @Inject()(auditConnector: AuditConnector, config: FrontendApp
       "employeeAnnualPayForYear"           -> userAnswers.getV(AnnualPayAmountPage).map(_.amount).json,
       "employeePayPeriodEndDates"          -> Json.toJson(userAnswers.getList(PayDatePage)),
       "employeePayDayForLastPeriod"        -> userAnswers.getV(LastPayDatePage).json,
-      "employeeLastYearPay"                -> Json.toJson(userAnswers.getList(LastYearPayPage))(Writes.iterableWrites2),
+      "employeeLastYearPay"                -> Json.toJson(userAnswers.getList(LastYearPayPage)),
       "employeePartialPayBeforeFurlough"   -> userAnswers.getV(PartialPayBeforeFurloughPage).json,
       "employeePartialPayAfterFurlough"    -> userAnswers.getV(PartialPayAfterFurloughPage).json,
-      "employerTopUpAmounts"               -> Json.toJson(userAnswers.getList(TopUpAmountPage))(Writes.iterableWrites2),
-      "employerAdditionalPayments"         -> Json.toJson(userAnswers.getList(AdditionalPaymentAmountPage))(Writes.iterableWrites2),
+      "employerTopUpAmounts"               -> Json.toJson(userAnswers.getList(TopUpAmountPage)),
+      "employerAdditionalPayments"         -> Json.toJson(userAnswers.getList(AdditionalPaymentAmountPage)),
       "employeeNationalInsuranceCategory"  -> userAnswers.getV(NicCategoryPage).json,
       "employerPensionStatus"              -> userAnswers.getV(PensionStatusPage).json,
       "employeePartTimeStatus"             -> userAnswers.getV(PartTimeQuestionPage).json,
-      "employeeActualHours"                -> Json.toJson(userAnswers.getList(PartTimeHoursPage))(Writes.iterableWrites2),
-      "employeeUsualHours"                 -> Json.toJson(userAnswers.getList(PartTimeNormalHoursPage))(Writes.iterableWrites2)
+      "employeeActualHours"                -> Json.toJson(userAnswers.getList(PartTimeHoursPage)),
+      "employeeUsualHours"                 -> Json.toJson(userAnswers.getList(PartTimeNormalHoursPage))
     )
 
   private def auditEvent(event: JobRetentionSchemeCalculatorEvent, transactionName: String, details: Seq[(String, Any)])(

@@ -18,9 +18,11 @@ package models
 
 import java.time.LocalDate
 
-import org.scalatest.{MustMatchers, OptionValues, WordSpec}
+import org.scalatest.OptionValues
+import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.play.PlaySpec
 
-class PeriodSpec extends WordSpec with MustMatchers with OptionValues {
+class PeriodSpec extends PlaySpec {
 
   "PhaseTwoPeriod" must {
 
@@ -31,7 +33,7 @@ class PeriodSpec extends WordSpec with MustMatchers with OptionValues {
       PaymentDate(LocalDate.of(2020, 7, 31))
     )
 
-    "isPartTime" should {
+    "isPartTime" must {
 
       "be true if there are actual hours and usual hours" in {
         val period = PhaseTwoPeriod(periodWithPaymentDate, Some(Hours(10.0)), Some(Hours(20.0)))
@@ -54,7 +56,7 @@ class PeriodSpec extends WordSpec with MustMatchers with OptionValues {
       }
     }
 
-    "furloughed" should {
+    "furloughed" must {
 
       "return number of furloughed hours when actual is less than usual" in {
         val period = PhaseTwoPeriod(periodWithPaymentDate, Some(Hours(15.5)), Some(Hours(20.2)))
@@ -73,7 +75,7 @@ class PeriodSpec extends WordSpec with MustMatchers with OptionValues {
 
     }
 
-    "isFullTime" should {
+    "isFullTime" must {
 
       "be true if actual hours is greater than usual hours" in {
         val period = PhaseTwoPeriod(periodWithPaymentDate, Some(Hours(20.2)), Some(Hours(15.5)))

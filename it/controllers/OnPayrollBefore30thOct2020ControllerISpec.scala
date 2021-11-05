@@ -28,7 +28,7 @@ class OnPayrollBefore30thOct2020ControllerISpec extends IntegrationSpecBase with
 
   "GET /october-payroll" when {
 
-    "is a Regular Journey" should {
+    "is a Regular Journey" must {
 
       "return correct page & title, Status: 200" in {
 
@@ -38,7 +38,7 @@ class OnPayrollBefore30thOct2020ControllerISpec extends IntegrationSpecBase with
         val res = getRequestHeaders("/october-payroll")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(OK),
             titleOf(onPayrollBefore30thOct2020)
           )
@@ -58,7 +58,7 @@ class OnPayrollBefore30thOct2020ControllerISpec extends IntegrationSpecBase with
           val res = getRequestHeaders("/october-payroll")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(SEE_OTHER),
               redirectLocation(controllers.routes.PreviousFurloughPeriodsController.onPageLoad().url)
             )
@@ -76,7 +76,7 @@ class OnPayrollBefore30thOct2020ControllerISpec extends IntegrationSpecBase with
           val res = getRequestHeaders("/october-payroll")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(OK),
               titleOf(onPayrollBefore30thOct2020)
             )
@@ -114,7 +114,7 @@ class OnPayrollBefore30thOct2020ControllerISpec extends IntegrationSpecBase with
 
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(SEE_OTHER),
             redirectLocation(controllers.routes.RootPageController.onPageLoad().url)
           )
@@ -147,7 +147,7 @@ class OnPayrollBefore30thOct2020ControllerISpec extends IntegrationSpecBase with
 
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(SEE_OTHER),
             redirectLocation(controllers.routes.PayDateController.onPageLoad(1).url)
           )
@@ -180,7 +180,7 @@ class OnPayrollBefore30thOct2020ControllerISpec extends IntegrationSpecBase with
 
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(SEE_OTHER),
             redirectLocation(controllers.routes.RegularPayAmountController.onPageLoad().url)
           )

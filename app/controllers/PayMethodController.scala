@@ -63,7 +63,7 @@ class PayMethodController @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PayMethodPage, value)(PayMethod.writes))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PayMethodPage, value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PayMethodPage, updatedAnswers))
       )

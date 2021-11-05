@@ -63,7 +63,7 @@ class FurloughOngoingController @Inject()(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, claimStartDate))),
           value =>
             userAnswerPersistence
-              .persistAnswer(request.userAnswers, FurloughStatusPage, value, None)(FurloughStatus.writes)
+              .persistAnswer(request.userAnswers, FurloughStatusPage, value, None)
               .map { updatedAnswers =>
                 Redirect(navigator.nextPage(FurloughStatusPage, updatedAnswers, None))
             }

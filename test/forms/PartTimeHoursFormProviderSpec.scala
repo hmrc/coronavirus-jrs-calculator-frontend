@@ -56,7 +56,7 @@ class PartTimeHoursFormProviderSpec extends DoubleFieldBehaviours with CoreTestD
     val data: Map[String, String] =
       Map("value" -> (usuals.head.hours.value + 1).toString)
 
-    form.bind(data).errors.size shouldBe 1
-    form.bind(data).errors.head.message shouldBe "partTimeHours.error.max"
+    form.bind(data).errors.size mustBe 1
+    form.bind(data).errors.head.message mustBe "partTimeHours.error.max"
   }
 }

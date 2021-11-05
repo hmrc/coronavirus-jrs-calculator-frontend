@@ -25,7 +25,7 @@ trait DoubleFieldBehaviours extends FieldBehaviours {
     "bind all double values" in {
       forAll(maxValue.fold(positiveDoubles)(positiveDoublesWithMax) -> "doubles") { double: Double =>
         val result = form.bind(Map(fieldName -> double.toString)).apply(fieldName)
-        result.errors shouldEqual Seq.empty
+        result.errors mustEqual Seq.empty
       }
     }
 
@@ -33,7 +33,7 @@ trait DoubleFieldBehaviours extends FieldBehaviours {
 
       forAll(nonNumerics -> "nonNumeric") { nonNumeric =>
         val result = form.bind(Map(fieldName -> nonNumeric)).apply(fieldName)
-        result.errors shouldEqual Seq(error)
+        result.errors mustEqual Seq(error)
       }
     }
   }

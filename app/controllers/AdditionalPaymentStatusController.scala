@@ -64,7 +64,7 @@ class AdditionalPaymentStatusController @Inject()(override val messagesApi: Mess
         formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           userAnswerPersistence
-            .persistAnswer(request.userAnswers, AdditionalPaymentStatusPage, value, None)(AdditionalPaymentStatus.writes)
+            .persistAnswer(request.userAnswers, AdditionalPaymentStatusPage, value, None)
             .map { updatedAnswers =>
               Redirect(navigator.nextPage(AdditionalPaymentStatusPage, updatedAnswers, None))
           }

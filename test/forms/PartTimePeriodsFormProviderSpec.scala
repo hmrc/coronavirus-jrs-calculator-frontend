@@ -48,7 +48,7 @@ class PartTimePeriodsFormProviderSpec extends CheckboxFieldBehaviours with Gener
 
       forAll(listGen) { list =>
         val data = list.zipWithIndex.map(item => s"$fieldName[${item._2}]" -> item._1.toString).toMap
-        form.bind(data).get shouldEqual list
+        form.bind(data).get mustEqual list
       }
 
     }
@@ -57,12 +57,12 @@ class PartTimePeriodsFormProviderSpec extends CheckboxFieldBehaviours with Gener
       val data = Map(
         s"$fieldName[0]" -> "invalid value"
       )
-      form.bind(data).errors should contain(FormError(s"$fieldName[0]", "error.date"))
+      form.bind(data).errors must contain(FormError(s"$fieldName[0]", "error.date"))
     }
 
     "fail to bind when no answers are selected" in {
       val data = Map.empty[String, String]
-      form.bind(data).errors should contain(FormError(s"$fieldName", requiredKey))
+      form.bind(data).errors must contain(FormError(s"$fieldName", requiredKey))
     }
   }
 }

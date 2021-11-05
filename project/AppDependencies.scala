@@ -13,7 +13,8 @@ object AppDependencies {
     "uk.gov.hmrc"                   %% "play-frontend-hmrc"             % s"1.22.0$playSuffix",
     "org.typelevel"                 %% "cats-core"                      % "2.6.0",
     "com.softwaremill.quicklens"    %% "quicklens"                      % "1.5.0",
-    "com.github.pureconfig"         %% "pureconfig"                     % "0.13.0"
+    "com.github.pureconfig"         %% "pureconfig"                     % "0.13.0",
+    "com.fasterxml.jackson.module"  %% "jackson-module-scala"           % "2.12.5"
   )
 
   val scalatestVersion = "3.2.10"
@@ -30,8 +31,8 @@ object AppDependencies {
     "org.mockito"                   %  "mockito-core"                   % "3.12.4",
     "com.github.tomakehurst"        %  "wiremock-jre8"                  % "2.31.0",
     "org.scalatestplus"             %% "scalacheck-1-15"                % s"$scalatestVersion.0",
-    "org.scalacheck"                %% "scalacheck"                     % "1.15.4"
-
+    "org.scalacheck"                %% "scalacheck"                     % "1.15.4",
+    "com.vladsch.flexmark"          %  "flexmark-all"                   % "0.62.2"
   ).map(_ % "test, it")
 
   def apply(): Seq[ModuleID] = compile ++ test

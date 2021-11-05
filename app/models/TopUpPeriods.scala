@@ -16,21 +16,19 @@
 
 package models
 
-import java.time.LocalDate
-
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.libs.json.{Format, Json}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.CheckboxItem
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 import views.ViewUtils._
-import play.api.data.format.Formats.localDateFormat
+
+import java.time.LocalDate
 
 case class TopUpPeriod(date: LocalDate, furloughGrant: Amount)
 
 object TopUpPeriod {
-  import utils.LocalDateImplicits.format
   implicit val defaultFormat: Format[TopUpPeriod] = Json.format[TopUpPeriod]
 }
 
@@ -44,9 +42,9 @@ object TopUpPeriods {
       CheckboxItem(
         name = Some(s"value[${value._2}]"),
         id = Some(s"topup-period_${value._2.toString}"),
-        value = periodEnd,
+        value = periodEnd.toString,
         content = Text(messages("topupPeriods.period", dateToString(periodEnd))),
-        checked = form.data.values.contains(periodEnd.toString),
+        checked = form.data.values.exists(_ == periodEnd.toString),
         hint = Some(Hint(content = Text(messages("topupPeriods.amount", periodAmount))))
       )
   }

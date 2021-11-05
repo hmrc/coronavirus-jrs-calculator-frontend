@@ -29,7 +29,7 @@ class RootPageControllerISpec extends IntegrationSpecBase with CreateRequestHelp
           val res = getRequest("/")()
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(SEE_OTHER),
               redirectLocation(controllers.routes.RootPageController.start().url)
             )

@@ -63,7 +63,7 @@ class EmployeeRTISubmissionController @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(EmployeeRTISubmissionPage, value)(EmployeeRTISubmission.writes))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(EmployeeRTISubmissionPage, value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(EmployeeRTISubmissionPage, updatedAnswers))
       )

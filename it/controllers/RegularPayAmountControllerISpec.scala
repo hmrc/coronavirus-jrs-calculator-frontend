@@ -13,7 +13,7 @@ import views.ViewUtils._
 import java.time.LocalDate
 
 class RegularPayAmountControllerISpec extends IntegrationSpecBase with CustomMatchers
-  with CreateRequestHelper with BaseITConstants {
+ with CreateRequestHelper with BaseITConstants {
 
   "employee is type 1" when {
 
@@ -77,7 +77,7 @@ class RegularPayAmountControllerISpec extends IntegrationSpecBase with CustomMat
         )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(SEE_OTHER),
             redirectLocation(controllers.routes.PartTimeQuestionController.onPageLoad().url)
           )
@@ -109,7 +109,7 @@ class RegularPayAmountControllerISpec extends IntegrationSpecBase with CustomMat
         )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(BAD_REQUEST)
           )
         }
@@ -124,7 +124,7 @@ class RegularPayAmountControllerISpec extends IntegrationSpecBase with CustomMat
       val res = getRequest("/regular-pay-amount")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
-        result should have(
+        result must have(
           httpStatus(OK),
           titleOf(PageTitles.regularPayAmount(dateToString(cutOffDate)))
         )

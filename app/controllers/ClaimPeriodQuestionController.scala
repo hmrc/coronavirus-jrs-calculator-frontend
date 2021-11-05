@@ -49,8 +49,6 @@ class ClaimPeriodQuestionController @Inject()(
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
     extends BaseController with FastJourneyUserAnswersHandler {
 
-  override implicit val logger: Logger = LoggerFactory.getLogger(getClass)
-
   val form: Form[ClaimPeriodQuestion] = formProvider()
   protected val userAnswerPersistence = new UserAnswerPersistence(sessionRepository.set)
 
@@ -83,7 +81,7 @@ class ClaimPeriodQuestionController @Inject()(
 
   private def processSubmittedAnswer(request: DataRequest[AnyContent], value: ClaimPeriodQuestion): Future[Result] =
     userAnswerPersistence
-      .persistAnswer(request.userAnswers, ClaimPeriodQuestionPage, value, None)(ClaimPeriodQuestion.writes)
+      .persistAnswer(request.userAnswers, ClaimPeriodQuestionPage, value, None)
       .map { updatedAnswers =>
         {
           Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedAnswers, None))

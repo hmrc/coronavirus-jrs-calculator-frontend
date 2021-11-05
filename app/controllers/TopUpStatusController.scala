@@ -63,7 +63,7 @@ class TopUpStatusController @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TopUpStatusPage, value)(TopUpStatus.writes))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(TopUpStatusPage, value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(TopUpStatusPage, updatedAnswers))
       )

@@ -6,7 +6,7 @@ import models.{EmployeeRTISubmission, FullPeriod, FurloughStatus, Hours, PartTim
 import utils.{CreateRequestHelper, CustomMatchers, ITCoreTestData, IntegrationSpecBase}
 
 object AprilConfirmationScenarios extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers
-  with BaseITConstants with ITCoreTestData {
+ with BaseITConstants with ITCoreTestData {
   val aprilVariableWeeklyScenarios: Seq[(String, Seq[(UserAnswers, BigDecimal)])] = Seq("April Variable Weekly Scenarios" -> Seq(
     emptyUserAnswers
       .withFurloughStatus(FurloughStatus.FurloughEnded)

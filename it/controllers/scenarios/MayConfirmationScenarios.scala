@@ -7,7 +7,7 @@ import models._
 import utils.{CreateRequestHelper, CustomMatchers, ITCoreTestData, IntegrationSpecBase}
 
 object MayConfirmationScenarios extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers
-  with BaseITConstants with ITCoreTestData {
+ with BaseITConstants with ITCoreTestData {
 
   val mayFixedFourWeeklyScenarios: Seq[(String, Seq[(UserAnswers, BigDecimal)])] = Seq("May Fixed Four Weekly Scenarios" -> Seq(
     emptyUserAnswers

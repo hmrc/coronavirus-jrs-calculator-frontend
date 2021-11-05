@@ -30,7 +30,7 @@ class ClaimPeriodStartFormProviderSpec extends SpecBaseControllerSpecs {
 
   import dateBehaviours._
 
-  ".startDate" should {
+  ".startDate" must {
 
     "bind valid data" in {
 
@@ -43,14 +43,14 @@ class ClaimPeriodStartFormProviderSpec extends SpecBaseControllerSpecs {
 
         val result = form.bind(data)
 
-        result.value.value shouldEqual date
+        result.value.value mustEqual date
       }
     }
 
     "fail to bind an empty date" in {
       val result = form.bind(Map.empty[String, String])
 
-      result.errors should contain allElementsOf List(
+      result.errors must contain allElementsOf List(
         FormError(s"startDate.day", LocalDateFormatter.dayBlankErrorKey),
         FormError(s"startDate.month", LocalDateFormatter.monthBlankErrorKey),
         FormError(s"startDate.year", LocalDateFormatter.yearBlankErrorKey),
@@ -67,7 +67,7 @@ class ClaimPeriodStartFormProviderSpec extends SpecBaseControllerSpecs {
 
       val result = form.bind(data)
 
-      result.errors shouldBe List(
+      result.errors mustBe List(
         FormError("startDate", "claimPeriodStart.error.outofrange", Seq("1 March 2020", dateToString(policyEndDate))),
       )
     }
@@ -82,7 +82,7 @@ class ClaimPeriodStartFormProviderSpec extends SpecBaseControllerSpecs {
 
       val result = form.bind(data)
 
-      result.errors shouldBe List(
+      result.errors mustBe List(
         FormError(key = "startDate",
                   message = "claimPeriodStart.error.outofrange",
                   args = Seq("1 March 2020", dateToString(policyEndDate))),

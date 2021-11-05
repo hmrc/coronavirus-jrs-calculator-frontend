@@ -90,7 +90,7 @@ class AdditionalPaymentStatusControllerSpec extends SpecBaseControllerSpecs {
     "redirect to the next page when valid data is submitted" in {
       val request =
         FakeRequest(POST, additionalPaymentStatusRoutePost)
-          .withFormUrlEncodedBody(("value", validAnswer))
+          .withFormUrlEncodedBody(("value", validAnswer.toString))
 
       val result = controller().onSubmit()(request)
 
@@ -124,7 +124,7 @@ class AdditionalPaymentStatusControllerSpec extends SpecBaseControllerSpecs {
     "redirect to Session Expired for a POST if no existing data is found" in {
       val request =
         FakeRequest(POST, additionalPaymentStatusRoute)
-          .withFormUrlEncodedBody(("value", validAnswer))
+          .withFormUrlEncodedBody(("value", validAnswer.toString))
 
       val result = controller(None).onSubmit()(request)
 

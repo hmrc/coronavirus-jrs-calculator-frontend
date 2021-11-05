@@ -52,8 +52,6 @@ class TopUpPeriodsController @Inject()(
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with FurloughCalculationHandler {
 
-  implicit val logger: slf4j.Logger = LoggerFactory.getLogger(getClass)
-
   val form: Form[List[LocalDate]] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -75,7 +73,7 @@ class TopUpPeriodsController @Inject()(
       .fold(
         nel => {
           logger.error("Failed handleCalculationFurloughV")
-          UserAnswers.logErrors(nel)
+          UserAnswers.logErrors(nel)(logger.logger)
           Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
         },
         identity
@@ -114,7 +112,7 @@ class TopUpPeriodsController @Inject()(
 
   private def saveAndRedirect(userAnswers: UserAnswers, topUpPeriods: List[TopUpPeriod]) =
     for {
-      updatedAnswers <- Future.fromTry(userAnswers.set(TopUpPeriodsPage, topUpPeriods)(Writes.iterableWrites2))
+      updatedAnswers <- Future.fromTry(userAnswers.set(TopUpPeriodsPage, topUpPeriods))
       _              <- sessionRepository.set(updatedAnswers)
     } yield Redirect(navigator.nextPage(TopUpPeriodsPage, updatedAnswers))
 }

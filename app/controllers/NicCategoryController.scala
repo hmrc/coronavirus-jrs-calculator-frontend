@@ -63,7 +63,7 @@ class NicCategoryController @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(NicCategoryPage, value)(NicCategory.writes))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(NicCategoryPage, value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(NicCategoryPage, updatedAnswers))
       )

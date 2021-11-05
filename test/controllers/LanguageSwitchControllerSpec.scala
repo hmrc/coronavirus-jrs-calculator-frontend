@@ -27,7 +27,7 @@ class LanguageSwitchControllerSpec extends SpecBaseControllerSpecs {
 
   def languageSwitchController(appConf: FrontendAppConfig) = new LanguageSwitchController(appConf, messagesApi, component)
 
-  "switching language when translation is enabled" should {
+  "switching language when translation is enabled" must {
     "should set the language to Cymraeg" in {
 
       val controller = languageSwitchController(new FrontendAppConfig(injector.instanceOf[ServicesConfig]) {
@@ -56,7 +56,7 @@ class LanguageSwitchControllerSpec extends SpecBaseControllerSpecs {
     }
   }
 
-  "when translation is disabled" should {
+  "when translation is disabled" must {
 
     "should set the language to English regardless of what is requested" in {
       implicit val appConf: FrontendAppConfig = new FrontendAppConfig(injector.instanceOf[ServicesConfig]) {

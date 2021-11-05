@@ -21,8 +21,7 @@ import forms.OnPayrollBefore30thOct2020FormProvider
 import models.PayMethod.Variable
 import models.UserAnswers
 import models.requests.DataRequest
-import org.mockito.Matchers.any
-import org.mockito.Matchers.{eq => argEqual}
+import org.mockito.ArgumentMatchers.{any, eq => argEqual}
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{EmployeeStartDatePage, OnPayrollBefore30thOct2020Page}
@@ -33,8 +32,8 @@ import play.api.test.Helpers._
 import views.html.OnPayrollBefore30thOct2020View
 
 import java.time.LocalDate
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class OnPayrollBefore30thOct2020ControllerSpec extends SpecBaseControllerSpecs with MockitoSugar {
 
@@ -185,7 +184,7 @@ class OnPayrollBefore30thOct2020ControllerSpec extends SpecBaseControllerSpecs w
       }
     }
 
-    "calling onSubmit()" should {
+    "calling onSubmit()" must {
 
       "redirect to the next page when valid data is submitted" in {
 

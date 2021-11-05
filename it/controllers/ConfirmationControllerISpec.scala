@@ -33,7 +33,7 @@ import utils.{CreateRequestHelper, CustomMatchers, ITCoreTestData, IntegrationSp
 
 class ConfirmationControllerISpec
     extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData
-    with FeatureSwitching {
+   with FeatureSwitching {
 
   val november: Seq[(String, Seq[(UserAnswers, BigDecimal)])] = {
     novemberFourWeeklyScenarios ++
@@ -127,7 +127,7 @@ class ConfirmationControllerISpec
     november ++ december ++ january ++ february ++ march ++ april ++ may ++ june
   }
 
-  "GET /confirmation" should {
+  "GET /confirmation" must {
     "show the page" when {
 
       scenarios.foreach {
@@ -145,7 +145,7 @@ class ConfirmationControllerISpec
                 val res = getRequestHeaders("/confirmation")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
                 whenReady(res) { result =>
-                  result should have(
+                  result must have(
                     httpStatus(OK),
                     titleOf("Claim amount for this employee - Job Retention Scheme calculator - GOV.UK"),
                     contentExists(s"${outcome.setScale(2).toString()}", ".govuk-panel__title"),
@@ -164,7 +164,7 @@ class ConfirmationControllerISpec
         val res = getRequestHeaders("/confirmation")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(OK),
             titleOf("Claim amount for this employee - Job Retention Scheme calculator - GOV.UK"),
             contentExists(s"Total furlough grant for pay period = £")
@@ -180,7 +180,7 @@ class ConfirmationControllerISpec
         val res = getRequestHeaders("/confirmation")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(OK),
             titleOf("Claim amount for this employee - Job Retention Scheme calculator - GOV.UK")
           )
@@ -195,7 +195,7 @@ class ConfirmationControllerISpec
         val res = getRequestHeaders("/confirmation")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(OK),
             titleOf("Claim amount for this employee - Job Retention Scheme calculator - GOV.UK")
           )
@@ -210,7 +210,7 @@ class ConfirmationControllerISpec
         val res = getRequestHeaders("/confirmation")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(OK),
             titleOf("Claim amount for this employee - Job Retention Scheme calculator - GOV.UK")
           )
@@ -230,7 +230,7 @@ class ConfirmationControllerISpec
 
         //TODO Should redirect to reset or start again page
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(SEE_OTHER),
             redirectLocation("/job-retention-scheme-calculator/error")
           )

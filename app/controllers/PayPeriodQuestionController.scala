@@ -47,7 +47,6 @@ class PayPeriodQuestionController @Inject()(
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
     extends BaseController with I18nSupport with FastJourneyUserAnswersHandler {
 
-  override val logger: Logger       = LoggerFactory.getLogger(getClass)
   val form: Form[PayPeriodQuestion] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
@@ -70,7 +69,7 @@ class PayPeriodQuestionController @Inject()(
 
   private def processSubmittedAnswer(request: DataRequest[AnyContent], value: PayPeriodQuestion): Future[Result] =
     for {
-      updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodQuestionPage, value)(PayPeriodQuestion.writes))
+      updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodQuestionPage, value))
       _              <- sessionRepository.set(updatedAnswers)
       call = navigator.nextPage(PayPeriodQuestionPage, updatedAnswers)
       updatedJourney <- {

@@ -48,8 +48,6 @@ class PartTimeQuestionController @Inject()(
 )(implicit ec: ExecutionContext)
     extends BaseController with I18nSupport with FurloughPeriodExtractor {
 
-  implicit override val logger: Logger = LoggerFactory.getLogger(getClass)
-
   val form: Form[PartTimeQuestion] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
@@ -61,7 +59,7 @@ class PartTimeQuestionController @Inject()(
         }
         Ok(view(preparedForm, furlough))
       case Invalid(err) => {
-        UserAnswers.logErrors(err)
+        UserAnswers.logErrors(err)(logger.logger)
         Redirect(routes.ErrorController.somethingWentWrong())
       }
     }
@@ -76,12 +74,12 @@ class PartTimeQuestionController @Inject()(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, furlough))),
             value =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(PartTimeQuestionPage, value)(PartTimeQuestion.writes))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(PartTimeQuestionPage, value))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(navigator.nextPage(PartTimeQuestionPage, updatedAnswers))
           )
       case Invalid(err) => {
-        UserAnswers.logErrors(err)
+        UserAnswers.logErrors(err)(logger.logger)
         Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
       }
     }

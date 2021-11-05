@@ -6,7 +6,7 @@ import models._
 import utils._
 
 object FebruaryConfirmationScenarios extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers
-  with BaseITConstants with ITCoreTestData {
+ with BaseITConstants with ITCoreTestData {
 
   val februaryFourWeeklyScenarios: Seq[(String, Seq[(UserAnswers, BigDecimal)])] = Seq(
     "February Fixed Four Weekly Scenarios" -> Seq(

@@ -35,7 +35,7 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
 
   val form = new ClaimPeriodEndFormProvider()(claimStart)
 
-  ".endDate" should {
+  ".endDate" must {
 
     "bind valid data" in {
 
@@ -52,14 +52,14 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
 
         val result = form.bind(data)
 
-        result.value.value shouldEqual date
+        result.value.value mustEqual date
       }
     }
 
     "fail to bind an empty date" in {
       val result = form.bind(Map.empty[String, String])
 
-      result.errors should contain allElementsOf List(
+      result.errors must contain allElementsOf List(
         FormError("endDate.day", LocalDateFormatter.dayBlankErrorKey),
         FormError("endDate.month", LocalDateFormatter.monthBlankErrorKey),
         FormError("endDate.year", LocalDateFormatter.yearBlankErrorKey),
@@ -76,7 +76,7 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
 
       val result = form.bind(data)
 
-      result.errors shouldBe List(FormError("endDate", "claimPeriodEnd.cannot.be.before.claimStart"))
+      result.errors mustBe List(FormError("endDate", "claimPeriodEnd.cannot.be.before.claimStart"))
     }
 
     "fail with invalid dates -  after policy end" in {
@@ -93,7 +93,7 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
 
       val result = form.bind(data)
 
-      result.errors shouldBe List(
+      result.errors mustBe List(
         FormError(
           key = "endDate",
           message = "claimPeriodEnd.cannot.be.after.policyEnd",
@@ -115,7 +115,7 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
 
       val result = form.bind(data)
 
-      result.errors shouldBe List(FormError("endDate", "claimPeriodEnd.cannot.be.lessThan.7days"))
+      result.errors mustBe List(FormError("endDate", "claimPeriodEnd.cannot.be.lessThan.7days"))
     }
 
     "fail with invalid dates - claim can be less than 7 days in phase two if end date is last day of month" in {
@@ -131,7 +131,7 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
 
       val result = form.bind(data)
 
-      result.errors shouldBe List()
+      result.errors mustBe List()
     }
 
     "fail with invalid dates - if start and end are not of the same calendar month" in {
@@ -148,7 +148,7 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
 
       val result = form.bind(data)
 
-      result.errors shouldBe List(FormError("endDate", "claimPeriodEnd.cannot.be.of.same.month"))
+      result.errors mustBe List(FormError("endDate", "claimPeriodEnd.cannot.be.of.same.month"))
     }
 
     "fail with invalid dates - if start and end are not of the same calendar year" in {
@@ -165,7 +165,7 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
 
       val result = form.bind(data)
 
-      result.errors shouldBe List(FormError("endDate", "claimPeriodEnd.cannot.be.different.years"))
+      result.errors mustBe List(FormError("endDate", "claimPeriodEnd.cannot.be.different.years"))
     }
 
   }

@@ -99,6 +99,4 @@ class PartialPayAfterFurloughController @Inject()(
           )
       }
   }
-
-  override val logger: Logger = LoggerFactory.getLogger(getClass)
 }

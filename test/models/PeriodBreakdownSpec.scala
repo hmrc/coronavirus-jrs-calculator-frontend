@@ -16,16 +16,15 @@
 
 package models
 
-import java.time.LocalDate
-
 import base.{CoreTestDataBuilder, SpecBaseControllerSpecs}
 import models.NicCategory.Payable
 import models.PaymentFrequency.Monthly
 import models.PensionStatus.DoesContribute
-import org.scalatest.MustMatchers
 import services.Threshold
 
-class PeriodBreakdownSpec extends SpecBaseControllerSpecs with MustMatchers with CoreTestDataBuilder {
+import java.time.LocalDate
+
+class PeriodBreakdownSpec extends SpecBaseControllerSpecs with CoreTestDataBuilder {
 
   "PhaseTwoFurloughBreakdown" must {
     "detect if furlough has been capped" in {

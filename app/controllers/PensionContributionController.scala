@@ -63,7 +63,7 @@ class PensionContributionController @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PensionStatusPage, value)(PensionStatus.writes))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PensionStatusPage, value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PensionStatusPage, updatedAnswers))
       )

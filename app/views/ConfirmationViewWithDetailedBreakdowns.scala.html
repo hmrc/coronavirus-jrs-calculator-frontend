@@ -40,7 +40,7 @@
 
     @confirmation {
 
-        @h1(Html(messages("confirmation.heading")), classes = Some(""))
+        @h1("confirmation.heading", classes = Some(""))
 
         <div class="furlough-heading">
             <p>@messages("confirmation.confirmation.p1")</p>
@@ -71,7 +71,7 @@
         <a id="print-link" class="govuk-link" href="">@messages("confirmation.print.this.page")</a>
     }
 
-    @h2(Html(messages("confirmation.nextSteps.heading")), classes = Some("govuk-heading-m"))
+    @h2("confirmation.nextSteps.heading", classes = Some("govuk-heading-m"))
 
     <ul class="govuk-list govuk-list--number">
         <li>
@@ -89,7 +89,7 @@
         <li>@Html(messages("confirmation.nextSteps.li.4.1", link(appConfig.jobRetentionScheme, "confirmation.nextSteps.li.4.2", true)))</li>
     </ul>
 
-    @button(messages("confirmation.startAgain"), href = Some(routes.ClaimPeriodQuestionController.onPageLoad()), classes = Some("govuk-button"))
+    @button(messages("confirmation.startAgain"), href = Some(routes.ClaimPeriodQuestionController.onPageLoad().url), classes = Some("govuk-button"))
 
     @h3(Messages("confirmation.breakdown.summary"))
         @for(messageKey <- cvb.detailedBreakdownMessageKeys) {
@@ -110,8 +110,8 @@
     @detailedPensionBreakdown(detailedBreakdown.pension, detailedBreakdown.furlough.furloughGrant)
     }
 
-    @p(Html(link(appConfig.webchatHelpUrl, "confirmation.webchat", true)))
+    @p(link(appConfig.webchatHelpUrl, "confirmation.webchat", true))
 
-    @p(Html(link(routes.FeedbackSurveyController.startSurvey(), "confirmation.feedbackSurvey.label", true)))
+    @p(link(routes.FeedbackSurveyController.startSurvey().url, "confirmation.feedbackSurvey.label", true))
 }
 

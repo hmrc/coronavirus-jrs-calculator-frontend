@@ -31,6 +31,6 @@
 
         @p(Html(messages("calculationUnsupported.p1")))
 
-        @button("calculationUnsupported.startAgain", href = Some(routes.ClaimPeriodStartController.onPageLoad()), classes = Some("govuk-button"))
+        @button("calculationUnsupported.startAgain", href = Some(routes.ClaimPeriodStartController.onPageLoad().url), classes = Some("govuk-button"))
 
     }
