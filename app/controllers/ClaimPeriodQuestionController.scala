@@ -49,8 +49,6 @@ class ClaimPeriodQuestionController @Inject()(
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
     extends BaseController with FastJourneyUserAnswersHandler {
 
-  override implicit val logger: Logger = LoggerFactory.getLogger(getClass)
-
   val form: Form[ClaimPeriodQuestion] = formProvider()
   protected val userAnswerPersistence = new UserAnswerPersistence(sessionRepository.set)
 

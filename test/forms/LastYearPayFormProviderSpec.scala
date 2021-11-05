@@ -36,8 +36,8 @@ class LastYearPayFormProviderSpec extends BigDecimalFieldBehaviours {
 
       val result = form.bind(data)
 
-      result.errors shouldBe empty
-      result.value.value.value shouldEqual BigDecimal(value)
+      result.errors mustBe empty
+      result.value.value.value mustEqual BigDecimal(value)
     }
 
     behave like bigDecimalField(

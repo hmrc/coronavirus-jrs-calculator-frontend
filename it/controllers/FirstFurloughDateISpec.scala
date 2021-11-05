@@ -20,7 +20,7 @@ class FirstFurloughDateISpec extends IntegrationSpecBase with CreateRequestHelpe
       val res = getRequestHeaders("/first-furlough-date")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
-        result should have(
+        result must have(
           httpStatus(OK),
           titleOf(firstFurloughDate)
         )
@@ -48,7 +48,7 @@ class FirstFurloughDateISpec extends IntegrationSpecBase with CreateRequestHelpe
         )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(SEE_OTHER),
             redirectLocation(controllers.routes.PayDateController.onPageLoad(1).url)
           )

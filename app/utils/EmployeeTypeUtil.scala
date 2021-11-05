@@ -24,12 +24,11 @@ import models.PayMethod.{Regular, Variable}
 import models.requests.DataRequest
 import models.{EmployeeRTISubmission, EmployeeStarted, RegularLengthEmployed}
 import pages._
-import play.api.Logger.logger
 import uk.gov.hmrc.http.InternalServerException
 import utils.LocalDateHelpers.{feb1st2020, nov1st2020}
 import utils.PagerDutyHelper.PagerDutyKeys.EMPLOYEE_TYPE_COULD_NOT_BE_RESOLVED
 
-trait EmployeeTypeUtil extends FeatureSwitching with DataExtractor {
+trait EmployeeTypeUtil extends FeatureSwitching with DataExtractor with LoggerUtil {
 
   def regularPayResolver[T](
     type1EmployeeResult: => Option[T] = None,

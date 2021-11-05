@@ -37,8 +37,8 @@ class DateBehaviours extends FieldBehaviours {
 
         val result = form.bind(data)
 
-        result.errors shouldEqual Seq()
-        result.value.value shouldEqual date
+        result.errors mustEqual Seq()
+        result.value.value mustEqual date
       }
     }
 
@@ -56,7 +56,7 @@ class DateBehaviours extends FieldBehaviours {
 
         val result = form.bind(data)
 
-        result.errors should contain only formError
+        result.errors must contain only formError
       }
     }
 
@@ -74,7 +74,7 @@ class DateBehaviours extends FieldBehaviours {
 
         val result = form.bind(data)
 
-        result.errors should contain only formError
+        result.errors must contain only formError
       }
     }
 
@@ -82,7 +82,7 @@ class DateBehaviours extends FieldBehaviours {
     "fail to bind an empty date" in {
       val result = form.bind(Map.empty[String, String])
 
-      result.errors should contain allElementsOf List(
+      result.errors must contain allElementsOf List(
         FormError(s"$key.day", LocalDateFormatter.dayBlankErrorKey),
         FormError(s"$key.month", LocalDateFormatter.monthBlankErrorKey),
         FormError(s"$key.year", LocalDateFormatter.yearBlankErrorKey),

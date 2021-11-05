@@ -25,7 +25,7 @@
 
 @(claimPeriod: Period)(implicit messages: Messages, appConfig: FrontendAppConfig)
 
-@h2(Html(messages("confirmation.nextSteps.heading")), classes = Some("govuk-heading-m"))
+@h2("confirmation.nextSteps.heading", classes = Some("govuk-heading-m"))
 
 @bullets(Seq(
     HtmlFormat.fill(immutable.Seq(

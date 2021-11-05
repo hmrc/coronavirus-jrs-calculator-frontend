@@ -41,9 +41,9 @@ object PartTimePeriods {
     CheckboxItem(
       name = Some(s"value[${value._2}]"),
       id = Some(s"part-time-period_${value._2.toString}"),
-      value = periodEnd,
+      value = periodEnd.toString,
       content = content,
-      checked = form.data.values.contains(periodEnd.toString)
+      checked = form.data.values.exists(_ == periodEnd.toString)
     )
   }
 

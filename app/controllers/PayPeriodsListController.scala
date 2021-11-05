@@ -18,19 +18,20 @@ package controllers
 
 import controllers.actions._
 import forms.PayPeriodsListFormProvider
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.PayPeriodsListPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.PayPeriodsListView
 
 import scala.concurrent.{ExecutionContext, Future}
 import cats.data.Validated.{Invalid, Valid}
 import handlers.PayPeriodsListHandler
-import models.UserAnswers
+import models.{PayPeriodsList, UserAnswers}
 
 class PayPeriodsListController @Inject()(
   override val messagesApi: MessagesApi,
@@ -60,7 +61,7 @@ class PayPeriodsListController @Inject()(
 
             Ok(view(preparedForm, periods, claimPeriod))
           case Invalid(err) =>
-            UserAnswers.logErrors(err)(logger)
+            UserAnswers.logErrors(err)(logger.logger)
             Redirect(routes.ErrorController.somethingWentWrong())
         }
     }
@@ -83,7 +84,7 @@ class PayPeriodsListController @Inject()(
                   } yield Redirect(navigator.nextPage(PayPeriodsListPage, updatedAnswers))
               )
           case Invalid(err) =>
-            UserAnswers.logErrors(err)(logger)
+            UserAnswers.logErrors(err)(logger.logger)
             Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
         }
     }

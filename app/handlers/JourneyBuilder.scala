@@ -22,9 +22,9 @@ import models.PayMethod.{Regular, Variable}
 import models.{BranchingQuestions, Journey, PhaseTwoReferencePay, PhaseTwoRegularPayData, PhaseTwoVariablePayData, PhaseTwoVariablePayWithCylbData, ReferencePay, RegularPay, RegularPayData, UserAnswers, VariablePay, VariablePayData, VariablePayWithCylb, VariablePayWithCylbData}
 import cats.syntax.apply._
 import models.UserAnswers.AnswerV
-import play.api.Logger.logger
+import utils.LoggerUtil
 
-trait JourneyBuilder extends DataExtractor {
+trait JourneyBuilder extends DataExtractor with LoggerUtil {
 
   def define(data: BranchingQuestions, cylbCutoff: LocalDate): Journey = data match {
     case BranchingQuestions(Regular, _, _)                                                     => RegularPay

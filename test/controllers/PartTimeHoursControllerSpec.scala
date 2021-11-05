@@ -25,7 +25,7 @@ import models.PayMethod.Regular
 import models.PaymentFrequency.Monthly
 import models.requests.DataRequest
 import models.{FullPeriod, Hours, PartTimeHours, Periods, UsualHours}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.PartTimeHoursPage

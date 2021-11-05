@@ -1,26 +1,26 @@
 # microservice specific routes
 
-->          /govuk-frontend                                  govuk.Routes
+->          /hmrc-frontend                                   hmrcfrontend.Routes
 
-GET         /                                                controllers.RootPageController.onPageLoad
+GET         /                                                controllers.RootPageController.onPageLoad()
 
 GET         /start                                           controllers.RootPageController.start()
 
-GET         /keepalive                                       controllers.IndexController.keepalive
+GET         /keepalive                                       controllers.IndexController.keepalive()
 
 GET         /assets/*file                                    controllers.Assets.versioned(path="/public", file: Asset)
 
 GET         /language/:lang                                  controllers.LanguageSwitchController.switchToLanguage(lang: Language)
 
-GET         /this-service-has-been-reset                     controllers.SessionExpiredController.onPageLoad
+GET         /this-service-has-been-reset                     controllers.SessionExpiredController.onPageLoad()
 
-GET         /unauthorised                                    controllers.UnauthorisedController.onPageLoad
+GET         /unauthorised                                    controllers.UnauthorisedController.onPageLoad()
 
-GET         /service-unavailable                             controllers.ErrorController.internalServerError
+GET         /service-unavailable                             controllers.ErrorController.internalServerError()
 
-GET         /error                                           controllers.ErrorController.somethingWentWrong
+GET         /error                                           controllers.ErrorController.somethingWentWrong()
 
-GET         /restart-service                                 controllers.StartAgainController.startAgain
+GET         /restart-service                                 controllers.StartAgainController.startAgain()
 
 GET         /claim-period-start                              controllers.ClaimPeriodStartController.onPageLoad()
 POST        /claim-period-start                              controllers.ClaimPeriodStartController.onSubmit()
@@ -68,11 +68,11 @@ POST        /annual-pay-amount                               controllers.AnnualP
 
 GET         /coming-soon                                     controllers.ComingSoonController.onPageLoad(showCalculateTopupsLink: Boolean ?= false)
 
-GET         /variable-pay-partial-pay-before-furlough        controllers.PartialPayBeforeFurloughController.onPageLoad
-POST        /variable-pay-partial-pay-before-furlough        controllers.PartialPayBeforeFurloughController.onSubmit
+GET         /variable-pay-partial-pay-before-furlough        controllers.PartialPayBeforeFurloughController.onPageLoad()
+POST        /variable-pay-partial-pay-before-furlough        controllers.PartialPayBeforeFurloughController.onSubmit()
 
-GET         /variable-pay-partial-pay-after-furlough         controllers.PartialPayAfterFurloughController.onPageLoad
-POST        /variable-pay-partial-pay-after-furlough         controllers.PartialPayAfterFurloughController.onSubmit
+GET         /variable-pay-partial-pay-after-furlough         controllers.PartialPayAfterFurloughController.onPageLoad()
+POST        /variable-pay-partial-pay-after-furlough         controllers.PartialPayAfterFurloughController.onSubmit()
 
 GET         /last-pay-date                                   controllers.LastPayDateController.onPageLoad()
 POST        /last-pay-date                                   controllers.LastPayDateController.onSubmit()
@@ -89,8 +89,8 @@ POST        /topup-pay-periods                               controllers.TopUpPe
 GET         /topup-pay-amount/:idx                           controllers.TopUpAmountController.onPageLoad(idx: Int)
 POST        /topup-pay-amount/:idx                           controllers.TopUpAmountController.onSubmit(idx: Int)
 
-GET         /additional-pay-question                         controllers.AdditionalPaymentStatusController.onPageLoad
-POST        /additional-pay-question                         controllers.AdditionalPaymentStatusController.onSubmit
+GET         /additional-pay-question                         controllers.AdditionalPaymentStatusController.onPageLoad()
+POST        /additional-pay-question                         controllers.AdditionalPaymentStatusController.onSubmit()
 
 GET         /additional-pay-periods                          controllers.AdditionalPaymentPeriodsController.onPageLoad()
 POST        /additional-pay-periods                          controllers.AdditionalPaymentPeriodsController.onSubmit()

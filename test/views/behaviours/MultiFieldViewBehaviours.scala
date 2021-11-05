@@ -24,7 +24,7 @@ trait MultiFieldViewBehaviours[T <: Form[_]] extends ViewBehaviours {
   def pageWithMultiFieldForm(expectedLabels: Map[String, String])(implicit doc: Document): Unit =
     "behave link a page with a multi field form" when {
 
-      "rendered" should {
+      "rendered" must {
 
         "contain a label for each of the inputs" in {
           val labels   = doc.select("label")

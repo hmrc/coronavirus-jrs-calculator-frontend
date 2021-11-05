@@ -36,7 +36,7 @@
 
 @confirmation {
 
-    @h1(Html(messages("confirmation.heading")), classes = Some("govuk-panel__body govuk-!-margin-bottom-4 govuk-!-margin-top-0 govuk-!-font-size-27"))
+    @h1("confirmation.heading", classes = Some("govuk-panel__body govuk-!-margin-bottom-4 govuk-!-margin-top-0 govuk-!-font-size-27"))
 
     <div class="furlough-heading">
         <p class="govuk-!-font-weight-regular govuk-!-font-size-24 govuk-!-margin-bottom-4 govuk-!-margin-top-0">@messages("confirmation.confirmation.p1")</p>
@@ -77,7 +77,7 @@
         <li>@messages(s"confirmation.pension.${cm.pension}")</li>
     </ul>
 
-    @h2(Html(messages("confirmation.breakdown.h2")), classes = Some("govuk-heading-m"))
+    @h2("confirmation.breakdown.h2", classes = Some("govuk-heading-m"))
 
     @p(Html(messages("confirmation.breakdown.p")))
 
@@ -101,7 +101,7 @@
         }
     }
 
-    @h2(Html(messages("confirmation.nextSteps.heading")), classes = Some("govuk-heading-m"))
+    @h2("confirmation.nextSteps.heading", classes = Some("govuk-heading-m"))
 
     <ul class="govuk-list govuk-list--number">
         <li>
@@ -119,8 +119,8 @@
         <li>@Html(messages("confirmation.nextSteps.li.4.1", link(appConfig.jobRetentionScheme, "confirmation.nextSteps.li.4.2", true)))</li>
     </ul>
 
-    @button(messages("confirmation.startAgain"), href = Some(routes.ClaimPeriodQuestionController.onPageLoad()), classes = Some("govuk-button"))
+    @button(messages("confirmation.startAgain"), href = Some(routes.ClaimPeriodQuestionController.onPageLoad().url), classes = Some("govuk-button"))
 
-    @p(Html(link(appConfig.webchatHelpUrl, "confirmation.webchat", true)))
+    @p(link(appConfig.webchatHelpUrl, "confirmation.webchat", true))
 }
 

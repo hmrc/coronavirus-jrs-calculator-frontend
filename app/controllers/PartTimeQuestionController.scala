@@ -19,6 +19,7 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.PartTimeQuestionFormProvider
+
 import javax.inject.Inject
 import models.{PartTimeQuestion, UserAnswers}
 import navigation.Navigator
@@ -26,6 +27,7 @@ import org.slf4j.{Logger, LoggerFactory}
 import pages.PartTimeQuestionPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.Writes
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.FurloughPeriodExtractor
@@ -46,8 +48,6 @@ class PartTimeQuestionController @Inject()(
 )(implicit ec: ExecutionContext)
     extends BaseController with I18nSupport with FurloughPeriodExtractor {
 
-  implicit override val logger: Logger = LoggerFactory.getLogger(getClass)
-
   val form: Form[PartTimeQuestion] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
@@ -59,7 +59,7 @@ class PartTimeQuestionController @Inject()(
         }
         Ok(view(preparedForm, furlough))
       case Invalid(err) => {
-        UserAnswers.logErrors(err)
+        UserAnswers.logErrors(err)(logger.logger)
         Redirect(routes.ErrorController.somethingWentWrong())
       }
     }
@@ -79,7 +79,7 @@ class PartTimeQuestionController @Inject()(
               } yield Redirect(navigator.nextPage(PartTimeQuestionPage, updatedAnswers))
           )
       case Invalid(err) => {
-        UserAnswers.logErrors(err)
+        UserAnswers.logErrors(err)(logger.logger)
         Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
       }
     }

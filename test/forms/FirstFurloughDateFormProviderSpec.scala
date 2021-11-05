@@ -30,7 +30,7 @@ class FirstFurloughDateFormProviderSpec extends SpecBaseControllerSpecs {
 
   def form(furloughStartDate: LocalDate) = new FirstFurloughDateFormProvider()(furloughStartDate)
 
-  ".firstFurloughDate" should {
+  ".firstFurloughDate" must {
 
     "when first furlough start date is before the furlough date" in {
 
@@ -44,7 +44,7 @@ class FirstFurloughDateFormProviderSpec extends SpecBaseControllerSpecs {
       )
 
       val result = form(furloughStartDate).bind(data)
-      result.value.value shouldEqual firstFurloughDate
+      result.value.value mustEqual firstFurloughDate
     }
 
     "when furlough start date is the same as the first furlough date" in {
@@ -60,7 +60,7 @@ class FirstFurloughDateFormProviderSpec extends SpecBaseControllerSpecs {
 
       val result = form(furloughStartDate).bind(data)
 
-      result.errors shouldBe List(
+      result.errors mustBe List(
         FormError("firstFurloughDate", "firstFurloughStartDate.error.afterStartDate", Seq(ViewUtils.dateToString(furloughStartDate)))
       )
     }
@@ -77,7 +77,7 @@ class FirstFurloughDateFormProviderSpec extends SpecBaseControllerSpecs {
       )
 
       val result = form(furloughStartDate).bind(data)
-      result.errors shouldBe List(
+      result.errors mustBe List(
         FormError("firstFurloughDate", "firstFurloughStartDate.error.afterStartDate", Seq(ViewUtils.dateToString(furloughStartDate)))
       )
     }
@@ -93,7 +93,7 @@ class FirstFurloughDateFormProviderSpec extends SpecBaseControllerSpecs {
 
         val result = form(firstFurloughDatesGenEnd.plusDays(1)).bind(data)
 
-        result.value.value shouldEqual date
+        result.value.value mustEqual date
       }
 
     }
@@ -101,7 +101,7 @@ class FirstFurloughDateFormProviderSpec extends SpecBaseControllerSpecs {
     "fail to bind an empty date" in {
       val result = form(firstFurloughDatesGenEnd.plusDays(1)).bind(Map.empty[String, String])
 
-      result.errors should contain allElementsOf List(
+      result.errors must contain allElementsOf List(
         FormError(s"firstFurloughDate.day", LocalDateFormatter.dayBlankErrorKey),
         FormError(s"firstFurloughDate.month", LocalDateFormatter.monthBlankErrorKey),
         FormError(s"firstFurloughDate.year", LocalDateFormatter.yearBlankErrorKey),
@@ -118,7 +118,7 @@ class FirstFurloughDateFormProviderSpec extends SpecBaseControllerSpecs {
 
       val result = form(firstFurloughDatesGenEnd.plusDays(1)).bind(data)
 
-      result.errors shouldBe List(
+      result.errors mustBe List(
         FormError("firstFurloughDate", "firstFurloughStartDate.error.beforeExtensionDate")
       )
     }

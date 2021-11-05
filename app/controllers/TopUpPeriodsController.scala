@@ -17,11 +17,11 @@
 package controllers
 
 import java.time.LocalDate
-
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.TopUpPeriodsFormProvider
 import handlers.FurloughCalculationHandler
+
 import javax.inject.Inject
 import models.{TopUpPeriod, UserAnswers}
 import navigation.Navigator
@@ -31,9 +31,10 @@ import pages.TopUpPeriodsPage
 import play.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.Writes
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.TopUpPeriodsView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -50,8 +51,6 @@ class TopUpPeriodsController @Inject()(
   view: TopUpPeriodsView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with FurloughCalculationHandler {
-
-  implicit val logger: slf4j.Logger = LoggerFactory.getLogger(getClass)
 
   val form: Form[List[LocalDate]] = formProvider()
 
@@ -74,7 +73,7 @@ class TopUpPeriodsController @Inject()(
       .fold(
         nel => {
           logger.error("Failed handleCalculationFurloughV")
-          UserAnswers.logErrors(nel)
+          UserAnswers.logErrors(nel)(logger.logger)
           Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
         },
         identity

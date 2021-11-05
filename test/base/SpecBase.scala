@@ -27,6 +27,8 @@ import navigation.Navigator
 import org.jsoup.Jsoup
 import org.scalatest._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.i18n.{Messages, MessagesApi}
@@ -41,8 +43,8 @@ import scala.concurrent.duration.{Duration, FiniteDuration, _}
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 trait SpecBase
-    extends WordSpec with MustMatchers with GuiceOneAppPerSuite with TryValues with OptionValues with ScalaFutures with IntegrationPatience
-    with BeforeAndAfterEach with CoreTestData {
+    extends PlaySpec with GuiceOneAppPerSuite with TryValues with ScalaFutures with IntegrationPatience with BeforeAndAfterEach
+    with CoreTestData {
 
   override def beforeEach(): Unit =
     super.beforeEach()

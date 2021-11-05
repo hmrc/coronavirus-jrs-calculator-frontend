@@ -146,7 +146,7 @@ class JrsExtensionConfirmationViewSpec
 
   "JRSExtensionConfirmationViewSpec" when {
 
-    "for a Regular Pay Pre-Covid Employee (Employee Type 1)" should {
+    "for a Regular Pay Pre-Covid Employee (Employee Type 1)" must {
 
       behave like normalPage(messageKeyPrefix)
       behave like pageWithHeading(heading = heading)
@@ -285,7 +285,7 @@ class EmployeeType5JrsExtensionConfirmationViewSpec
 
   implicit val doc: Document = asDocument(applyView())
 
-  "for a Variable Pay New Starter Employee (Employee Type 5)" should {
+  "for a Variable Pay New Starter Employee (Employee Type 5)" must {
 
     behave like normalPage(messageKeyPrefix)
     behave like pageWithHeading(heading = heading)

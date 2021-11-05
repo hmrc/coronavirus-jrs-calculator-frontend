@@ -22,10 +22,9 @@ import pages.PayDatePage
 import cats.syntax.apply._
 import models.UserAnswers.AnswerV
 import org.slf4j.{Logger, LoggerFactory}
+import utils.LoggerUtil
 
-trait PayPeriodsListHandler extends DataExtractor {
-
-  val logger: Logger = LoggerFactory.getLogger(getClass)
+trait PayPeriodsListHandler extends DataExtractor with LoggerUtil {
 
   def extractPayPeriods(userAnswers: UserAnswers): Seq[Periods] =
     userAnswers.getList(PayDatePage) match {
@@ -35,7 +34,7 @@ trait PayPeriodsListHandler extends DataExtractor {
           case Valid(furlough) =>
             generatePeriodsWithFurlough(endDates, furlough)
           case Invalid(errors) =>
-            UserAnswers.logWarnings(errors)(logger)
+            UserAnswers.logWarnings(errors)(logger.logger)
             Seq.empty
         }
     }

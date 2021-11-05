@@ -34,6 +34,7 @@ import viewmodels.ViewBreakdown
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
+import play.api.libs.json.LowPriorityWrites
 
 object JobRetentionSchemeCalculatorEvent extends Enumeration {
   type JobRetentionSchemeCalculatorEvent = Value

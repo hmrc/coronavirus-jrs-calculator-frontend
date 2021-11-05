@@ -22,7 +22,7 @@ import forms.StatutoryLeavePayFormProvider
 import models.requests.DataRequest
 import models.{Amount, AnnualPayAmount, NormalMode, UserAnswers}
 import navigation.Navigator
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{AnnualPayAmountPage, StatutoryLeavePayPage}
@@ -63,7 +63,7 @@ class StatutoryLeavePayControllerSpec extends SpecBaseControllerSpecs with Mocki
 
   "StatutoryLeavePay Controller" must {
 
-    "onPageLoad" should {
+    "onPageLoad" must {
       val referencePay = BigDecimal(420.00)
 
       "return OK and the correct view for a GET" in {
@@ -117,7 +117,7 @@ class StatutoryLeavePayControllerSpec extends SpecBaseControllerSpecs with Mocki
       }
     }
 
-    "onSubmit" should {
+    "onSubmit" must {
       val referencePay = BigDecimal(420.01)
 
       "redirect to the next page when valid data is submitted" in {

@@ -1,5 +1,7 @@
 $govuk-assets-path: "/job-retention-scheme-calculator/assets/lib/govuk-frontend/govuk/assets/";
+
 @import "lib/govuk-frontend/govuk/all";
+@import "lib/hmrc-frontend/hmrc/all";
 
 @import "timeout-dialog";
 @import "language-selection";

@@ -16,15 +16,15 @@
 
 package services
 
-import java.time.{Month, Year}
 import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
 import models.{FullPeriodCap, FurloughCap, PartialPeriodCap, PaymentFrequency, Period, PeriodSpansMonthCap}
-import play.api.Logger.logger
 import utils.AmountRounding._
+import utils.LoggerUtil
 
+import java.time.{Month, Year}
 import scala.math.BigDecimal.RoundingMode._
 
-trait FurloughCapCalculator extends PeriodHelper {
+trait FurloughCapCalculator extends PeriodHelper with LoggerUtil {
 
   def furloughCap(paymentFrequency: PaymentFrequency, payPeriod: Period): FurloughCap = {
     val furloughCap = capForFrequency(paymentFrequency)

@@ -54,7 +54,7 @@ class PartTimeNormalHoursFormProviderSpec extends DoubleFieldBehaviours with Cor
     val data: Map[String, String] =
       Map("value" -> (hours + 1).toString)
 
-    form.bind(data).errors.size shouldBe 1
-    form.bind(data).errors.head.message shouldBe "partTimeNormalHours.error.max"
+    form.bind(data).errors.size mustBe 1
+    form.bind(data).errors.head.message mustBe "partTimeNormalHours.error.max"
   }
 }

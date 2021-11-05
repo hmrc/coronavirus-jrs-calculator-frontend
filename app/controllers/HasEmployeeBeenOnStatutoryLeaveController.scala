@@ -27,7 +27,8 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.LoggerUtil
 import viewmodels.BeenOnStatutoryLeaveHelper
 import views.html.HasEmployeeBeenOnStatutoryLeaveView
 
@@ -45,10 +46,10 @@ class HasEmployeeBeenOnStatutoryLeaveController @Inject()(
   helper: BeenOnStatutoryLeaveHelper,
   val controllerComponents: MessagesControllerComponents,
   view: HasEmployeeBeenOnStatutoryLeaveView)(implicit ec: ExecutionContext, appConfig: FrontendAppConfig)
-    extends FrontendBaseController with I18nSupport {
+    extends FrontendBaseController with I18nSupport with LoggerUtil {
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    Logger.debug(
+    logger.debug(
       s"[HasEmployeeBeenOnStatutoryLeaveController][onPageLoad] " +
         s"boundaryStart: ${helper.boundaryStart()}, boundaryEnd: ${helper.boundaryEnd()}")
     val form: Form[Boolean] = formProvider(helper.boundaryStart(), helper.boundaryEnd())

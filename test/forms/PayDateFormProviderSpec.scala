@@ -37,9 +37,9 @@ class PayDateFormProviderSpec extends DateBehaviours with GuiceOneAppPerSuite {
 
   val form = new PayDateFormProvider()()
 
-  "PayDateFormProvider" should {
+  "PayDateFormProvider" must {
 
-    ".value" should {
+    ".value" must {
 
       val validData = datesBetween(
         min = LocalDate.of(2000, 1, 1),
@@ -74,8 +74,8 @@ class PayDateFormProviderSpec extends DateBehaviours with GuiceOneAppPerSuite {
 
             val result = new PayDateFormProvider().apply(beforeDate = Some(date)).bind(data)
 
-            result.errors shouldBe empty
-            result.value.value shouldEqual dateBefore
+            result.errors mustBe empty
+            result.value.value mustEqual dateBefore
         }
       }
 
@@ -100,9 +100,9 @@ class PayDateFormProviderSpec extends DateBehaviours with GuiceOneAppPerSuite {
 
             val result = new PayDateFormProvider().apply(beforeDate = Some(date)).bind(data)
 
-            result.errors.head.key shouldBe "value"
-            result.errors.head.message shouldBe "payDate.error.mustBeBefore"
-            result.errors.head.args should contain only dateToString(date)
+            result.errors.head.key mustBe "value"
+            result.errors.head.message mustBe "payDate.error.mustBeBefore"
+            result.errors.head.args must contain only dateToString(date)
         }
       }
     }
@@ -130,8 +130,8 @@ class PayDateFormProviderSpec extends DateBehaviours with GuiceOneAppPerSuite {
 
             val result = new PayDateFormProvider().apply(afterDate = Some(date)).bind(data)
 
-            result.errors shouldBe empty
-            result.value.value shouldEqual dateAfter
+            result.errors mustBe empty
+            result.value.value mustEqual dateAfter
         }
       }
 
@@ -156,9 +156,9 @@ class PayDateFormProviderSpec extends DateBehaviours with GuiceOneAppPerSuite {
 
             val result = new PayDateFormProvider().apply(afterDate = Some(date)).bind(data)
 
-            result.errors.head.key shouldBe "value"
-            result.errors.head.message shouldBe "payDate.error.mustBeAfter"
-            result.errors.head.args should contain only dateToString(date)
+            result.errors.head.key mustBe "value"
+            result.errors.head.message mustBe "payDate.error.mustBeAfter"
+            result.errors.head.args must contain only dateToString(date)
         }
       }
     }
@@ -179,8 +179,8 @@ class PayDateFormProviderSpec extends DateBehaviours with GuiceOneAppPerSuite {
 
         val result = new PayDateFormProvider().apply(beforeDate = Some(dateBefore), paymentFrequency = Some(pf)).bind(data)
 
-        result.errors shouldBe empty
-        result.value.value shouldEqual formData
+        result.errors mustBe empty
+        result.value.value mustEqual formData
       }
 
       "return InValid if date is before expected lookback date as per paymentFrequency" in {
@@ -198,9 +198,9 @@ class PayDateFormProviderSpec extends DateBehaviours with GuiceOneAppPerSuite {
 
         val result = new PayDateFormProvider().apply(beforeDate = Some(dateBefore), paymentFrequency = Some(pf)).bind(data)
 
-        result.errors.head.key shouldBe "value"
-        result.errors.head.message shouldBe "payDate.error.must.be.as.per.paymentFrequency"
-        result.errors.head.args shouldBe Seq(dateToString(dateBefore), dateToString(lookBackDateAsPerPF))
+        result.errors.head.key mustBe "value"
+        result.errors.head.message mustBe "payDate.error.must.be.as.per.paymentFrequency"
+        result.errors.head.args mustBe Seq(dateToString(dateBefore), dateToString(lookBackDateAsPerPF))
       }
     }
   }

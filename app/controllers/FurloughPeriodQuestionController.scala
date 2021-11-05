@@ -51,8 +51,7 @@ class FurloughPeriodQuestionController @Inject()(
 
   val form: Form[FurloughPeriodQuestion] = formProvider()
 
-  override implicit val logger: Logger = LoggerFactory.getLogger(getClass)
-  protected val userAnswerPersistence  = new UserAnswerPersistence(sessionRepository.set)
+  protected val userAnswerPersistence = new UserAnswerPersistence(sessionRepository.set)
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     getRequiredAnswersOrRestartJourneyV(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
@@ -70,7 +69,7 @@ class FurloughPeriodQuestionController @Inject()(
             Future.successful(previousPageOrRedirect(Ok(view(preparedForm, claimStart, furloughStart, furloughStatus, Some(end)))))
           case Invalid(errors) =>
             logger.error("Failed to extract furlough period.")
-            UserAnswers.logErrors(errors)
+            UserAnswers.logErrors(errors)(logger.logger)
             Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
         }
       }
@@ -101,7 +100,7 @@ class FurloughPeriodQuestionController @Inject()(
       case Valid(FurloughEnded(_, end)) =>
         Future.successful(BadRequest(view(formWithErrors, claimStart, furloughStart, furloughStatus, Some(end))))
       case Invalid(errors) =>
-        UserAnswers.logErrors(errors)
+        UserAnswers.logErrors(errors)(logger.logger)
         Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
     }
 
@@ -122,7 +121,7 @@ class FurloughPeriodQuestionController @Inject()(
           Redirect(call)
         }
       case Invalid(e) =>
-        UserAnswers.logErrors(e)
+        UserAnswers.logErrors(e)(logger.logger)
         Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate(request)))
     }
 }

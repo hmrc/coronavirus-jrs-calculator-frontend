@@ -86,7 +86,7 @@ class NumberOfStatLeaveDaysFormProviderSpec extends IntFieldBehaviours with Guic
 
   ".daysBetween()" when {
 
-    "given 2 dates with more than 0 days between them" should {
+    "given 2 dates with more than 0 days between them" must {
 
       "return the number of days between them as 10" in {
 
@@ -96,11 +96,11 @@ class NumberOfStatLeaveDaysFormProviderSpec extends IntFieldBehaviours with Guic
         val actual: Int = new NumberOfStatLeaveDaysFormProvider().daysBetween(startDate, endDate)
         val expected    = 10
 
-        actual shouldEqual expected
+        actual mustEqual expected
       }
     }
 
-    "given 2 dates that are the same" should {
+    "given 2 dates that are the same" must {
 
       "return the number of days between them as 0" in {
 
@@ -110,7 +110,7 @@ class NumberOfStatLeaveDaysFormProviderSpec extends IntFieldBehaviours with Guic
         val actual: Int = new NumberOfStatLeaveDaysFormProvider().daysBetween(startDate, endDate)
         val expected    = 0
 
-        actual shouldEqual expected
+        actual mustEqual expected
       }
     }
 

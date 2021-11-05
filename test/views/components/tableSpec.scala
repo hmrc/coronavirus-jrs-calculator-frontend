@@ -17,6 +17,7 @@
 package views.components
 
 import org.scalatestplus.play.PlaySpec
+import org.scalatest.matchers.should.Matchers
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.html.components.GovukTable
 import viewmodels.{Cell, Header, Row, TableModel}

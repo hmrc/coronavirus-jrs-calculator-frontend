@@ -32,7 +32,7 @@ class FurloughEndDateFormProviderSpec extends SpecBaseControllerSpecs {
   private val endDate       = LocalDate.of(2020, 5, 1)
   private val furloughStart = startDate
 
-  ".value" should {
+  ".value" must {
 
     val form = new FurloughEndDateFormProvider()(Period(startDate, endDate), furloughStart)
 
@@ -48,7 +48,7 @@ class FurloughEndDateFormProviderSpec extends SpecBaseControllerSpecs {
     behave like mandatoryDateField(form, "value")
   }
 
-  ".endDate" should {
+  ".endDate" must {
     val claimStart    = LocalDate.of(2020, 7, 1)
     val claimEnd      = LocalDate.of(2020, 7, 31)
     val furloughStart = claimStart
@@ -65,7 +65,7 @@ class FurloughEndDateFormProviderSpec extends SpecBaseControllerSpecs {
 
       val result = form.bind(data)
 
-      result.errors shouldBe List()
+      result.errors mustBe List()
     }
 
     "be before or same as end of the claim for phase two and do not show furloughEndDate.error.min.max" in {
@@ -79,9 +79,9 @@ class FurloughEndDateFormProviderSpec extends SpecBaseControllerSpecs {
           "value.year"  -> claimEnd.getYear.toString
       )
 
-      form.bind(data(1)).errors.size shouldBe 1
-      form.bind(data(1)).errors.head.message shouldBe "furloughEndDate.error.claimPeriod"
-      form.bind(data(0)).errors shouldBe List()
+      form.bind(data(1)).errors.size mustBe 1
+      form.bind(data(1)).errors.head.message mustBe "furloughEndDate.error.claimPeriod"
+      form.bind(data(0)).errors mustBe List()
     }
   }
 }

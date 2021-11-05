@@ -46,7 +46,7 @@ class PartTimeNormalHoursController @Inject()(
   def onPageLoad(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     getRequiredAnswerOrRedirectV(PartTimePeriodsPage) { partTimePeriods =>
       withValidPartTimePeriod(partTimePeriods, idx) { partTimePeriod =>
-        val preparedForm = request.userAnswers.getV(PartTimeNormalHoursPage, Some(idx)) match {
+        val preparedForm = request.userAnswers.getV(PartTimeNormalHoursPage, Some(idx))(UsualHours.format) match {
           case Invalid(e)   => formProvider(partTimePeriod)
           case Valid(value) => formProvider(partTimePeriod).fill(value.hours)
         }

@@ -17,7 +17,7 @@ class HasEmployeeBeenOnStatutoryLeaveControllerISpec
 
   val dayEmploymentStarted = "the day their employment started"
 
-  "GET /been-on-statutory-leave" should {
+  "GET /been-on-statutory-leave" must {
 
     "employee is type 3" when {
 
@@ -238,7 +238,7 @@ class HasEmployeeBeenOnStatutoryLeaveControllerISpec
 
   "POST /been-on-statutory-leave" when {
 
-    "user answers true" should {
+    "user answers true" must {
 
       "redirect to how many days on statutory leave page - feature switch enabled" in {
 
@@ -267,7 +267,7 @@ class HasEmployeeBeenOnStatutoryLeaveControllerISpec
         )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(SEE_OTHER),
             redirectLocation(controllers.routes.NumberOfStatLeaveDaysController.onPageLoad().url)
           )
@@ -302,7 +302,7 @@ class HasEmployeeBeenOnStatutoryLeaveControllerISpec
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(SEE_OTHER),
               redirectLocation(controllers.routes.RootPageController.onPageLoad().url)
             )
@@ -313,7 +313,7 @@ class HasEmployeeBeenOnStatutoryLeaveControllerISpec
       }
     }
 
-    "user answers false" should {
+    "user answers false" must {
 
       "redirect to has this employee done any work page page" in {
 
@@ -342,7 +342,7 @@ class HasEmployeeBeenOnStatutoryLeaveControllerISpec
         )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(SEE_OTHER),
             redirectLocation(controllers.routes.PartTimeQuestionController.onPageLoad().url)
           )
@@ -377,7 +377,7 @@ class HasEmployeeBeenOnStatutoryLeaveControllerISpec
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(SEE_OTHER),
               redirectLocation(controllers.routes.RootPageController.onPageLoad().url)
             )
@@ -388,7 +388,7 @@ class HasEmployeeBeenOnStatutoryLeaveControllerISpec
       }
     }
 
-    "user answer is invalid" should {
+    "user answer is invalid" must {
 
       "show BadRequest errors on page" in {
 
@@ -417,7 +417,7 @@ class HasEmployeeBeenOnStatutoryLeaveControllerISpec
         )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(BAD_REQUEST)
           )
         }
@@ -432,7 +432,7 @@ class HasEmployeeBeenOnStatutoryLeaveControllerISpec
       val res = getRequest("/been-on-statutory-leave")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
-        result should have(
+        result must have(
           httpStatus(OK),
           titleOf(PageTitles.hasEmployeeBeenOnStatutoryLeave(boundaryStart, boundaryEnd))
         )

@@ -29,22 +29,20 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.UserAnswerPersistence
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AdditionalPaymentStatusView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AdditionalPaymentStatusController @Inject()(
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  navigator: Navigator,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  formProvider: AdditionalPaymentStatusFormProvider,
-  val controllerComponents: MessagesControllerComponents,
-  view: AdditionalPaymentStatusView
-)(implicit ec: ExecutionContext)
+class AdditionalPaymentStatusController @Inject()(override val messagesApi: MessagesApi,
+                                                  sessionRepository: SessionRepository,
+                                                  navigator: Navigator,
+                                                  identify: IdentifierAction,
+                                                  getData: DataRetrievalAction,
+                                                  requireData: DataRequiredAction,
+                                                  formProvider: AdditionalPaymentStatusFormProvider,
+                                                  val controllerComponents: MessagesControllerComponents,
+                                                  view: AdditionalPaymentStatusView)(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with FurloughCalculationHandler {
 
   val form: Form[AdditionalPaymentStatus] = formProvider()

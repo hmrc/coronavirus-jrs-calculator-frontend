@@ -22,7 +22,7 @@ import models.requests.DataRequest
 import models.{EmployeeRTISubmission, EmployeeStarted, UserAnswers}
 import pages._
 import play.api.Logger
-import uk.gov.hmrc.play.test.LogCapturing
+import utils.LogCapturing
 import utils.LocalDateHelpers
 import utils.LocalDateHelpers._
 import views.ViewUtils.dateToString
@@ -45,9 +45,11 @@ class BeenOnStatutoryLeaveHelperSpec extends SpecBase with LocalDateHelpers with
           .value
         implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
 
-        withCaptureOfLoggingFrom(Logger) { logs =>
+        withCaptureOfLoggingFrom(helper.logger) { logs =>
           helper.boundaryStart() mustBe dateToString(apr6th2019)
-          logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
+          logs
+            .map(_.getMessage)
+            .contains("[BeenOnStatutoryLeaveHelper] [EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
         }
       }
     }
@@ -68,9 +70,11 @@ class BeenOnStatutoryLeaveHelperSpec extends SpecBase with LocalDateHelpers with
           .value
         implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
 
-        withCaptureOfLoggingFrom(Logger) { logs =>
+        withCaptureOfLoggingFrom(helper.logger) { logs =>
           helper.boundaryStart() mustBe BeenOnStatutoryLeaveMessages.dayEmploymentStarted
-          logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
+          logs
+            .map(_.getMessage)
+            .contains("[BeenOnStatutoryLeaveHelper] [EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
         }
       }
     }
@@ -100,9 +104,11 @@ class BeenOnStatutoryLeaveHelperSpec extends SpecBase with LocalDateHelpers with
           .value
         implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
 
-        withCaptureOfLoggingFrom(Logger) { logs =>
+        withCaptureOfLoggingFrom(helper.logger) { logs =>
           helper.boundaryStart() mustBe dateToString(apr6th2020)
-          logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 5a Employee") mustBe true
+          logs
+            .map(_.getMessage)
+            .contains("[BeenOnStatutoryLeaveHelper] [EmployeeTypeUtil][variablePayResolver] Type 5a Employee") mustBe true
         }
       }
     }
@@ -132,9 +138,11 @@ class BeenOnStatutoryLeaveHelperSpec extends SpecBase with LocalDateHelpers with
           .value
         implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
 
-        withCaptureOfLoggingFrom(Logger) { logs =>
+        withCaptureOfLoggingFrom(helper.logger) { logs =>
           helper.boundaryStart() mustBe BeenOnStatutoryLeaveMessages.dayEmploymentStarted
-          logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 5b Employee") mustBe true
+          logs
+            .map(_.getMessage)
+            .contains("[BeenOnStatutoryLeaveHelper] [EmployeeTypeUtil][variablePayResolver] Type 5b Employee") mustBe true
         }
       }
     }
@@ -156,9 +164,11 @@ class BeenOnStatutoryLeaveHelperSpec extends SpecBase with LocalDateHelpers with
           .value
         implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
 
-        withCaptureOfLoggingFrom(Logger) { logs =>
+        withCaptureOfLoggingFrom(helper.logger) { logs =>
           helper.boundaryEnd() mustBe dateToString(apr5th2020)
-          logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
+          logs
+            .map(_.getMessage)
+            .contains("[BeenOnStatutoryLeaveHelper] [EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
         }
       }
     }
@@ -179,9 +189,11 @@ class BeenOnStatutoryLeaveHelperSpec extends SpecBase with LocalDateHelpers with
           .value
         implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
 
-        withCaptureOfLoggingFrom(Logger) { logs =>
+        withCaptureOfLoggingFrom(helper.logger) { logs =>
           helper.boundaryEnd() mustBe dateToString(apr5th2020.minusDays(1))
-          logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
+          logs
+            .map(_.getMessage)
+            .contains("[BeenOnStatutoryLeaveHelper] [EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
         }
       }
     }
@@ -211,9 +223,11 @@ class BeenOnStatutoryLeaveHelperSpec extends SpecBase with LocalDateHelpers with
           .value
         implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
 
-        withCaptureOfLoggingFrom(Logger) { logs =>
+        withCaptureOfLoggingFrom(helper.logger) { logs =>
           helper.boundaryEnd() mustBe dateToString(firstFurloughDateAns.minusDays(1))
-          logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 5a Employee") mustBe true
+          logs
+            .map(_.getMessage)
+            .contains("[BeenOnStatutoryLeaveHelper] [EmployeeTypeUtil][variablePayResolver] Type 5a Employee") mustBe true
         }
       }
     }
@@ -243,9 +257,11 @@ class BeenOnStatutoryLeaveHelperSpec extends SpecBase with LocalDateHelpers with
           .value
         implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
 
-        withCaptureOfLoggingFrom(Logger) { logs =>
+        withCaptureOfLoggingFrom(helper.logger) { logs =>
           helper.boundaryEnd() mustBe dateToString(firstFurloughDateAns.minusDays(1))
-          logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 5b Employee") mustBe true
+          logs
+            .map(_.getMessage)
+            .contains("[BeenOnStatutoryLeaveHelper] [EmployeeTypeUtil][variablePayResolver] Type 5b Employee") mustBe true
         }
       }
     }

@@ -29,7 +29,7 @@ import models.PaymentFrequency.Monthly
 import models.PensionStatus.DoesContribute
 import models._
 import models.requests.DataRequest
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest

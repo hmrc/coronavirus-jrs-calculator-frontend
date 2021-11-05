@@ -24,7 +24,7 @@ import models.requests.DataRequest
 import models.{Amount, EmployeeRTISubmission, EmployeeStarted, RegularLengthEmployed, UserAnswers}
 import pages.{ClaimPeriodStartPage, EmployeeRTISubmissionPage, EmployeeStartDatePage, EmployeeStartedPage, NumberOfStatLeaveDaysPage, OnPayrollBefore30thOct2020Page, PayMethodPage, RegularLengthEmployedPage, StatutoryLeavePayPage}
 import uk.gov.hmrc.http.InternalServerException
-import uk.gov.hmrc.play.test.LogCapturing
+import utils.LogCapturing
 import utils.LocalDateHelpers.{feb1st2020, july1st2020, nov1st2020}
 
 class EmployeeTypeUtilSpec extends SpecBase with EmployeeTypeUtil with LogCapturing {

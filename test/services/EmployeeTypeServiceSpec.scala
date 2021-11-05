@@ -32,7 +32,7 @@ class EmployeeTypeServiceSpec extends SpecBase with CoreTestDataBuilder {
 
       "Employee Type is 5a New Starter Variable pay" when {
 
-        "answers are (EmployeeStartDatePage = after 19th March 2020, EmployeeRTISubmissionPage = not answered)" should {
+        "answers are (EmployeeStartDatePage = after 19th March 2020, EmployeeRTISubmissionPage = not answered)" must {
 
           "return true" in {
 
@@ -48,7 +48,7 @@ class EmployeeTypeServiceSpec extends SpecBase with CoreTestDataBuilder {
           }
         }
 
-        "answers are (EmployeeStartDatePage = after 19th March 2020, EmployeeRTISubmissionPage = Yes)" should {
+        "answers are (EmployeeStartDatePage = after 19th March 2020, EmployeeRTISubmissionPage = Yes)" must {
 
           "return true" in {
 
@@ -67,7 +67,7 @@ class EmployeeTypeServiceSpec extends SpecBase with CoreTestDataBuilder {
           }
         }
 
-        "answers are (EmployeeStartDatePage = after 19th March 2020, EmployeeRTISubmissionPage = No)" should {
+        "answers are (EmployeeStartDatePage = after 19th March 2020, EmployeeRTISubmissionPage = No)" must {
 
           "return true" in {
 
@@ -86,7 +86,7 @@ class EmployeeTypeServiceSpec extends SpecBase with CoreTestDataBuilder {
           }
         }
 
-        "answers are (EmployeeStartDatePage = before 19th March 2020, EmployeeRTISubmissionPage = No)" should {
+        "answers are (EmployeeStartDatePage = before 19th March 2020, EmployeeRTISubmissionPage = No)" must {
 
           "return true" in {
 
@@ -108,7 +108,7 @@ class EmployeeTypeServiceSpec extends SpecBase with CoreTestDataBuilder {
 
       "Employee Type is Not a 5x New Starter Variable pay" when {
 
-        "answers are (EmployeeStartDatePage = before 19th March 2020, EmployeeRTISubmissionPage = not answered)" should {
+        "answers are (EmployeeStartDatePage = before 19th March 2020, EmployeeRTISubmissionPage = not answered)" must {
 
           "return false" in {
 
@@ -124,7 +124,7 @@ class EmployeeTypeServiceSpec extends SpecBase with CoreTestDataBuilder {
           }
         }
 
-        "answers are (EmployeeStartDatePage = 19th March 2020, EmployeeRTISubmissionPage = not answered)" should {
+        "answers are (EmployeeStartDatePage = 19th March 2020, EmployeeRTISubmissionPage = not answered)" must {
 
           "return false" in {
 
@@ -140,7 +140,7 @@ class EmployeeTypeServiceSpec extends SpecBase with CoreTestDataBuilder {
           }
         }
 
-        "answers are (EmployeeStartDatePage = before 19th March 2020, EmployeeRTISubmissionPage = Yes)" should {
+        "answers are (EmployeeStartDatePage = before 19th March 2020, EmployeeRTISubmissionPage = Yes)" must {
 
           "return false" in {
 

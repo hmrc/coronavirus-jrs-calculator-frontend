@@ -21,7 +21,7 @@ import base.SpecBaseControllerSpecs
 import forms.PaymentFrequencyFormProvider
 import models.requests.DataRequest
 import models.{PaymentFrequency, UserAnswers}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}

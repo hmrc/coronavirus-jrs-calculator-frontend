@@ -17,16 +17,15 @@
 package controllers
 
 import java.time.LocalDate
-
 import base.SpecBaseControllerSpecs
 import config.featureSwitch.{ExtensionTwoNewStarterFlow, FeatureSwitching}
 import controllers.actions.DataRetrievalActionImpl
 import forms.PreviousFurloughPeriodsFormProvider
 import models.EmployeeStarted.OnOrBefore1Feb2019
 import models.PayMethod.Variable
-import models.UserAnswers
+import models.{EmployeeStarted, UserAnswers}
 import models.requests.DataRequest
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{EmployeeStartedPage, FurloughStartDatePage, OnPayrollBefore30thOct2020Page, PreviousFurloughPeriodsPage}

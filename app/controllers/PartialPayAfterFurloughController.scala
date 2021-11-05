@@ -27,7 +27,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.PartialPayExtractor
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.VariableLengthPartialPayView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -99,6 +99,4 @@ class PartialPayAfterFurloughController @Inject()(
           )
       }
   }
-
-  override val logger: Logger = LoggerFactory.getLogger(getClass)
 }

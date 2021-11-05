@@ -17,17 +17,18 @@
 package controllers
 
 import java.time.LocalDate
-
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.PartTimePeriodsFormProvider
 import handlers.ErrorHandler
+
 import javax.inject.Inject
 import models.UserAnswers
 import navigation.Navigator
 import pages.{PartTimePeriodsPage, PayDatePage}
 import play.api.data.Form
 import play.api.i18n.MessagesApi
+import play.api.libs.json.Writes
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import services.{FurloughPeriodExtractor, PeriodHelper}

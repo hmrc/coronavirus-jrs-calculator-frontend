@@ -30,7 +30,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.InternalServerException
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.EmployeeTypeUtil
 import utils.LocalDateHelpers.{mar19th2020, mar2nd2021, oct30th2020}
 import views.ViewUtils.dateToString

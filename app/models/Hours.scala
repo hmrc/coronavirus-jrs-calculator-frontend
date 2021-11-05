@@ -22,7 +22,7 @@ import utils.ValueClassFormat
 case class Hours(value: Double)
 
 object Hours {
-  implicit val format: Format[Hours] = ValueClassFormat.format(value => Hours.apply(value.toDouble))(_.value)
+  implicit val format: Format[Hours] = ValueClassFormat.format(value => Hours.apply(value.toDouble))(_.value.toString)
 
   implicit class Defaulted(maybeAmount: Option[Hours]) {
     def defaulted: Hours = maybeAmount.fold(Hours(0.0))(v => v)

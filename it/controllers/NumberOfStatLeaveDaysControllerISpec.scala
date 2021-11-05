@@ -16,7 +16,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
 
   "GET /number-of-days-on-statutory-leave" when {
 
-    "Employee Type 3" should {
+    "Employee Type 3" must {
 
       "render the first furlough date page with correct title" in {
 
@@ -41,7 +41,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
         val res = getRequestHeaders("/number-of-days-on-statutory-leave")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(OK),
             titleOf(PageTitles.numberOfStatLeaveDays(Some(boundaryStart), boundaryEnd))
           )
@@ -49,7 +49,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
       }
     }
 
-    "Employee Type 4" should {
+    "Employee Type 4" must {
 
       "render the first furlough date page with correct wordy title" in {
 
@@ -76,7 +76,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
         val res = getRequestHeaders("/number-of-days-on-statutory-leave")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(OK),
             titleOf(PageTitles.numberOfStatLeaveDays(None, boundaryEnd))
           )
@@ -84,7 +84,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
       }
     }
 
-    "Employee Type 5a" should {
+    "Employee Type 5a" must {
 
       "render the first furlough date page with correct wordy title" in {
 
@@ -112,7 +112,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
         val res = getRequestHeaders("/number-of-days-on-statutory-leave")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(OK),
             titleOf(PageTitles.numberOfStatLeaveDays(None, boundaryEnd))
           )
@@ -120,7 +120,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
       }
     }
 
-    "Employee Type 5b" should {
+    "Employee Type 5b" must {
 
       "render the first furlough date page with correct wordy title" in {
 
@@ -148,7 +148,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
         val res = getRequestHeaders("/number-of-days-on-statutory-leave")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(OK),
             titleOf(PageTitles.numberOfStatLeaveDays(None, boundaryEnd))
           )
@@ -159,7 +159,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
 
   "POST /number-of-days-on-statutory-leave" when {
 
-    "Employee Type 3" should {
+    "Employee Type 3" must {
 
       "valid values supplied" must {
 
@@ -186,7 +186,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(SEE_OTHER),
               redirectLocation(controllers.routes.StatutoryLeavePayController.onPageLoad().url)
             )
@@ -195,7 +195,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
       }
     }
 
-    "Employee Type 4" should {
+    "Employee Type 4" must {
 
       "valid values supplied" must {
 
@@ -227,7 +227,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(SEE_OTHER),
               redirectLocation(controllers.routes.StatutoryLeavePayController.onPageLoad().url)
             )
@@ -236,7 +236,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
       }
     }
 
-    "Employee Type 5a" should {
+    "Employee Type 5a" must {
 
       "valid values supplied" must {
 
@@ -266,7 +266,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(SEE_OTHER),
               redirectLocation(controllers.routes.StatutoryLeavePayController.onPageLoad().url)
             )
@@ -275,7 +275,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
       }
     }
 
-    "Employee Type 5b" should {
+    "Employee Type 5b" must {
 
       "valid values supplied" must {
 
@@ -307,7 +307,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(SEE_OTHER),
               redirectLocation(controllers.routes.StatutoryLeavePayController.onPageLoad().url)
             )
@@ -328,7 +328,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
 
         //TODO Should redirect to reset or start again page
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(INTERNAL_SERVER_ERROR)
           )
         }

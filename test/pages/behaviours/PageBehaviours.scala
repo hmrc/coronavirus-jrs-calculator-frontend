@@ -22,15 +22,16 @@ import generators.Generators
 import models.{EmptyAnswerError, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalatest.{MustMatchers, OptionValues, TryValues, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.{OptionValues, TryValues}
+import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.QuestionPage
 import play.api.libs.json._
 import queries.Gettable
 
 trait PageBehaviours
-    extends WordSpec with MustMatchers with ScalaCheckPropertyChecks with Generators with OptionValues with ValidatedValues
-    with ValidatedMatchers with TryValues {
+    extends PlaySpec with ScalaCheckPropertyChecks with Generators with ValidatedValues with ValidatedMatchers with TryValues {
 
   def emptyError(path: JsPath, error: String = "error.path.missing"): JsError =
     JsError(path -> JsonValidationError(List(error)))

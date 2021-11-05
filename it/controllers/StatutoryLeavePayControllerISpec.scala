@@ -28,9 +28,9 @@ import utils.{CreateRequestHelper, CustomMatchers, ITCoreTestData, IntegrationSp
 
 
 class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with ITCoreTestData
-  with BaseITConstants with FeatureSwitching {
+ with BaseITConstants with FeatureSwitching {
 
-  "GET /amount-paid-for-statutory-leave" should {
+  "GET /amount-paid-for-statutory-leave" must {
 
     "render the page correct with the correct status" in {
       val userAnswers: UserAnswers =
@@ -46,7 +46,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
       val res = getRequest("/amount-paid-for-statutory-leave")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
-        result should have(
+        result must have(
           httpStatus(OK),
           titleOf(statutoryLeavePay),
         )
@@ -55,7 +55,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
   }
 
   "POST /amount-paid-for-statutory-leave" when {
-    "a valid amount has been entered" should {
+    "a valid amount has been entered" must {
       "redirect to the Part Time question" in {
         enable(StatutoryLeaveFlow)
         val userAnswers: UserAnswers = emptyUserAnswers
@@ -76,7 +76,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
 
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(SEE_OTHER),
             redirectLocation(controllers.routes.PartTimeQuestionController.onPageLoad().url)
           )
@@ -104,7 +104,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
 
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(SEE_OTHER),
             redirectLocation(controllers.routes.RootPageController.onPageLoad().url)
           )
@@ -114,7 +114,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
       }
     }
 
-    "£0 has been entered" should {
+    "£0 has been entered" must {
       "show the page with errors" in {
         val userAnswers: UserAnswers = emptyUserAnswers
           .withClaimPeriodStart("2020, 10, 31")
@@ -134,7 +134,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
 
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(BAD_REQUEST),
             titleOf(statutoryLeavePay),
             contentExists("The amount this employee was paid for the periods of statutory leave must be more than £0")
@@ -144,7 +144,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
     }
 
     "an invalid amount has been entered" when {
-      "a negative number has been entered" should {
+      "a negative number has been entered" must {
         "show the page with errors" in {
           val userAnswers: UserAnswers = emptyUserAnswers
             .withClaimPeriodStart("2020, 10, 31")
@@ -164,7 +164,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
 
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(BAD_REQUEST),
               contentExists("The amount this employee was paid for the periods of statutory leave must be more than £0")
             )
@@ -172,7 +172,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
         }
       }
 
-      "a value that is EQUAL to the reference pay is entered" should {
+      "a value that is EQUAL to the reference pay is entered" must {
         "show the page with errors" in {
           val userAnswers: UserAnswers = emptyUserAnswers
             .withClaimPeriodStart("2020, 10, 31")
@@ -192,7 +192,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
 
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(BAD_REQUEST),
               contentExists("The amount this employee was paid for the periods of statutory leave must be less than £50,000")
             )
@@ -200,7 +200,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
         }
       }
 
-      "a value that is MORE THAN the reference pay is entered" should {
+      "a value that is MORE THAN the reference pay is entered" must {
         "show the page with errors" in {
           val userAnswers: UserAnswers = emptyUserAnswers
             .withClaimPeriodStart("2020, 10, 31")
@@ -220,7 +220,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
 
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(BAD_REQUEST),
               contentExists("The amount this employee was paid for the periods of statutory leave must be less than £50,000.01")
             )
@@ -228,7 +228,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
         }
       }
 
-      "an invalid value has been entered" should {
+      "an invalid value has been entered" must {
         "show the page with errors" in {
           val userAnswers: UserAnswers = emptyUserAnswers
             .withClaimPeriodStart("2020, 10, 31")
@@ -248,7 +248,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
 
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(BAD_REQUEST),
               contentExists("Enter a valid amount")
             )

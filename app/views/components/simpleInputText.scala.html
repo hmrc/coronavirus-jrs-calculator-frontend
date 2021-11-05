@@ -40,7 +40,7 @@
     hint = hint.map(hintHtml => Hint(
         content = HtmlContent(hintHtml)
     )),
-    value = form(name).value,
-    errorMessage = form(name).error.map(err => ErrorMessage(content = Text(messages(err.message, err.args:_*))))
+    value = form(name.getOrElse(id)).value,
+    errorMessage = form(name.getOrElse(id)).error.map(err => ErrorMessage(content = Text(messages(err.message, err.args:_*))))
 ))
 

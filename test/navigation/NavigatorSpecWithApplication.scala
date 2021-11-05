@@ -16,7 +16,6 @@
 
 package navigation
 
-import java.time.LocalDate
 import base.{CoreTestDataBuilder, SpecBaseControllerSpecs}
 import config.featureSwitch.{ExtensionTwoNewStarterFlow, FeatureSwitching, StatutoryLeaveFlow}
 import controllers.routes
@@ -27,6 +26,8 @@ import models.PaymentFrequency.Monthly
 import models._
 import pages._
 import play.api.mvc.Call
+
+import java.time.LocalDate
 
 class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTestDataBuilder with FeatureSwitching {
 
@@ -137,7 +138,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "the ExtensionTwoNewStarterFlow switch is enabled" when {
 
-          "claim period start date is on or after 01/11/2020" should {
+          "claim period start date is on or after 01/11/2020" must {
 
             "go to OnPayrollBefore30thOct2020Page if PayDate is defined & answer == No" in {
 
@@ -181,7 +182,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "the ExtensionTwoNewStarterFlow switch is disabled" when {
 
-          "claim period start date is on or after 01/11/2020" should {
+          "claim period start date is on or after 01/11/2020" must {
 
             "go to RegularPayAmountPage if PayDate is defined & answer == Yes" in {
 
@@ -225,7 +226,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
           }
         }
 
-        "the date is before 01/11/2020" should {
+        "the date is before 01/11/2020" must {
 
           "go to the Root Page" in {
 
@@ -631,7 +632,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
       "EmployeeStartDatePage" when {
 
-        "the ExtensionTwoNewStarterFlow switch is enabled" should {
+        "the ExtensionTwoNewStarterFlow switch is enabled" must {
 
           "and the employee start date is after the 19th March 2020, return the OnPayrollBefore30thOct2020 page" in {
 
@@ -647,7 +648,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         }
 
-        "the ExtensionTwoNewStarterFlow switch is disabled" should {
+        "the ExtensionTwoNewStarterFlow switch is disabled" must {
 
           "go to correct next page" in {
 
@@ -735,7 +736,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "the ExtensionTwoNewStarterFlow switch is enabled" when {
 
-          "answered No" should {
+          "answered No" must {
 
             "return the OnPayrollBefore30thOct2020 page" in {
 
@@ -750,7 +751,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
             }
           }
 
-          "answered Yes" should {
+          "answered Yes" must {
 
             "return the PayDatePage when furlough date is defined" in {
 
@@ -777,7 +778,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
           }
         }
 
-        "the ExtensionTwoNewStarterFlow switch is disabled" should {
+        "the ExtensionTwoNewStarterFlow switch is disabled" must {
 
           "return the correct page" in {
 
@@ -1066,7 +1067,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
       }
     }
 
-    "routeFor() is called" should {
+    "routeFor() is called" must {
       "return correct url for FurloughStartDatePage" in {
         navigator.routeFor(FurloughStartDatePage) mustBe routes.FurloughStartDateController.onPageLoad()
       }
@@ -1337,7 +1338,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
       }
     }
 
-    ".routeToEmployeeFirstFurloughed" should {
+    ".routeToEmployeeFirstFurloughed" must {
       "route to the PreviousFurloughPeriods page" when {
         "the feature switch is disabled and the furlough start date is after 8th Nov 2020" in {
           disable(ExtensionTwoNewStarterFlow)
@@ -1449,7 +1450,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
     }
 
     ".statutoryLeavePayRoutes" when {
-      "feature switch is enabled" should {
+      "feature switch is enabled" must {
         "route to the next page (PartTimeQuestionPage) when the answer to the StatutoryLeavePayPage is valid" in {
           enable(StatutoryLeaveFlow)
           val userAnswers: UserAnswers = {
@@ -1490,7 +1491,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         }
       }
 
-      "feature switch is disabled" should {
+      "feature switch is disabled" must {
         "route back to the RootPage" in {
           disable(StatutoryLeaveFlow)
           val actual: Call   = navigator.statutoryLeavePayRoutes(emptyUserAnswers)
@@ -1503,7 +1504,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
     }
 
     ".hasBeenOnStatutoryLeaveRoutes" when {
-      "feature switch is enabled" should {
+      "feature switch is enabled" must {
         "route to the next page (PartTimeQuestionPage) when the user answers 'No' on HasEmployeeBeenOnStatutoryLeavePage" in {
           enable(StatutoryLeaveFlow)
           val userAnswers: UserAnswers = {
@@ -1565,7 +1566,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         }
       }
 
-      "feature switch is disabled" should {
+      "feature switch is disabled" must {
         "route back to the RootPage" in {
           disable(StatutoryLeaveFlow)
           val actual: Call   = navigator.hasBeenOnStatutoryLeaveRoutes(emptyUserAnswers)
@@ -1577,8 +1578,8 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
       }
     }
 
-    ".numberOfStatLeaveDaysRoutes" should {
-      "feature switch is enabled" should {
+    ".numberOfStatLeaveDaysRoutes" must {
+      "feature switch is enabled" must {
         "route to the next page (StatutoryLeavePayPage) when the answer to the NumberOfStatLeaveDaysPage is valid" in {
           enable(StatutoryLeaveFlow)
           val userAnswers: UserAnswers = {
@@ -1619,7 +1620,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         }
       }
 
-      "feature switch is disabled" should {
+      "feature switch is disabled" must {
         "route back to the RootPage" in {
           disable(StatutoryLeaveFlow)
           val actual: Call   = navigator.hasBeenOnStatutoryLeaveRoutes(emptyUserAnswers)

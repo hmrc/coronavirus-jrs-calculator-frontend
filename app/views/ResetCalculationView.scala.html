@@ -33,11 +33,11 @@ link: components.link
 @govukLayout(pageTitle = Some(titleNoForm("resetCalculation.title")), showBackButton = false,  thisPage = ResetCalculationPage) {
 
 
-@h1(Html(messages("resetCalculation.h1")), classes = Some("govuk-heading-xl"))
+@h1("resetCalculation.h1", classes = Some("govuk-heading-xl"))
 
 @p(Html(messages("resetCalculation.p1")))
 
-@button(messages("resetCalculation.button"), href = Some(routes.ClaimPeriodStartController.onPageLoad()), classes = Some("govuk-button"))
+@button(messages("resetCalculation.button"), href = Some(routes.ClaimPeriodStartController.onPageLoad().url), classes = Some("govuk-button"))
 
 }
 

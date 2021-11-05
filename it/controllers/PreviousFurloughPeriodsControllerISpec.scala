@@ -35,7 +35,7 @@ class PreviousFurloughPeriodsControllerISpec extends IntegrationSpecBase with Cr
       val res = getRequestHeaders("/furloughed-more-than-once")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
-        result should have(
+        result must have(
           httpStatus(OK),
           titleOf(previousFurloughPeriods)
         )
@@ -52,7 +52,7 @@ class PreviousFurloughPeriodsControllerISpec extends IntegrationSpecBase with Cr
       val res = postRequestHeader("/furloughed-more-than-once", Json.obj("value" -> "false"))("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
-        result should have(
+        result must have(
           httpStatus(SEE_OTHER),
           redirectLocation(controllers.routes.PayDateController.onPageLoad(1).url)
         )
@@ -67,7 +67,7 @@ class PreviousFurloughPeriodsControllerISpec extends IntegrationSpecBase with Cr
       val res = postRequestHeader("/furloughed-more-than-once", Json.obj("value" -> "true"))("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
-        result should have(
+        result must have(
           httpStatus(SEE_OTHER),
           redirectLocation(controllers.routes.FirstFurloughDateController.onPageLoad().url)
         )
@@ -82,7 +82,7 @@ class PreviousFurloughPeriodsControllerISpec extends IntegrationSpecBase with Cr
       val res = postRequestHeader("/furloughed-more-than-once", Json.toJson("value", ""))("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
-        result should have(
+        result must have(
           httpStatus(BAD_REQUEST),
           contentExists(s"Select yes if this employee has been furloughed more than once since ${dateToString(nov1st2020)}")
         )
@@ -97,7 +97,7 @@ class PreviousFurloughPeriodsControllerISpec extends IntegrationSpecBase with Cr
       val res = postRequestHeader("/furloughed-more-than-once", Json.toJson("value", ""))("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
-        result should have(
+        result must have(
           httpStatus(BAD_REQUEST),
           contentExists(s"Select yes if this employee has been furloughed more than once since ${dateToString(may1st2021)}")
         )

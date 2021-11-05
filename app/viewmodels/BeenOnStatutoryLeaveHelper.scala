@@ -24,10 +24,10 @@ import play.api.Logger
 import play.api.i18n.Messages
 import uk.gov.hmrc.http.InternalServerException
 import utils.LocalDateHelpers._
-import utils.{EmployeeTypeUtil, KeyDatesUtil}
+import utils.{EmployeeTypeUtil, KeyDatesUtil, LoggerUtil}
 import views.ViewUtils.dateToString
 
-class BeenOnStatutoryLeaveHelper extends EmployeeTypeUtil with KeyDatesUtil {
+class BeenOnStatutoryLeaveHelper extends EmployeeTypeUtil with KeyDatesUtil with LoggerUtil {
 
   def boundaryStart()(implicit request: DataRequest[_], appConfig: FrontendAppConfig, messages: Messages): String =
     variablePayResolver[String](
@@ -52,20 +52,20 @@ class BeenOnStatutoryLeaveHelper extends EmployeeTypeUtil with KeyDatesUtil {
   def type5BoundaryStart()(implicit request: DataRequest[_], messages: Messages): Option[String] =
     request.userAnswers.getV(EmployeeStartDatePage) match {
       case Valid(startDate) =>
-        Logger.debug(s"[BeenOnStatutoryLeaveHelper][type5BoundaryStart] start date: $startDate")
+        logger.debug(s"[type5BoundaryStart] start date: $startDate")
         if (startDate.isAfter(apr6th2020)) {
           Some(messages("hasEmployeeBeenOnStatutoryLeave.dayEmploymentStarted"))
         } else {
           Some(dateToString(apr6th2020))
         }
       case _ =>
-        Logger.debug("[BeenOnStatutoryLeaveHelper][type5BoundaryStart] no answer for EmployeeStartDatePage")
+        logger.debug("[BeenOnStatutoryLeaveHelper][type5BoundaryStart] no answer for EmployeeStartDatePage")
         None
     }
 
   def type3And4BoundaryEnd()(implicit request: DataRequest[_], messages: Messages): String = {
     val dayBeforeFirstFurlough = firstFurloughDate().minusDays(1)
-    Logger.debug(s"[BeenOnStatutoryLeaveHelper][type3And4BoundaryEnd] dayBeforeFirstFurlough: $dayBeforeFirstFurlough")
+    logger.debug(s"[type3And4BoundaryEnd] dayBeforeFirstFurlough: $dayBeforeFirstFurlough")
     dateToString(earliestOf(apr5th2020, dayBeforeFirstFurlough))
   }
 }

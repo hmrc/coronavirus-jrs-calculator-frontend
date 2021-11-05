@@ -31,7 +31,7 @@ class FurloughStartDateFormProviderSpec extends SpecBaseControllerSpecs {
   private val endDate   = LocalDate.of(2020, 6, 1)
   val form              = new FurloughStartDateFormProvider()(endDate)
 
-  ".value" should {
+  ".value" must {
 
     val validData = datesBetween(
       min = startDate,

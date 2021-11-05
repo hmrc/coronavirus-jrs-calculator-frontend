@@ -24,15 +24,13 @@ import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
 import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnSamePeriod}
 import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
 import models.UserAnswers.AnswerV
-import models.{GenericValidationError, UserAnswers}
+import models.{FurloughStatus, GenericValidationError, PaymentFrequency, UserAnswers}
 import org.slf4j.{Logger, LoggerFactory}
 import pages._
 import play.api.libs.json.{JsError, Json}
-import utils.UserAnswersHelper
+import utils.{LoggerUtil, UserAnswersHelper}
 
-trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper {
-
-  implicit def logger: Logger = LoggerFactory.getLogger(getClass)
+trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper with LoggerUtil {
 
   def claimQuestion(userAnswer: UserAnswers): AnswerV[UserAnswersState] =
     userAnswer.getV(ClaimPeriodQuestionPage) map {
@@ -45,7 +43,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
       case Valid(ClaimOnSamePeriod)      => processFurloughQuestion(UserAnswersState(userAnswer, userAnswer))
       case Valid(ClaimOnDifferentPeriod) => UserAnswersState(userAnswer.copy(data = Json.obj()), userAnswer).validNec
       case inv @ Invalid(err) =>
-        UserAnswers.logWarnings(err)
+        UserAnswers.logWarnings(err)(logger.logger)
         inv
     }
 
@@ -64,7 +62,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
           )
 
       case inv @ Invalid(err) =>
-        UserAnswers.logWarnings(err)
+        UserAnswers.logWarnings(err)(logger.logger)
         inv
     }
 
@@ -83,7 +81,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
           )
 
       case Invalid(err) =>
-        UserAnswers.logWarnings(err)
+        UserAnswers.logWarnings(err)(logger.logger)
         Valid(answer)
     }
 
@@ -111,7 +109,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
             )
           )
       case inv @ Invalid(err) =>
-        UserAnswers.logWarnings(err)
+        UserAnswers.logWarnings(err)(logger.logger)
         inv
     }
 
@@ -140,7 +138,7 @@ trait FastJourneyUserAnswersHandler extends DataExtractor with UserAnswersHelper
           )
 
       case Invalid(err) =>
-        UserAnswers.logWarnings(err)
+        UserAnswers.logWarnings(err)(logger.logger)
         Valid(answer)
     }
 

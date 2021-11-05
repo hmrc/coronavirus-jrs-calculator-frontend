@@ -32,7 +32,7 @@ class ClaimPeriodStartControllerISpec extends IntegrationSpecBase with CreateReq
       val res = getRequest("/claim-period-start")()
 
       whenReady(res) { result =>
-        result should have(
+        result must have(
           httpStatus(OK),
           titleOf(claimPeriodStartDate)
         )
@@ -55,7 +55,7 @@ class ClaimPeriodStartControllerISpec extends IntegrationSpecBase with CreateReq
 
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(SEE_OTHER),
             redirectLocation(controllers.routes.ClaimPeriodEndController.onPageLoad().url)
           )

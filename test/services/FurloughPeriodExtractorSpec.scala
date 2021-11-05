@@ -257,7 +257,7 @@ class FurloughPeriodExtractorSpec
 
   "calling the .extractFurloughPeriodDatesV()" when {
 
-    "determining the furlough start date" should {
+    "determining the furlough start date" must {
 
       "the furlough start date should just be the furlough start date" in new FurloughPeriodExtractor {
 
@@ -270,7 +270,7 @@ class FurloughPeriodExtractorSpec
 
     }
 
-    "determining the furlough end date" should {
+    "determining the furlough end date" must {
 
       "user answers furlough is 'FurloughEnded', the furlough end date should be set to the answered furlough end date" in new FurloughPeriodExtractor {
 
@@ -296,7 +296,7 @@ class FurloughPeriodExtractorSpec
       }
     }
 
-    "supplied all answers should build a correct FurloughWithinClaim model" should {
+    "supplied all answers should build a correct FurloughWithinClaim model" must {
 
       "user answers furlough is 'FurloughEnded', the furlough end date should be set to the answered furlough end date" in new FurloughPeriodExtractor {
 
@@ -325,7 +325,7 @@ class FurloughPeriodExtractorSpec
       }
     }
 
-    "not supplied any answers" should {
+    "not supplied any answers" must {
 
       "return invalid" in new FurloughPeriodExtractor {
 

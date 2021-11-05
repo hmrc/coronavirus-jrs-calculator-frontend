@@ -16,14 +16,12 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import base.SpecBaseControllerSpecs
 import forms.NumberOfStatLeaveDaysFormProvider
 import messages.NumberOfStatLeaveDaysMessages
 import models.EmployeeStarted
 import models.requests.DataRequest
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages._
@@ -37,6 +35,7 @@ import viewmodels.{BeenOnStatutoryLeaveHelper, NumberOfStatLeaveDaysHelper}
 import views.ViewUtils.dateToString
 import views.html.NumberOfStatLeaveDaysView
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

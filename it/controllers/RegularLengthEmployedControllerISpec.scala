@@ -26,11 +26,11 @@ import play.api.libs.json.Json
 import utils.{CreateRequestHelper, CustomMatchers, ITCoreTestData, IntegrationSpecBase}
 
 class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
-  with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData with FeatureSwitching {
+ with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData with FeatureSwitching {
 
   "the ExtensionTwoNewStarterFlow is turned ON" when {
 
-    "GET /regular-length-employed" should {
+    "GET /regular-length-employed" must {
 
       "redirect display the correct title" in {
 
@@ -54,7 +54,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
         val res = getRequestHeaders("/regular-length-employed")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(OK),
             titleOf(regularLengthEmployed)
           )
@@ -64,7 +64,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
 
     "POST /regular-length-employed" when {
 
-      "user enters a 'Yes' answer" should {
+      "user enters a 'Yes' answer" must {
 
         "redirect to RegularPayAmount page when PayDate is defined" in {
 
@@ -90,7 +90,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(SEE_OTHER),
               redirectLocation(controllers.routes.RegularPayAmountController.onPageLoad().url)
             )
@@ -98,7 +98,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
         }
       }
 
-      "user enters a 'No' answer" should {
+      "user enters a 'No' answer" must {
 
         "redirect to OnPayrollBefore30thOct2020 page" in {
 
@@ -123,7 +123,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(SEE_OTHER),
               redirectLocation(controllers.routes.OnPayrollBefore30thOct2020Controller.onPageLoad().url)
             )
@@ -131,7 +131,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
         }
       }
 
-      "user enters an Invalid answer" should {
+      "user enters an Invalid answer" must {
 
         "redirect back to the same RegularLengthEmployed page" in {
 
@@ -156,7 +156,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(BAD_REQUEST)
             )
           }
@@ -168,7 +168,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
 
   "the ExtensionTwoNewStarterFlow is turned OFF" when {
 
-    "GET /regular-length-employed" should {
+    "GET /regular-length-employed" must {
 
       "redirect to the start page" in {
 
@@ -180,7 +180,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
         val res = getRequestHeaders("/regular-length-employed")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
-          result should have(
+          result must have(
             httpStatus(OK),
             titleOf(regularLengthEmployed)
           )
@@ -190,7 +190,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
 
     "POST /regular-length-employed" when {
 
-      "user enters a 'Yes' answer" should {
+      "user enters a 'Yes' answer" must {
 
         "redirect to RegularPayAmount page when PayDate is defined" in {
 
@@ -217,7 +217,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(SEE_OTHER),
               redirectLocation(controllers.routes.RegularPayAmountController.onPageLoad().url)
             )
@@ -225,7 +225,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
         }
       }
 
-      "user enters a 'No' answer" should {
+      "user enters a 'No' answer" must {
 
         "redirect to RegularPayAmount page" in {
 
@@ -250,7 +250,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(SEE_OTHER),
               redirectLocation(controllers.routes.RegularPayAmountController.onPageLoad().url)
             )
@@ -258,7 +258,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
         }
       }
 
-      "user enters an Invalid answer" should {
+      "user enters an Invalid answer" must {
 
         "redirect back to the same RegularLengthEmployed page" in {
 
@@ -283,7 +283,7 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
-            result should have(
+            result must have(
               httpStatus(BAD_REQUEST)
             )
           }
