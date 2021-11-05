@@ -14,7 +14,7 @@ object AppDependencies {
     "org.typelevel"                 %% "cats-core"                      % "2.6.0",
     "com.softwaremill.quicklens"    %% "quicklens"                      % "1.5.0",
     "com.github.pureconfig"         %% "pureconfig"                     % "0.13.0",
-    "com.fasterxml.jackson.module"  %% "jackson-module-scala"           % "2.12.5"
+    "com.fasterxml.jackson.module"  %% "jackson-module-scala"           % "2.13.0"
   )
 
   val scalatestVersion = "3.2.10"

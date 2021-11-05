@@ -2,10 +2,8 @@ package utils
 
 import config.FrontendAppConfig
 import models.UserAnswers
-import navigation.Navigator
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.{TryValues, _}
+import org.scalatest._
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.i18n.{Lang, MessagesApi}
@@ -20,9 +18,9 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext}
 
 trait IntegrationSpecBase
-    extends PlaySpec with GivenWhenThen with TestSuite with ScalaFutures with IntegrationPatience with Matchers with WiremockHelper
-   with GuiceOneServerPerSuite with TryValues with BeforeAndAfterEach with BeforeAndAfterAll with Eventually with CreateRequestHelper
-   with CustomMatchers {
+  extends PlaySpec with GivenWhenThen with TestSuite with ScalaFutures with IntegrationPatience with WiremockHelper
+    with GuiceOneServerPerSuite with TryValues with BeforeAndAfterEach with BeforeAndAfterAll with Eventually with CreateRequestHelper
+    with CustomMatchers {
 
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.global
   implicit val hc: HeaderCarrier    = HeaderCarrier()

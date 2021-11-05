@@ -35,8 +35,8 @@ trait PeriodHelper {
     @tailrec
     def generate(acc: Seq[Period], list: Seq[LocalDate]): Seq[Period] = list match {
       case Nil      => acc
-      case _ :: Nil => acc
-      case h :: t   => generate(acc ++ Seq(Period(h.plusDays(1), t.head)), t)
+      case _ +: Nil => acc
+      case h +: t   => generate(acc ++ Seq(Period(h.plusDays(1), t.head)), t)
     }
 
     if (endDates.length == 1) {

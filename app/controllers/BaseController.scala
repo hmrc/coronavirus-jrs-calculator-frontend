@@ -30,7 +30,7 @@ import play.api.i18n.I18nSupport
 import play.api.libs.json.Reads
 import play.api.mvc.Result
 import services.BackJourneyValidator
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.LoggerUtil
 
 import scala.concurrent.Future

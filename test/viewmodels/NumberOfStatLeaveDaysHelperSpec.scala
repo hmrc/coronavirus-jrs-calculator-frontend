@@ -21,7 +21,6 @@ import models.EmployeeRTISubmission._
 import models.requests.DataRequest
 import models.{EmployeeRTISubmission, EmployeeStarted, UserAnswers}
 import pages._
-import play.api.Logger
 import utils.LocalDateHelpers._
 import utils.{LocalDateHelpers, LogCapturing}
 
@@ -46,7 +45,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
         withCaptureOfLoggingFrom(helper.logger) { logs =>
           helper.boundaryStartDate() mustBe apr6th2019
-          logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
+          logs
+            .map(_.getMessage)
+            .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
         }
       }
     }
@@ -73,7 +74,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
           withCaptureOfLoggingFrom(helper.logger) { logs =>
             helper.boundaryStartDate() mustBe feb2nd2020
-            logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
+            logs
+              .map(_.getMessage)
+              .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
           }
         }
       }
@@ -98,7 +101,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
           withCaptureOfLoggingFrom(helper.logger) { logs =>
             helper.boundaryStartDate() mustBe apr6th2019
-            logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
+            logs
+              .map(_.getMessage)
+              .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
           }
         }
       }
@@ -134,7 +139,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
           withCaptureOfLoggingFrom(helper.logger) { logs =>
             helper.boundaryStartDate() mustBe apr6th2020
-            logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 5a Employee") mustBe true
+            logs
+              .map(_.getMessage)
+              .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 5a Employee") mustBe true
           }
         }
       }
@@ -167,7 +174,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
           withCaptureOfLoggingFrom(helper.logger) { logs =>
             helper.boundaryStartDate() mustBe employeeStartDate
-            logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 5a Employee") mustBe true
+            logs
+              .map(_.getMessage)
+              .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 5a Employee") mustBe true
           }
         }
       }
@@ -204,7 +213,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
           withCaptureOfLoggingFrom(helper.logger) { logs =>
             helper.boundaryStartDate() mustBe employeeStartDate
-            logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 5b Employee") mustBe true
+            logs
+              .map(_.getMessage)
+              .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 5b Employee") mustBe true
           }
         }
       }
@@ -237,7 +248,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
           withCaptureOfLoggingFrom(helper.logger) { logs =>
             helper.boundaryStartDate() mustBe apr6th2020
-            logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 5b Employee") mustBe true
+            logs
+              .map(_.getMessage)
+              .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 5b Employee") mustBe true
           }
         }
       }
@@ -270,7 +283,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
             withCaptureOfLoggingFrom(helper.logger) { logs =>
               helper.boundaryEndDate() mustBe march31st2020
-              logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
+              logs
+                .map(_.getMessage)
+                .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
             }
           }
         }
@@ -293,7 +308,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
             withCaptureOfLoggingFrom(helper.logger) { logs =>
               helper.boundaryEndDate() mustBe apr5th2020
-              logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
+              logs
+                .map(_.getMessage)
+                .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
             }
           }
         }
@@ -316,7 +333,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
             withCaptureOfLoggingFrom(helper.logger) { logs =>
               helper.boundaryEndDate() mustBe apr5th2020
-              logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
+              logs
+                .map(_.getMessage)
+                .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
             }
           }
         }
@@ -344,7 +363,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
             withCaptureOfLoggingFrom(helper.logger) { logs =>
               helper.boundaryEndDate() mustBe march31st2020
-              logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
+              logs
+                .map(_.getMessage)
+                .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
             }
           }
         }
@@ -367,7 +388,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
             withCaptureOfLoggingFrom(helper.logger) { logs =>
               helper.boundaryEndDate() mustBe apr5th2020
-              logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
+              logs
+                .map(_.getMessage)
+                .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
             }
           }
         }
@@ -397,7 +420,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
             withCaptureOfLoggingFrom(helper.logger) { logs =>
               helper.boundaryEndDate() mustBe march31st2020
-              logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
+              logs
+                .map(_.getMessage)
+                .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
             }
           }
         }
@@ -424,7 +449,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
             withCaptureOfLoggingFrom(helper.logger) { logs =>
               helper.boundaryEndDate() mustBe apr5th2020
-              logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
+              logs
+                .map(_.getMessage)
+                .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 3 Employee") mustBe true
             }
           }
         }
@@ -461,7 +488,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
             withCaptureOfLoggingFrom(helper.logger) { logs =>
               helper.boundaryEndDate() mustBe march31st2020
-              logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
+              logs
+                .map(_.getMessage)
+                .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
             }
           }
         }
@@ -491,7 +520,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
             withCaptureOfLoggingFrom(helper.logger) { logs =>
               helper.boundaryEndDate() mustBe apr5th2020
-              logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
+              logs
+                .map(_.getMessage)
+                .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
             }
           }
         }
@@ -525,7 +556,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
             withCaptureOfLoggingFrom(helper.logger) { logs =>
               helper.boundaryEndDate() mustBe march31st2020
-              logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
+              logs
+                .map(_.getMessage)
+                .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
             }
           }
         }
@@ -555,7 +588,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
             withCaptureOfLoggingFrom(helper.logger) { logs =>
               helper.boundaryEndDate() mustBe apr5th2020
-              logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
+              logs
+                .map(_.getMessage)
+                .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
             }
           }
         }
@@ -592,7 +627,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
             withCaptureOfLoggingFrom(helper.logger) { logs =>
               helper.boundaryEndDate() mustBe march31st2020
-              logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
+              logs
+                .map(_.getMessage)
+                .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
             }
           }
         }
@@ -626,7 +663,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
             withCaptureOfLoggingFrom(helper.logger) { logs =>
               helper.boundaryEndDate() mustBe apr5th2020
-              logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
+              logs
+                .map(_.getMessage)
+                .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 4 Employee") mustBe true
             }
           }
         }
@@ -664,7 +703,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
           withCaptureOfLoggingFrom(helper.logger) { logs =>
             helper.boundaryEndDate() mustBe apr9th2020
-            logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 5a Employee") mustBe true
+            logs
+              .map(_.getMessage)
+              .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 5a Employee") mustBe true
           }
         }
       }
@@ -698,7 +739,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
           withCaptureOfLoggingFrom(helper.logger) { logs =>
             helper.boundaryEndDate() mustBe apr9th2020
-            logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 5a Employee") mustBe true
+            logs
+              .map(_.getMessage)
+              .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 5a Employee") mustBe true
           }
         }
       }
@@ -736,7 +779,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
           withCaptureOfLoggingFrom(helper.logger) { logs =>
             helper.boundaryEndDate() mustBe apr9th2020
-            logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 5a Employee") mustBe true
+            logs
+              .map(_.getMessage)
+              .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 5a Employee") mustBe true
           }
         }
       }
@@ -773,7 +818,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
           withCaptureOfLoggingFrom(helper.logger) { logs =>
             helper.boundaryEndDate() mustBe apr9th2020
-            logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 5b Employee") mustBe true
+            logs
+              .map(_.getMessage)
+              .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 5b Employee") mustBe true
           }
         }
       }
@@ -807,7 +854,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
           withCaptureOfLoggingFrom(helper.logger) { logs =>
             helper.boundaryEndDate() mustBe apr9th2020
-            logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 5b Employee") mustBe true
+            logs
+              .map(_.getMessage)
+              .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 5b Employee") mustBe true
           }
         }
       }
@@ -845,7 +894,9 @@ class NumberOfStatLeaveDaysHelperSpec extends SpecBase with LocalDateHelpers wit
 
           withCaptureOfLoggingFrom(helper.logger) { logs =>
             helper.boundaryEndDate() mustBe apr9th2020
-            logs.map(_.getMessage).contains("[EmployeeTypeUtil][variablePayResolver] Type 5b Employee") mustBe true
+            logs
+              .map(_.getMessage)
+              .contains("[NumberOfStatLeaveDaysHelper] [EmployeeTypeUtil][variablePayResolver] Type 5b Employee") mustBe true
           }
         }
       }

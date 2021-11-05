@@ -38,7 +38,7 @@ class ClaimPeriodStartControllerSpec extends SpecBaseControllerSpecs {
 
   val formProvider                  = new ClaimPeriodStartFormProvider()
   private def form: Form[LocalDate] = formProvider()
-  val validAnswer                   = LocalDate.now(ZoneOffset.UTC)
+  val validAnswer                   = LocalDate.of(2021, 9, 1)
 
   lazy val claimPeriodStartRoute = routes.ClaimPeriodStartController.onPageLoad().url
 
