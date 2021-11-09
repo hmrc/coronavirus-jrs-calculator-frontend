@@ -16,15 +16,15 @@
 
 package viewmodels
 
-import java.time.LocalDate
 import config.FrontendAppConfig
 import models.requests.DataRequest
 import pages.EmployeeStartDatePage
-import play.api.Logger
 import play.api.i18n.Messages
 import uk.gov.hmrc.http.InternalServerException
 import utils.LocalDateHelpers._
 import utils.{EmployeeTypeUtil, KeyDatesUtil, LoggerUtil}
+
+import java.time.LocalDate
 
 class NumberOfStatLeaveDaysHelper extends EmployeeTypeUtil with KeyDatesUtil with LoggerUtil {
 

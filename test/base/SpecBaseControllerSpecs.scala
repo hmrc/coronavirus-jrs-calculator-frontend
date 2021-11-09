@@ -22,11 +22,10 @@ import controllers.actions._
 import handlers.ErrorHandler
 import models.UserAnswers.AnswerV
 import navigation.Navigator
-import org.scalatestplus.mockito.MockitoSugar
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
-import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.play.guice._
 import play.api.Configuration
 import play.api.i18n.{Messages, MessagesApi}
