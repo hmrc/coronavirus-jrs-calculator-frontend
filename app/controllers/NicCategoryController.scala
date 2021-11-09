@@ -19,9 +19,6 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.NicCategoryFormProvider
-import models.NicCategory
-
-import javax.inject.Inject
 import navigation.Navigator
 import pages.NicCategoryPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -30,6 +27,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.NicCategoryView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class NicCategoryController @Inject()(

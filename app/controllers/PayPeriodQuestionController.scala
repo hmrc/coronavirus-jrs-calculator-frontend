@@ -20,11 +20,9 @@ import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.PayPeriodQuestionFormProvider
 import handlers.{ErrorHandler, FastJourneyUserAnswersHandler}
-import javax.inject.Inject
 import models.PayPeriodQuestion
 import models.requests.DataRequest
 import navigation.Navigator
-import org.slf4j.{Logger, LoggerFactory}
 import pages.{PayDatePage, PayPeriodQuestionPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,6 +30,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import views.html.PayPeriodQuestionView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PayPeriodQuestionController @Inject()(

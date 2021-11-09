@@ -19,10 +19,9 @@ package config
 import java.time.LocalDate
 import config.featureSwitch.{FeatureSwitching, WelshLanguageFeature}
 import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
-
-import scala.util.Try
 import pureconfig.ConfigSource
-import pureconfig.generic.auto._ // do not remove this
+//do not remove the import below (pureconfig.generic.auto._)
+import pureconfig.generic.auto._
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import javax.inject.{Inject, Singleton}

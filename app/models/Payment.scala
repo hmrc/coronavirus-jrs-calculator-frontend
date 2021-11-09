@@ -16,11 +16,11 @@
 
 package models
 
-import java.time.LocalDate
-import play.api.data.format.Formats.localDateFormat
 import play.api.libs.json.{Format, Json}
-import services.{AveragePayCalculator, PeriodHelper}
 import services.Calculators._
+import services.{AveragePayCalculator, PeriodHelper}
+
+import java.time.LocalDate
 
 case class PaymentDate(value: LocalDate)
 

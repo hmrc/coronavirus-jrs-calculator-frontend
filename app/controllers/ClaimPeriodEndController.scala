@@ -16,12 +16,9 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.ClaimPeriodEndFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage}
 import play.api.data.Form
@@ -32,6 +29,8 @@ import services.UserAnswerPersistence
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ClaimPeriodEndView
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ClaimPeriodEndController @Inject()(

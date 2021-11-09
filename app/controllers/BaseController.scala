@@ -18,14 +18,11 @@ package controllers
 
 import cats.data.Validated.{Invalid, Valid}
 import handlers.ErrorHandler
-import models.{BackFirstPage, BackToPreviousPage, UserAnswers}
 import models.UserAnswers.AnswerV
 import models.requests.DataRequest
+import models.{BackFirstPage, BackToPreviousPage, UserAnswers}
 import navigation.Navigator
-import org.slf4j
-import org.slf4j.LoggerFactory
 import pages.QuestionPage
-import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Reads
 import play.api.mvc.Result

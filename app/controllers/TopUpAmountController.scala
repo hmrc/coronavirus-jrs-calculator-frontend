@@ -19,7 +19,6 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.TopUpAmountFormProvider
-import javax.inject.Inject
 import models.{Amount, TopUpPayment, TopUpPeriod}
 import navigation.Navigator
 import pages.{TopUpAmountPage, TopUpPeriodsPage}
@@ -29,6 +28,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import views.html.TopUpAmountView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TopUpAmountController @Inject()(

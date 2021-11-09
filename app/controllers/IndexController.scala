@@ -17,13 +17,13 @@
 package controllers
 
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
-import javax.inject.Inject
 import models.UserAnswers
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class IndexController @Inject()(identify: IdentifierAction,

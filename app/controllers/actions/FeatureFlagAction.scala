@@ -63,8 +63,7 @@ final case class FeatureFlagKeyWithRedirect(key: String, redirectRoute: Call) ex
 final case class FeatureFlagWith404(key: String)                              extends FeatureFlag
 
 object FeatureFlag {
-  import pureconfig.ConfigSource
-  import pureconfig.generic.auto._ // Do not remove this
+  import pureconfig.ConfigSource // Do not remove this
   def isEnabled(flag: FeatureFlag): Boolean =
     Try(ConfigSource.default.at(flag.key).loadOrThrow[Boolean]).getOrElse(false) //TODO try passing flag instead of retrieving it.
 }

@@ -17,6 +17,7 @@
 package utils
 
 import java.time.{LocalDate, Month, Year, YearMonth}
+import scala.language.implicitConversions
 
 trait YearMonthHelper {
 

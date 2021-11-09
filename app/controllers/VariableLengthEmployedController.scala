@@ -19,10 +19,8 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.VariableLengthEmployedFormProvider
-import javax.inject.Inject
 import models.EmployeeStarted
 import navigation.Navigator
-import org.slf4j.{Logger, LoggerFactory}
 import pages.EmployeeStartedPage
 import play.api.data.Form
 import play.api.i18n.MessagesApi
@@ -30,6 +28,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import views.html.VariableLengthEmployedView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class VariableLengthEmployedController @Inject()(

@@ -19,7 +19,6 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.PayMethodFormProvider
-import javax.inject.Inject
 import models.PayMethod
 import navigation.Navigator
 import pages.PayMethodPage
@@ -30,6 +29,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.PayMethodView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PayMethodController @Inject()(

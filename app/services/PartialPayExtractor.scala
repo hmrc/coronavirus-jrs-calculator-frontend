@@ -17,7 +17,6 @@
 package services
 
 import models.{PartialPeriod, Period, UserAnswers}
-import org.slf4j.Logger
 import pages.PayDatePage
 import utils.LoggerUtil
 

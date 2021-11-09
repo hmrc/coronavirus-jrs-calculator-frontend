@@ -21,7 +21,6 @@ import cats.implicits._
 import models.UserAnswers.AnswerV
 import models._
 import pages._
-import play.api.libs.json.Reads
 import services.{FurloughPeriodExtractor, PeriodHelper}
 import utils.LocalDateHelpers._
 

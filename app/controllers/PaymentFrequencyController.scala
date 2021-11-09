@@ -19,7 +19,6 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.PaymentFrequencyFormProvider
-import javax.inject.Inject
 import models.PaymentFrequency
 import navigation.Navigator
 import pages.PaymentFrequencyPage
@@ -31,6 +30,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.PaymentFrequencyView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaymentFrequencyController @Inject()(

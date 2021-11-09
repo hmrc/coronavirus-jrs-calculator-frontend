@@ -16,14 +16,14 @@
 
 package handlers
 
-import java.time.LocalDate
-
 import cats.data.Validated.Valid
-import models.{Period, PeriodWithPaymentDate, Periods, UserAnswers}
+import cats.syntax.apply._
 import models.UserAnswers.AnswerV
+import models.{Period, PeriodWithPaymentDate, UserAnswers}
 import pages._
 import services.PreviousYearPeriod
-import cats.syntax.apply._
+
+import java.time.LocalDate
 
 trait LastYearPayControllerRequestHandler extends DataExtractor with PreviousYearPeriod {
 

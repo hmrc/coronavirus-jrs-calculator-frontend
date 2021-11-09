@@ -28,7 +28,7 @@ import java.time.LocalDate
 
 class NumberOfStatLeaveDaysHelper extends EmployeeTypeUtil with KeyDatesUtil with LoggerUtil {
 
-  def boundaryStartDate()(implicit request: DataRequest[_], appConfig: FrontendAppConfig, messages: Messages): LocalDate = {
+  def boundaryStartDate()(implicit request: DataRequest[_], appConfig: FrontendAppConfig): LocalDate = {
 
     val employeeStartDate: Option[LocalDate] = request.userAnswers.getV(EmployeeStartDatePage).toOption
 
@@ -50,7 +50,7 @@ class NumberOfStatLeaveDaysHelper extends EmployeeTypeUtil with KeyDatesUtil wit
     )(identity)
   }
 
-  def boundaryEndDate()(implicit request: DataRequest[_], appConfig: FrontendAppConfig, messages: Messages): LocalDate = {
+  def boundaryEndDate()(implicit request: DataRequest[_], appConfig: FrontendAppConfig): LocalDate = {
 
     val dayBeforeFirstFurlough = firstFurloughDate.minusDays(1)
 

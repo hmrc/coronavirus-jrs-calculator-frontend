@@ -16,23 +16,21 @@
 
 package controllers
 
+import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.StatutoryLeavePayFormProvider
-
-import javax.inject.Inject
+import handlers.ErrorHandler
+import models.Amount
 import navigation.Navigator
 import pages.{AnnualPayAmountPage, StatutoryLeavePayPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.StatutoryLeavePayView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import cats.data.Validated.{Invalid, Valid}
-import handlers.ErrorHandler
-import models.Amount
-import play.api.data.Form
 
 class StatutoryLeavePayController @Inject()(
   override val messagesApi: MessagesApi,

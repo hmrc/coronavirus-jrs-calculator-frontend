@@ -26,14 +26,11 @@ import models.EmployeeStarted.{After1Feb2019, OnOrBefore1Feb2019}
 import models.PartTimeQuestion.{PartTimeNo, PartTimeYes}
 import models.PayMethod.{Regular, Variable}
 import models.{UserAnswers, _}
-import org.slf4j
-import org.slf4j.LoggerFactory
-import pages.{PayDatePage, _}
-import play.api.Logger
+import pages._
 import play.api.mvc.Call
 import services.PartialPayExtractor
-import utils.{LocalDateHelpers, LoggerUtil}
 import utils.LocalDateHelpers._
+import utils.{LocalDateHelpers, LoggerUtil}
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
