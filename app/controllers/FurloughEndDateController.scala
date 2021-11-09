@@ -16,13 +16,10 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.FurloughEndDateFormProvider
 import handlers.ErrorHandler
-import javax.inject.Inject
 import models.Period
 import navigation.Navigator
 import pages.{ClaimPeriodEndPage, ClaimPeriodStartPage, FurloughEndDatePage, FurloughStartDatePage}
@@ -33,6 +30,8 @@ import repositories.SessionRepository
 import services.UserAnswerPersistence
 import views.html.FurloughEndDateView
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class FurloughEndDateController @Inject()(

@@ -19,7 +19,6 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.TopUpStatusFormProvider
-import javax.inject.Inject
 import models.TopUpStatus
 import navigation.Navigator
 import pages.TopUpStatusPage
@@ -30,6 +29,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.TopUpStatusView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TopUpStatusController @Inject()(

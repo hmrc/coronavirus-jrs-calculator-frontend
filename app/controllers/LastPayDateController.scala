@@ -16,12 +16,9 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.LastPayDateFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.{LastPayDatePage, PayDatePage}
 import play.api.data.Form
@@ -31,6 +28,8 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.LastPayDateView
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class LastPayDateController @Inject()(

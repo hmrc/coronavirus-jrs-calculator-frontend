@@ -19,7 +19,6 @@ package controllers
 import controllers.actions._
 import forms.FurloughOngoingFormProvider
 import handlers.ErrorHandler
-import javax.inject.Inject
 import models.FurloughStatus
 import navigation.Navigator
 import pages.{ClaimPeriodStartPage, FurloughStatusPage}
@@ -30,6 +29,7 @@ import repositories.SessionRepository
 import services.UserAnswerPersistence
 import views.html.FurloughOngoingView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class FurloughOngoingController @Inject()(

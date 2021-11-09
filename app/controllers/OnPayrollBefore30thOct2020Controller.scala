@@ -16,24 +16,22 @@
 
 package controllers
 
+import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.OnPayrollBefore30thOct2020FormProvider
-
-import javax.inject.Inject
-import cats.data.Validated.{Invalid, Valid}
 import models.requests.DataRequest
 import navigation.Navigator
 import pages.{EmployeeStartDatePage, OnPayrollBefore30thOct2020Page}
 import play.api.data.Form
+import play.api.http.{Status => StatusCode}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.OnPayrollBefore30thOct2020View
-import play.api.http.{Status => StatusCode}
-import utils.LocalDateHelpers._
 
 import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class OnPayrollBefore30thOct2020Controller @Inject()(

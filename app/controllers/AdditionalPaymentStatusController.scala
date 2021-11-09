@@ -20,7 +20,6 @@ import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.AdditionalPaymentStatusFormProvider
 import handlers.FurloughCalculationHandler
-import javax.inject.Inject
 import models.AdditionalPaymentStatus
 import navigation.Navigator
 import pages.AdditionalPaymentStatusPage
@@ -32,6 +31,7 @@ import services.UserAnswerPersistence
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AdditionalPaymentStatusView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AdditionalPaymentStatusController @Inject()(override val messagesApi: MessagesApi,

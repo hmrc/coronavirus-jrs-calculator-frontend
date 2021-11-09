@@ -19,8 +19,6 @@ package controllers
 import cats.data.Validated._
 import controllers.actions._
 import forms.FurloughInLastTaxYearFormProvider
-import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.FurloughInLastTaxYearPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -29,6 +27,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.FurloughInLastTaxYearView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class FurloughInLastTaxYearController @Inject()(

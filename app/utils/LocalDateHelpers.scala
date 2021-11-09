@@ -16,8 +16,6 @@
 
 package utils
 
-import play.api.libs.json.{Format, JsString, Reads, Writes, __}
-
 import java.time.LocalDate
 
 trait LocalDateHelpers {

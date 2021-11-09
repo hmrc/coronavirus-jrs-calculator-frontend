@@ -24,8 +24,7 @@ import models.ClaimPeriodQuestion.{ClaimOnDifferentPeriod, ClaimOnSamePeriod}
 import models.FurloughPeriodQuestion.{FurloughedOnDifferentPeriod, FurloughedOnSamePeriod}
 import models.PayPeriodQuestion.{UseDifferentPayPeriod, UseSamePayPeriod}
 import models.UserAnswers.AnswerV
-import models.{FurloughStatus, GenericValidationError, PaymentFrequency, UserAnswers}
-import org.slf4j.{Logger, LoggerFactory}
+import models.{GenericValidationError, UserAnswers}
 import pages._
 import play.api.libs.json.{JsError, Json}
 import utils.{LoggerUtil, UserAnswersHelper}

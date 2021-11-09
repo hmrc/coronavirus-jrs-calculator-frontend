@@ -19,9 +19,7 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.FurloughPartialPayFormProvider
-import javax.inject.Inject
 import navigation.Navigator
-import org.slf4j.{Logger, LoggerFactory}
 import pages._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -30,6 +28,7 @@ import services.PartialPayExtractor
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.VariableLengthPartialPayView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PartialPayAfterFurloughController @Inject()(

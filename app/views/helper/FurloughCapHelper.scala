@@ -16,14 +16,12 @@
 
 package views.helper
 
-import java.time.Month
-import java.time.format.TextStyle
-import java.util.Locale
-
 import com.google.inject.Inject
 import models._
 import play.api.i18n.Messages
 import services.Calculators._
+
+import java.time.Month
 
 class FurloughCapHelper @Inject()() {
 

@@ -16,10 +16,7 @@
 
 package services
 
-import java.time.LocalDate
-
 import config.FrontendAppConfig
-import javax.inject.{Inject, Singleton}
 import models.UserAnswers
 import models.UserAnswers.AnswerV
 import pages._
@@ -32,9 +29,10 @@ import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.model.DataEvent
 import viewmodels.ViewBreakdown
 
+import java.time.LocalDate
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
-import play.api.libs.json.LowPriorityWrites
 
 object JobRetentionSchemeCalculatorEvent extends Enumeration {
   type JobRetentionSchemeCalculatorEvent = Value

@@ -7,14 +7,16 @@ object AppDependencies {
   val bootstrapVersion = "5.16.0"
 
   val compile = Seq(
-    "org.reactivemongo"             %% "play2-reactivemongo"            % "0.19.7-play28",
-    "uk.gov.hmrc"                   %% "play-conditional-form-mapping"  % s"1.10.0$playSuffix",
-    "uk.gov.hmrc"                   %% s"bootstrap-frontend$playSuffix" % bootstrapVersion,
-    "uk.gov.hmrc"                   %% "play-frontend-hmrc"             % s"1.22.0$playSuffix",
-    "org.typelevel"                 %% "cats-core"                      % "2.6.0",
-    "com.softwaremill.quicklens"    %% "quicklens"                      % "1.5.0",
-    "com.github.pureconfig"         %% "pureconfig"                     % "0.13.0",
-    "com.fasterxml.jackson.module"  %% "jackson-module-scala"           % "2.13.0"
+    "org.reactivemongo"             %% "play2-reactivemongo"                % "0.19.7-play28",
+    "uk.gov.hmrc"                   %% "play-conditional-form-mapping"      % s"1.10.0$playSuffix",
+    "uk.gov.hmrc"                   %% s"bootstrap-frontend$playSuffix"     % bootstrapVersion,
+    "uk.gov.hmrc"                   %% "play-frontend-hmrc"                 % s"1.22.0$playSuffix",
+    "org.typelevel"                 %% "cats-core"                          % "2.6.0",
+    "com.softwaremill.quicklens"    %% "quicklens"                          % "1.5.0",
+    "com.github.pureconfig"         %% "pureconfig"                         % "0.13.0",
+    "com.fasterxml.jackson.module"  %% "jackson-module-scala"               % "2.13.0",
+    "org.reactivemongo"             %% "reactivemongo-play-json-compat"     % "1.0.7-play28",
+    "com.typesafe.play"             %% "play-json"                          % "2.9.2"
   )
 
   val scalatestVersion = "3.2.10"

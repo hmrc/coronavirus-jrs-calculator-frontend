@@ -17,14 +17,12 @@
 package controllers
 
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
-import javax.inject.Inject
-import models.UserAnswers
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CalculationUnsupportView
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class CalculationUnsupportedController @Inject()(identify: IdentifierAction,

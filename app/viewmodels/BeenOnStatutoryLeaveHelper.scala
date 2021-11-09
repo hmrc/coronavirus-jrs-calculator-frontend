@@ -20,7 +20,6 @@ import cats.data.Validated.Valid
 import config.FrontendAppConfig
 import models.requests.DataRequest
 import pages.EmployeeStartDatePage
-import play.api.Logger
 import play.api.i18n.Messages
 import uk.gov.hmrc.http.InternalServerException
 import utils.LocalDateHelpers._

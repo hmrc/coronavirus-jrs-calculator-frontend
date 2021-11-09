@@ -16,27 +16,23 @@
 
 package controllers
 
-import java.time.LocalDate
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.TopUpPeriodsFormProvider
 import handlers.FurloughCalculationHandler
-
-import javax.inject.Inject
 import models.{TopUpPeriod, UserAnswers}
 import navigation.Navigator
-import org.slf4j
-import org.slf4j.LoggerFactory
 import pages.TopUpPeriodsPage
-import play.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Writes
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.LoggerUtil
 import views.html.TopUpPeriodsView
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TopUpPeriodsController @Inject()(
@@ -50,7 +46,7 @@ class TopUpPeriodsController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: TopUpPeriodsView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport with FurloughCalculationHandler {
+    extends FrontendBaseController with I18nSupport with FurloughCalculationHandler with LoggerUtil {
 
   val form: Form[List[LocalDate]] = formProvider()
 
@@ -97,7 +93,7 @@ class TopUpPeriodsController @Inject()(
               }
 
               if (dates.length != topUpPeriods.length) {
-                Logger.warn("[TopUpPeriodsController][onSubmit] Dates in furlough and input do not align")
+                logger.warn("[TopUpPeriodsController][onSubmit] Dates in furlough and input do not align")
                 Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
               } else {
                 saveAndRedirect(request.userAnswers, topUpPeriods)

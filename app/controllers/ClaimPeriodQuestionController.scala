@@ -20,11 +20,9 @@ import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.ClaimPeriodQuestionFormProvider
 import handlers.{ErrorHandler, FastJourneyUserAnswersHandler}
-import javax.inject.Inject
 import models.ClaimPeriodQuestion
 import models.requests.DataRequest
 import navigation.Navigator
-import org.slf4j.{Logger, LoggerFactory}
 import pages.{ClaimPeriodEndPage, ClaimPeriodQuestionPage, ClaimPeriodStartPage}
 import play.api.data.Form
 import play.api.i18n.MessagesApi
@@ -34,6 +32,7 @@ import repositories.SessionRepository
 import services.UserAnswerPersistence
 import views.html.ClaimPeriodQuestionView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ClaimPeriodQuestionController @Inject()(

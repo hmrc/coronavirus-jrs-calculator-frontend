@@ -19,9 +19,6 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.EmployeeRTISubmissionFormProvider
-import models.EmployeeRTISubmission
-
-import javax.inject.Inject
 import navigation.Navigator
 import pages.EmployeeRTISubmissionPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -30,6 +27,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.EmployeeRTISubmissionView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class EmployeeRTISubmissionController @Inject()(

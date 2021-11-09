@@ -16,26 +16,25 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import cats.data.Validated.{Invalid, Valid}
 import config.FrontendAppConfig
 import controllers.actions._
 import forms.FirstFurloughDateFormProvider
 import handlers.ErrorHandler
-import javax.inject.Inject
 import models.requests.DataRequest
 import navigation.Navigator
 import pages.{FirstFurloughDatePage, FurloughStartDatePage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
-import play.api.data.Form
 import services.UserAnswerPersistence
 import utils.EmployeeTypeUtil
 import utils.LocalDateHelpers.{mar1st2020, may1st2021, nov1st2020}
 import views.html.FirstFurloughDateView
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class FirstFurloughDateController @Inject()(

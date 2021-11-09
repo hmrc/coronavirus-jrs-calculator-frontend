@@ -16,13 +16,10 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.EmployeeStartDateFormProvider
 import handlers.ErrorHandler
-import javax.inject.Inject
 import navigation.Navigator
 import pages.{ClaimPeriodStartPage, EmployeeStartDatePage, FurloughStartDatePage}
 import play.api.data.Form
@@ -32,6 +29,8 @@ import repositories.SessionRepository
 import services.UserAnswerPersistence
 import views.html.EmployeeStartDateView
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class EmployeeStartDateController @Inject()(

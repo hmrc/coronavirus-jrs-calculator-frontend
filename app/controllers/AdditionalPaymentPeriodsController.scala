@@ -16,27 +16,24 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.AdditionalPaymentPeriodsFormProvider
 import handlers.FurloughCalculationHandler
-import javax.inject.Inject
 import models.UserAnswers
 import navigation.Navigator
-import org.slf4j
-import org.slf4j.LoggerFactory
 import pages.AdditionalPaymentPeriodsPage
-import play.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.UserAnswerPersistence
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.LoggerUtil
 import views.html.AdditionalPaymentPeriodsView
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AdditionalPaymentPeriodsController @Inject()(
@@ -50,7 +47,7 @@ class AdditionalPaymentPeriodsController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: AdditionalPaymentPeriodsView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport with FurloughCalculationHandler {
+    extends FrontendBaseController with I18nSupport with FurloughCalculationHandler with LoggerUtil {
 
   val form: Form[List[LocalDate]] = formProvider()
 
@@ -91,7 +88,7 @@ class AdditionalPaymentPeriodsController @Inject()(
               }
 
               if (dates.length != periods.length) {
-                Logger.warn("[AdditionalPaymentPeriodsController][onSubmit] Dates in furlough and input do not align")
+                logger.warn("[AdditionalPaymentPeriodsController][onSubmit] Dates in furlough and input do not align")
                 Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
               } else {
                 saveAndRedirect(request.userAnswers, periods)

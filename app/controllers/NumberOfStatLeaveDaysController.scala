@@ -20,7 +20,6 @@ import cats.data.Validated.{Invalid, Valid}
 import config.FrontendAppConfig
 import controllers.actions._
 import forms.NumberOfStatLeaveDaysFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.NumberOfStatLeaveDaysPage
 import play.api.data.Form
@@ -31,6 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.{BeenOnStatutoryLeaveHelper, NumberOfStatLeaveDaysHelper}
 import views.html.NumberOfStatLeaveDaysView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class NumberOfStatLeaveDaysController @Inject()(

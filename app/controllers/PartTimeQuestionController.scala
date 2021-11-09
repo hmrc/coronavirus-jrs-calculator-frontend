@@ -19,20 +19,17 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.PartTimeQuestionFormProvider
-
-import javax.inject.Inject
 import models.{PartTimeQuestion, UserAnswers}
 import navigation.Navigator
-import org.slf4j.{Logger, LoggerFactory}
 import pages.PartTimeQuestionPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Writes
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.FurloughPeriodExtractor
 import views.html.PartTimeQuestionView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PartTimeQuestionController @Inject()(

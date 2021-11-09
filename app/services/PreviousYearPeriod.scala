@@ -19,8 +19,7 @@ package services
 import models.PaymentFrequency.{Monthly, _}
 import models.{CylbDuration, PaymentFrequency, Period, PeriodWithPaymentDate, Periods}
 
-import java.time.{LocalDate, Year}
-import java.time.temporal.ChronoUnit
+import java.time.LocalDate
 
 trait PreviousYearPeriod {
 

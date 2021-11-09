@@ -19,7 +19,6 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.FurloughPartialPayFormProvider
-import javax.inject.Inject
 import models.FurloughPartialPay
 import navigation.Navigator
 import pages._
@@ -30,6 +29,7 @@ import repositories.SessionRepository
 import services.PartialPayExtractor
 import views.html.VariableLengthPartialPayView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PartialPayBeforeFurloughController @Inject()(

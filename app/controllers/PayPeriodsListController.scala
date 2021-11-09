@@ -16,10 +16,11 @@
 
 package controllers
 
+import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.PayPeriodsListFormProvider
-
-import javax.inject.Inject
+import handlers.PayPeriodsListHandler
+import models.UserAnswers
 import navigation.Navigator
 import pages.PayPeriodsListPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -28,10 +29,8 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.PayPeriodsListView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import cats.data.Validated.{Invalid, Valid}
-import handlers.PayPeriodsListHandler
-import models.{PayPeriodsList, UserAnswers}
 
 class PayPeriodsListController @Inject()(
   override val messagesApi: MessagesApi,

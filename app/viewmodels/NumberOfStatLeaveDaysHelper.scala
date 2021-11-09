@@ -16,19 +16,19 @@
 
 package viewmodels
 
-import java.time.LocalDate
 import config.FrontendAppConfig
 import models.requests.DataRequest
 import pages.EmployeeStartDatePage
-import play.api.Logger
 import play.api.i18n.Messages
 import uk.gov.hmrc.http.InternalServerException
 import utils.LocalDateHelpers._
 import utils.{EmployeeTypeUtil, KeyDatesUtil, LoggerUtil}
 
+import java.time.LocalDate
+
 class NumberOfStatLeaveDaysHelper extends EmployeeTypeUtil with KeyDatesUtil with LoggerUtil {
 
-  def boundaryStartDate()(implicit request: DataRequest[_], appConfig: FrontendAppConfig, messages: Messages): LocalDate = {
+  def boundaryStartDate()(implicit request: DataRequest[_], appConfig: FrontendAppConfig): LocalDate = {
 
     val employeeStartDate: Option[LocalDate] = request.userAnswers.getV(EmployeeStartDatePage).toOption
 
@@ -50,7 +50,7 @@ class NumberOfStatLeaveDaysHelper extends EmployeeTypeUtil with KeyDatesUtil wit
     )(identity)
   }
 
-  def boundaryEndDate()(implicit request: DataRequest[_], appConfig: FrontendAppConfig, messages: Messages): LocalDate = {
+  def boundaryEndDate()(implicit request: DataRequest[_], appConfig: FrontendAppConfig): LocalDate = {
 
     val dayBeforeFirstFurlough = firstFurloughDate.minusDays(1)
 

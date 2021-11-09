@@ -17,11 +17,10 @@
 package handlers
 
 import cats.data.Validated.{Invalid, Valid}
-import models.{Period, Periods, UserAnswers}
-import pages.PayDatePage
 import cats.syntax.apply._
 import models.UserAnswers.AnswerV
-import org.slf4j.{Logger, LoggerFactory}
+import models.{Period, Periods, UserAnswers}
+import pages.PayDatePage
 import utils.LoggerUtil
 
 trait PayPeriodsListHandler extends DataExtractor with LoggerUtil {

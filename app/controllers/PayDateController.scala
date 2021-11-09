@@ -24,7 +24,6 @@ import models.PaymentFrequency.Monthly
 import models.{PaymentFrequency, UserAnswers}
 import navigation.Navigator
 import pages.{ClaimPeriodStartPage, FurloughStartDatePage, PayDatePage}
-import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}

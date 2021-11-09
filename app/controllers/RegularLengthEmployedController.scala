@@ -19,7 +19,6 @@ package controllers
 import cats.data.Validated.{Invalid, Valid}
 import controllers.actions._
 import forms.RegularLengthEmployedFormProvider
-import javax.inject.Inject
 import models.RegularLengthEmployed
 import navigation.Navigator
 import pages.RegularLengthEmployedPage
@@ -30,6 +29,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.RegularLengthEmployedView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegularLengthEmployedController @Inject()(
