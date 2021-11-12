@@ -51,8 +51,14 @@ object LocalDateHelpers extends LocalDateHelpers {
   val may8th2021  = LocalDate.of(2021, 5, 8)
 
   implicit class LocalDateHelper(val value: LocalDate) {
-    def isEqualOrAfter(localDate: LocalDate)  = value.compareTo(localDate) >= 0
-    def isEqualOrBefore(localDate: LocalDate) = value.compareTo(localDate) <= 0
+    def isEqualOrAfter(localDate: LocalDate): Boolean  = value.compareTo(localDate) >= 0
+    def isEqualOrBefore(localDate: LocalDate): Boolean = value.compareTo(localDate) <= 0
+
+    def betweenInclusive(lowerBound: LocalDate, upperBound: LocalDate): Boolean =
+      value.isEqualOrAfter(lowerBound) && value.isEqualOrBefore(upperBound)
+
+    def betweenLowerBoundInclusive(lowerBound: LocalDate, upperBound: LocalDate): Boolean =
+      value.isEqualOrAfter(lowerBound) && value.isBefore(upperBound)
   }
 
 }
