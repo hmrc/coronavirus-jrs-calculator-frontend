@@ -37,7 +37,6 @@ object Amount {
   }
 }
 
-//TODO use Amount Vs BigDecimal
 case class Salary(amount: BigDecimal)
 
 object Salary {

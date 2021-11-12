@@ -18,6 +18,7 @@ package services
 
 import models.PaymentFrequency.{Monthly, _}
 import models.{CylbDuration, PaymentFrequency, Period, PeriodWithPaymentDate, Periods}
+import uk.gov.hmrc.http.InternalServerException
 
 import java.time.LocalDate
 
@@ -37,9 +38,11 @@ trait PreviousYearPeriod {
   }
 
   def cylbCutoff(frequency: PaymentFrequency, periods: Seq[PeriodWithPaymentDate]): LocalDate = {
-    //TODO Make it head safe
 
-    val periodWithPaymentDate = periods.head
+    val periodWithPaymentDate: PeriodWithPaymentDate = periods.headOption match {
+      case None                        => throw new InternalServerException("[PreviousYearPeriod][cylbCutoff] no PeriodWithPaymentDate found")
+      case Some(periodWithPaymentDate) => periodWithPaymentDate
+    }
 
     val cylbDuration = CylbDuration(frequency, periodWithPaymentDate.period)
 

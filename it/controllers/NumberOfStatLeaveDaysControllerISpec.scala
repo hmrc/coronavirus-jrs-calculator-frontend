@@ -326,7 +326,6 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
 
         val res = getRequest("/number-of-days-on-statutory-leave")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
-        //TODO Should redirect to reset or start again page
         whenReady(res) { result =>
           result must have(
             httpStatus(INTERNAL_SERVER_ERROR)

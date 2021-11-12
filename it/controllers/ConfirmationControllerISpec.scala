@@ -228,7 +228,6 @@ class ConfirmationControllerISpec
 
         val res = getRequest("/confirmation")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
-        //TODO Should redirect to reset or start again page
         whenReady(res) { result =>
           result must have(
             httpStatus(SEE_OTHER),

@@ -33,25 +33,43 @@ case class NiRate(value: BigDecimal = 13.8 / 100)     extends Rate
 case class PensionRate(value: BigDecimal = 3.0 / 100) extends Rate
 
 object FrequencyTaxYearThresholdMapping {
-  //scalastyle:off
-  //TODO Refactor or leave as is?
   def thresholdFor(frequency: PaymentFrequency, taxYear: TaxYear, rate: Rate): Threshold =
-    (frequency, taxYear, rate) match {
-      case (Monthly, TaxYearEnding2020, _: NiRate)          => Threshold(719.00, TaxYearEnding2020, Monthly)
-      case (Monthly, TaxYearEnding2021, _: NiRate)          => Threshold(732.00, TaxYearEnding2021, Monthly)
-      case (FourWeekly, TaxYearEnding2020, _: NiRate)       => Threshold(664.00, TaxYearEnding2020, FourWeekly)
-      case (FourWeekly, TaxYearEnding2021, _: NiRate)       => Threshold(676.00, TaxYearEnding2021, FourWeekly)
-      case (FortNightly, TaxYearEnding2020, _: NiRate)      => Threshold(332.00, TaxYearEnding2020, FortNightly)
-      case (FortNightly, TaxYearEnding2021, _: NiRate)      => Threshold(338.00, TaxYearEnding2021, FortNightly)
-      case (Weekly, TaxYearEnding2020, _: NiRate)           => Threshold(166.00, TaxYearEnding2020, Weekly)
-      case (Weekly, TaxYearEnding2021, _: NiRate)           => Threshold(169.00, TaxYearEnding2021, Weekly)
-      case (Monthly, TaxYearEnding2020, _: PensionRate)     => Threshold(512.00, TaxYearEnding2020, Monthly)
-      case (Monthly, TaxYearEnding2021, _: PensionRate)     => Threshold(520.00, TaxYearEnding2021, Monthly)
-      case (FourWeekly, TaxYearEnding2020, _: PensionRate)  => Threshold(472.00, TaxYearEnding2020, FourWeekly)
-      case (FourWeekly, TaxYearEnding2021, _: PensionRate)  => Threshold(480.00, TaxYearEnding2021, FourWeekly)
-      case (FortNightly, TaxYearEnding2020, _: PensionRate) => Threshold(236.00, TaxYearEnding2020, FortNightly)
-      case (FortNightly, TaxYearEnding2021, _: PensionRate) => Threshold(240.00, TaxYearEnding2021, FortNightly)
-      case (Weekly, TaxYearEnding2020, _: PensionRate)      => Threshold(118.00, TaxYearEnding2020, Weekly)
-      case (Weekly, TaxYearEnding2021, _: PensionRate)      => Threshold(120.00, TaxYearEnding2021, Weekly)
+    frequency match {
+      case Weekly      => weeklyThreshold(taxYear, rate)
+      case FortNightly => fortnightlyThreshold(taxYear, rate)
+      case FourWeekly  => fourWeeklyThreshold(taxYear, rate)
+      case Monthly     => monthlyThreshold(taxYear, rate)
+    }
+
+  def weeklyThreshold(taxYear: TaxYear, rate: Rate): Threshold =
+    (taxYear, rate) match {
+      case (TaxYearEnding2020, _: NiRate)      => Threshold(166.00, TaxYearEnding2020, Weekly)
+      case (TaxYearEnding2021, _: NiRate)      => Threshold(169.00, TaxYearEnding2021, Weekly)
+      case (TaxYearEnding2020, _: PensionRate) => Threshold(118.00, TaxYearEnding2020, Weekly)
+      case (TaxYearEnding2021, _: PensionRate) => Threshold(120.00, TaxYearEnding2021, Weekly)
+    }
+
+  def fortnightlyThreshold(taxYear: TaxYear, rate: Rate): Threshold =
+    (taxYear, rate) match {
+      case (TaxYearEnding2020, _: NiRate)      => Threshold(332.00, TaxYearEnding2020, FortNightly)
+      case (TaxYearEnding2021, _: NiRate)      => Threshold(338.00, TaxYearEnding2021, FortNightly)
+      case (TaxYearEnding2020, _: PensionRate) => Threshold(236.00, TaxYearEnding2020, FortNightly)
+      case (TaxYearEnding2021, _: PensionRate) => Threshold(240.00, TaxYearEnding2021, FortNightly)
+    }
+
+  def fourWeeklyThreshold(taxYear: TaxYear, rate: Rate): Threshold =
+    (taxYear, rate) match {
+      case (TaxYearEnding2020, _: NiRate)      => Threshold(664.00, TaxYearEnding2020, FourWeekly)
+      case (TaxYearEnding2021, _: NiRate)      => Threshold(676.00, TaxYearEnding2021, FourWeekly)
+      case (TaxYearEnding2020, _: PensionRate) => Threshold(472.00, TaxYearEnding2020, FourWeekly)
+      case (TaxYearEnding2021, _: PensionRate) => Threshold(480.00, TaxYearEnding2021, FourWeekly)
+    }
+
+  def monthlyThreshold(taxYear: TaxYear, rate: Rate): Threshold =
+    (taxYear, rate) match {
+      case (TaxYearEnding2020, _: NiRate)      => Threshold(719.00, TaxYearEnding2020, Monthly)
+      case (TaxYearEnding2021, _: NiRate)      => Threshold(732.00, TaxYearEnding2021, Monthly)
+      case (TaxYearEnding2020, _: PensionRate) => Threshold(512.00, TaxYearEnding2020, Monthly)
+      case (TaxYearEnding2021, _: PensionRate) => Threshold(520.00, TaxYearEnding2021, Monthly)
     }
 }

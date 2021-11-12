@@ -279,26 +279,25 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
     }
   }
 
-  //scalastyle:off
-  //TODO Refactor cyclomatic complexity or leave as is.
+  private[this] def nov1stClaimPeriodOnwardsRouting(userAnswers: UserAnswers, payDateRoutes: Call): Call =
+    userAnswers.getV(EmployeeStartDatePage) match {
+      case Valid(empStartDate) if empStartDate.isBefore(feb1st2019) => payDateRoutes
+      case Valid(empStartDate) if empStartDate.isAfter(mar19th2020) =>
+        routes.OnPayrollBefore30thOct2020Controller.onPageLoad()
+      case Valid(empStartDate) if empStartDate.betweenLowerBoundInclusive(feb1st2019, feb1st2020) => payDateRoutes
+      case Valid(empStartDate) if empStartDate.betweenInclusive(feb1st2020, mar19th2020) =>
+        routes.EmployeeRTISubmissionController.onPageLoad()
+      case Invalid(_) => routes.EmployeeStartDateController.onPageLoad()
+    }
+
   private[this] def employeeStartDateRoutes: UserAnswers => Call = { userAnswers =>
-    val payDateRoutes = handlePayDateRoutes(userAnswers)
+    val payDateRoutes: Call = handlePayDateRoutes(userAnswers)
     userAnswers.getV(ClaimPeriodStartPage) match {
       case Valid(claimPeriodStart) if claimPeriodStart.isEqualOrAfter(nov1st2020) =>
-        userAnswers.getV(EmployeeStartDatePage) match {
-          case Valid(empStartDate) if empStartDate.isBefore(feb1st2019) => payDateRoutes
-          case Valid(empStartDate) if empStartDate.isAfter(mar19th2020) && isEnabled(ExtensionTwoNewStarterFlow) =>
-            routes.OnPayrollBefore30thOct2020Controller.onPageLoad()
-          case Valid(empStartDate) if empStartDate.isAfter(mar19th2020)                                            => routeToEmployeeFirstFurloughed(userAnswers)
-          case Valid(empStartDate) if empStartDate.isEqualOrAfter(feb1st2019) && empStartDate.isBefore(feb1st2020) => payDateRoutes
-          case Valid(empStartDate) if empStartDate.isEqualOrAfter(feb1st2020) && empStartDate.isEqualOrBefore(mar19th2020) =>
-            routes.EmployeeRTISubmissionController.onPageLoad()
-          case Invalid(e) => routes.EmployeeStartDateController.onPageLoad()
-        }
-
+        nov1stClaimPeriodOnwardsRouting(userAnswers, payDateRoutes)
       case Valid(_) => payDateRoutes
 
-      case Invalid(e) => routes.ClaimPeriodStartController.onPageLoad()
+      case Invalid(_) => routes.ClaimPeriodStartController.onPageLoad()
     }
   }
 
@@ -433,8 +432,18 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
     }
   }
 
-  //scalastyle:off
-  //TODO Refactor cyclomatic complexity or leave as is.
+  private[this] def employeeStartedAfter1Feb2019Routes(userAnswers: UserAnswers): Call =
+    userAnswers.getV(EmployeeStartDatePage) match {
+      case Valid(_) if hasStartDateWithinFirstLookbackPeriod(userAnswers) =>
+        routes.CalculationUnsupportedController.startDateWithinLookbackUnsupported()
+      case Valid(date) if date.isBefore(dynamicCylbCutoff(userAnswers)) =>
+        routes.LastYearPayController.onPageLoad(1)
+      case Valid(_) => routes.AnnualPayAmountController.onPageLoad()
+      case Invalid(err) =>
+        UserAnswers.logErrors(err)(logger.logger)
+        routes.EmployeeStartDateController.onPageLoad()
+    }
+
   private[this] def lastPayDateRoutes: UserAnswers => Call = { userAnswers =>
     userAnswers.getV(PayMethodPage) match {
       case Valid(Regular) => routes.RegularPayAmountController.onPageLoad()
@@ -443,17 +452,7 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
           case Valid(EmployeeStarted.OnOrBefore1Feb2019) =>
             routes.LastYearPayController.onPageLoad(1)
           case Valid(EmployeeStarted.After1Feb2019) =>
-            userAnswers.getV(EmployeeStartDatePage) match {
-              case Valid(_) if hasStartDateWithinFirstLookbackPeriod(userAnswers) =>
-                routes.CalculationUnsupportedController.startDateWithinLookbackUnsupported()
-              case Valid(date) if date.isBefore(dynamicCylbCutoff(userAnswers)) => {
-                routes.LastYearPayController.onPageLoad(1)
-              }
-              case Valid(_) => routes.AnnualPayAmountController.onPageLoad()
-              case Invalid(err) =>
-                UserAnswers.logErrors(err)(logger.logger)
-                routes.EmployeeStartDateController.onPageLoad()
-            }
+            employeeStartedAfter1Feb2019Routes(userAnswers)
           case Invalid(err) =>
             UserAnswers.logErrors(err)(logger.logger)
             routes.VariableLengthEmployedController.onPageLoad()
@@ -543,7 +542,6 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
 
   private[navigation] def numberOfStatLeaveDaysRoutes: UserAnswers => Call = { userAnswers =>
     (userAnswers.getV(NumberOfStatLeaveDaysPage), isEnabled(StatutoryLeaveFlow)) match {
-      //TODO: remove this feature switch check when feature switch is deprecated
       case (_, false)      => routes.RootPageController.onPageLoad()
       case (Valid(_), _)   => routes.StatutoryLeavePayController.onPageLoad()
       case (Invalid(_), _) => routes.NumberOfStatLeaveDaysController.onPageLoad()
@@ -552,7 +550,6 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
 
   private[navigation] def hasBeenOnStatutoryLeaveRoutes: UserAnswers => Call = { userAnswers =>
     (userAnswers.getV(HasEmployeeBeenOnStatutoryLeavePage), isEnabled(StatutoryLeaveFlow)) match {
-      //TODO: remove this feature switch check when feature switch is deprecated
       case (_, false)        => routes.RootPageController.onPageLoad()
       case (Valid(false), _) => routes.PartTimeQuestionController.onPageLoad()
       case (Valid(true), _)  => routes.NumberOfStatLeaveDaysController.onPageLoad()
