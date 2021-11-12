@@ -64,7 +64,6 @@ trait SpecBaseControllerSpecs extends PlaySpec with GuiceOneAppPerSuite with Cor
   def configValues(kv: (String, Any)): List[(String, Any)] =
     configKeyValues.toMap.+(kv._1 -> kv._2).toList
 
-  //TODO controllers should not have this!
   lazy val mockSessionRepository: SessionRepository = {
     val mockSession = mock[SessionRepository]
     when(mockSession.set(any())) thenReturn Future.successful(true)

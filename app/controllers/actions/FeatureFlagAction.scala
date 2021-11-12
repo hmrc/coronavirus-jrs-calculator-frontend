@@ -65,7 +65,7 @@ final case class FeatureFlagWith404(key: String)                              ex
 object FeatureFlag {
   import pureconfig.ConfigSource // Do not remove this
   def isEnabled(flag: FeatureFlag): Boolean =
-    Try(ConfigSource.default.at(flag.key).loadOrThrow[Boolean]).getOrElse(false) //TODO try passing flag instead of retrieving it.
+    Try(ConfigSource.default.at(flag.key).loadOrThrow[Boolean]).getOrElse(false)
 }
 
 @Singleton

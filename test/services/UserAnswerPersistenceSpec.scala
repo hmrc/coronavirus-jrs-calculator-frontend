@@ -34,7 +34,7 @@ class UserAnswerPersistenceSpec extends SpecBaseControllerSpecs with ScalaFuture
   "persist a user answer" in {
     val additionalPaymentPeriod                            = LocalDate.of(2020, 3, 31)
     val amount                                             = Amount(100)
-    val additionalPayment                                  = AdditionalPayment(additionalPaymentPeriod, amount) //TODO maybe use generator for different types of answers
+    val additionalPayment                                  = AdditionalPayment(additionalPaymentPeriod, amount)
     val stubbedPersistence: UserAnswers => Future[Boolean] = _ => Future.successful(true)
 
     val userAnswers     = emptyUserAnswers

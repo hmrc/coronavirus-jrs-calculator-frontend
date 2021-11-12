@@ -20,7 +20,6 @@ import models.Amount
 
 import scala.math.BigDecimal.RoundingMode.RoundingMode
 
-//TODO remove this and use Amount object
 object AmountRounding {
 
   val roundWithMode: (BigDecimal, RoundingMode) => BigDecimal = (value, mode) => value.setScale(2, mode)

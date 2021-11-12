@@ -36,7 +36,6 @@ import scala.concurrent.Future
 class LastPayDateControllerSpec extends SpecBaseControllerSpecs {
 
   val formProvider = new LastPayDateFormProvider()
-  //TODO This should be a date from user answers based on pay date loop
   private def form = formProvider(LocalDate.now())
 
   def onwardRoute = Call("GET", "/foo")
