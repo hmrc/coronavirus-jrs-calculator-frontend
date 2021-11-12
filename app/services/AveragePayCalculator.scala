@@ -17,8 +17,7 @@
 package services
 
 import models.NonFurloughPay.determineNonFurloughPay
-import models.{Amount, AveragePayment, AveragePaymentWithFullPeriod, AveragePaymentWithPartialPeriod, AveragePaymentWithPhaseTwoPeriod,
-  FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriodWithPaymentDate, Period, PeriodWithPaymentDate, PhaseTwoPeriod, StatutoryLeaveData}
+import models.{Amount, AveragePayment, AveragePaymentWithFullPeriod, AveragePaymentWithPartialPeriod, AveragePaymentWithPhaseTwoPeriod, FullPeriodWithPaymentDate, NonFurloughPay, PartialPeriodWithPaymentDate, Period, PeriodWithPaymentDate, PhaseTwoPeriod, StatutoryLeaveData}
 import services.Calculators._
 
 trait AveragePayCalculator extends Calculators {

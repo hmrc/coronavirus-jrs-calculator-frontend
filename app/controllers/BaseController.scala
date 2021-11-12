@@ -49,9 +49,8 @@ trait BaseController extends FrontendBaseController with I18nSupport with BackJo
   def getRequiredAnswerV[A](page: QuestionPage[A], idx: Option[Int] = None)(
     f: A => Future[Result])(implicit request: DataRequest[_], reads: Reads[A], errorHandler: ErrorHandler): Future[Result] =
     getAnswerV(page, idx) match {
-      case Valid(ans)      => f(ans)
+      case Valid(ans) => f(ans)
       case Invalid(errors) =>
-        // TODO (flav): Discuss with team if we want to display errors on the page.
         logger.error(s"[BaseController][getRequiredAnswer] Failed to retrieve expected data for page: $page")
         UserAnswers.logWarnings(errors)(logger.logger)
         Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
@@ -69,7 +68,6 @@ trait BaseController extends FrontendBaseController with I18nSupport with BackJo
     }
 
   //scalastyle:off
-  //TODO Refactor to include fewer parameters or leave as is.
   def getRequiredAnswersV[A, B](
     pageA: QuestionPage[A],
     pageB: QuestionPage[B],
@@ -97,7 +95,6 @@ trait BaseController extends FrontendBaseController with I18nSupport with BackJo
   //scalastyle:on
 
   //scalastyle:off
-  //TODO Refactor to include fewer parameters or leave as is.
   def getRequiredAnswersOrRestartJourneyV[A, B](
     pageA: QuestionPage[A],
     pageB: QuestionPage[B],
