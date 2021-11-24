@@ -16,26 +16,25 @@
 
 package controllers
 
-import java.time.LocalDate
 import base.SpecBaseControllerSpecs
 import config.featureSwitch.{ExtensionTwoNewStarterFlow, FeatureSwitching}
 import controllers.actions.DataRetrievalActionImpl
 import forms.PreviousFurloughPeriodsFormProvider
 import models.EmployeeStarted.OnOrBefore1Feb2019
 import models.PayMethod.Variable
-import models.{EmployeeStarted, UserAnswers}
+import models.UserAnswers
 import models.requests.DataRequest
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{EmployeeStartedPage, FurloughStartDatePage, OnPayrollBefore30thOct2020Page, PreviousFurloughPeriodsPage}
-import play.api.inject.bind
+import pages.{EmployeeStartedPage, OnPayrollBefore30thOct2020Page, PreviousFurloughPeriodsPage}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.CSRFTokenHelper._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.PreviousFurloughPeriodsView
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

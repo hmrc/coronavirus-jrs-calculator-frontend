@@ -127,8 +127,7 @@ class RegularLengthEmployedControllerSpec extends SpecBaseControllerSpecs with M
       when(mockSessionRepository.get(any())) thenReturn Future.successful(None)
       val request = FakeRequest(GET, regularLengthEmployedRouteGet).withCSRFToken
         .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
-      val result      = controller.onPageLoad()(request)
-      val dataRequest = DataRequest(request, emptyUserAnswers.id, emptyUserAnswers)
+      val result = controller.onPageLoad()(request)
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url

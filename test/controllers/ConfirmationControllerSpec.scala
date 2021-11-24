@@ -38,7 +38,6 @@ import services.{AuditService, EmployeeTypeService, Threshold}
 import viewmodels.{ConfirmationViewBreakdownWithoutNicAndPension, PhaseTwoConfirmationViewBreakdown}
 import views.html._
 
-import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -198,7 +197,6 @@ class ConfirmationControllerSpec extends SpecBaseControllerSpecs with CoreTestDa
 
       val result: Future[Result] = controller.onPageLoad()(request)
 
-      val expected: String = contentAsString(result)
       val actual: String = extensionView(
         cvb = breakdown,
         claimPeriod = period(start = claimStartDate, end = claimEndDate),

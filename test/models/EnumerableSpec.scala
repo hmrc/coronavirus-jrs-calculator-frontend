@@ -16,8 +16,7 @@
 
 package models
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.{EitherValues, OptionValues}
+import org.scalatest.EitherValues
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json._
 

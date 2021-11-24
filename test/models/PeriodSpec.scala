@@ -16,11 +16,9 @@
 
 package models
 
-import java.time.LocalDate
-
-import org.scalatest.OptionValues
-import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.play.PlaySpec
+
+import java.time.LocalDate
 
 class PeriodSpec extends PlaySpec {
 

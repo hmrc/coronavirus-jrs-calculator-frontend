@@ -16,10 +16,9 @@
 
 package pages
 
-import java.time.LocalDate
-
-import org.scalacheck.Arbitrary
 import pages.behaviours.PageBehaviours
+
+import java.time.LocalDate
 
 class FirstFurloughDatePageSpec extends PageBehaviours {
 

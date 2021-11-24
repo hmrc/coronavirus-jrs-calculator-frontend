@@ -25,15 +25,13 @@ import views.html.{RootPageView, StartPageView}
 
 import javax.inject.Inject
 
-class RootPageController @Inject()(
-  override val messagesApi: MessagesApi,
-  val controllerComponents: MessagesControllerComponents,
-  view: RootPageView,
-  newView: StartPageView
-)(implicit appConfig: FrontendAppConfig)
+class RootPageController @Inject()(override val messagesApi: MessagesApi,
+                                   val controllerComponents: MessagesControllerComponents,
+                                   view: RootPageView,
+                                   newView: StartPageView)(implicit appConfig: FrontendAppConfig)
     extends FrontendBaseController with I18nSupport with FeatureSwitching {
 
-  def onPageLoad: Action[AnyContent] = Action { implicit request =>
+  def onPageLoad: Action[AnyContent] = Action { _ =>
     Redirect(routes.RootPageController.start())
   }
 

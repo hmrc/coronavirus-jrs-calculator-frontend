@@ -23,12 +23,11 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CalculationUnsupportView
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
 class CalculationUnsupportedController @Inject()(identify: IdentifierAction,
                                                  getData: DataRetrievalAction,
                                                  calculationUnsupportedView: CalculationUnsupportView,
-                                                 val controllerComponents: MessagesControllerComponents)(implicit ec: ExecutionContext)
+                                                 val controllerComponents: MessagesControllerComponents)
     extends FrontendBaseController with I18nSupport {
 
   def multipleFurloughUnsupported: Action[AnyContent] = (identify andThen getData) { implicit request =>

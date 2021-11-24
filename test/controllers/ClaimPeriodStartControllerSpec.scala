@@ -16,8 +16,6 @@
 
 package controllers
 
-import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBaseControllerSpecs
 import controllers.actions.DataRetrievalActionImpl
 import forms.ClaimPeriodStartFormProvider
@@ -31,6 +29,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.ClaimPeriodStartView
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

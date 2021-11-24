@@ -21,7 +21,6 @@ import org.scalatest.matchers._
 import play.api.http.HeaderNames
 import play.api.libs.json.Reads
 import play.api.libs.ws.WSResponse
-import play.twirl.api.Html
 
 trait CustomMatchers {
   def httpStatus(expectedValue: Int): HavePropertyMatcher[WSResponse, Int] =

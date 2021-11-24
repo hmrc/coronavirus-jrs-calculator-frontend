@@ -1,7 +1,7 @@
 package utils
 
 import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
+import akka.stream.Materializer
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._
@@ -23,7 +23,7 @@ trait WiremockHelper {
   val wireMockServer = new WireMockServer(wmConfig)
 
   implicit val system = ActorSystem("my-system")
-  implicit val materializer = ActorMaterializer()
+  implicit val materializer = Materializer(system)
 
   def startWiremock(): Unit = {
     WireMock.configureFor(wiremockHost, wiremockPort)

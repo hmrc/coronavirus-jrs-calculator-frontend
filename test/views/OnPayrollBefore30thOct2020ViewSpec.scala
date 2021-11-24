@@ -41,8 +41,6 @@ class OnPayrollBefore30thOct2020ViewSpec extends YesNoViewBehaviours {
       Selectors.hint -> OnPayrollBefore30thOct2020Messages.hint
     )
 
-    implicit val request: DataRequest[_] = fakeDataRequest()
-
     val applyView: Form[Boolean] => HtmlFormat.Appendable = (form: Form[_]) =>
       view(form = form, postAction = controllers.routes.OnPayrollBefore30thOct2020Controller.onSubmit())(fakeRequest, messages)
 

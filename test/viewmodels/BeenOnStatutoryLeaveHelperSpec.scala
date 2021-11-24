@@ -21,10 +21,8 @@ import base.SpecBase
 import models.requests.DataRequest
 import models.{EmployeeRTISubmission, EmployeeStarted, UserAnswers}
 import pages._
-import play.api.Logger
-import utils.LogCapturing
-import utils.LocalDateHelpers
 import utils.LocalDateHelpers._
+import utils.{LocalDateHelpers, LogCapturing}
 import views.ViewUtils.dateToString
 
 import java.time.LocalDate

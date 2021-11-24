@@ -20,7 +20,6 @@ import cats.data.Validated.{Invalid, Valid}
 import config.FrontendAppConfig
 import controllers.actions._
 import forms.RegularPayAmountFormProvider
-import handlers.ErrorHandler
 import models.Salary
 import models.requests.DataRequest
 import navigation.Navigator
@@ -39,16 +38,15 @@ import views.html.RegularPayAmountView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class RegularPayAmountController @Inject()(
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  navigator: Navigator,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  formProvider: RegularPayAmountFormProvider,
-  val controllerComponents: MessagesControllerComponents,
-  view: RegularPayAmountView)(implicit ec: ExecutionContext, appconfig: FrontendAppConfig, errorHandler: ErrorHandler)
+class RegularPayAmountController @Inject()(override val messagesApi: MessagesApi,
+                                           sessionRepository: SessionRepository,
+                                           navigator: Navigator,
+                                           identify: IdentifierAction,
+                                           getData: DataRetrievalAction,
+                                           requireData: DataRequiredAction,
+                                           formProvider: RegularPayAmountFormProvider,
+                                           val controllerComponents: MessagesControllerComponents,
+                                           view: RegularPayAmountView)(implicit ec: ExecutionContext, appconfig: FrontendAppConfig)
     extends FrontendBaseController with I18nSupport with EmployeeTypeUtil {
 
   val form: Form[Salary] = formProvider()

@@ -16,21 +16,17 @@
 
 package views
 
-import assets.constants.PaymentFrequencyConstants.allRadioOptions
-import assets.messages.{BaseMessages, PaymentFrequencyMessages}
-import forms.behaviours.BooleanFieldBehaviours
-import forms.{PaymentFrequencyFormProvider, PreviousFurloughPeriodsFormProvider}
+import assets.messages.BaseMessages
+import forms.PreviousFurloughPeriodsFormProvider
 import messages.PreviousFurloughPeriodsMessages
-import models.PaymentFrequency
 import models.requests.DataRequest
 import org.jsoup.nodes.Document
 import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import utils.LocalDateHelpers._
 import views.ViewUtils.dateToString
 import views.behaviours.{ViewBehaviours, YesNoViewBehaviours}
-import views.html.{PaymentFrequencyView, PreviousFurloughPeriodsView}
+import views.html.PreviousFurloughPeriodsView
 
 import java.time.LocalDate
 

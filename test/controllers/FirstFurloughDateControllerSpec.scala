@@ -16,26 +16,22 @@
 
 package controllers
 
-import java.time.{LocalDate, ZoneOffset}
-
 import assets.messages.PartTimeNormalHoursMessages.dateToString
 import base.SpecBaseControllerSpecs
-import config.featureSwitch.{ExtensionTwoNewStarterFlow, FeatureSwitching}
+import config.featureSwitch.FeatureSwitching
 import controllers.actions.DataRetrievalActionImpl
 import forms.FirstFurloughDateFormProvider
-import models.EmployeeStarted.OnOrBefore1Feb2019
 import models.PayMethod.Variable
-import models.PaymentFrequency.Weekly
-import models.{EmployeeStarted, UserAnswers}
-import pages.{EmployeeStartedPage, FirstFurloughDatePage, FurloughStartDatePage, OnPayrollBefore30thOct2020Page, PreviousFurloughPeriodsPage}
+import models.UserAnswers
+import pages.{FirstFurloughDatePage, FurloughStartDatePage, OnPayrollBefore30thOct2020Page}
 import play.api.data.Form
-import play.api.libs.json.Json
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
-import play.api.test.FakeRequest
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.CSRFTokenHelper._
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.FirstFurloughDateView
 
+import java.time.{LocalDate, ZoneOffset}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

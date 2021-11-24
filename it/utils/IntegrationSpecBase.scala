@@ -39,8 +39,9 @@ trait IntegrationSpecBase
   def config: Map[String, String] = Map(
     "play.filters.csrf.header.bypassHeaders.Csrf-Token"          -> "nocheck",
     "play.http.router"                                           -> "testOnlyDoNotUseInAppConf.Routes",
+    "auditing.enabled"                                           -> "false",
     "microservice.services.job-retention-scheme-calculator.host" -> mockHost,
-    "microservice.services.job-retention-scheme-calculator.port" -> mockPort,
+    "microservice.services.job-retention-scheme-calculator.port" -> mockPort
   )
 
   lazy val mongo: SessionRepository = app.injector.instanceOf[SessionRepository]
