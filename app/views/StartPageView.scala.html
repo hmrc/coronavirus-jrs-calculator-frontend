@@ -115,13 +115,13 @@
 
         <div id="julyOnwards">
             @bullets(Seq(
-                Html(Html(messages("startPage.beforeYouStart.p2.l1", link(appConfig.usualHours, "startPage.beforeYouStart.p2.l1.link", false, Some("_blank")))).toString()),
+                Html(Html(messages("startPage.beforeYouStart.p2.l1", link(appConfig.usualHours, "startPage.beforeYouStart.p2.l1.link", false))).toString()),
                 Html(messages("startPage.beforeYouStart.p2.l2")),
                 Html(messages("startPage.beforeYouStart.p2.l3"))
             ))
         </div>
 
-        @p(Html(Messages("startPage.beforeYouStart.p3", link(appConfig.stepsBeforeCalculation, "startPage.beforeYouStart.p3.link", false, Some("_blank")))))
+        @p(Html(Messages("startPage.beforeYouStart.p3", link(appConfig.stepsBeforeCalculation, "startPage.beforeYouStart.p3.link", false))))
 
         @button(
             msg = "site.startNow",
