@@ -3,11 +3,9 @@ package utils
 import org.scalatestplus.play.ServerProvider
 import play.api.Application
 import play.api.http.HeaderNames
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.JsValue
 import play.api.libs.ws.{DefaultWSCookie, WSClient, WSResponse}
-import uk.gov.hmrc.auth.core.AffinityGroup
-import uk.gov.hmrc.http.SessionKeys
-import utils.SessionCookieBaker
+
 import scala.concurrent.Future
 import scala.concurrent.duration.{Duration, FiniteDuration, SECONDS}
 

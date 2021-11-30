@@ -1,11 +1,5 @@
 package assets
 
-import java.time.LocalDate
-
-import models.{EmployeeType, Type4}
-import play.api.i18n.Messages
-import views.ViewUtils.dateToString
-
 object PageTitles {
   def regularPayAmount(cutOffDate: String) = s"What was the employee paid in the last pay period ending on or before ${cutOffDate}?"
 

@@ -18,7 +18,6 @@ package services
 
 import base.{CoreTestDataBuilder, SpecBase}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.slf4j.{Logger, LoggerFactory}
 
 class PartialPayHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreTestDataBuilder {
 

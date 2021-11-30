@@ -20,8 +20,6 @@ import cats.data.Validated.Valid
 import models.{Amount, UserAnswers}
 import pages.behaviours.PageBehaviours
 
-import scala.util.Success
-
 class HasEmployeeBeenOnStatutoryLeavePageSpec extends PageBehaviours {
 
   "HasEmployeeBeenOnStatutoryLeavePage" must {

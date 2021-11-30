@@ -16,12 +16,11 @@
 
 package controllers
 
-import java.time.{LocalDate, Month}
 import base.SpecBaseControllerSpecs
 import controllers.actions.DataRetrievalActionImpl
 import forms.LastYearPayFormProvider
 import models.requests.DataRequest
-import models.{Amount, LastYearPayment, Period, UserAnswers}
+import models.{Amount, LastYearPayment, UserAnswers}
 import pages.LastYearPayPage
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.CSRFTokenHelper._
@@ -30,6 +29,7 @@ import play.api.test.Helpers._
 import services.UserAnswerPersistence
 import views.html.LastYearPayView
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

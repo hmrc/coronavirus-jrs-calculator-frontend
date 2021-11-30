@@ -75,19 +75,19 @@ class PreviousYearPeriodSpec extends SpecBase with CoreTestDataBuilder {
       // Note:
       // 2019 period equivalent is: 4/3/2019 to 10/3/2019
 
-      extract(CylbDuration(Weekly, fullPeriod("2021,3,1", "2021,3,7"))) mustBe (7, 4, 3)
+      extract(CylbDuration(Weekly, fullPeriod("2021,3,1", "2021,3,7"))) mustBe Tuple3(7, 4, 3)
 
-      extract(CylbDuration(Weekly, partialPeriod("2021,3,1" -> "2021,3,7", "2021,3,3" -> "2021,3,7"))) mustBe (7, 4, 1)
+      extract(CylbDuration(Weekly, partialPeriod("2021,3,1" -> "2021,3,7", "2021,3,3" -> "2021,3,7"))) mustBe Tuple3(7, 4, 1)
 
-      extract(CylbDuration(Weekly, partialPeriod("2021,3,1" -> "2021,3,7", "2021,3,4" -> "2021,3,7"))) mustBe (7, 4, 0)
+      extract(CylbDuration(Weekly, partialPeriod("2021,3,1" -> "2021,3,7", "2021,3,4" -> "2021,3,7"))) mustBe Tuple3(7, 4, 0)
 
-      extract(CylbDuration(Weekly, partialPeriod("2021,3,1" -> "2021,3,7", "2021,3,2" -> "2021,3,7"))) mustBe (7, 4, 2)
+      extract(CylbDuration(Weekly, partialPeriod("2021,3,1" -> "2021,3,7", "2021,3,2" -> "2021,3,7"))) mustBe Tuple3(7, 4, 2)
 
-      extract(CylbDuration(Weekly, partialPeriod("2021,3,1" -> "2021,3,7", "2021,3,1" -> "2021,3,6"))) mustBe (7, 3, 3)
+      extract(CylbDuration(Weekly, partialPeriod("2021,3,1" -> "2021,3,7", "2021,3,1" -> "2021,3,6"))) mustBe Tuple3(7, 3, 3)
 
-      extract(CylbDuration(Weekly, partialPeriod("2021,3,1" -> "2021,3,7", "2021,3,1" -> "2021,3,2"))) mustBe (7, 0, 2)
+      extract(CylbDuration(Weekly, partialPeriod("2021,3,1" -> "2021,3,7", "2021,3,1" -> "2021,3,2"))) mustBe Tuple3(7, 0, 2)
 
-      extract(CylbDuration(Weekly, partialPeriod("2021,3,1" -> "2021,3,7", "2021,3,1" -> "2021,3,1"))) mustBe (7, 0, 1)
+      extract(CylbDuration(Weekly, partialPeriod("2021,3,1" -> "2021,3,7", "2021,3,1" -> "2021,3,1"))) mustBe Tuple3(7, 0, 1)
     }
   }
 

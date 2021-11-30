@@ -1,7 +1,6 @@
 package controllers.scenarios
 
 import assets.BaseITConstants
-import models.EmployeeStarted.After1Feb2019
 import models.PaymentFrequency._
 import models._
 import utils.{CreateRequestHelper, CustomMatchers, ITCoreTestData, IntegrationSpecBase}

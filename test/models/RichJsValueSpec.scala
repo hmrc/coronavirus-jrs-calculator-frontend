@@ -18,10 +18,8 @@ package models
 
 import generators.ModelGenerators
 import org.scalacheck.{Gen, Shrink}
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalatest.OptionValues
-import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.play.PlaySpec
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json._
 
 class RichJsValueSpec extends PlaySpec with ScalaCheckPropertyChecks with ModelGenerators {

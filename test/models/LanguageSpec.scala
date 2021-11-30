@@ -17,7 +17,6 @@
 package models
 
 import org.scalatest.EitherValues
-import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.play.PlaySpec
 import play.api.mvc.PathBindable
 

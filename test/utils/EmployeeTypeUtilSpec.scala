@@ -22,10 +22,9 @@ import config.featureSwitch.ExtensionTwoNewStarterFlow
 import models.PayMethod.{Regular, Variable}
 import models.requests.DataRequest
 import models.{Amount, EmployeeRTISubmission, EmployeeStarted, RegularLengthEmployed, UserAnswers}
-import pages.{ClaimPeriodStartPage, EmployeeRTISubmissionPage, EmployeeStartDatePage, EmployeeStartedPage, NumberOfStatLeaveDaysPage, OnPayrollBefore30thOct2020Page, PayMethodPage, RegularLengthEmployedPage, StatutoryLeavePayPage}
+import pages._
 import uk.gov.hmrc.http.InternalServerException
-import utils.LogCapturing
-import utils.LocalDateHelpers.{feb1st2020, july1st2020, nov1st2020}
+import utils.LocalDateHelpers.{feb1st2020, nov1st2020}
 
 class EmployeeTypeUtilSpec extends SpecBase with EmployeeTypeUtil with LogCapturing {
 

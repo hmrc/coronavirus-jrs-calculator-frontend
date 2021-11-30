@@ -17,8 +17,6 @@
 package pages
 
 import models.Amount
-import org.scalacheck.Arbitrary
-import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class StatutoryLeavePayPageSpec extends PageBehaviours {

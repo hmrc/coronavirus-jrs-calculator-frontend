@@ -21,14 +21,13 @@
 
 package handlers
 
-import java.time.LocalDate
 import base.{CoreTestDataBuilder, SpecBase}
 import cats.data.Validated.Valid
 import models.{AdditionalPayment, Amount, FullPeriod, FullPeriodWithPaymentDate, FurloughWithinClaim, PaymentDate, PaymentFrequency, Period, PhaseTwoPeriod, PhaseTwoReferencePayData, StatutoryLeaveData, TopUpPayment, UserAnswers}
 import pages.{AdditionalPaymentAmountPage, TopUpAmountPage}
 import utils.CoreTestData
 
-import java.time.LocalDate._
+import java.time.LocalDate
 
 class DataExtractorSpec extends SpecBase with CoreTestData with CoreTestDataBuilder {
 

@@ -24,7 +24,7 @@ import models.Amount
 import navigation.Navigator
 import pages.{AnnualPayAmountPage, StatutoryLeavePayPage}
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import views.html.StatutoryLeavePayView
@@ -32,21 +32,18 @@ import views.html.StatutoryLeavePayView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class StatutoryLeavePayController @Inject()(
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  val navigator: Navigator,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  formProvider: StatutoryLeavePayFormProvider,
-  val controllerComponents: MessagesControllerComponents,
-  view: StatutoryLeavePayView
-)(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
+class StatutoryLeavePayController @Inject()(override val messagesApi: MessagesApi,
+                                            sessionRepository: SessionRepository,
+                                            val navigator: Navigator,
+                                            identify: IdentifierAction,
+                                            getData: DataRetrievalAction,
+                                            requireData: DataRequiredAction,
+                                            formProvider: StatutoryLeavePayFormProvider,
+                                            val controllerComponents: MessagesControllerComponents,
+                                            view: StatutoryLeavePayView)(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
     extends BaseController with I18nSupport {
 
-  def form(referencePay: BigDecimal)(implicit messages: Messages): Form[Amount] =
-    formProvider(referencePay)
+  def form(referencePay: BigDecimal): Form[Amount] = formProvider(referencePay)
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     getRequiredAnswerV(AnnualPayAmountPage) { annualPayAmount =>

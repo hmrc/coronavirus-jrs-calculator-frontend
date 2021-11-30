@@ -16,17 +16,16 @@
 
 package controllers
 
+import _root_.config.featureSwitch.{FeatureSwitching, WriteConfirmationTestCasesToFile}
 import assets.BaseITConstants
 import controllers.scenarios.AprilConfirmationScenarios._
 import controllers.scenarios.DecemberConfirmationScenarios._
 import controllers.scenarios.FebruaryConfirmationScenarios._
 import controllers.scenarios.JanuaryConfirmationScenarios._
+import controllers.scenarios.JuneConfirmationScenarios._
 import controllers.scenarios.MarchConfirmationScenarios._
 import controllers.scenarios.MayConfirmationScenarios._
 import controllers.scenarios.NovemberConfirmationScenarios._
-import _root_.config.featureSwitch.{FeatureSwitching, WriteConfirmationTestCasesToFile}
-import controllers.scenarios.JuneConfirmationScenarios._
-import models.PaymentFrequency.FourWeekly
 import models._
 import play.api.test.Helpers._
 import utils.{CreateRequestHelper, CustomMatchers, ITCoreTestData, IntegrationSpecBase}

@@ -17,7 +17,6 @@
 package viewmodels
 
 import org.scalatestplus.play.PlaySpec
-import org.scalatest.matchers.should.Matchers
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases.Table
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent

@@ -5,36 +5,37 @@ object AppDependencies {
 
   val playSuffix = "-play-28"
   val bootstrapVersion = "5.16.0"
+  val hmrcMongoVersion = "0.56.0"
 
   val compile = Seq(
-    "org.reactivemongo"             %% "play2-reactivemongo"                % "0.19.7-play28",
+    "uk.gov.hmrc.mongo"             %% s"hmrc-mongo$playSuffix"             % hmrcMongoVersion,
     "uk.gov.hmrc"                   %% "play-conditional-form-mapping"      % s"1.10.0$playSuffix",
     "uk.gov.hmrc"                   %% s"bootstrap-frontend$playSuffix"     % bootstrapVersion,
-    "uk.gov.hmrc"                   %% "play-frontend-hmrc"                 % s"1.22.0$playSuffix",
+    "uk.gov.hmrc"                   %% "play-frontend-hmrc"                 % s"1.26.0$playSuffix",
     "org.typelevel"                 %% "cats-core"                          % "2.6.0",
     "com.softwaremill.quicklens"    %% "quicklens"                          % "1.5.0",
     "com.github.pureconfig"         %% "pureconfig"                         % "0.13.0",
     "com.fasterxml.jackson.module"  %% "jackson-module-scala"               % "2.13.0",
-    "org.reactivemongo"             %% "reactivemongo-play-json-compat"     % "1.0.7-play28",
     "com.typesafe.play"             %% "play-json"                          % "2.9.2"
   )
 
   val scalatestVersion = "3.2.10"
 
   val test = Seq(
-    "uk.gov.hmrc"                   %% s"bootstrap-test$playSuffix"     % bootstrapVersion,
-    "org.scalatest"                 %% "scalatest"                      % scalatestVersion,
-    "com.ironcorelabs"              %% "cats-scalatest"                 % "3.0.0",
-    "org.scalatestplus.play"        %% "scalatestplus-play"             % "5.1.0",
-    "org.pegdown"                   %  "pegdown"                        % "1.6.0",
-    "org.jsoup"                     %  "jsoup"                          % "1.14.3",
-    "com.typesafe.play"             %% "play-test"                      % PlayVersion.current,
-    "org.scalatestplus"             %% "mockito-3-12"                   % s"$scalatestVersion.0",
-    "org.mockito"                   %  "mockito-core"                   % "3.12.4",
-    "com.github.tomakehurst"        %  "wiremock-jre8"                  % "2.31.0",
-    "org.scalatestplus"             %% "scalacheck-1-15"                % s"$scalatestVersion.0",
-    "org.scalacheck"                %% "scalacheck"                     % "1.15.4",
-    "com.vladsch.flexmark"          %  "flexmark-all"                   % "0.62.2"
+    "uk.gov.hmrc.mongo"             %% s"hmrc-mongo-test$playSuffix"        % hmrcMongoVersion,
+    "uk.gov.hmrc"                   %% s"bootstrap-test$playSuffix"         % bootstrapVersion,
+    "org.scalatest"                 %% "scalatest"                          % scalatestVersion,
+    "com.ironcorelabs"              %% "cats-scalatest"                     % "3.0.0",
+    "org.scalatestplus.play"        %% "scalatestplus-play"                 % "5.1.0",
+    "org.pegdown"                   %  "pegdown"                            % "1.6.0",
+    "org.jsoup"                     %  "jsoup"                              % "1.14.3",
+    "com.typesafe.play"             %% "play-test"                          % PlayVersion.current,
+    "org.scalatestplus"             %% "mockito-3-12"                       % s"$scalatestVersion.0",
+    "org.mockito"                   %  "mockito-core"                       % "3.12.4",
+    "com.github.tomakehurst"        %  "wiremock-jre8"                      % "2.31.0",
+    "org.scalatestplus"             %% "scalacheck-1-15"                    % s"$scalatestVersion.0",
+    "org.scalacheck"                %% "scalacheck"                         % "1.15.4",
+    "com.vladsch.flexmark"          %  "flexmark-all"                       % "0.62.2"
   ).map(_ % "test, it")
 
   def apply(): Seq[ModuleID] = compile ++ test

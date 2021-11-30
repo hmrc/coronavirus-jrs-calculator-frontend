@@ -16,69 +16,46 @@
 
 package repositories
 
-import java.time.LocalDateTime
-
-import config.MongoConfiguration
-import javax.inject.Inject
+import config.FrontendAppConfig
 import models.UserAnswers
+import org.mongodb.scala.model.Filters.equal
+import org.mongodb.scala.model.Indexes.ascending
+import org.mongodb.scala.model.{FindOneAndReplaceOptions, IndexModel, IndexOptions}
 import play.api.libs.json._
-import play.modules.reactivemongo.ReactiveMongoApi
-import reactivemongo.api.indexes.{Index, IndexType}
-import reactivemongo.bson.BSONDocument
-import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
-import reactivemongo.play.json.collection.JSONCollection
+import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
+import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DefaultSessionRepository @Inject()(
-  mongo: ReactiveMongoApi
-)(implicit ec: ExecutionContext)
-    extends SessionRepository with MongoConfiguration {
-
-  private val collectionName: String = "user-answers"
-
-  private def collection: Future[JSONCollection] =
-    mongo.database.map(_.collection[JSONCollection](collectionName))
-
-  private val lastUpdatedIndex = Index(
-    key = Seq("lastUpdated" -> IndexType.Ascending),
-    name = Some("user-answers-last-updated-index"),
-    options = BSONDocument("expireAfterSeconds" -> mongoConf.timeToLiveInSeconds)
-  )
-
-  val started: Future[Unit] =
-    collection
-      .flatMap {
-        _.indexesManager.ensure(lastUpdatedIndex)
-      }
-      .map(_ => ())
+class DefaultSessionRepository @Inject()(mongo: MongoComponent, appConfig: FrontendAppConfig)(implicit ec: ExecutionContext)
+    extends PlayMongoRepository[UserAnswers](
+      mongo,
+      "user-answers",
+      Format(UserAnswers.reads, UserAnswers.writes),
+      indexes = Seq(
+        IndexModel(
+          ascending("lastUpdated"),
+          IndexOptions()
+            .name("user-answers-last-updated-index")
+            .expireAfter(appConfig.mongoConf.timeToLiveInSeconds, TimeUnit.SECONDS)
+        )
+      )
+    ) with SessionRepository {
 
   override def get(id: String): Future[Option[UserAnswers]] =
-    collection.flatMap(_.find(Json.obj("_id" -> id), None).one[UserAnswers])
+    collection.find(equal("_id", id)).toFuture().map(_.headOption)
 
   override def set(userAnswers: UserAnswers): Future[Boolean] = {
-
-    val selector = Json.obj(
-      "_id" -> userAnswers.id
-    )
-
-    val modifier = Json.obj(
-      "$set" -> (userAnswers copy (lastUpdated = LocalDateTime.now))
-    )
-
-    collection.flatMap {
-      _.update(ordered = false)
-        .one(selector, modifier, upsert = true)
-        .map { lastError =>
-          lastError.ok
-        }
-    }
+    val selector = equal("_id", userAnswers.id)
+    val newDoc   = userAnswers copy (lastUpdated = LocalDateTime.now)
+    collection.findOneAndReplace(selector, newDoc, FindOneAndReplaceOptions().upsert(true)).toFuture().map(_ => true)
   }
 }
 
 trait SessionRepository {
-
-  val started: Future[Unit]
 
   def get(id: String): Future[Option[UserAnswers]]
 

@@ -16,16 +16,15 @@
 
 package services
 
-import java.time.LocalDate
-
 import base.SpecBase
-import cats.data.{Chain, Validated}
 import cats.scalatest.{ValidatedMatchers, ValidatedValues}
 import generators.Generators
 import models.{FurloughEnded, FurloughOngoing, FurloughWithinClaim, UserAnswers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.FurloughStartDatePage
 import utils.CoreTestData
+
+import java.time.LocalDate
 
 class FurloughPeriodExtractorSpec
     extends SpecBase with CoreTestData with ScalaCheckPropertyChecks with ValidatedMatchers with ValidatedValues with Generators {

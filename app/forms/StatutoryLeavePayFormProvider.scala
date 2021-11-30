@@ -20,7 +20,6 @@ import forms.mappings.Mappings
 import models.Amount
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import play.api.i18n.Messages
 import utils.CurrencyFormatter
 
 import javax.inject.Inject

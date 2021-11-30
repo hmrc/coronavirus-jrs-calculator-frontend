@@ -1,7 +1,7 @@
 package controllers
 
 import assets.BaseITConstants
-import assets.PageTitles.{firstFurloughDate, previousFurloughPeriods}
+import assets.PageTitles.previousFurloughPeriods
 import config.featureSwitch.{ExtensionTwoNewStarterFlow, FeatureSwitching}
 import models.UserAnswers
 import play.api.http.Status._
@@ -79,7 +79,7 @@ class PreviousFurloughPeriodsControllerISpec extends IntegrationSpecBase with Cr
 
       setAnswers(userAnswers)
 
-      val res = postRequestHeader("/furloughed-more-than-once", Json.toJson("value", ""))("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
+      val res = postRequestHeader("/furloughed-more-than-once", Json.toJson("value" -> ""))("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
         result must have(
@@ -94,7 +94,7 @@ class PreviousFurloughPeriodsControllerISpec extends IntegrationSpecBase with Cr
 
       setAnswers(userAnswers)
 
-      val res = postRequestHeader("/furloughed-more-than-once", Json.toJson("value", ""))("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
+      val res = postRequestHeader("/furloughed-more-than-once", Json.toJson("value" -> ""))("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
         result must have(

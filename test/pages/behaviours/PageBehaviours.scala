@@ -22,8 +22,7 @@ import generators.Generators
 import models.{EmptyAnswerError, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.{OptionValues, TryValues}
+import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.QuestionPage
