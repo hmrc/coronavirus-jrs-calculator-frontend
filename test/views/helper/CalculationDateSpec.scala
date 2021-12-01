@@ -17,10 +17,9 @@
 package views.helper
 
 import messages.JRSExtensionConfirmationMessages._
-import models._
 import views.BaseSelectors
 import views.behaviours.ViewBehaviours
-import views.html.helper.{additionalPaymentUpToEightyPercent, calculationDate}
+import views.html.helper.calculationDate
 
 import java.time.LocalDate
 

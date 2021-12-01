@@ -16,7 +16,6 @@
 
 package utils
 
-import java.util.UUID
 import models.FurloughStatus.FurloughEnded
 import models.PartTimeQuestion.PartTimeNo
 import models.PayMethod.Variable
@@ -24,6 +23,8 @@ import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
 import models.TopUpStatus.NotToppedUp
 import models.{EmployeeRTISubmission, EmployeeStarted, UserAnswers}
 import play.api.libs.json.Json
+
+import java.util.UUID
 
 trait ITCoreTestData extends ITUserAnswersBuilder {
 

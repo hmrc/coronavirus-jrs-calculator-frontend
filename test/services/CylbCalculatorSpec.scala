@@ -16,10 +16,11 @@
 
 package services
 
-import java.time.LocalDate
 import base.{CoreTestDataBuilder, SpecBase}
 import models.PaymentFrequency.{FortNightly, FourWeekly, Weekly}
 import models.{Amount, AveragePaymentWithFullPeriod, AveragePaymentWithPartialPeriod, AveragePaymentWithPhaseTwoPeriod, CylbPaymentWithFullPeriod, CylbPaymentWithPartialPeriod, CylbPaymentWithPhaseTwoPeriod, FullPeriodWithPaymentDate, Hours, LastYearPayment, NonFurloughPay, OnePeriodCylb, PartialPeriodWithPaymentDate, PhaseTwoPeriod, StatutoryLeaveData, TwoPeriodCylb}
+
+import java.time.LocalDate
 
 class CylbCalculatorSpec extends SpecBase with CoreTestDataBuilder {
 

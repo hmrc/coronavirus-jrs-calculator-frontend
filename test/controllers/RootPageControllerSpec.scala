@@ -35,7 +35,7 @@ class RootPageControllerSpec extends SpecBaseControllerSpecs with MockitoSugar w
     val newStartView = injector.instanceOf[StartPageView]
     val appConfig    = injector.instanceOf[FrontendAppConfig]
 
-    val controller = new RootPageController(messagesApi, component, newStartView)(appConfig)
+    val controller = new RootPageController(messagesApi, component, newStartView)
 
     when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(emptyUserAnswers))
 

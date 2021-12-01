@@ -17,7 +17,6 @@
 package utils
 
 import base.SpecBase
-import config.FrontendAppConfig
 import models.PayMethod.{Regular, Variable}
 import models.requests.DataRequest
 import models.{Amount, EmployeeRTISubmission, EmployeeStarted, RegularLengthEmployed, UserAnswers}
@@ -38,13 +37,13 @@ class EmployeeTypeUtilSpec extends SpecBase with EmployeeTypeUtil with LogCaptur
   val type5aEmployeeResult: Option[String]      = Some("Type 5a")
   val type5bEmployeeResult: Option[String]      = Some("Type 5b")
 
-  def actualRegularPayResolverResult()(implicit request: DataRequest[_], appConfig: FrontendAppConfig): Option[String] =
+  def actualRegularPayResolverResult()(implicit request: DataRequest[_]): Option[String] =
     regularPayResolver[String](type1EmployeeResult, type2aEmployeeResult, type2bEmployeeResult)(request)
 
-  def actualVariablePayResolverResult()(implicit request: DataRequest[_], appConfig: FrontendAppConfig): Option[String] =
+  def actualVariablePayResolverResult()(implicit request: DataRequest[_]): Option[String] =
     variablePayResolver[String](type3EmployeeResult, type4EmployeeResult, type5aEmployeeResult, type5bEmployeeResult)(request)
 
-  def actualEmployeeTypeResolverResult()(implicit request: DataRequest[_], appConfig: FrontendAppConfig): String =
+  def actualEmployeeTypeResolverResult()(implicit request: DataRequest[_]): String =
     employeeTypeResolver[String](
       defaultResult,
       regularPayEmployeeResult,
@@ -56,7 +55,7 @@ class EmployeeTypeUtilSpec extends SpecBase with EmployeeTypeUtil with LogCaptur
       type4EmployeeResult,
       type5aEmployeeResult,
       type5bEmployeeResult
-    )(request, appConfig)
+    )(request)
 
   "regularPayResolver" when {
 

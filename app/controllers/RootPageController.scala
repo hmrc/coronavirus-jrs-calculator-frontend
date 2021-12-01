@@ -16,18 +16,17 @@
 
 package controllers
 
-import config.FrontendAppConfig
 import config.featureSwitch.FeatureSwitching
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.{RootPageView, StartPageView}
+import views.html.StartPageView
 
 import javax.inject.Inject
 
 class RootPageController @Inject()(override val messagesApi: MessagesApi,
                                    val controllerComponents: MessagesControllerComponents,
-                                   newView: StartPageView)(implicit appConfig: FrontendAppConfig)
+                                   newView: StartPageView)
     extends FrontendBaseController with I18nSupport with FeatureSwitching {
 
   def onPageLoad: Action[AnyContent] = Action { _ =>

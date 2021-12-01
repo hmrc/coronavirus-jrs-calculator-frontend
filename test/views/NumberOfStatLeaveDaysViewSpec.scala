@@ -16,8 +16,6 @@
 
 package views
 
-import java.time.LocalDate
-
 import assets.messages.BaseMessages
 import forms.NumberOfStatLeaveDaysFormProvider
 import messages.NumberOfStatLeaveDaysMessages
@@ -31,6 +29,8 @@ import utils.LocalDateHelpers._
 import views.ViewUtils.dateToString
 import views.behaviours.IntViewBehaviours
 import views.html.NumberOfStatLeaveDaysView
+
+import java.time.LocalDate
 
 class NumberOfStatLeaveDaysViewSpec extends IntViewBehaviours {
 

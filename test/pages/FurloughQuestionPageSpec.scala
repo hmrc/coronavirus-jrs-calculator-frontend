@@ -16,11 +16,11 @@
 
 package pages
 
-import java.time.LocalDate
-
 import cats.scalatest.ValidatedMatchers
 import models.{FurloughStatus, UserAnswers}
 import pages.behaviours.PageBehaviours
+
+import java.time.LocalDate
 
 class FurloughOngoingSpec extends PageBehaviours with ValidatedMatchers {
 

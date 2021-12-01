@@ -16,14 +16,14 @@
 
 package forms
 
-import java.time.LocalDate
-
 import base.SpecBaseControllerSpecs
 import forms.behaviours.DateBehaviours
 import forms.mappings.LocalDateFormatter
 import play.api.data.FormError
 import play.api.data.validation.{Invalid, Valid}
 import views.ViewUtils
+
+import java.time.LocalDate
 
 class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
 

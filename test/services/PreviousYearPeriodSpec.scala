@@ -16,11 +16,11 @@
 
 package services
 
-import java.time.LocalDate
-
 import base.{CoreTestDataBuilder, SpecBase}
 import models.CylbDuration
 import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
+
+import java.time.LocalDate
 
 class PreviousYearPeriodSpec extends SpecBase with CoreTestDataBuilder {
 

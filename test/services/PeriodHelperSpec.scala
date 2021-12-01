@@ -16,14 +16,14 @@
 
 package services
 
-import java.time.LocalDate
-
 import base.{CoreTestDataBuilder, SpecBase}
 import models.PaymentFrequency.{FortNightly, FourWeekly, Monthly, Weekly}
 import models.{FullPeriod, FurloughWithinClaim, Hours, PartTimeHours, PartialPeriod, PaymentDate, Period, Periods, PhaseTwoPeriod, UsualHours}
 import org.scalacheck.Gen.choose
 import org.scalacheck.Shrink
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+
+import java.time.LocalDate
 
 class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreTestDataBuilder {
 

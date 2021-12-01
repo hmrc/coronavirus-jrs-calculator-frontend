@@ -16,14 +16,14 @@
 
 package services
 
-import java.time.LocalDate
-
 import base.{CoreTestDataBuilder, SpecBase}
 import models.Amount._
 import models.NicCategory.{Nonpayable, Payable}
 import models.PaymentFrequency.{FourWeekly, Monthly, Weekly}
 import models.{AdditionalPayment, Amount, FullPeriodCap, Hours, NicCap, PartialPeriodCap, PartialPeriodNicBreakdown, PhaseTwoFurloughBreakdown, PhaseTwoPeriod, RegularPaymentWithPhaseTwoPeriod, TaxYearEnding2020, TaxYearEnding2021, TopUpPayment}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+
+import java.time.LocalDate
 
 class NicCalculatorSpec extends SpecBase with ScalaCheckPropertyChecks with CoreTestDataBuilder {
 

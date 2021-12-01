@@ -16,8 +16,6 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import base.SpecBaseControllerSpecs
 import forms.PartTimeNormalHoursFormProvider
 import models.FurloughStatus.FurloughOngoing
@@ -35,6 +33,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.PartTimeNormalHoursView
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

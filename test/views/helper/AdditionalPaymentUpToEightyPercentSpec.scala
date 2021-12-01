@@ -20,7 +20,7 @@ import messages.JRSExtensionConfirmationMessages._
 import models._
 import views.BaseSelectors
 import views.behaviours.ViewBehaviours
-import views.html.helper.{additionalPaymentUpToEightyPercent, confirmationHeading}
+import views.html.helper.additionalPaymentUpToEightyPercent
 
 import java.time.LocalDate
 

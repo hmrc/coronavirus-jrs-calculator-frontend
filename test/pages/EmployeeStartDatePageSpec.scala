@@ -17,9 +17,9 @@
 package pages
 
 import models.UserAnswers
+import pages.behaviours.PageBehaviours
 
 import java.time.LocalDate
-import pages.behaviours.PageBehaviours
 
 class EmployeeStartDatePageSpec extends PageBehaviours {
 

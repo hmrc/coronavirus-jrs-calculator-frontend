@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package messages
+package assets.messages
+
+import views.ViewUtils.dateToString
 
 import java.time.LocalDate
 
 import navigation.FakeNavigators.messages
-import views.ViewUtils.dateToString
 
 object FirstFurloughDateMessages {
 

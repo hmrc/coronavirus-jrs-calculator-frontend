@@ -17,7 +17,6 @@
 package utils
 
 import cats.data.Validated.Valid
-import config.FrontendAppConfig
 import config.featureSwitch.FeatureSwitching
 import handlers.DataExtractor
 import models.PayMethod.{Regular, Variable}
@@ -94,17 +93,16 @@ trait EmployeeTypeUtil extends FeatureSwitching with DataExtractor with LoggerUt
     }
 
   //noinspection ScalaStyle
-  def employeeTypeResolver[T](
-    defaultResult: => T,
-    regularPayEmployeeResult: => Option[T] = None,
-    variablePayEmployeeResult: => Option[T] = None,
-    type1EmployeeResult: => Option[T] = None,
-    type2aEmployeeResult: => Option[T] = None,
-    type2bEmployeeResult: => Option[T] = None,
-    type3EmployeeResult: => Option[T] = None,
-    type4EmployeeResult: => Option[T] = None,
-    type5aEmployeeResult: => Option[T] = None,
-    type5bEmployeeResult: => Option[T] = None)(implicit request: DataRequest[_], appConfig: FrontendAppConfig): T = {
+  def employeeTypeResolver[T](defaultResult: => T,
+                              regularPayEmployeeResult: => Option[T] = None,
+                              variablePayEmployeeResult: => Option[T] = None,
+                              type1EmployeeResult: => Option[T] = None,
+                              type2aEmployeeResult: => Option[T] = None,
+                              type2bEmployeeResult: => Option[T] = None,
+                              type3EmployeeResult: => Option[T] = None,
+                              type4EmployeeResult: => Option[T] = None,
+                              type5aEmployeeResult: => Option[T] = None,
+                              type5bEmployeeResult: => Option[T] = None)(implicit request: DataRequest[_]): T = {
     val defaultRegularResult: T  = regularPayEmployeeResult.getOrElse(defaultResult)
     val defaultVariableResult: T = variablePayEmployeeResult.getOrElse(defaultResult)
     request.userAnswers.getV(PayMethodPage) match {

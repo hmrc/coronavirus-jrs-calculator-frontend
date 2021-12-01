@@ -16,8 +16,6 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import base.SpecBaseControllerSpecs
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -26,6 +24,7 @@ import pages.ClaimPeriodStartPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class StartAgainControllerSpec extends SpecBaseControllerSpecs with MockitoSugar {

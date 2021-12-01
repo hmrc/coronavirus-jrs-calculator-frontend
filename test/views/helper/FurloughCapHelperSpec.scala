@@ -20,7 +20,6 @@ import base.SpecBase
 import models._
 import play.api.i18n.Messages
 import play.api.test.Helpers
-import views.helper.FurloughCapHelper
 
 import java.time.Month
 

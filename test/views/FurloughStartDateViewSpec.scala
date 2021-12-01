@@ -16,8 +16,6 @@
 
 package views
 
-import java.time.LocalDate
-
 import assets.messages.{BaseMessages, FurloughStartDateMessages}
 import forms.FurloughStartDateFormProvider
 import models.Period
@@ -27,6 +25,8 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
 import views.html.FurloughStartDateView
+
+import java.time.LocalDate
 
 class FurloughStartDateViewSpec extends QuestionViewBehaviours[LocalDate] {
 

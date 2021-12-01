@@ -17,7 +17,6 @@
 package controllers
 
 import cats.data.Validated.{Invalid, Valid}
-import config.FrontendAppConfig
 import controllers.actions._
 import forms.RegularPayAmountFormProvider
 import models.Salary
@@ -46,7 +45,7 @@ class RegularPayAmountController @Inject()(override val messagesApi: MessagesApi
                                            requireData: DataRequiredAction,
                                            formProvider: RegularPayAmountFormProvider,
                                            val controllerComponents: MessagesControllerComponents,
-                                           view: RegularPayAmountView)(implicit ec: ExecutionContext, appconfig: FrontendAppConfig)
+                                           view: RegularPayAmountView)(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with EmployeeTypeUtil {
 
   val form: Form[Salary] = formProvider()
