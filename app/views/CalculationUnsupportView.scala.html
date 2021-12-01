@@ -23,13 +23,18 @@
         button: components.button
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(ineligible: Boolean = false)(implicit request: Request[_], messages: Messages)
 
     @govukLayout(pageTitle = Some(titleNoForm("calculationUnsupported.heading")), thisPage = CalculationUnsupportedPage) {
 
         @h1("calculationUnsupported.heading")
 
-        @p(Html(messages("calculationUnsupported.p1")))
+        @if(ineligible) {
+            @p(Html(messages("calculationUnsupported.ineligible.p1")))
+            @p(Html(messages("calculationUnsupported.ineligible.p2")))
+        } else {
+            @p(Html(messages("calculationUnsupported.p1")))
+        }
 
         @button("calculationUnsupported.startAgain", href = Some(routes.ClaimPeriodStartController.onPageLoad().url), classes = Some("govuk-button"))
 

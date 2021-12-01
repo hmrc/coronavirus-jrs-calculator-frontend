@@ -139,6 +139,7 @@ POST        /furlough-in-last-tax-year                       controllers.Furloug
 
 GET         /multiple-furlough-unsupported                   controllers.CalculationUnsupportedController.multipleFurloughUnsupported()
 GET         /start-date-within-lookback-unsupported          controllers.CalculationUnsupportedController.startDateWithinLookbackUnsupported()
+GET         /ineligible                                      controllers.CalculationUnsupportedController.ineligibleCalculationUnsupported()
 
 GET         /furloughed-more-than-once                       controllers.PreviousFurloughPeriodsController.onPageLoad()
 POST        /furloughed-more-than-once                       controllers.PreviousFurloughPeriodsController.onSubmit()
@@ -152,8 +153,8 @@ POST        /october-payroll                                 controllers.OnPayro
 GET         /amount-paid-for-statutory-leave                 controllers.StatutoryLeavePayController.onPageLoad()
 POST        /amount-paid-for-statutory-leave                 controllers.StatutoryLeavePayController.onSubmit()
 
-GET        /been-on-statutory-leave                        controllers.HasEmployeeBeenOnStatutoryLeaveController.onPageLoad()
-POST       /been-on-statutory-leave                        controllers.HasEmployeeBeenOnStatutoryLeaveController.onSubmit()
+GET        /been-on-statutory-leave                          controllers.HasEmployeeBeenOnStatutoryLeaveController.onPageLoad()
+POST       /been-on-statutory-leave                          controllers.HasEmployeeBeenOnStatutoryLeaveController.onSubmit()
 
 GET        /number-of-days-on-statutory-leave                controllers.NumberOfStatLeaveDaysController.onPageLoad()
 POST       /number-of-days-on-statutory-leave                controllers.NumberOfStatLeaveDaysController.onSubmit()
