@@ -25,7 +25,6 @@ object FeatureSwitch {
   val switches: Seq[FeatureSwitch] = Seq(
     WelshLanguageFeature,
     ShowNewStartPage,
-    ExtensionTwoNewStarterFlow,
     WriteConfirmationTestCasesToFile
   )
 
@@ -63,11 +62,6 @@ object WelshLanguageFeature extends BooleanFeatureSwitch {
 object ShowNewStartPage extends BooleanFeatureSwitch {
   override val name: String        = s"$prefix.showNewStartPage"
   override val displayText: String = "Enable or Disable the new Start Page content"
-}
-
-object ExtensionTwoNewStarterFlow extends BooleanFeatureSwitch {
-  override val name: String        = s"$prefix.extensionTwoNewStarterFlow"
-  override val displayText: String = "Enable or Disable the Extension Two New Start Flow"
 }
 
 object WriteConfirmationTestCasesToFile extends BooleanFeatureSwitch {

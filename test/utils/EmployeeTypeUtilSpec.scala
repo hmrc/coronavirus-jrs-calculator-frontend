@@ -18,7 +18,6 @@ package utils
 
 import base.SpecBase
 import config.FrontendAppConfig
-import config.featureSwitch.ExtensionTwoNewStarterFlow
 import models.PayMethod.{Regular, Variable}
 import models.requests.DataRequest
 import models.{Amount, EmployeeRTISubmission, EmployeeStarted, RegularLengthEmployed, UserAnswers}
@@ -39,13 +38,11 @@ class EmployeeTypeUtilSpec extends SpecBase with EmployeeTypeUtil with LogCaptur
   val type5aEmployeeResult: Option[String]      = Some("Type 5a")
   val type5bEmployeeResult: Option[String]      = Some("Type 5b")
 
-  implicit val appConfig = frontendAppConfig
-
   def actualRegularPayResolverResult()(implicit request: DataRequest[_], appConfig: FrontendAppConfig): Option[String] =
-    regularPayResolver[String](type1EmployeeResult, type2aEmployeeResult, type2bEmployeeResult)(request, appConfig)
+    regularPayResolver[String](type1EmployeeResult, type2aEmployeeResult, type2bEmployeeResult)(request)
 
   def actualVariablePayResolverResult()(implicit request: DataRequest[_], appConfig: FrontendAppConfig): Option[String] =
-    variablePayResolver[String](type3EmployeeResult, type4EmployeeResult, type5aEmployeeResult, type5bEmployeeResult)(request, appConfig)
+    variablePayResolver[String](type3EmployeeResult, type4EmployeeResult, type5aEmployeeResult, type5bEmployeeResult)(request)
 
   def actualEmployeeTypeResolverResult()(implicit request: DataRequest[_], appConfig: FrontendAppConfig): String =
     employeeTypeResolver[String](
@@ -83,8 +80,6 @@ class EmployeeTypeUtilSpec extends SpecBase with EmployeeTypeUtil with LogCaptur
 
         "return type2aEmployeeResult" in {
 
-          enable(ExtensionTwoNewStarterFlow)
-
           val userAnswers = UserAnswers(userAnswersId)
             .set(RegularLengthEmployedPage, RegularLengthEmployed.No)
             .success
@@ -103,8 +98,6 @@ class EmployeeTypeUtilSpec extends SpecBase with EmployeeTypeUtil with LogCaptur
 
         "return type2bEmployeeResult" in {
 
-          enable(ExtensionTwoNewStarterFlow)
-
           val userAnswers = UserAnswers(userAnswersId)
             .set(RegularLengthEmployedPage, RegularLengthEmployed.No)
             .success
@@ -121,38 +114,16 @@ class EmployeeTypeUtilSpec extends SpecBase with EmployeeTypeUtil with LogCaptur
 
       "user did not answer payroll before 30th October" when {
 
-        "ExtensionTwoNewStarterFlow is enabled" must {
+        "return None" in {
 
-          "return None" in {
+          val userAnswers = UserAnswers(userAnswersId)
+            .set(RegularLengthEmployedPage, RegularLengthEmployed.No)
+            .success
+            .value
 
-            enable(ExtensionTwoNewStarterFlow)
+          implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
 
-            val userAnswers = UserAnswers(userAnswersId)
-              .set(RegularLengthEmployedPage, RegularLengthEmployed.No)
-              .success
-              .value
-
-            implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
-
-            actualRegularPayResolverResult() mustBe None
-          }
-        }
-
-        "ExtensionTwoNewStarterFlow is disabled" must {
-
-          "return type2aEmployeeResult" in {
-
-            disable(ExtensionTwoNewStarterFlow)
-
-            val userAnswers = UserAnswers(userAnswersId)
-              .set(RegularLengthEmployedPage, RegularLengthEmployed.No)
-              .success
-              .value
-
-            implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
-
-            actualRegularPayResolverResult mustBe type2aEmployeeResult
-          }
+          actualRegularPayResolverResult() mustBe None
         }
       }
     }
@@ -255,71 +226,45 @@ class EmployeeTypeUtilSpec extends SpecBase with EmployeeTypeUtil with LogCaptur
 
       "no answer is given to on payroll before 30 October 2020" when {
 
-        "ExtensionTwoNewStarterFlow is enabled" must {
+        "journey is pre November1" must {
 
-          "journey is pre November1" must {
-
-            "return type 1 employee result" in {
-
-              enable(ExtensionTwoNewStarterFlow)
-
-              val userAnswers = UserAnswers(userAnswersId)
-                .set(ClaimPeriodStartPage, nov1st2020.minusDays(1))
-                .success
-                .value
-                .set(EmployeeStartedPage, EmployeeStarted.After1Feb2019)
-                .success
-                .value
-                .set(EmployeeStartDatePage, feb1st2020.plusDays(1))
-                .success
-                .value
-
-              implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
-
-              actualRegularPayResolverResult() mustBe type1EmployeeResult
-            }
-          }
-
-          "journey is not phase 1" must {
-
-            "return type 1 employee result" in {
-
-              enable(ExtensionTwoNewStarterFlow)
-
-              val userAnswers = UserAnswers(userAnswersId)
-                .set(ClaimPeriodStartPage, nov1st2020)
-                .success
-                .value
-                .set(EmployeeStartedPage, EmployeeStarted.After1Feb2019)
-                .success
-                .value
-                .set(EmployeeStartDatePage, feb1st2020.plusDays(1))
-                .success
-                .value
-
-              implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
-
-              actualRegularPayResolverResult() mustBe None
-            }
-          }
-        }
-
-        "ExtensionTwoNewStarterFlow is disabled" must {
-
-          "return type 5a employee result" in {
-
-            disable(ExtensionTwoNewStarterFlow)
+          "return type 1 employee result" in {
 
             val userAnswers = UserAnswers(userAnswersId)
+              .set(ClaimPeriodStartPage, nov1st2020.minusDays(1))
+              .success
+              .value
               .set(EmployeeStartedPage, EmployeeStarted.After1Feb2019)
               .success
               .value
               .set(EmployeeStartDatePage, feb1st2020.plusDays(1))
               .success
               .value
+
             implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
 
-            actualVariablePayResolverResult() mustBe type5aEmployeeResult
+            actualRegularPayResolverResult() mustBe type1EmployeeResult
+          }
+        }
+
+        "journey is not phase 1" must {
+
+          "return type 1 employee result" in {
+
+            val userAnswers = UserAnswers(userAnswersId)
+              .set(ClaimPeriodStartPage, nov1st2020)
+              .success
+              .value
+              .set(EmployeeStartedPage, EmployeeStarted.After1Feb2019)
+              .success
+              .value
+              .set(EmployeeStartDatePage, feb1st2020.plusDays(1))
+              .success
+              .value
+
+            implicit val request: DataRequest[_] = DataRequest(fakeDataRequest, userAnswers.id, userAnswers)
+
+            actualRegularPayResolverResult() mustBe None
           }
         }
       }
@@ -363,8 +308,6 @@ class EmployeeTypeUtilSpec extends SpecBase with EmployeeTypeUtil with LogCaptur
       "the regularPayResolver determines it is a type 2a result" must {
 
         "return the type 2a result" in {
-
-          enable(ExtensionTwoNewStarterFlow)
 
           val userAnswers = UserAnswers(userAnswersId)
             .set(PayMethodPage, Regular)
@@ -419,8 +362,6 @@ class EmployeeTypeUtilSpec extends SpecBase with EmployeeTypeUtil with LogCaptur
       "the variablePayResolver determines it is a type 4 result" must {
 
         "return the type 4 result" in {
-
-          enable(ExtensionTwoNewStarterFlow)
 
           val userAnswers = UserAnswers(userAnswersId)
             .set(PayMethodPage, Variable)

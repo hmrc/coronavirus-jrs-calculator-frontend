@@ -18,7 +18,7 @@ package utils
 
 import cats.data.Validated.Valid
 import config.FrontendAppConfig
-import config.featureSwitch.{ExtensionTwoNewStarterFlow, FeatureSwitching}
+import config.featureSwitch.FeatureSwitching
 import handlers.DataExtractor
 import models.PayMethod.{Regular, Variable}
 import models.requests.DataRequest
@@ -30,10 +30,9 @@ import utils.PagerDutyHelper.PagerDutyKeys.EMPLOYEE_TYPE_COULD_NOT_BE_RESOLVED
 
 trait EmployeeTypeUtil extends FeatureSwitching with DataExtractor with LoggerUtil {
 
-  def regularPayResolver[T](
-    type1EmployeeResult: => Option[T] = None,
-    type2aEmployeeResult: => Option[T] = None,
-    type2bEmployeeResult: => Option[T] = None)(implicit request: DataRequest[_], appConfig: FrontendAppConfig): Option[T] =
+  def regularPayResolver[T](type1EmployeeResult: => Option[T] = None,
+                            type2aEmployeeResult: => Option[T] = None,
+                            type2bEmployeeResult: => Option[T] = None)(implicit request: DataRequest[_]): Option[T] =
     (request.userAnswers.getV(RegularLengthEmployedPage), request.userAnswers.getV(ClaimPeriodStartPage)) match {
       case (Valid(RegularLengthEmployed.Yes), _) =>
         logger.debug("[EmployeeTypeUtil][regularPayResolver] Type 1 Employee")
@@ -47,14 +46,9 @@ trait EmployeeTypeUtil extends FeatureSwitching with DataExtractor with LoggerUt
             logger.debug("[EmployeeTypeUtil][regularPayResolver] Type 2b Employee")
             type2bEmployeeResult
           case _ =>
-            if (isEnabled(ExtensionTwoNewStarterFlow)) {
-              val logMsg = "[EmployeeTypeService][regularPayResolver] no valid answer for OnPayrollBefore30thOct2020Page"
-              logger.debug(logMsg)
-              None
-            } else {
-              logger.debug("[EmployeeTypeUtil][regularPayResolver] Type 2a Employee - ExtensionTwoNewStarterFlow disabled")
-              type2aEmployeeResult
-            }
+            val logMsg = "[EmployeeTypeService][regularPayResolver] no valid answer for OnPayrollBefore30thOct2020Page"
+            logger.debug(logMsg)
+            None
         }
       case (_, Valid(startDate)) if startDate.isBefore(nov1st2020) =>
         val logMsg = "[EmployeeTypeService][regularPayResolver] pre November journeys do not see RegularLengthEmployedPage"
@@ -67,11 +61,10 @@ trait EmployeeTypeUtil extends FeatureSwitching with DataExtractor with LoggerUt
         None
     }
 
-  def variablePayResolver[T](
-    type3EmployeeResult: => Option[T] = None,
-    type4EmployeeResult: => Option[T] = None,
-    type5aEmployeeResult: => Option[T] = None,
-    type5bEmployeeResult: => Option[T] = None)(implicit request: DataRequest[_], appConfig: FrontendAppConfig): Option[T] =
+  def variablePayResolver[T](type3EmployeeResult: => Option[T] = None,
+                             type4EmployeeResult: => Option[T] = None,
+                             type5aEmployeeResult: => Option[T] = None,
+                             type5bEmployeeResult: => Option[T] = None)(implicit request: DataRequest[_]): Option[T] =
     request.userAnswers.getV(EmployeeStartedPage) match {
       case Valid(EmployeeStarted.OnOrBefore1Feb2019) =>
         logger.debug("[EmployeeTypeUtil][variablePayResolver] Type 3 Employee")
@@ -90,14 +83,9 @@ trait EmployeeTypeUtil extends FeatureSwitching with DataExtractor with LoggerUt
             logger.debug("[EmployeeTypeUtil][variablePayResolver] Type 5b Employee")
             type5bEmployeeResult
           case _ =>
-            if (isEnabled(ExtensionTwoNewStarterFlow)) {
-              val logMsg = "[EmployeeTypeService][variablePayResolver] variable pay employee type cannot be resolved"
-              logger.warn(logMsg)
-              None
-            } else {
-              logger.debug("[EmployeeTypeUtil][variablePayResolver] Type 5a Employee - ExtensionTwoNewStarterFlow disabled")
-              type5aEmployeeResult
-            }
+            val logMsg = "[EmployeeTypeService][variablePayResolver] variable pay employee type cannot be resolved"
+            logger.warn(logMsg)
+            None
         }
       case _ =>
         val logMsg = "[EmployeeTypeService][variablePayResolver] no valid answer for EmployeeStartedPage"

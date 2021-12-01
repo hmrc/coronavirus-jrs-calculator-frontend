@@ -18,23 +18,22 @@ package controllers
 
 import assets.BaseITConstants
 import assets.PageTitles._
-import config.featureSwitch.{ExtensionTwoNewStarterFlow, FeatureSwitching}
+import config.featureSwitch.FeatureSwitching
 import models.PaymentFrequency.Monthly
 import models.{RegularLengthEmployed, UserAnswers}
 import play.api.http.Status._
 import play.api.libs.json.Json
 import utils.{CreateRequestHelper, CustomMatchers, ITCoreTestData, IntegrationSpecBase}
 
-class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
- with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData with FeatureSwitching {
+class RegularLengthEmployedControllerISpec
+    extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData
+    with FeatureSwitching {
 
   "the ExtensionTwoNewStarterFlow is turned ON" when {
 
     "GET /regular-length-employed" must {
 
       "redirect display the correct title" in {
-
-        enable(ExtensionTwoNewStarterFlow)
 
         val userAnswers: UserAnswers =
           emptyUserAnswers
@@ -68,8 +67,6 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
 
         "redirect to RegularPayAmount page when PayDate is defined" in {
 
-          enable(ExtensionTwoNewStarterFlow)
-
           val userAnswers: UserAnswers =
             emptyUserAnswers
               .withClaimPeriodStart("2020, 11, 1")
@@ -85,9 +82,9 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
 
           setAnswers(userAnswers)
 
-          val res = postRequestHeader("/regular-length-employed",
-            Json.obj("value" -> RegularLengthEmployed.Yes.toString)
-          )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
+          val res = postRequestHeader("/regular-length-employed", Json.obj("value" -> RegularLengthEmployed.Yes.toString))(
+            "sessionId"    -> userAnswers.id,
+            "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
             result must have(
@@ -102,8 +99,6 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
 
         "redirect to OnPayrollBefore30thOct2020 page" in {
 
-          enable(ExtensionTwoNewStarterFlow)
-
           val userAnswers: UserAnswers = emptyUserAnswers
             .withClaimPeriodStart("2020, 11, 1")
             .withClaimPeriodEnd("2020, 11, 30")
@@ -118,9 +113,9 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
 
           setAnswers(userAnswers)
 
-          val res = postRequestHeader("/regular-length-employed",
-            Json.obj("value" -> RegularLengthEmployed.No.toString)
-          )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
+          val res = postRequestHeader("/regular-length-employed", Json.obj("value" -> RegularLengthEmployed.No.toString))(
+            "sessionId"    -> userAnswers.id,
+            "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
             result must have(
@@ -135,8 +130,6 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
 
         "redirect back to the same RegularLengthEmployed page" in {
 
-          enable(ExtensionTwoNewStarterFlow)
-
           val userAnswers: UserAnswers = emptyUserAnswers
             .withClaimPeriodStart("2020, 11, 1")
             .withClaimPeriodEnd("2020, 11, 30")
@@ -151,9 +144,8 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
 
           setAnswers(userAnswers)
 
-          val res = postRequestHeader("/regular-length-employed",
-            Json.obj("value" -> "bleh")
-          )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
+          val res = postRequestHeader("/regular-length-employed", Json.obj("value" -> "bleh"))("sessionId" -> userAnswers.id,
+                                                                                               "X-Session-ID" -> userAnswers.id)
 
           whenReady(res) { result =>
             result must have(
@@ -165,132 +157,4 @@ class RegularLengthEmployedControllerISpec extends IntegrationSpecBase
 
     }
   }
-
-  "the ExtensionTwoNewStarterFlow is turned OFF" when {
-
-    "GET /regular-length-employed" must {
-
-      "redirect to the start page" in {
-
-        disable(ExtensionTwoNewStarterFlow)
-
-        val userAnswers: UserAnswers = emptyUserAnswers
-        setAnswers(userAnswers)
-
-        val res = getRequestHeaders("/regular-length-employed")("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
-
-        whenReady(res) { result =>
-          result must have(
-            httpStatus(OK),
-            titleOf(regularLengthEmployed)
-          )
-        }
-      }
-    }
-
-    "POST /regular-length-employed" when {
-
-      "user enters a 'Yes' answer" must {
-
-        "redirect to RegularPayAmount page when PayDate is defined" in {
-
-          disable(ExtensionTwoNewStarterFlow)
-
-          val userAnswers: UserAnswers =
-            emptyUserAnswers
-              .withClaimPeriodStart("2020, 11, 1")
-              .withClaimPeriodEnd("2020, 11, 30")
-              .withFurloughStartDate("2020, 11, 1")
-              .withFurloughStatus()
-              .withPaymentFrequency(Monthly)
-              .withNiCategory()
-              .withPensionStatus()
-              .withPayMethod()
-              .withLastPayDate("2020, 10, 31")
-              .withPayDate(List("2020, 11, 30"))
-
-          setAnswers(userAnswers)
-
-
-          val res = postRequestHeader("/regular-length-employed",
-            Json.obj("value" -> RegularLengthEmployed.Yes.toString)
-          )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
-
-          whenReady(res) { result =>
-            result must have(
-              httpStatus(SEE_OTHER),
-              redirectLocation(controllers.routes.RegularPayAmountController.onPageLoad().url)
-            )
-          }
-        }
-      }
-
-      "user enters a 'No' answer" must {
-
-        "redirect to RegularPayAmount page" in {
-
-          disable(ExtensionTwoNewStarterFlow)
-
-          val userAnswers: UserAnswers = emptyUserAnswers
-            .withClaimPeriodStart("2020, 11, 1")
-            .withClaimPeriodEnd("2020, 11, 30")
-            .withFurloughStartDate("2020, 11, 1")
-            .withFurloughStatus()
-            .withPaymentFrequency(Monthly)
-            .withNiCategory()
-            .withPensionStatus()
-            .withPayMethod()
-            .withLastPayDate("2020, 10, 31")
-            .withPayDate(List("2020, 11, 30"))
-
-          setAnswers(userAnswers)
-
-          val res = postRequestHeader("/regular-length-employed",
-            Json.obj("value" -> RegularLengthEmployed.No.toString)
-          )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
-
-          whenReady(res) { result =>
-            result must have(
-              httpStatus(SEE_OTHER),
-              redirectLocation(controllers.routes.RegularPayAmountController.onPageLoad().url)
-            )
-          }
-        }
-      }
-
-      "user enters an Invalid answer" must {
-
-        "redirect back to the same RegularLengthEmployed page" in {
-
-          disable(ExtensionTwoNewStarterFlow)
-
-          val userAnswers: UserAnswers = emptyUserAnswers
-            .withClaimPeriodStart("2020, 11, 1")
-            .withClaimPeriodEnd("2020, 11, 30")
-            .withFurloughStartDate("2020, 11, 1")
-            .withFurloughStatus()
-            .withPaymentFrequency(Monthly)
-            .withNiCategory()
-            .withPensionStatus()
-            .withPayMethod()
-            .withLastPayDate("2020, 10, 31")
-            .withPayDate(List("2020, 11, 30"))
-
-          setAnswers(userAnswers)
-
-          val res = postRequestHeader("/regular-length-employed",
-            Json.obj("value" -> "bleh")
-          )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
-
-          whenReady(res) { result =>
-            result must have(
-              httpStatus(BAD_REQUEST)
-            )
-          }
-        }
-      }
-
-    }
-  }
-
 }
