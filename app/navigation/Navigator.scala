@@ -468,7 +468,7 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
   private def annualPayAmountRoutes: UserAnswers => Call =
     userAnswers =>
       if (isPhaseTwoOnwards(userAnswers)) {
-        if (isMayExtensionOnwards(userAnswers) && isEnabled(StatutoryLeaveFlow)) {
+        if (isMayExtensionOnwards(userAnswers)) {
           routes.HasEmployeeBeenOnStatutoryLeaveController.onPageLoad()
         } else {
           routes.PartTimeQuestionController.onPageLoad()
@@ -532,39 +532,32 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
     userAnswers.getV(PayMethodPage) match {
       case Valid(Variable) => routeToEmployeeFirstFurloughed(userAnswers)
       case Valid(Regular)  => regularPayOnPayrollBefore30thOct2020Routes(userAnswers)
-      case Invalid(_) => {
+      case Invalid(_) =>
         logger.info(
           "[Navigator][onPayrollBefore30thOct2020Routes] - User tried to route from 'onPayrollBefore30thOct2020' page but did not have a valid answer for 'PayMethodPage'")
         routes.RootPageController.onPageLoad()
-      }
     }
   }
 
   private[navigation] def numberOfStatLeaveDaysRoutes: UserAnswers => Call = { userAnswers =>
-    (userAnswers.getV(NumberOfStatLeaveDaysPage), isEnabled(StatutoryLeaveFlow)) match {
-      case (_, false)      => routes.RootPageController.onPageLoad()
-      case (Valid(_), _)   => routes.StatutoryLeavePayController.onPageLoad()
-      case (Invalid(_), _) => routes.NumberOfStatLeaveDaysController.onPageLoad()
+    userAnswers.getV(NumberOfStatLeaveDaysPage) match {
+      case Valid(_)   => routes.StatutoryLeavePayController.onPageLoad()
+      case Invalid(_) => routes.NumberOfStatLeaveDaysController.onPageLoad()
     }
   }
 
   private[navigation] def hasBeenOnStatutoryLeaveRoutes: UserAnswers => Call = { userAnswers =>
-    (userAnswers.getV(HasEmployeeBeenOnStatutoryLeavePage), isEnabled(StatutoryLeaveFlow)) match {
-      case (_, false)        => routes.RootPageController.onPageLoad()
-      case (Valid(false), _) => routes.PartTimeQuestionController.onPageLoad()
-      case (Valid(true), _)  => routes.NumberOfStatLeaveDaysController.onPageLoad()
-      case (Invalid(_), _)   => routes.HasEmployeeBeenOnStatutoryLeaveController.onPageLoad()
+    userAnswers.getV(HasEmployeeBeenOnStatutoryLeavePage) match {
+      case Valid(false) => routes.PartTimeQuestionController.onPageLoad()
+      case Valid(true)  => routes.NumberOfStatLeaveDaysController.onPageLoad()
+      case Invalid(_)   => routes.HasEmployeeBeenOnStatutoryLeaveController.onPageLoad()
     }
   }
 
   private[navigation] def statutoryLeavePayRoutes: UserAnswers => Call = { userAnswers =>
-    if (isEnabled(StatutoryLeaveFlow)) {
-      userAnswers.getV(StatutoryLeavePayPage) match {
-        case Valid(_)   => routes.PartTimeQuestionController.onPageLoad()
-        case Invalid(_) => routes.StatutoryLeavePayController.onPageLoad()
-      }
-    } else {
-      routes.RootPageController.onPageLoad()
+    userAnswers.getV(StatutoryLeavePayPage) match {
+      case Valid(_)   => routes.PartTimeQuestionController.onPageLoad()
+      case Invalid(_) => routes.StatutoryLeavePayController.onPageLoad()
     }
   }
 

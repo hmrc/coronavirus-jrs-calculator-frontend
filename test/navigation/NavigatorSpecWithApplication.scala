@@ -17,7 +17,7 @@
 package navigation
 
 import base.{CoreTestDataBuilder, SpecBaseControllerSpecs}
-import config.featureSwitch.{ExtensionTwoNewStarterFlow, FeatureSwitching, StatutoryLeaveFlow}
+import config.featureSwitch.{ExtensionTwoNewStarterFlow, FeatureSwitching}
 import controllers.routes
 import models.ClaimPeriodQuestion._
 import models.PartTimeQuestion.{PartTimeNo, PartTimeYes}
@@ -310,19 +310,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
         navigator.nextPage(AnnualPayAmountPage, userAnswers) mustBe routes.PartTimeQuestionController.onPageLoad()
       }
 
-      "go to PartTimeQuestionPage after AnnualPayAmountPage if May onwards claim AND Stat Leave journey is disabled" in {
-
-        disable(StatutoryLeaveFlow)
-
-        val userAnswers = emptyUserAnswers
-          .withClaimPeriodStart(LocalDate.of(2021, 5, 1))
-
-        navigator.nextPage(AnnualPayAmountPage, userAnswers) mustBe routes.PartTimeQuestionController.onPageLoad()
-      }
-
-      "go to StatutoryLeavePage after AnnualPayAmountPage if May onwards claim AND Stat Leave journey is enabled" in {
-
-        enable(StatutoryLeaveFlow)
+      "go to StatutoryLeavePage after AnnualPayAmountPage if May onwards claim" in {
 
         val userAnswers = emptyUserAnswers
           .withClaimPeriodStart(LocalDate.of(2021, 5, 1))
@@ -1101,7 +1089,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
             val userAnswers = emptyUserAnswers
               .withPayMethod(Regular)
-              .withOnPayrollBefore30thOct2020(true)
+              .withOnPayrollBefore30thOct2020()
               .withClaimPeriodStart("2020-11-01")
               .withPayDate(List("2020-11-01"))
 
@@ -1366,63 +1354,51 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
     }
 
     ".statutoryLeavePayRoutes" when {
-      "feature switch is enabled" must {
-        "route to the next page (PartTimeQuestionPage) when the answer to the StatutoryLeavePayPage is valid" in {
-          enable(StatutoryLeaveFlow)
-          val userAnswers: UserAnswers = {
-            emptyUserAnswers
-              .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
-              .success
-              .value
-              .set(ClaimPeriodEndPage, LocalDate.of(2021, 5, 31))
-              .success
-              .value
-              .set(StatutoryLeavePayPage, Amount(BigDecimal(30.10)))
-              .success
-              .value
-          }
-          val actual: Call   = navigator.statutoryLeavePayRoutes(userAnswers)
-          val expected: Call = routes.PartTimeQuestionController.onPageLoad()
 
-          actual mustBe expected
-          disable(StatutoryLeaveFlow)
+      "route to the next page (PartTimeQuestionPage) when the answer to the StatutoryLeavePayPage is valid" in {
+
+        val userAnswers: UserAnswers = {
+          emptyUserAnswers
+            .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
+            .success
+            .value
+            .set(ClaimPeriodEndPage, LocalDate.of(2021, 5, 31))
+            .success
+            .value
+            .set(StatutoryLeavePayPage, Amount(BigDecimal(30.10)))
+            .success
+            .value
         }
+        val actual: Call   = navigator.statutoryLeavePayRoutes(userAnswers)
+        val expected: Call = routes.PartTimeQuestionController.onPageLoad()
 
-        "stay on the same page StatutoryLeavePayPage - when the answer is invalid" in {
-          enable(StatutoryLeaveFlow)
-          val userAnswers: UserAnswers = {
-            emptyUserAnswers
-              .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
-              .success
-              .value
-              .set(ClaimPeriodEndPage, LocalDate.of(2021, 5, 31))
-              .success
-              .value
-          }
-          val actual: Call   = navigator.statutoryLeavePayRoutes(userAnswers)
-          val expected: Call = routes.StatutoryLeavePayController.onPageLoad()
-
-          actual mustBe expected
-          disable(StatutoryLeaveFlow)
-        }
+        actual mustBe expected
       }
 
-      "feature switch is disabled" must {
-        "route back to the RootPage" in {
-          disable(StatutoryLeaveFlow)
-          val actual: Call   = navigator.statutoryLeavePayRoutes(emptyUserAnswers)
-          val expected: Call = routes.RootPageController.onPageLoad()
+      "stay on the same page StatutoryLeavePayPage - when the answer is invalid" in {
 
-          actual mustBe expected
-          enable(StatutoryLeaveFlow)
+        val userAnswers: UserAnswers = {
+          emptyUserAnswers
+            .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
+            .success
+            .value
+            .set(ClaimPeriodEndPage, LocalDate.of(2021, 5, 31))
+            .success
+            .value
         }
+        val actual: Call   = navigator.statutoryLeavePayRoutes(userAnswers)
+        val expected: Call = routes.StatutoryLeavePayController.onPageLoad()
+
+        actual mustBe expected
       }
     }
 
     ".hasBeenOnStatutoryLeaveRoutes" when {
+
       "feature switch is enabled" must {
+
         "route to the next page (PartTimeQuestionPage) when the user answers 'No' on HasEmployeeBeenOnStatutoryLeavePage" in {
-          enable(StatutoryLeaveFlow)
+
           val userAnswers: UserAnswers = {
             emptyUserAnswers
               .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
@@ -1439,11 +1415,10 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
           val expected: Call = routes.PartTimeQuestionController.onPageLoad()
 
           actual mustBe expected
-          disable(StatutoryLeaveFlow)
         }
 
         "route to the next page (NumberOfStatLeaveDaysPage) when the user answers 'Yes' on HasEmployeeBeenOnStatutoryLeavePage" in {
-          enable(StatutoryLeaveFlow)
+
           val userAnswers: UserAnswers = {
             emptyUserAnswers
               .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
@@ -1460,11 +1435,10 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
           val expected: Call = routes.NumberOfStatLeaveDaysController.onPageLoad()
 
           actual mustBe expected
-          disable(StatutoryLeaveFlow)
         }
 
         "route back to the page (HasEmployeeBeenOnStatutoryLeavePage) when the user hasn't answered the HasEmployeeBeenOnStatutoryLeavePage" in {
-          enable(StatutoryLeaveFlow)
+
           val userAnswers: UserAnswers = {
             emptyUserAnswers
               .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
@@ -1478,73 +1452,47 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
           val expected: Call = routes.HasEmployeeBeenOnStatutoryLeaveController.onPageLoad()
 
           actual mustBe expected
-          disable(StatutoryLeaveFlow)
-        }
-      }
-
-      "feature switch is disabled" must {
-        "route back to the RootPage" in {
-          disable(StatutoryLeaveFlow)
-          val actual: Call   = navigator.hasBeenOnStatutoryLeaveRoutes(emptyUserAnswers)
-          val expected: Call = routes.RootPageController.onPageLoad()
-
-          actual mustBe expected
-          enable(StatutoryLeaveFlow)
         }
       }
     }
 
     ".numberOfStatLeaveDaysRoutes" must {
-      "feature switch is enabled" must {
-        "route to the next page (StatutoryLeavePayPage) when the answer to the NumberOfStatLeaveDaysPage is valid" in {
-          enable(StatutoryLeaveFlow)
-          val userAnswers: UserAnswers = {
-            emptyUserAnswers
-              .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
-              .success
-              .value
-              .set(ClaimPeriodEndPage, LocalDate.of(2021, 5, 31))
-              .success
-              .value
-              .set(NumberOfStatLeaveDaysPage, 1)
-              .success
-              .value
-          }
-          val actual: Call   = navigator.numberOfStatLeaveDaysRoutes(userAnswers)
-          val expected: Call = routes.StatutoryLeavePayController.onPageLoad()
 
-          actual mustBe expected
-          disable(StatutoryLeaveFlow)
+      "route to the next page (StatutoryLeavePayPage) when the answer to the NumberOfStatLeaveDaysPage is valid" in {
+
+        val userAnswers: UserAnswers = {
+          emptyUserAnswers
+            .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
+            .success
+            .value
+            .set(ClaimPeriodEndPage, LocalDate.of(2021, 5, 31))
+            .success
+            .value
+            .set(NumberOfStatLeaveDaysPage, 1)
+            .success
+            .value
         }
+        val actual: Call   = navigator.numberOfStatLeaveDaysRoutes(userAnswers)
+        val expected: Call = routes.StatutoryLeavePayController.onPageLoad()
 
-        "route back to the page (NumberOfStatLeaveDaysPage) when the user hasn't answered the NumberOfStatLeaveDaysPage" in {
-          enable(StatutoryLeaveFlow)
-          val userAnswers: UserAnswers = {
-            emptyUserAnswers
-              .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
-              .success
-              .value
-              .set(ClaimPeriodEndPage, LocalDate.of(2021, 5, 31))
-              .success
-              .value
-          }
-          val actual: Call   = navigator.numberOfStatLeaveDaysRoutes(userAnswers)
-          val expected: Call = routes.NumberOfStatLeaveDaysController.onPageLoad()
-
-          actual mustBe expected
-          disable(StatutoryLeaveFlow)
-        }
+        actual mustBe expected
       }
 
-      "feature switch is disabled" must {
-        "route back to the RootPage" in {
-          disable(StatutoryLeaveFlow)
-          val actual: Call   = navigator.hasBeenOnStatutoryLeaveRoutes(emptyUserAnswers)
-          val expected: Call = routes.RootPageController.onPageLoad()
+      "route back to the page (NumberOfStatLeaveDaysPage) when the user hasn't answered the NumberOfStatLeaveDaysPage" in {
 
-          actual mustBe expected
-          enable(StatutoryLeaveFlow)
+        val userAnswers: UserAnswers = {
+          emptyUserAnswers
+            .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
+            .success
+            .value
+            .set(ClaimPeriodEndPage, LocalDate.of(2021, 5, 31))
+            .success
+            .value
         }
+        val actual: Call   = navigator.numberOfStatLeaveDaysRoutes(userAnswers)
+        val expected: Call = routes.NumberOfStatLeaveDaysController.onPageLoad()
+
+        actual mustBe expected
       }
     }
   }

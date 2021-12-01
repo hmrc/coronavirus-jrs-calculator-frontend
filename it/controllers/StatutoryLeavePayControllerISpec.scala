@@ -18,7 +18,7 @@ package controllers
 
 import assets.BaseITConstants
 import assets.PageTitles.statutoryLeavePay
-import config.featureSwitch.{FeatureSwitching, StatutoryLeaveFlow}
+import config.featureSwitch.FeatureSwitching
 import models.PayMethod.Variable
 import models.PaymentFrequency.Monthly
 import models.UserAnswers
@@ -26,9 +26,9 @@ import play.api.http.Status._
 import play.api.libs.json.Json
 import utils.{CreateRequestHelper, CustomMatchers, ITCoreTestData, IntegrationSpecBase}
 
-
-class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with ITCoreTestData
- with BaseITConstants with FeatureSwitching {
+class StatutoryLeavePayControllerISpec
+    extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with ITCoreTestData with BaseITConstants
+    with FeatureSwitching {
 
   "GET /amount-paid-for-statutory-leave" must {
 
@@ -57,7 +57,7 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
   "POST /amount-paid-for-statutory-leave" when {
     "a valid amount has been entered" must {
       "redirect to the Part Time question" in {
-        enable(StatutoryLeaveFlow)
+
         val userAnswers: UserAnswers = emptyUserAnswers
           .withClaimPeriodStart("2020, 10, 31")
           .withClaimPeriodEnd("2020, 11, 30")
@@ -73,7 +73,6 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
           path = "/amount-paid-for-statutory-leave",
           formJson = Json.obj("value" -> "420.00")
         )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
-
 
         whenReady(res) { result =>
           result must have(
@@ -81,36 +80,6 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
             redirectLocation(controllers.routes.PartTimeQuestionController.onPageLoad().url)
           )
         }
-      }
-
-      "redirect to the root page when the StatutoryLeaveFlow feature switch is disabled" in {
-        disable(StatutoryLeaveFlow)
-
-        val userAnswers: UserAnswers = emptyUserAnswers
-          .withClaimPeriodStart("2020, 10, 31")
-          .withClaimPeriodEnd("2020, 11, 30")
-          .withFurloughStartDate("2020, 11, 1")
-          .withFurloughStatus()
-          .withPaymentFrequency(Monthly)
-          .withAnnualPayAmount(BigDecimal(50000))
-          .withPayMethod(Variable)
-
-        setAnswers(userAnswers)
-
-        val res = postRequestHeader(
-          path = "/amount-paid-for-statutory-leave",
-          formJson = Json.obj("value" -> "420.00")
-        )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
-
-
-        whenReady(res) { result =>
-          result must have(
-            httpStatus(SEE_OTHER),
-            redirectLocation(controllers.routes.RootPageController.onPageLoad().url)
-          )
-        }
-
-        enable(StatutoryLeaveFlow)
       }
     }
 
@@ -131,7 +100,6 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
           path = "/amount-paid-for-statutory-leave",
           formJson = Json.obj("value" -> "0")
         )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
-
 
         whenReady(res) { result =>
           result must have(
@@ -162,7 +130,6 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
             formJson = Json.obj("value" -> "-1")
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
-
           whenReady(res) { result =>
             result must have(
               httpStatus(BAD_REQUEST),
@@ -189,7 +156,6 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
             path = "/amount-paid-for-statutory-leave",
             formJson = Json.obj("value" -> "50000.01")
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
-
 
           whenReady(res) { result =>
             result must have(
@@ -218,7 +184,6 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
             formJson = Json.obj("value" -> "50000.02")
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
-
           whenReady(res) { result =>
             result must have(
               httpStatus(BAD_REQUEST),
@@ -245,7 +210,6 @@ class StatutoryLeavePayControllerISpec extends IntegrationSpecBase with CreateRe
             path = "/amount-paid-for-statutory-leave",
             formJson = Json.obj("value" -> "hello world")
           )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
-
 
           whenReady(res) { result =>
             result must have(

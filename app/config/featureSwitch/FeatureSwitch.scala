@@ -26,7 +26,6 @@ object FeatureSwitch {
     WelshLanguageFeature,
     ShowNewStartPage,
     ExtensionTwoNewStarterFlow,
-    StatutoryLeaveFlow,
     WriteConfirmationTestCasesToFile
   )
 
@@ -69,11 +68,6 @@ object ShowNewStartPage extends BooleanFeatureSwitch {
 object ExtensionTwoNewStarterFlow extends BooleanFeatureSwitch {
   override val name: String        = s"$prefix.extensionTwoNewStarterFlow"
   override val displayText: String = "Enable or Disable the Extension Two New Start Flow"
-}
-
-object StatutoryLeaveFlow extends BooleanFeatureSwitch {
-  override val name: String        = s"$prefix.statutoryLeaveFlow"
-  override val displayText: String = "Enables the Statutory Leave flow (if selected)"
 }
 
 object WriteConfirmationTestCasesToFile extends BooleanFeatureSwitch {
