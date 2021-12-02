@@ -14,48 +14,39 @@
  * limitations under the License.
  */
 
-package views.calculationUnsupported
+package views
 
-import assets.constants.PaymentFrequencyConstants.allRadioOptions
-import assets.messages.{BaseMessages, CalculationUnsupportedMessages}
-import forms.PaymentFrequencyFormProvider
-import models.PaymentFrequency
+import assets.messages.BaseMessages
+import messages.CalculationUnsupportedMessages
 import models.requests.DataRequest
 import org.jsoup.nodes.Document
-import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import views.behaviours.ViewBehaviours
-import views.html.CalculationUnsupportedView
+import views.html.CalculationUnsupportView
 
 class CalculationUnsupportedViewSpec extends ViewBehaviours {
 
   object Selectors extends BaseSelectors
 
-  val messageKeyPrefix                 = "calculationUnsupported"
-  val view: CalculationUnsupportedView = injector.instanceOf[CalculationUnsupportedView]
-
-  val expectedContent = Seq(
-    Selectors.h1   -> CalculationUnsupportedMessages.heading,
-    Selectors.p(1) -> CalculationUnsupportedMessages.ineligiblePara1,
-    Selectors.p(2) -> CalculationUnsupportedMessages.ineligiblePara2
-  )
+  val messageKeyPrefix = "calculationUnsupported"
+  val view             = injector.instanceOf[CalculationUnsupportView]
 
   "CalculationUnsupportedViewSpec" when {
 
-    "it is the ineligible RTI version of the view 1stFeb2020 - 19thMarch2020 journey view"
-
     implicit val request: DataRequest[_] = fakeDataRequest()
 
-    def applyView(): HtmlFormat.Appendable = view(ineligible = true)
+    val expectedContent = Seq(
+      Selectors.h1   -> CalculationUnsupportedMessages.heading,
+      Selectors.p(1) -> CalculationUnsupportedMessages.p1
+    )
+
+    def applyView(): HtmlFormat.Appendable = view()
 
     implicit val doc: Document = asDocument(applyView())
 
     behave like normalPage(messageKeyPrefix)
     behave like pageWithBackLink
     behave like pageWithHeading(heading = CalculationUnsupportedMessages.heading)
-    behave like pageWithSubmitButton(BaseMessages.continue)
     behave like pageWithExpectedMessages(expectedContent)
   }
-
 }

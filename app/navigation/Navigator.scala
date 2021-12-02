@@ -332,7 +332,7 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
       case (Valid(Yes), _) =>
         handlePayDateRoutes(userAnswers)
       case (Valid(No), Valid(empStartDate)) if empStartDate.betweenInclusive(feb1st2020, mar19th2020) =>
-        routes.CalculationUnsupportedController.ineligibleCalculationUnsupported()
+        routes.CalculationUnsupportedController.startDateWithinLookbackUnsupported()
       case (Valid(No), _) if isEnabled(ExtensionTwoNewStarterFlow) =>
         routes.OnPayrollBefore30thOct2020Controller.onPageLoad()
       case (Valid(No), _) =>

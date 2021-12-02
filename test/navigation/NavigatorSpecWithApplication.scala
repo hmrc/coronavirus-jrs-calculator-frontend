@@ -744,8 +744,8 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
                 .withRtiSubmission(EmployeeRTISubmission.No)
                 .withEmployeeStartDate("2020,3,19")
 
-            navigator.nextPage(EmployeeRTISubmissionPage, userAnswers) mustBe routes.CalculationUnsupportedController
-              .ineligibleCalculationUnsupported()
+            navigator.nextPage(EmployeeRTISubmissionPage, userAnswers) mustBe
+              routes.CalculationUnsupportedController.startDateWithinLookbackUnsupported()
           }
         }
       }

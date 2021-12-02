@@ -37,8 +37,4 @@ class CalculationUnsupportedController @Inject()(identify: IdentifierAction,
   def startDateWithinLookbackUnsupported: Action[AnyContent] = (identify andThen getData) { implicit request =>
     Ok(calculationUnsupportedView())
   }
-
-  def ineligibleCalculationUnsupported: Action[AnyContent] = (identify andThen getData) { implicit request =>
-    Ok(calculationUnsupportedView(true))
-  }
 }
