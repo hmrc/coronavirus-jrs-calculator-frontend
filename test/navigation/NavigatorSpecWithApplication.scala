@@ -646,6 +646,20 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
             ) mustBe routes.OnPayrollBefore30thOct2020Controller.onPageLoad()
           }
         }
+
+        "Valid claim period start date & the employee start date is inbetween feb1st2020, mar19th2020" should {
+
+          "navigate to the EmployeeRTISubmission page" in {
+
+            val userAnswers =
+              emptyUserAnswers
+                .withEmployeeStartDate("2020,3,19")
+                .withClaimPeriodStart("2020,11,1")
+
+            navigator.nextPage(EmployeeStartDatePage, userAnswers) mustBe routes.EmployeeRTISubmissionController.onPageLoad()
+          }
+        }
+
       }
 
       "EmployeeSRTISubmissionPage" when {
@@ -718,6 +732,20 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
                 .withFurloughStartDate("2020,11,15")
                 .withRtiSubmission(EmployeeRTISubmission.No)
             ) mustBe routes.PreviousFurloughPeriodsController.onPageLoad()
+          }
+        }
+
+        "the user answers No to the EmployeeRTISubmissionPage & the employee start date is inbetween feb1st2020 & 19thMarch2020 (inclusive)" should {
+
+          "call the CalculationUnsupportedController.ineligibleCalculationUnsupported() route" in {
+
+            val userAnswers =
+              emptyUserAnswers
+                .withRtiSubmission(EmployeeRTISubmission.No)
+                .withEmployeeStartDate("2020,3,19")
+
+            navigator.nextPage(EmployeeRTISubmissionPage, userAnswers) mustBe routes.CalculationUnsupportedController
+              .ineligibleCalculationUnsupported()
           }
         }
       }
@@ -1495,6 +1523,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
     }
 
     ".numberOfStatLeaveDaysRoutes" must {
+
       "feature switch is enabled" must {
         "route to the next page (StatutoryLeavePayPage) when the answer to the NumberOfStatLeaveDaysPage is valid" in {
           enable(StatutoryLeaveFlow)

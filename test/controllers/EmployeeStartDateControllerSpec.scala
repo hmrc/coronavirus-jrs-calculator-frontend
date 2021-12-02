@@ -79,6 +79,7 @@ class EmployeeStartDateControllerSpec extends SpecBaseControllerSpecs {
     )
 
   "EmployeeStartDate Controller" must {
+
     "return OK and the correct view for a GET" in {
       val result = controller(Some(userAnswers)).onPageLoad()(getRequest)
 
@@ -101,7 +102,7 @@ class EmployeeStartDateControllerSpec extends SpecBaseControllerSpecs {
       val result = controller(Some(userAnswers)).onSubmit()(postRequest)
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual "/job-retention-scheme-calculator/pay-date/1"
+      redirectLocation(result).value mustEqual controllers.routes.EmployeeRTISubmissionController.onPageLoad().url
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
