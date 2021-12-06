@@ -735,14 +735,14 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
           }
         }
 
-        "the user answers No to the EmployeeRTISubmissionPage & the employee start date is inbetween feb1st2020 & 19thMarch2020 (inclusive)" should {
+        "the user answers No to the EmployeeRTISubmissionPage & the claim period start date is before 1st Nov 2020" should {
 
           "call the CalculationUnsupportedController.ineligibleCalculationUnsupported() route" in {
 
             val userAnswers =
               emptyUserAnswers
                 .withRtiSubmission(EmployeeRTISubmission.No)
-                .withEmployeeStartDate("2020,3,19")
+                .withClaimPeriodStart("2020,10,31")
 
             navigator.nextPage(EmployeeRTISubmissionPage, userAnswers) mustBe
               routes.CalculationUnsupportedController.startDateWithinLookbackUnsupported()

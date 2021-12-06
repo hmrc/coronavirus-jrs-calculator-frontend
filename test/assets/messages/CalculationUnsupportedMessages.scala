@@ -18,11 +18,8 @@ package messages
 
 object CalculationUnsupportedMessages {
 
-  val heading         = "This calculation cannot be supported at the moment"
-  val p1              = "You can do this calculation manually."
-  val ineligiblePara1 = "The scenario captured is invalid please revise your answers."
-  val ineligiblePara2 =
-    "The employee must of been on the employer’s payroll on or before 19th March 2020 if they started working after 1st February 2019."
+  val heading    = "This calculation cannot be supported at the moment"
+  val p1         = "You can do this calculation manually."
   val startAgain = "Start a new calculation"
 
 }

@@ -896,8 +896,6 @@ furloughInLastTaxYear.error.required = Select one of the options below
 calculationUnsupported.title = This calculation cannot be supported at the moment
 calculationUnsupported.heading = This calculation cannot be supported at the moment
 calculationUnsupported.p1 = You can do this calculation manually.
-calculationUnsupported.ineligible.p1 = The scenario captured is invalid please revise your answers.
-calculationUnsupported.ineligible.p2 = The employee must of been on the employer’s payroll on or before 19th March 2020 if they started working after 1st February 2019.
 calculationUnsupported.startAgain = Start a new calculation
 
 previousFurloughPeriods.title = Has this employee been furloughed more than once since {0}?

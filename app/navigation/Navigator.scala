@@ -328,10 +328,10 @@ class Navigator @Inject()(implicit frontendAppConfig: FrontendAppConfig)
   }
 
   private[this] def employeeRTISubmissionRoutes: UserAnswers => Call = { userAnswers =>
-    (userAnswers.getV(EmployeeRTISubmissionPage), userAnswers.getV(EmployeeStartDatePage)) match {
+    (userAnswers.getV(EmployeeRTISubmissionPage), userAnswers.getV(ClaimPeriodStartPage)) match {
       case (Valid(Yes), _) =>
         handlePayDateRoutes(userAnswers)
-      case (Valid(No), Valid(empStartDate)) if empStartDate.betweenInclusive(feb1st2020, mar19th2020) =>
+      case (Valid(No), Valid(claimStartDate)) if claimStartDate.isBefore(nov1st2020) =>
         routes.CalculationUnsupportedController.startDateWithinLookbackUnsupported()
       case (Valid(No), _) if isEnabled(ExtensionTwoNewStarterFlow) =>
         routes.OnPayrollBefore30thOct2020Controller.onPageLoad()
