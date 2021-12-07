@@ -16,12 +16,12 @@
 
 package base
 
-import java.time.LocalDate
-
 import models.PaymentFrequency.Monthly
 import models.{PaymentWithPhaseTwoPeriod, _}
 import org.scalatest.TryValues
 import services.Threshold
+
+import java.time.LocalDate
 
 trait CoreTestDataBuilder extends TryValues {
 

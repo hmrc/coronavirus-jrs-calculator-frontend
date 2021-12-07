@@ -16,8 +16,6 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import base.SpecBaseControllerSpecs
 import forms.PayPeriodQuestionFormProvider
 import models.ClaimPeriodQuestion.ClaimOnSamePeriod
@@ -36,6 +34,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.PayPeriodQuestionView
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

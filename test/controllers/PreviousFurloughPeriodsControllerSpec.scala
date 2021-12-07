@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBaseControllerSpecs
-import config.featureSwitch.{ExtensionTwoNewStarterFlow, FeatureSwitching}
+import config.featureSwitch.FeatureSwitching
 import controllers.actions.DataRetrievalActionImpl
 import forms.PreviousFurloughPeriodsFormProvider
 import models.EmployeeStarted.OnOrBefore1Feb2019
@@ -28,6 +28,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{EmployeeStartedPage, OnPayrollBefore30thOct2020Page, PreviousFurloughPeriodsPage}
+import play.api.data.Form
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.CSRFTokenHelper._
 import play.api.test.FakeRequest
@@ -40,14 +41,14 @@ import scala.concurrent.Future
 
 class PreviousFurloughPeriodsControllerSpec extends SpecBaseControllerSpecs with MockitoSugar with FeatureSwitching {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider                                             = new PreviousFurloughPeriodsFormProvider()
-  def form(dateToPassIntoFormProviderWhenFormError: LocalDate) = formProvider(dateToPassIntoFormProviderWhenFormError)
+  val formProvider                                                            = new PreviousFurloughPeriodsFormProvider()
+  def form(dateToPassIntoFormProviderWhenFormError: LocalDate): Form[Boolean] = formProvider(dateToPassIntoFormProviderWhenFormError)
 
-  val view = app.injector.instanceOf[PreviousFurloughPeriodsView]
+  val view: PreviousFurloughPeriodsView = app.injector.instanceOf[PreviousFurloughPeriodsView]
 
-  lazy val previousFurloughPeriodsRoute = routes.PreviousFurloughPeriodsController.onPageLoad().url
+  lazy val previousFurloughPeriodsRoute: String = routes.PreviousFurloughPeriodsController.onPageLoad().url
 
   lazy val getRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, previousFurloughPeriodsRoute).withCSRFToken
@@ -76,11 +77,11 @@ class PreviousFurloughPeriodsControllerSpec extends SpecBaseControllerSpecs with
       view
     )
 
-  val nov8th2020            = LocalDate.of(2020, 11, 8)
+  val nov8th2020: LocalDate = LocalDate.of(2020, 11, 8)
   val mar8th2020: LocalDate = LocalDate.of(2020, 3, 8)
   val may8th2021: LocalDate = LocalDate.of(2021, 5, 8)
 
-  val nov1st2020            = LocalDate.of(2020, 11, 1)
+  val nov1st2020: LocalDate = LocalDate.of(2020, 11, 1)
   val mar1st2020: LocalDate = LocalDate.of(2020, 3, 1)
   val may1st2021: LocalDate = LocalDate.of(2021, 5, 1)
 
@@ -108,20 +109,6 @@ class PreviousFurloughPeriodsControllerSpec extends SpecBaseControllerSpecs with
       .value
 
   "PreviousFurloughPeriods Controller" must {
-
-    "return OK and the correct view for a GET - showing 1st November 2020 when Feature Switch is disabled" in {
-      val userAnswers = emptyUserAnswers
-        .withEmployeeStartedAfter1Feb2019()
-        .withPayMethod(Variable)
-      disable(ExtensionTwoNewStarterFlow)
-      val result = controller(Some(userAnswers)).onPageLoad()(getRequest)
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form(nov1st2020), nov1st2020)(getRequest, messages).toString
-      enable(ExtensionTwoNewStarterFlow)
-    }
 
     "return OK and the correct view for a GET" in {
       val result = controller(Some(userAnswersEmployedAfter1stFeb2019(true))).onPageLoad()(getRequest)
@@ -172,9 +159,9 @@ class PreviousFurloughPeriodsControllerSpec extends SpecBaseControllerSpecs with
     "redirect to the next page when the value 'true' is submitted" in {
 
       when(mockSessionRepository.get(any())) thenReturn Future.successful(
-        Some(userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019)))
+        Some(userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019())))
 
-      val result = controller(Some(userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019)))
+      val result = controller(Some(userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019())))
         .onSubmit()(postRequest)
 
       status(result) mustEqual SEE_OTHER
@@ -184,7 +171,7 @@ class PreviousFurloughPeriodsControllerSpec extends SpecBaseControllerSpecs with
 
     "redirect to the next page when the value 'false' is submitted " in {
       when(mockSessionRepository.get(any())) thenReturn Future.successful(
-        Some(userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019)))
+        Some(userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019())))
 
       lazy val postRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
         FakeRequest(POST, previousFurloughPeriodsRoute).withCSRFToken
@@ -193,7 +180,7 @@ class PreviousFurloughPeriodsControllerSpec extends SpecBaseControllerSpecs with
             "value" -> "false"
           )
 
-      val result = controller(Some(userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019)))
+      val result = controller(Some(userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019())))
         .onSubmit()(postRequest)
 
       status(result) mustEqual SEE_OTHER
@@ -201,7 +188,7 @@ class PreviousFurloughPeriodsControllerSpec extends SpecBaseControllerSpecs with
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val userAnswers = userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019)
+      val userAnswers = userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019())
       val request =
         FakeRequest(POST, previousFurloughPeriodsRoute).withCSRFToken
           .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]

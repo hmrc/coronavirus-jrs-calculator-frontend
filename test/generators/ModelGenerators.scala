@@ -16,11 +16,11 @@
 
 package generators
 
-import java.time.{Instant, LocalDate, ZoneOffset}
-
 import models._
-import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.{Arbitrary, Gen}
+
+import java.time.{Instant, LocalDate, ZoneOffset}
 trait ModelGenerators {
 
   implicit lazy val arbitraryEmployeeRTISubmission: Arbitrary[EmployeeRTISubmission] =

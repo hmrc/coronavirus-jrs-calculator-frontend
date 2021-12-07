@@ -16,8 +16,6 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import base.SpecBaseControllerSpecs
 import forms.RegularLengthEmployedFormProvider
 import models.requests.DataRequest
@@ -32,6 +30,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.RegularLengthEmployedView
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

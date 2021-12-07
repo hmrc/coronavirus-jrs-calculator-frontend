@@ -16,8 +16,6 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import base.{CoreTestDataBuilder, SpecBaseControllerSpecs}
 import controllers.actions.DataRetrievalActionImpl
 import forms.AdditionalPaymentPeriodsFormProvider
@@ -33,6 +31,7 @@ import play.api.test.Helpers._
 import services.UserAnswerPersistence
 import views.html.AdditionalPaymentPeriodsView
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

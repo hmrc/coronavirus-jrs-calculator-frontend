@@ -16,14 +16,14 @@
 
 package handlers
 
-import java.time.LocalDate
-
 import base.SpecBase
 import cats.scalatest.ValidatedValues
 import models.PayMethod.{Regular, Variable}
 import models.{Amount, AnnualPayAmount, BranchingQuestions, EmployeeStarted, LastYearPayment, NonFurloughPay, RegularPay, RegularPayData, Salary, UserAnswers, VariablePay, VariablePayData, VariablePayWithCylb, VariablePayWithCylbData}
 import pages._
 import utils.CoreTestData
+
+import java.time.LocalDate
 
 class JourneyBuilderSpec extends SpecBase with CoreTestData with ValidatedValues {
 

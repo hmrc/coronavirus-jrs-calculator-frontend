@@ -16,12 +16,11 @@
 
 package utils
 
-import java.time.LocalDate
-
 import base.SpecBase
 import models.UserAnswers
 import pages.PayDatePage
 
+import java.time.LocalDate
 import scala.util.Try
 
 class UserAnswersHelperSpec extends SpecBase with CoreTestData {

@@ -16,8 +16,6 @@
 
 package forms
 
-import java.time._
-
 import forms.behaviours.IntFieldBehaviours
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.data.{Form, FormError}
@@ -26,6 +24,8 @@ import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.ViewUtils.dateToString
+
+import java.time._
 
 class NumberOfStatLeaveDaysFormProviderSpec extends IntFieldBehaviours with GuiceOneAppPerSuite {
 

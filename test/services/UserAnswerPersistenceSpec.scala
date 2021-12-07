@@ -16,14 +16,13 @@
 
 package services
 
-import java.time.LocalDate
-
 import base.SpecBaseControllerSpecs
 import models.{AdditionalPayment, Amount, UserAnswers}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Seconds, Span}
 import pages.AdditionalPaymentAmountPage
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

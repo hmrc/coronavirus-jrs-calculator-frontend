@@ -16,12 +16,13 @@
 
 package forms
 
-import java.time.LocalDate
 import base.SpecBaseControllerSpecs
 import forms.behaviours.DateBehaviours
 import forms.mappings.LocalDateFormatter
 import play.api.data.FormError
 import views.ViewUtils
+
+import java.time.LocalDate
 
 class FirstFurloughDateFormProviderSpec extends SpecBaseControllerSpecs {
 

@@ -16,9 +16,10 @@
 
 package services
 
-import java.time.LocalDate
 import base.{CoreTestDataBuilder, SpecBase}
 import models.{Amount, AveragePaymentWithPhaseTwoPeriod, Hours, NonFurloughPay, Period, PeriodWithPaymentDate, PhaseTwoPeriod, StatutoryLeaveData}
+
+import java.time.LocalDate
 
 class AveragePayCalculatorSpec extends SpecBase with CoreTestDataBuilder {
 

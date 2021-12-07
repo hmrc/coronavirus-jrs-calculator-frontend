@@ -17,7 +17,6 @@
 package controllers
 
 import cats.data.Validated.{Invalid, Valid}
-import config.FrontendAppConfig
 import controllers.actions._
 import forms.HasEmployeeBeenOnStatutoryLeaveFormProvider
 import navigation.Navigator
@@ -34,17 +33,16 @@ import views.html.HasEmployeeBeenOnStatutoryLeaveView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class HasEmployeeBeenOnStatutoryLeaveController @Inject()(
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  navigator: Navigator,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  formProvider: HasEmployeeBeenOnStatutoryLeaveFormProvider,
-  helper: BeenOnStatutoryLeaveHelper,
-  val controllerComponents: MessagesControllerComponents,
-  view: HasEmployeeBeenOnStatutoryLeaveView)(implicit ec: ExecutionContext, appConfig: FrontendAppConfig)
+class HasEmployeeBeenOnStatutoryLeaveController @Inject()(override val messagesApi: MessagesApi,
+                                                          sessionRepository: SessionRepository,
+                                                          navigator: Navigator,
+                                                          identify: IdentifierAction,
+                                                          getData: DataRetrievalAction,
+                                                          requireData: DataRequiredAction,
+                                                          formProvider: HasEmployeeBeenOnStatutoryLeaveFormProvider,
+                                                          helper: BeenOnStatutoryLeaveHelper,
+                                                          val controllerComponents: MessagesControllerComponents,
+                                                          view: HasEmployeeBeenOnStatutoryLeaveView)(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with LoggerUtil {
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>

@@ -18,7 +18,7 @@ package controllers
 
 import assets.messages.BeenOnStatutoryLeaveMessages
 import base.SpecBaseControllerSpecs
-import config.featureSwitch.{FeatureSwitching, StatutoryLeaveFlow}
+import config.featureSwitch.FeatureSwitching
 import forms.HasEmployeeBeenOnStatutoryLeaveFormProvider
 import models.EmployeeStarted
 import models.requests.DataRequest
@@ -26,7 +26,8 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages._
-import play.api.mvc.AnyContentAsEmpty
+import play.api.data.Form
+import play.api.mvc.{AnyContentAsEmpty, Call}
 import play.api.test.CSRFTokenHelper._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -41,14 +42,14 @@ import scala.concurrent.Future
 
 class HasEmployeeBeenOnStatutoryLeaveControllerSpec extends SpecBaseControllerSpecs with MockitoSugar with FeatureSwitching {
 
-  val helper       = app.injector.instanceOf[BeenOnStatutoryLeaveHelper]
-  val view         = app.injector.instanceOf[HasEmployeeBeenOnStatutoryLeaveView]
-  val postAction   = controllers.routes.HasEmployeeBeenOnStatutoryLeaveController.onSubmit()
-  val formProvider = new HasEmployeeBeenOnStatutoryLeaveFormProvider()
+  val helper: BeenOnStatutoryLeaveHelper                        = app.injector.instanceOf[BeenOnStatutoryLeaveHelper]
+  val view: HasEmployeeBeenOnStatutoryLeaveView                 = app.injector.instanceOf[HasEmployeeBeenOnStatutoryLeaveView]
+  val postAction: Call                                          = controllers.routes.HasEmployeeBeenOnStatutoryLeaveController.onSubmit()
+  val formProvider: HasEmployeeBeenOnStatutoryLeaveFormProvider = new HasEmployeeBeenOnStatutoryLeaveFormProvider()
 
-  def form(boundaryStart: String, boundaryEnd: String) = formProvider(boundaryStart, boundaryEnd)
+  def form(boundaryStart: String, boundaryEnd: String): Form[Boolean] = formProvider(boundaryStart, boundaryEnd)
 
-  lazy val hasEmployeeBeenOnStatutoryLeaveRoute = routes.HasEmployeeBeenOnStatutoryLeaveController.onPageLoad().url
+  lazy val hasEmployeeBeenOnStatutoryLeaveRoute: String = routes.HasEmployeeBeenOnStatutoryLeaveController.onPageLoad().url
 
   val getRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, hasEmployeeBeenOnStatutoryLeaveRoute).withCSRFToken
@@ -365,7 +366,7 @@ class HasEmployeeBeenOnStatutoryLeaveControllerSpec extends SpecBaseControllerSp
         "day before employee is first furloughed is before 5th April 2020" must {
 
           "redirect to the next page when valid data is submitted" in {
-            enable(StatutoryLeaveFlow)
+
             val firstFurloughDate = LocalDate.parse("2020-04-05")
             val furloughStartDate = LocalDate.parse("2021-03-01")
 
@@ -422,34 +423,6 @@ class HasEmployeeBeenOnStatutoryLeaveControllerSpec extends SpecBaseControllerSp
             status(result) mustEqual BAD_REQUEST
             contentAsString(result) mustEqual
               view(boundForm, postAction, boundaryStart, boundaryEnd)(dataRequest, messages).toString
-          }
-
-          "route back to the root page when the Statutory Leave flow feature switch is disabled" in {
-            disable(StatutoryLeaveFlow)
-            val firstFurloughDate = LocalDate.parse("2020-04-05")
-            val furloughStartDate = LocalDate.parse("2021-03-01")
-
-            val userAnswers = emptyUserAnswers
-              .set(FurloughStartDatePage, furloughStartDate)
-              .success
-              .value
-              .set(EmployeeStartedPage, EmployeeStarted.OnOrBefore1Feb2019)
-              .success
-              .value
-              .set(FirstFurloughDatePage, firstFurloughDate)
-              .success
-              .value
-
-            when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
-            val request =
-              FakeRequest(POST, hasEmployeeBeenOnStatutoryLeaveRoute)
-                .withFormUrlEncodedBody(("value", "true"))
-
-            val result = controller.onSubmit()(request)
-
-            status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.RootPageController.onPageLoad().url
-            enable(StatutoryLeaveFlow)
           }
         }
 
@@ -513,34 +486,6 @@ class HasEmployeeBeenOnStatutoryLeaveControllerSpec extends SpecBaseControllerSp
             status(result) mustEqual BAD_REQUEST
             contentAsString(result) mustEqual
               view(boundForm, postAction, boundaryStart, boundaryEnd)(dataRequest, messages).toString
-          }
-
-          "route back to the root page when the Statutory Leave flow feature switch is disabled" in {
-            disable(StatutoryLeaveFlow)
-            val firstFurloughDate = LocalDate.parse("2020-04-06")
-            val furloughStartDate = LocalDate.parse("2021-03-01")
-
-            val userAnswers = emptyUserAnswers
-              .set(FirstFurloughDatePage, firstFurloughDate)
-              .success
-              .value
-              .set(FurloughStartDatePage, furloughStartDate)
-              .success
-              .value
-              .set(EmployeeStartedPage, EmployeeStarted.OnOrBefore1Feb2019)
-              .success
-              .value
-
-            when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
-            val request =
-              FakeRequest(POST, hasEmployeeBeenOnStatutoryLeaveRoute)
-                .withFormUrlEncodedBody(("value", "true"))
-
-            val result = controller.onSubmit()(request)
-
-            status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.RootPageController.onPageLoad().url
-            enable(StatutoryLeaveFlow)
           }
         }
       }
@@ -616,38 +561,6 @@ class HasEmployeeBeenOnStatutoryLeaveControllerSpec extends SpecBaseControllerSp
             contentAsString(result) mustEqual
               view(boundForm, postAction, boundaryStart, boundaryEnd)(dataRequest, messages).toString
           }
-
-          "route back to the root page when the Statutory Leave flow feature switch is disabled" in {
-            disable(StatutoryLeaveFlow)
-            val employeeStartDate = feb1st2020.minusDays(1)
-            val firstFurloughDate = LocalDate.parse("2020-04-05")
-            val furloughStartDate = LocalDate.parse("2021-03-01")
-
-            val userAnswers = emptyUserAnswers
-              .set(FurloughStartDatePage, furloughStartDate)
-              .success
-              .value
-              .set(EmployeeStartedPage, EmployeeStarted.After1Feb2019)
-              .success
-              .value
-              .set(EmployeeStartDatePage, employeeStartDate)
-              .success
-              .value
-              .set(FirstFurloughDatePage, firstFurloughDate)
-              .success
-              .value
-
-            when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
-            val request =
-              FakeRequest(POST, hasEmployeeBeenOnStatutoryLeaveRoute)
-                .withFormUrlEncodedBody(("value", "true"))
-
-            val result = controller.onSubmit()(request)
-
-            status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.RootPageController.onPageLoad().url
-            enable(StatutoryLeaveFlow)
-          }
         }
 
         "day before employee is first furloughed is after 5th April 2020" must {
@@ -720,37 +633,6 @@ class HasEmployeeBeenOnStatutoryLeaveControllerSpec extends SpecBaseControllerSp
               view(boundForm, postAction, boundaryStart, boundaryEnd)(dataRequest, messages).toString
           }
 
-          "route back to the root page when the Statutory Leave flow feature switch is disabled" in {
-            disable(StatutoryLeaveFlow)
-            val employeeStartDate = feb1st2020.minusDays(1)
-            val firstFurloughDate = LocalDate.parse("2020-04-06")
-            val furloughStartDate = LocalDate.parse("2021-03-01")
-
-            val userAnswers = emptyUserAnswers
-              .set(FirstFurloughDatePage, firstFurloughDate)
-              .success
-              .value
-              .set(FurloughStartDatePage, furloughStartDate)
-              .success
-              .value
-              .set(EmployeeStartDatePage, employeeStartDate)
-              .success
-              .value
-              .set(EmployeeStartedPage, EmployeeStarted.After1Feb2019)
-              .success
-              .value
-
-            when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
-            val request =
-              FakeRequest(POST, hasEmployeeBeenOnStatutoryLeaveRoute)
-                .withFormUrlEncodedBody(("value", "true"))
-
-            val result = controller.onSubmit()(request)
-
-            status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.RootPageController.onPageLoad().url
-            enable(StatutoryLeaveFlow)
-          }
         }
       }
 
@@ -830,41 +712,6 @@ class HasEmployeeBeenOnStatutoryLeaveControllerSpec extends SpecBaseControllerSp
             contentAsString(result) mustEqual
               view(boundForm, postAction, boundaryStart, boundaryEnd)(dataRequest, messages).toString
           }
-
-          "route back to the root page when the Statutory Leave flow feature switch is disabled" in {
-            disable(StatutoryLeaveFlow)
-            val employeeStartDate = apr6th2020.minusDays(1)
-            val firstFurloughDate = LocalDate.parse("2021-01-01")
-            val furloughStartDate = LocalDate.parse("2021-03-01")
-
-            val userAnswers = emptyUserAnswers
-              .set(FurloughStartDatePage, furloughStartDate)
-              .success
-              .value
-              .set(EmployeeStartedPage, EmployeeStarted.After1Feb2019)
-              .success
-              .value
-              .set(EmployeeStartDatePage, employeeStartDate)
-              .success
-              .value
-              .set(OnPayrollBefore30thOct2020Page, true)
-              .success
-              .value
-              .set(FirstFurloughDatePage, firstFurloughDate)
-              .success
-              .value
-
-            when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
-            val request =
-              FakeRequest(POST, hasEmployeeBeenOnStatutoryLeaveRoute)
-                .withFormUrlEncodedBody(("value", "true"))
-
-            val result = controller.onSubmit()(request)
-
-            status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.RootPageController.onPageLoad().url
-            enable(StatutoryLeaveFlow)
-          }
         }
 
         "employment started after 6 April 2020 and first furloughed 1 Jan 2021" must {
@@ -941,41 +788,6 @@ class HasEmployeeBeenOnStatutoryLeaveControllerSpec extends SpecBaseControllerSp
             status(result) mustEqual BAD_REQUEST
             contentAsString(result) mustEqual
               view(boundForm, postAction, boundaryStart, boundaryEnd)(dataRequest, messages).toString
-          }
-
-          "route back to the root page when the Statutory Leave flow feature switch is disabled" in {
-            disable(StatutoryLeaveFlow)
-            val employeeStartDate = apr6th2020.plusDays(1)
-            val firstFurloughDate = LocalDate.parse("2021-01-01")
-            val furloughStartDate = LocalDate.parse("2021-03-01")
-
-            val userAnswers = emptyUserAnswers
-              .set(FurloughStartDatePage, furloughStartDate)
-              .success
-              .value
-              .set(EmployeeStartedPage, EmployeeStarted.After1Feb2019)
-              .success
-              .value
-              .set(EmployeeStartDatePage, employeeStartDate)
-              .success
-              .value
-              .set(OnPayrollBefore30thOct2020Page, true)
-              .success
-              .value
-              .set(FirstFurloughDatePage, firstFurloughDate)
-              .success
-              .value
-
-            when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
-            val request =
-              FakeRequest(POST, hasEmployeeBeenOnStatutoryLeaveRoute)
-                .withFormUrlEncodedBody(("value", "true"))
-
-            val result = controller.onSubmit()(request)
-
-            status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.RootPageController.onPageLoad().url
-            enable(StatutoryLeaveFlow)
           }
         }
       }
@@ -1057,41 +869,6 @@ class HasEmployeeBeenOnStatutoryLeaveControllerSpec extends SpecBaseControllerSp
             contentAsString(result) mustEqual
               view(boundForm, postAction, boundaryStart, boundaryEnd)(dataRequest, messages).toString
           }
-
-          "route back to the root page when the Statutory Leave flow feature switch is disabled" in {
-            disable(StatutoryLeaveFlow)
-            val employeeStartDate = apr6th2020.minusDays(1)
-            val firstFurloughDate = LocalDate.parse("2021-05-01")
-            val furloughStartDate = LocalDate.parse("2021-05-21")
-
-            val userAnswers = emptyUserAnswers
-              .set(FurloughStartDatePage, furloughStartDate)
-              .success
-              .value
-              .set(EmployeeStartedPage, EmployeeStarted.After1Feb2019)
-              .success
-              .value
-              .set(EmployeeStartDatePage, employeeStartDate)
-              .success
-              .value
-              .set(OnPayrollBefore30thOct2020Page, false)
-              .success
-              .value
-              .set(FirstFurloughDatePage, firstFurloughDate)
-              .success
-              .value
-
-            when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
-            val request =
-              FakeRequest(POST, hasEmployeeBeenOnStatutoryLeaveRoute)
-                .withFormUrlEncodedBody(("value", "true"))
-
-            val result = controller.onSubmit()(request)
-
-            status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.RootPageController.onPageLoad().url
-            enable(StatutoryLeaveFlow)
-          }
         }
 
         "employment started after 6 April 2020 and first furloughed 01 May 2021" must {
@@ -1168,41 +945,6 @@ class HasEmployeeBeenOnStatutoryLeaveControllerSpec extends SpecBaseControllerSp
             status(result) mustEqual BAD_REQUEST
             contentAsString(result) mustEqual
               view(boundForm, postAction, boundaryStart, boundaryEnd)(dataRequest, messages).toString
-          }
-
-          "route back to the root page when the Statutory Leave flow feature switch is disabled" in {
-            disable(StatutoryLeaveFlow)
-            val employeeStartDate = apr6th2020.plusDays(1)
-            val firstFurloughDate = LocalDate.parse("2021-05-01")
-            val furloughStartDate = LocalDate.parse("2021-05-21")
-
-            val userAnswers = emptyUserAnswers
-              .set(FurloughStartDatePage, furloughStartDate)
-              .success
-              .value
-              .set(EmployeeStartedPage, EmployeeStarted.After1Feb2019)
-              .success
-              .value
-              .set(EmployeeStartDatePage, employeeStartDate)
-              .success
-              .value
-              .set(OnPayrollBefore30thOct2020Page, false)
-              .success
-              .value
-              .set(FirstFurloughDatePage, firstFurloughDate)
-              .success
-              .value
-
-            when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
-            val request =
-              FakeRequest(POST, hasEmployeeBeenOnStatutoryLeaveRoute)
-                .withFormUrlEncodedBody(("value", "true"))
-
-            val result = controller.onSubmit()(request)
-
-            status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.RootPageController.onPageLoad().url
-            enable(StatutoryLeaveFlow)
           }
         }
       }

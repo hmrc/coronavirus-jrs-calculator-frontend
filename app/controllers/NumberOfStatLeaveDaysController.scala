@@ -17,7 +17,6 @@
 package controllers
 
 import cats.data.Validated.{Invalid, Valid}
-import config.FrontendAppConfig
 import controllers.actions._
 import forms.NumberOfStatLeaveDaysFormProvider
 import navigation.Navigator
@@ -45,7 +44,7 @@ class NumberOfStatLeaveDaysController @Inject()(
   contentHelper: BeenOnStatutoryLeaveHelper,
   val controllerComponents: MessagesControllerComponents,
   view: NumberOfStatLeaveDaysView
-)(implicit ec: ExecutionContext, appConfig: FrontendAppConfig)
+)(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>

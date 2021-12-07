@@ -29,7 +29,6 @@ import models.requests.DataRequest
 import models.{EightyPercent, EmployeeStarted, Period, UserAnswers}
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
-import utils.LocalDateHelpers._
 import utils.ValueFormatter
 import viewmodels.{ConfirmationDataResultWithoutNicAndPension, ConfirmationViewBreakdownWithoutNicAndPension}
 import views.behaviours.ViewBehaviours

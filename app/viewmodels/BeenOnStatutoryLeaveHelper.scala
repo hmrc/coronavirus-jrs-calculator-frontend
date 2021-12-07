@@ -17,7 +17,6 @@
 package viewmodels
 
 import cats.data.Validated.Valid
-import config.FrontendAppConfig
 import models.requests.DataRequest
 import pages.EmployeeStartDatePage
 import play.api.i18n.Messages
@@ -28,7 +27,7 @@ import views.ViewUtils.dateToString
 
 class BeenOnStatutoryLeaveHelper extends EmployeeTypeUtil with KeyDatesUtil with LoggerUtil {
 
-  def boundaryStart()(implicit request: DataRequest[_], appConfig: FrontendAppConfig, messages: Messages): String =
+  def boundaryStart()(implicit request: DataRequest[_], messages: Messages): String =
     variablePayResolver[String](
       type3EmployeeResult = Some(dateToString(apr6th2019)),
       type4EmployeeResult = Some(messages("hasEmployeeBeenOnStatutoryLeave.dayEmploymentStarted")),
@@ -38,7 +37,7 @@ class BeenOnStatutoryLeaveHelper extends EmployeeTypeUtil with KeyDatesUtil with
       throw new InternalServerException("[BeenOnStatutoryLeaveHelper][boundaryStart] failed to resolve employee type")
     )(identity)
 
-  def boundaryEnd()(implicit request: DataRequest[_], appConfig: FrontendAppConfig, messages: Messages): String =
+  def boundaryEnd()(implicit request: DataRequest[_], messages: Messages): String =
     variablePayResolver[String](
       type3EmployeeResult = Some(type3And4BoundaryEnd()),
       type4EmployeeResult = Some(type3And4BoundaryEnd()),

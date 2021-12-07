@@ -16,9 +16,9 @@
 
 package pages
 
-import java.time.LocalDate
-
 import pages.behaviours.PageBehaviours
+
+import java.time.LocalDate
 
 class PayDatePageSpec extends PageBehaviours {
 

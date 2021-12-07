@@ -20,7 +20,7 @@ import messages.JRSExtensionConfirmationMessages._
 import models._
 import views.BaseSelectors
 import views.behaviours.ViewBehaviours
-import views.html.helper.{additionalPaymentUpToEightyPercent, confirmationNextSteps}
+import views.html.helper.confirmationNextSteps
 
 import java.time.LocalDate
 
