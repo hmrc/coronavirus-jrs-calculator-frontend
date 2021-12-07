@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBaseControllerSpecs
 import config.FrontendAppConfig
-import config.featureSwitch.{FeatureSwitching, ShowNewStartPage}
+import config.featureSwitch.FeatureSwitching
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -35,7 +35,7 @@ class RootPageControllerSpec extends SpecBaseControllerSpecs with MockitoSugar w
     val newStartView = injector.instanceOf[StartPageView]
     val appConfig    = injector.instanceOf[FrontendAppConfig]
 
-    val controller = new RootPageController(messagesApi, component, view, newStartView)(appConfig)
+    val controller = new RootPageController(messagesApi, component, newStartView)
 
     when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(emptyUserAnswers))
 
@@ -44,29 +44,12 @@ class RootPageControllerSpec extends SpecBaseControllerSpecs with MockitoSugar w
 
   "RootPage Controller" when {
 
-    "The new start page feature switch is disabled" must {
+    "return OK and the new view for a GET" in new Setup {
 
-      "return OK and the old view for a GET" in new Setup {
+      val result = controller.start()(request)
 
-        disable(ShowNewStartPage)
-        val result = controller.start()(request)
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view()(request, messages).toString
-      }
-    }
-
-    "The new start page feature switch is enabled" must {
-
-      "return OK and the new view for a GET" in new Setup {
-
-        enable(ShowNewStartPage)
-
-        val result = controller.start()(request)
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual newStartView(controllers.routes.ClaimPeriodStartController.onPageLoad())(request, messages).toString
-      }
+      status(result) mustEqual OK
+      contentAsString(result) mustEqual newStartView(controllers.routes.ClaimPeriodStartController.onPageLoad())(request, messages).toString
     }
   }
 }

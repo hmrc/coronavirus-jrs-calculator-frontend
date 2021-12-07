@@ -25,7 +25,7 @@ import models.PayMethod.Regular
 import models.PensionStatus.DoesContribute
 import models.TopUpStatus.ToppedUp
 import models._
-import pages.{PartTimeQuestionPage, QuestionPage, TopUpPeriodsPage, _}
+import pages._
 import play.api.libs.json.Writes
 import queries.Settable
 

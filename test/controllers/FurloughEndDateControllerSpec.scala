@@ -16,13 +16,11 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import base.SpecBaseControllerSpecs
 import controllers.actions.DataRetrievalActionImpl
 import forms.FurloughEndDateFormProvider
-import models.{Period, UserAnswers}
 import models.requests.DataRequest
+import models.{Period, UserAnswers}
 import pages.FurloughEndDatePage
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.CSRFTokenHelper._
@@ -30,6 +28,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.FurloughEndDateView
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

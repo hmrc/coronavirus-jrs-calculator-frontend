@@ -16,8 +16,6 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import akka.util.Timeout
 import base.SpecBaseControllerSpecs
 import cats.scalatest.ValidatedValues
@@ -31,6 +29,7 @@ import play.api.mvc.Results._
 import play.api.mvc.{AnyContentAsEmpty, MessagesControllerComponents, Result}
 import play.api.test.Helpers.{contentAsString, redirectLocation, status}
 
+import java.time.LocalDate
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.language.postfixOps

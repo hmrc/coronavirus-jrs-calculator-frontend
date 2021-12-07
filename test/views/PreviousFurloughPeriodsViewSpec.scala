@@ -19,7 +19,6 @@ package views
 import assets.messages.BaseMessages
 import forms.PreviousFurloughPeriodsFormProvider
 import messages.PreviousFurloughPeriodsMessages
-import models.requests.DataRequest
 import org.jsoup.nodes.Document
 import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
@@ -43,8 +42,6 @@ class PreviousFurloughPeriodsViewSpec extends ViewBehaviours with YesNoViewBehav
   )
 
   "PreviousFurloughPeriodsViewSpec" when {
-
-    implicit val request: DataRequest[_] = fakeDataRequest()
 
     def applyView(date: LocalDate): Form[Boolean] => HtmlFormat.Appendable =
       (form: Form[_]) => view(form, date)(fakeRequest, messages)

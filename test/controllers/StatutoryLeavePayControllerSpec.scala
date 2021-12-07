@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBaseControllerSpecs
-import config.featureSwitch.{FeatureSwitching, StatutoryLeaveFlow}
+import config.featureSwitch.FeatureSwitching
 import forms.StatutoryLeavePayFormProvider
 import models.requests.DataRequest
 import models.{Amount, AnnualPayAmount}
@@ -40,13 +40,13 @@ class StatutoryLeavePayControllerSpec extends SpecBaseControllerSpecs with Mocki
   val formProvider                                 = new StatutoryLeavePayFormProvider()
   def form(referencePay: BigDecimal): Form[Amount] = formProvider(referencePay)
 
-  lazy val statutoryLeavePayRoute = routes.StatutoryLeavePayController.onPageLoad().url
+  lazy val statutoryLeavePayRoute: String = routes.StatutoryLeavePayController.onPageLoad().url
 
   val getRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, statutoryLeavePayRoute).withCSRFToken
       .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
-  val view = app.injector.instanceOf[StatutoryLeavePayView]
+  val view: StatutoryLeavePayView = app.injector.instanceOf[StatutoryLeavePayView]
 
   val controller = new StatutoryLeavePayController(messagesApi,
                                                    mockSessionRepository,
@@ -132,25 +132,6 @@ class StatutoryLeavePayControllerSpec extends SpecBaseControllerSpecs with Mocki
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual routes.PartTimeQuestionController.onPageLoad().url
-      }
-
-      "redirect to the root page when the feature switch is disabled" in {
-        disable(StatutoryLeaveFlow)
-        val userAnswers = emptyUserAnswers
-          .set(AnnualPayAmountPage, AnnualPayAmount(BigDecimal(420.20)))
-          .success
-          .value
-        when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
-        val request =
-          FakeRequest(POST, statutoryLeavePayRoute)
-            .withFormUrlEncodedBody(("value", "111"))
-
-        val result = controller.onSubmit()(request)
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual routes.RootPageController.onPageLoad().url
-        enable(StatutoryLeaveFlow)
       }
 
       "return a Bad Request and errors when invalid data is submitted" in {

@@ -17,7 +17,6 @@
 package controllers
 
 import cats.data.Validated.{Invalid, Valid}
-import config.FrontendAppConfig
 import config.featureSwitch.FeatureSwitching
 import controllers.actions._
 import forms.PreviousFurloughPeriodsFormProvider
@@ -48,7 +47,7 @@ class PreviousFurloughPeriodsController @Inject()(
   formProvider: PreviousFurloughPeriodsFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PreviousFurloughPeriodsView
-)(implicit ec: ExecutionContext, appConfig: FrontendAppConfig, errorHandler: ErrorHandler)
+)(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
     extends FrontendBaseController with I18nSupport with FeatureSwitching with EmployeeTypeUtil {
 
   def form()(implicit request: DataRequest[_]): Form[Boolean] =

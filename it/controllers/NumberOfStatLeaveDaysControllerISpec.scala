@@ -1,7 +1,5 @@
 package controllers
 
-import java.time._
-
 import assets.{BaseITConstants, PageTitles}
 import models.PayMethod.Variable
 import models.PaymentFrequency.Monthly
@@ -11,6 +9,8 @@ import play.api.libs.json.Json
 import utils.LocalDateHelpers._
 import utils.{CreateRequestHelper, CustomMatchers, ITCoreTestData, IntegrationSpecBase}
 import views.ViewUtils.dateToString
+
+import java.time._
 
 class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData {
 

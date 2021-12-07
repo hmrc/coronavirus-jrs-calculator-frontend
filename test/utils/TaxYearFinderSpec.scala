@@ -16,10 +16,10 @@
 
 package utils
 
-import java.time.LocalDate
-
 import base.SpecBase
 import models.{PaymentDate, TaxYearEnding2020, TaxYearEnding2021}
+
+import java.time.LocalDate
 
 class TaxYearFinderSpec extends SpecBase {
 

@@ -17,7 +17,6 @@
 package controllers
 
 import cats.data.Validated.{Invalid, Valid}
-import config.FrontendAppConfig
 import controllers.actions._
 import forms.FirstFurloughDateFormProvider
 import handlers.ErrorHandler
@@ -47,7 +46,7 @@ class FirstFurloughDateController @Inject()(
   formProvider: FirstFurloughDateFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: FirstFurloughDateView
-)(implicit ec: ExecutionContext, appConfig: FrontendAppConfig, errorHandler: ErrorHandler)
+)(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
     extends BaseController with I18nSupport with EmployeeTypeUtil {
 
   def form(startDate: LocalDate)(implicit messages: Messages): Form[LocalDate] = formProvider(startDate)

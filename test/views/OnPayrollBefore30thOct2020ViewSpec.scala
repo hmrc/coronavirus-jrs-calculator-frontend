@@ -19,7 +19,6 @@ package views
 import assets.messages._
 import forms.OnPayrollBefore30thOct2020FormProvider
 import messages.OnPayrollBefore30thOct2020Messages
-import models.requests.DataRequest
 import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.twirl.api.HtmlFormat

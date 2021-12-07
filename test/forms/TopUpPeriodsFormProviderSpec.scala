@@ -16,13 +16,13 @@
 
 package forms
 
-import java.time.LocalDate
-
 import forms.behaviours.CheckboxFieldBehaviours
-import org.scalacheck.{Gen, Shrink}
 import generators.Generators
+import org.scalacheck.{Gen, Shrink}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.data.FormError
+
+import java.time.LocalDate
 
 class TopUpPeriodsFormProviderSpec extends CheckboxFieldBehaviours with Generators with ScalaCheckPropertyChecks {
 

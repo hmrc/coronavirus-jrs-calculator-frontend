@@ -16,11 +16,11 @@
 
 package messages
 
-import java.time.LocalDate
-
 import models.{EmployeeType, Type4}
 import play.api.i18n.Messages
 import views.ViewUtils._
+
+import java.time.LocalDate
 
 object NumberOfStatLeaveDaysMessages {
 

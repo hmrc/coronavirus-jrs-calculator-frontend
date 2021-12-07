@@ -16,13 +16,13 @@
 
 package utils
 
-import java.net.URLEncoder
-import java.util.UUID
-
 import play.api.Application
 import play.api.libs.crypto.CookieSigner
 import uk.gov.hmrc.crypto.{CompositeSymmetricCrypto, PlainText}
 import uk.gov.hmrc.http.SessionKeys
+
+import java.net.URLEncoder
+import java.util.UUID
 
 object SessionCookieBaker extends IntegrationSpecBase {
   private val cookieKey = "gvBoGdgzqG1AarzF1LY0zQ=="

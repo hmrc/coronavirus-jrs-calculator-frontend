@@ -2,7 +2,7 @@ package controllers
 
 import assets.BaseITConstants
 import assets.PageTitles.previousFurloughPeriods
-import config.featureSwitch.{ExtensionTwoNewStarterFlow, FeatureSwitching}
+import config.featureSwitch.FeatureSwitching
 import models.UserAnswers
 import play.api.http.Status._
 import play.api.libs.json.Json
@@ -10,21 +10,11 @@ import utils.LocalDateHelpers._
 import utils.{CreateRequestHelper, CustomMatchers, ITCoreTestData, IntegrationSpecBase}
 import views.ViewUtils.dateToString
 
-class PreviousFurloughPeriodsControllerISpec extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData
- with FeatureSwitching {
-
-  override def beforeAll(): Unit = {
-    super.beforeAll()
-    enable(ExtensionTwoNewStarterFlow)
-  }
-
-  override def afterAll(): Unit = {
-    super.afterAll()
-    disable(ExtensionTwoNewStarterFlow)
-  }
+class PreviousFurloughPeriodsControllerISpec
+    extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData
+    with FeatureSwitching {
 
   "GET /furloughed-more-than-once" when {
-
 
     "redirect to the .onPageLoad" in {
 
@@ -49,7 +39,8 @@ class PreviousFurloughPeriodsControllerISpec extends IntegrationSpecBase with Cr
 
       setAnswers(userAnswers)
 
-      val res = postRequestHeader("/furloughed-more-than-once", Json.obj("value" -> "false"))("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
+      val res = postRequestHeader("/furloughed-more-than-once", Json.obj("value" -> "false"))("sessionId" -> userAnswers.id,
+                                                                                              "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
         result must have(
@@ -64,7 +55,8 @@ class PreviousFurloughPeriodsControllerISpec extends IntegrationSpecBase with Cr
 
       setAnswers(userAnswers)
 
-      val res = postRequestHeader("/furloughed-more-than-once", Json.obj("value" -> "true"))("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
+      val res = postRequestHeader("/furloughed-more-than-once", Json.obj("value" -> "true"))("sessionId" -> userAnswers.id,
+                                                                                             "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
         result must have(
@@ -79,7 +71,8 @@ class PreviousFurloughPeriodsControllerISpec extends IntegrationSpecBase with Cr
 
       setAnswers(userAnswers)
 
-      val res = postRequestHeader("/furloughed-more-than-once", Json.toJson("value" -> ""))("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
+      val res = postRequestHeader("/furloughed-more-than-once", Json.toJson("value" -> ""))("sessionId" -> userAnswers.id,
+                                                                                            "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
         result must have(
@@ -94,7 +87,8 @@ class PreviousFurloughPeriodsControllerISpec extends IntegrationSpecBase with Cr
 
       setAnswers(userAnswers)
 
-      val res = postRequestHeader("/furloughed-more-than-once", Json.toJson("value" -> ""))("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
+      val res = postRequestHeader("/furloughed-more-than-once", Json.toJson("value" -> ""))("sessionId" -> userAnswers.id,
+                                                                                            "X-Session-ID" -> userAnswers.id)
 
       whenReady(res) { result =>
         result must have(

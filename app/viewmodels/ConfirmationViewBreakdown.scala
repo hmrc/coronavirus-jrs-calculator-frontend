@@ -16,7 +16,6 @@
 
 package viewmodels
 
-import config.FrontendAppConfig
 import models._
 import models.requests.DataRequest
 import play.api.i18n.Messages
@@ -114,7 +113,7 @@ case class PhaseTwoConfirmationViewBreakdown(furlough: PhaseTwoFurloughCalculati
     )
   }
 
-  def detailedBreakdownMessageKeys(implicit messages: Messages, dataRequest: DataRequest[_], appConfig: FrontendAppConfig): Seq[String] = {
+  def detailedBreakdownMessageKeys(implicit messages: Messages, dataRequest: DataRequest[_]): Seq[String] = {
     val helper = new BeenOnStatutoryLeaveHelper()
     furlough.periodBreakdowns.headOption
       .map {
@@ -180,9 +179,8 @@ case class ConfirmationViewBreakdownWithoutNicAndPension(furlough: PhaseTwoFurlo
     )
   }
 
-  def detailedBreakdownMessageKeys(
-    furloughRate: FurloughGrantRate,
-    isNewStarterType5: Boolean)(implicit messages: Messages, dataRequest: DataRequest[_], appConfig: FrontendAppConfig): Seq[String] = {
+  def detailedBreakdownMessageKeys(furloughRate: FurloughGrantRate,
+                                   isNewStarterType5: Boolean)(implicit messages: Messages, dataRequest: DataRequest[_]): Seq[String] = {
 
     val helper = new BeenOnStatutoryLeaveHelper()
 
@@ -212,7 +210,7 @@ case class ConfirmationViewBreakdownWithoutNicAndPension(furlough: PhaseTwoFurlo
       .getOrElse(Seq())
   }
 
-  def statLeaveOnlyMessageKeys()(implicit messages: Messages, dataRequest: DataRequest[_], appConfig: FrontendAppConfig): Option[String] =
+  def statLeaveOnlyMessageKeys()(implicit messages: Messages, dataRequest: DataRequest[_]): Option[String] =
     if (hasStatutoryLeaveData()) {
 
       lazy val helper = new BeenOnStatutoryLeaveHelper()

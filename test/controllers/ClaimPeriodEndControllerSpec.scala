@@ -16,8 +16,6 @@
 
 package controllers
 
-import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBaseControllerSpecs
 import controllers.actions.DataRetrievalActionImpl
 import forms.ClaimPeriodEndFormProvider
@@ -33,6 +31,7 @@ import play.api.test.Helpers._
 import services.UserAnswerPersistence
 import views.html.ClaimPeriodEndView
 
+import java.time.{LocalDate, ZoneOffset}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

@@ -36,7 +36,6 @@ import views.behaviours.ViewBehaviours
 import views.html.JrsExtensionConfirmationView
 
 import java.time.LocalDate
-import utils.LocalDateHelpers._
 
 class ConfirmationType5EmployeeViewSpec
     extends SpecBase with ConfirmationControllerRequestHandler with ValidatedValues with ValueFormatter with ViewBehaviours {

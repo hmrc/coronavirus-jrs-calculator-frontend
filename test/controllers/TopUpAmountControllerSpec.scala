@@ -16,8 +16,6 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import base.{CoreTestDataBuilder, SpecBaseControllerSpecs}
 import forms.TopUpAmountFormProvider
 import models.requests.DataRequest
@@ -31,6 +29,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.TopUpAmountView
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

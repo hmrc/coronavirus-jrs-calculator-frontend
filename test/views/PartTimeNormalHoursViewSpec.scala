@@ -16,8 +16,6 @@
 
 package views.includes
 
-import java.time.LocalDate
-
 import assets.messages.{BaseMessages, PartTimeNormalHoursMessages}
 import forms.PartTimeNormalHoursFormProvider
 import models.requests.DataRequest
@@ -28,6 +26,8 @@ import play.twirl.api.HtmlFormat
 import views.BaseSelectors
 import views.html.PartTimeNormalHoursView
 import views.includes.behaviours.HoursViewBehaviours
+
+import java.time.LocalDate
 
 class PartTimeNormalHoursViewSpec extends HoursViewBehaviours {
 

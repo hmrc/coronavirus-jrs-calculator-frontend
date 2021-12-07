@@ -16,13 +16,12 @@
 
 package generators
 
-import java.time.{Instant, LocalDate, ZoneOffset}
-
 import models.Amount
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Gen._
 import org.scalacheck.{Arbitrary, Gen, Shrink}
 
+import java.time.{Instant, LocalDate, ZoneOffset}
 import scala.math.BigDecimal.RoundingMode
 
 trait Generators extends UserAnswersGenerator with PageGenerators with ModelGenerators with UserAnswersEntryGenerators {
@@ -61,7 +60,8 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
     alphaStr suchThat (_.size > 0)
 
   implicit val arbBigDecimal: Arbitrary[BigDecimal] = Arbitrary {
-    import java.math.MathContext, MathContext._
+    import java.math.MathContext
+    import MathContext._
     val genMathContext0: Gen[MathContext] =
       Gen.oneOf(DECIMAL32, DECIMAL64, DECIMAL128)
 

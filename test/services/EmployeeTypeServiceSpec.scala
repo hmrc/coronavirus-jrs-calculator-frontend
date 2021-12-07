@@ -16,11 +16,11 @@
 
 package services
 
-import java.time._
-
 import base.{CoreTestDataBuilder, SpecBase}
 import models.EmployeeRTISubmission.{No, Yes}
 import pages._
+
+import java.time._
 
 class EmployeeTypeServiceSpec extends SpecBase with CoreTestDataBuilder {
 

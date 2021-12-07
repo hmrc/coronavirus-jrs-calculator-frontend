@@ -16,12 +16,12 @@
 
 package forms
 
-import java.time.LocalDate
-
 import base.SpecBaseControllerSpecs
 import forms.behaviours.DateBehaviours
 import models.Period
 import play.api.data.FormError
+
+import java.time.LocalDate
 
 class FurloughEndDateFormProviderSpec extends SpecBaseControllerSpecs {
 

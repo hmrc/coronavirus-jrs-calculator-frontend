@@ -16,10 +16,10 @@
 
 package services
 
-import java.time.LocalDate
-
 import base.{CoreTestDataBuilder, SpecBase}
 import models.{Amount, LastYearPayment, NonFurloughPay, OnePeriodCylb, RegularPayData, VariablePayData, VariablePayWithCylbData}
+
+import java.time.LocalDate
 
 class ReferencePayCalculatorSpec extends SpecBase with CoreTestDataBuilder {
 

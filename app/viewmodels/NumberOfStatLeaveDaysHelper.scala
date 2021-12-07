@@ -16,7 +16,6 @@
 
 package viewmodels
 
-import config.FrontendAppConfig
 import models.requests.DataRequest
 import pages.EmployeeStartDatePage
 import uk.gov.hmrc.http.InternalServerException
@@ -27,7 +26,7 @@ import java.time.LocalDate
 
 class NumberOfStatLeaveDaysHelper extends EmployeeTypeUtil with KeyDatesUtil with LoggerUtil {
 
-  def boundaryStartDate()(implicit request: DataRequest[_], appConfig: FrontendAppConfig): LocalDate = {
+  def boundaryStartDate()(implicit request: DataRequest[_]): LocalDate = {
 
     val employeeStartDate: Option[LocalDate] = request.userAnswers.getV(EmployeeStartDatePage).toOption
 
@@ -49,7 +48,7 @@ class NumberOfStatLeaveDaysHelper extends EmployeeTypeUtil with KeyDatesUtil wit
     )(identity)
   }
 
-  def boundaryEndDate()(implicit request: DataRequest[_], appConfig: FrontendAppConfig): LocalDate = {
+  def boundaryEndDate()(implicit request: DataRequest[_]): LocalDate = {
 
     val dayBeforeFirstFurlough = firstFurloughDate.minusDays(1)
 

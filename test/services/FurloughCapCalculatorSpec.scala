@@ -16,11 +16,11 @@
 
 package services
 
-import java.time.{LocalDate, Month}
-
 import base.SpecBase
-import models.{FullPeriodCap, PartialPeriodCap, Period, PeriodSpansMonthCap}
 import models.PaymentFrequency.Monthly
+import models.{FullPeriodCap, PartialPeriodCap, Period, PeriodSpansMonthCap}
+
+import java.time.{LocalDate, Month}
 
 class FurloughCapCalculatorSpec extends SpecBase {
 

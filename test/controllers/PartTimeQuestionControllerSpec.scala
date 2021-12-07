@@ -16,12 +16,10 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import base.SpecBaseControllerSpecs
 import forms.PartTimeQuestionFormProvider
-import models.{FurloughStatus, FurloughWithinClaim, PartTimeQuestion}
 import models.requests.DataRequest
+import models.{FurloughStatus, FurloughWithinClaim, PartTimeQuestion}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -31,6 +29,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.PartTimeQuestionView
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
