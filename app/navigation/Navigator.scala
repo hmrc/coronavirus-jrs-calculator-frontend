@@ -459,17 +459,13 @@ class Navigator @Inject()
 
   //scalastyle:on
 
-  private def annualPayAmountRoutes: UserAnswers => Call =
-    userAnswers =>
-      if (isPhaseTwoOnwards(userAnswers)) {
-        if (isMayExtensionOnwards(userAnswers)) {
-          routes.HasEmployeeBeenOnStatutoryLeaveController.onPageLoad()
-        } else {
-          routes.PartTimeQuestionController.onPageLoad()
-        }
-      } else {
-        phaseOneAnnualPayAmountRoute(userAnswers)
+  private def annualPayAmountRoutes: UserAnswers => Call = { userAnswers =>
+    (isPhaseTwoOnwards(userAnswers), isMayExtensionOnwards(userAnswers)) match {
+      case (true, true)  => routes.HasEmployeeBeenOnStatutoryLeaveController.onPageLoad()
+      case (true, false) => routes.PartTimeQuestionController.onPageLoad()
+      case _             => phaseOneAnnualPayAmountRoute(userAnswers)
     }
+  }
 
   private def phaseOneAnnualPayAmountRoute(userAnswers: UserAnswers): Call =
     if (hasPartialPayBefore(userAnswers)) {
