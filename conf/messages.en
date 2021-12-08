@@ -893,6 +893,7 @@ furloughInLastTaxYear.title = Has this employee had any previous periods of furl
 furloughInLastTaxYear.heading = Has this employee had any previous periods of furlough which start in the 2019/20 tax year?
 furloughInLastTaxYear.error.required = Select one of the options below
 
+calculationUnsupported.title = This calculation cannot be supported at the moment
 calculationUnsupported.heading = This calculation cannot be supported at the moment
 calculationUnsupported.p1 = You can do this calculation manually.
 calculationUnsupported.startAgain = Start a new calculation

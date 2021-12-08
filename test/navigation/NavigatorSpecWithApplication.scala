@@ -582,45 +582,70 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
             ) mustBe routes.OnPayrollBefore30thOct2020Controller.onPageLoad()
           }
         }
+
+        "Valid claim period start date & the employee start date is inbetween feb1st2020, mar19th2020" should {
+
+          "navigate to the EmployeeRTISubmission page" in {
+
+            val userAnswers =
+              emptyUserAnswers
+                .withEmployeeStartDate("2020,3,19")
+                .withClaimPeriodStart("2020,11,1")
+
+            navigator.nextPage(EmployeeStartDatePage, userAnswers) mustBe routes.EmployeeRTISubmissionController.onPageLoad()
+          }
+        }
+
       }
 
       "EmployeeSRTISubmissionPage" when {
 
-        "the ExtensionTwoNewStarterFlow switch is enabled" when {
+        "user answered No" must {
 
-          "answered No" must {
+          "return the OnPayrollBefore30thOct2020 page" in {
 
-            "return the OnPayrollBefore30thOct2020 page" in {
+            navigator.nextPage(
+              EmployeeRTISubmissionPage,
+              emptyUserAnswers
+                .withFurloughStartDate("2020,11,15")
+                .withRtiSubmission(EmployeeRTISubmission.No)
+            ) mustBe routes.OnPayrollBefore30thOct2020Controller.onPageLoad()
+          }
+        }
 
-              navigator.nextPage(
-                EmployeeRTISubmissionPage,
-                emptyUserAnswers
-                  .withFurloughStartDate("2020,11,15")
-                  .withRtiSubmission(EmployeeRTISubmission.No)
-              ) mustBe routes.OnPayrollBefore30thOct2020Controller.onPageLoad()
-            }
+        "user answered Yes" must {
+
+          "return the PayDatePage when furlough date is defined" in {
+
+            navigator.nextPage(
+              EmployeeRTISubmissionPage,
+              emptyUserAnswers
+                .withFurloughStartDate("2020,11,15")
+                .withRtiSubmission(EmployeeRTISubmission.Yes)
+            ) mustBe routes.PayDateController.onPageLoad(1)
+
           }
 
-          "answered Yes" must {
+          "return the PayDatePage when furlough date is not defined" in {
 
-            "return the PayDatePage when furlough date is defined" in {
+            navigator.nextPage(
+              EmployeeRTISubmissionPage,
+              emptyUserAnswers.withRtiSubmission(EmployeeRTISubmission.Yes)
+            ) mustBe routes.PayDateController.onPageLoad(1)
+          }
+        }
 
-              navigator.nextPage(
-                EmployeeRTISubmissionPage,
-                emptyUserAnswers
-                  .withFurloughStartDate("2020,11,15")
-                  .withRtiSubmission(EmployeeRTISubmission.Yes)
-              ) mustBe routes.PayDateController.onPageLoad(1)
+        "the user answers No to the EmployeeRTISubmissionPage & the claim period start date is before 1st Nov 2020" should {
 
-            }
+          "call the CalculationUnsupportedController.ineligibleCalculationUnsupported() route" in {
 
-            "return the PayDatePage when furlough date is not defined" in {
+            val userAnswers =
+              emptyUserAnswers
+                .withRtiSubmission(EmployeeRTISubmission.No)
+                .withClaimPeriodStart("2020,10,31")
 
-              navigator.nextPage(
-                EmployeeRTISubmissionPage,
-                emptyUserAnswers.withRtiSubmission(EmployeeRTISubmission.Yes)
-              ) mustBe routes.PayDateController.onPageLoad(1)
-            }
+            navigator.nextPage(EmployeeRTISubmissionPage, userAnswers) mustBe
+              routes.CalculationUnsupportedController.startDateWithinLookbackUnsupported()
           }
         }
       }

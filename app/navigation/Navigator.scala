@@ -292,12 +292,13 @@ class Navigator @Inject()
 
   private[this] def employeeStartDateRoutes: UserAnswers => Call = { userAnswers =>
     val payDateRoutes: Call = handlePayDateRoutes(userAnswers)
-    userAnswers.getV(ClaimPeriodStartPage) match {
-      case Valid(claimPeriodStart) if claimPeriodStart.isEqualOrAfter(nov1st2020) =>
+    (userAnswers.getV(ClaimPeriodStartPage), userAnswers.getV(EmployeeStartDatePage)) match {
+      case (Valid(claimPeriodStart), _) if claimPeriodStart.isEqualOrAfter(nov1st2020) =>
         nov1stClaimPeriodOnwardsRouting(userAnswers, payDateRoutes)
-      case Valid(_) => payDateRoutes
-
-      case Invalid(_) => routes.ClaimPeriodStartController.onPageLoad()
+      case (Valid(claimPeriodStart), Valid(empStartDate)) if empStartDate.betweenInclusive(feb1st2020, mar19th2020) =>
+        routes.EmployeeRTISubmissionController.onPageLoad()
+      case (Valid(_), _) => payDateRoutes
+      case _             => routes.ClaimPeriodStartController.onPageLoad()
     }
   }
 
@@ -324,10 +325,16 @@ class Navigator @Inject()
   }
 
   private[this] def employeeRTISubmissionRoutes: UserAnswers => Call = { userAnswers =>
-    userAnswers.getV(EmployeeRTISubmissionPage) match {
-      case Valid(Yes) => handlePayDateRoutes(userAnswers)
-      case Valid(No)  => routes.OnPayrollBefore30thOct2020Controller.onPageLoad()
-      case Invalid(_) => routes.EmployeeRTISubmissionController.onPageLoad()
+    (userAnswers.getV(EmployeeRTISubmissionPage), userAnswers.getV(ClaimPeriodStartPage)) match {
+      case (Valid(Yes), _) =>
+        handlePayDateRoutes(userAnswers)
+      case (Valid(No), Valid(claimStartDate)) if claimStartDate.isBefore(nov1st2020) =>
+        routes.CalculationUnsupportedController.startDateWithinLookbackUnsupported()
+      case (Valid(No), _) =>
+        routes.OnPayrollBefore30thOct2020Controller.onPageLoad()
+      case (Valid(No), _) =>
+        routeToEmployeeFirstFurloughed(userAnswers)
+      case _ => routes.EmployeeRTISubmissionController.onPageLoad()
     }
   }
 
