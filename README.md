@@ -1,7 +1,9 @@
 
-# coronavirus-jrs-calculator-frontend
+# Coronavirus Job Retention Scheme Calculator Frontend
 
-This service enables a user to calcluate the amount they can claim for the job retention scheme. 
+To read about the service, please visit this repository's [GitHub Wiki](https://github.com/hmrc/coronavirus-jrs-calculator-frontend/wiki)
 
 
+### License
 
+This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
