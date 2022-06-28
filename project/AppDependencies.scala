@@ -4,7 +4,7 @@ object AppDependencies {
   import play.core.PlayVersion
 
   val playSuffix = "-play-28"
-  val bootstrapVersion = "5.16.0"
+  val bootstrapVersion = "5.24.0"
   val hmrcMongoVersion = "0.56.0"
 
   val compile = Seq(
@@ -40,7 +40,7 @@ object AppDependencies {
 
   def apply(): Seq[ModuleID] = compile ++ test
 
-  val akkaVersion = "2.6.14"
+  val akkaVersion = "2.6.19"
   val akkaHttpVersion = "10.1.14"
 
   val overrides = Seq(
