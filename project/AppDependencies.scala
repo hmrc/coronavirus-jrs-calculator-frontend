@@ -5,7 +5,7 @@ object AppDependencies {
 
   val playSuffix = "-play-28"
   val bootstrapVersion = "5.24.0"
-  val hmrcMongoVersion = "0.56.0"
+  val hmrcMongoVersion = "0.68.0"
 
   val compile = Seq(
     "uk.gov.hmrc.mongo"             %% s"hmrc-mongo$playSuffix"             % hmrcMongoVersion,
