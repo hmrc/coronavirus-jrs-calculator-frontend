@@ -40,7 +40,7 @@ object AppDependencies {
 
   def apply(): Seq[ModuleID] = compile ++ test
 
-  val akkaVersion = "2.6.19"
+  val akkaVersion = "2.6.20"
   val akkaHttpVersion = "10.1.14"
 
   val overrides = Seq(
