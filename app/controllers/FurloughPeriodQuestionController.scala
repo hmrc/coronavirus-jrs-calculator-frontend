@@ -16,6 +16,7 @@
 
 package controllers
 import cats.data.Validated.{Invalid, Valid}
+import controllers.BaseController
 import controllers.actions._
 import forms.FurloughPeriodQuestionFormProvider
 import handlers.{ErrorHandler, FastJourneyUserAnswersHandler}
@@ -24,7 +25,7 @@ import models.{FurloughEnded, FurloughOngoing, FurloughPeriodQuestion, FurloughS
 import navigation.Navigator
 import pages.{ClaimPeriodStartPage, FurloughPeriodQuestionPage, FurloughStartDatePage, FurloughStatusPage}
 import play.api.data.Form
-import play.api.i18n.MessagesApi
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import repositories.SessionRepository
 import services.{FurloughPeriodExtractor, UserAnswerPersistence}
@@ -45,7 +46,7 @@ class FurloughPeriodQuestionController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: FurloughPeriodQuestionView
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
-    extends BaseController with FurloughPeriodExtractor with FastJourneyUserAnswersHandler {
+    extends BaseController with FurloughPeriodExtractor with FastJourneyUserAnswersHandler with I18nSupport {
 
   val form: Form[FurloughPeriodQuestion] = formProvider()
 

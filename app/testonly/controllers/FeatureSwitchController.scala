@@ -27,6 +27,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 
 import javax.inject.Inject
+import scala.collection.View
 import scala.collection.immutable.ListMap
 
 class FeatureSwitchController @Inject()(controllerComponents: MessagesControllerComponents,
@@ -57,10 +58,10 @@ class FeatureSwitchController @Inject()(controllerComponents: MessagesController
     val cfs: Map[CustomValueFeatureSwitch, String] = frontendFeatureSwitches.collect { case (a: CustomValueFeatureSwitch, b) => a -> b }
     val configurableConstants: Map[String, String] =
       submittedData
-        .filterKeys(configurableConstantsKeys.contains)
+        .filter { case (key, _) => configurableConstantsKeys.contains(key) }
         .map(kv => kv._1 -> kv._2.headOption)
         .collect {
-          case (k, Some(v)) => k -> v
+          case (k, Some(v)) => (k -> v)
         }
 
     logger.debug(s"[submit] booleanFeatureSwitches > $bfs")

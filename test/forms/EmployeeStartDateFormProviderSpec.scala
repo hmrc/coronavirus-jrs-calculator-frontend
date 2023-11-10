@@ -59,7 +59,7 @@ class EmployeeStartDateFormProviderSpec extends DateBehaviours with GuiceOneAppP
       behave like dateFieldWithMin(form,
                                    "value",
                                    formProvider.feb2nd2019,
-                                   FormError("value", "employeeStartDate.error.min", Array(dateToString(formProvider.feb2nd2019))))
+                                   FormError("value", "employeeStartDate.error.min", dateToString(formProvider.feb2nd2019).toSeq))
 
       behave like mandatoryDateField(form, "value")
 
@@ -86,7 +86,7 @@ class EmployeeStartDateFormProviderSpec extends DateBehaviours with GuiceOneAppP
       behave like dateFieldWithMin(form,
                                    "value",
                                    formProvider.feb2nd2019,
-                                   FormError("value", "employeeStartDate.error.min", Array(dateToString(formProvider.feb2nd2019))))
+                                   FormError("value", "employeeStartDate.error.min", dateToString(formProvider.feb2nd2019).toSeq))
 
       behave like mandatoryDateField(form, "value")
 
@@ -113,7 +113,7 @@ class EmployeeStartDateFormProviderSpec extends DateBehaviours with GuiceOneAppP
       behave like dateFieldWithMin(form,
                                    "value",
                                    formProvider.feb2nd2019,
-                                   FormError("value", "employeeStartDate.error.min", Array(dateToString(formProvider.feb2nd2019))))
+                                   FormError("value", "employeeStartDate.error.min", dateToString(formProvider.feb2nd2019).toSeq))
 
       behave like mandatoryDateField(form, "value")
 

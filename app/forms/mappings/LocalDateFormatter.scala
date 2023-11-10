@@ -16,12 +16,11 @@
 
 package forms.mappings
 
-import java.time.LocalDate
-
+import forms.mappings.LocalDateFormatter._
 import play.api.data.FormError
 import play.api.data.format.Formatter
-import LocalDateFormatter._
 
+import java.time.LocalDate
 import scala.util.{Failure, Success, Try}
 
 object LocalDateFormatter {
@@ -49,8 +48,7 @@ private[mappings] class LocalDateFormatter(invalidKey: String) extends Formatter
         requiredKey = blankErrorKey,
         wholeNumberKey = invalidErrorKey,
         nonNumericKey = invalidErrorKey
-      ).bind(s"$key.$subKey", data.mapValues(_.trim))
-        .right
+      ).bind(s"$key.$subKey", data.map { case (k, v) => (k, v.trim) })
         .flatMap(int => if (extraValidation(int)) Right(int) else Left(Seq(FormError(s"$key.$subKey", invalidErrorKey))))
 
     val dayField = bindIntSubfield("day", dayBlankErrorKey, dayInvalidErrorKey, day => day >= 1 && day <= 31)
