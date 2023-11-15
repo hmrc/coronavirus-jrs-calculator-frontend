@@ -8,7 +8,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val appName: String = "coronavirus-jrs-calculator-frontend"
 
-val silencerVersion = "1.7.6"
+val silencerVersion = "1.7.14"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
@@ -39,7 +39,7 @@ lazy val root = (project in file("."))
     )
   )
   .settings(
-    scalaVersion := "2.12.15",
+    scalaVersion := "2.13.11",
     name := appName,
     RoutesKeys.routesImport += "models._",
     TwirlKeys.templateImports ++= Seq(
@@ -53,7 +53,7 @@ lazy val root = (project in file("."))
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*filters.*;.*handlers.*;.*components.*;.*repositories.*;" +
       ".*BuildInfo.*;.*javascript.*;.*FrontendAuditConnector.*;.*Routes.*;.*GuiceInjector;" +
       ".*ControllerConfiguration;.*LanguageSwitchController",
-    ScoverageKeys.coverageMinimum := 70,
+    ScoverageKeys.coverageMinimumStmtTotal := 70,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
     scalacOptions ++= Seq("-feature"),
@@ -93,3 +93,5 @@ lazy val testSettings: Seq[Def.Setting[_]] = Seq(
 )
 
 dependencyOverrides ++= AppDependencies.overrides
+
+ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always

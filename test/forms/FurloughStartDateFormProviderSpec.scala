@@ -40,9 +40,9 @@ class FurloughStartDateFormProviderSpec extends SpecBaseControllerSpecs {
 
     behave like dateField(form, "value", validData)
 
-    behave like dateFieldWithMin(form, "value", startDate, FormError("value", "furloughStartDate.error.minimum", Array("1 March 2020")))
+    behave like dateFieldWithMin(form, "value", startDate, FormError("value", "furloughStartDate.error.minimum", Seq("1 March 2020")))
 
-    behave like dateFieldWithMax(form, "value", endDate, FormError("value", "furloughStartDate.error.maximum", Array("1 May 2020")))
+    behave like dateFieldWithMax(form, "value", endDate, FormError("value", "furloughStartDate.error.maximum", Seq("1 May 2020")))
 
     behave like mandatoryDateField(form, "value")
   }

@@ -25,7 +25,7 @@ import play.api.libs.json._
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
-import java.time.LocalDateTime
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -50,7 +50,7 @@ class DefaultSessionRepository @Inject()(mongo: MongoComponent, appConfig: Front
 
   override def set(userAnswers: UserAnswers): Future[Boolean] = {
     val selector = equal("_id", userAnswers.id)
-    val newDoc   = userAnswers copy (lastUpdated = LocalDateTime.now)
+    val newDoc   = userAnswers copy (lastUpdated = Instant.now)
     collection.findOneAndReplace(selector, newDoc, FindOneAndReplaceOptions().upsert(true)).toFuture().map(_ => true)
   }
 }
