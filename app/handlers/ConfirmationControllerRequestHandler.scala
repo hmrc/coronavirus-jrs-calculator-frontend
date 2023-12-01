@@ -36,11 +36,12 @@ trait ConfirmationControllerRequestHandler
       case i @ Invalid(_) => i
     }
 
-  private def breakDown(meta: Metadata, userAnswers: UserAnswers): AnswerV[ViewBreakdown] = meta match {
-    case _: ConfirmationMetadataWithoutNicAndPension => breakdownWithoutNicAndPension(userAnswers)
-    case ConfirmationMetadata(claim, _, _, _, _) =>
-      if (claim.start.isBefore(LocalDate.of(2020, 7, 1))) breakdown(userAnswers) else phaseTwoBreakdown(userAnswers)
-  }
+  private def breakDown(meta: Metadata, userAnswers: UserAnswers): AnswerV[ViewBreakdown] =
+    meta match {
+      case _: ConfirmationMetadataWithoutNicAndPension => breakdownWithoutNicAndPension(userAnswers)
+      case ConfirmationMetadata(claim, _, _, _, _) =>
+        if (claim.start.isBefore(LocalDate.of(2020, 7, 1))) breakdown(userAnswers) else phaseTwoBreakdown(userAnswers)
+    }
 
   private def validateBreakdown(userAnswers: UserAnswers, m: Metadata): AnswerV[ConfirmationDataResult] = {
     logger.debug(s"[handlers][validateBreakdown] Metadata: $m")
@@ -156,16 +157,20 @@ trait ConfirmationControllerRequestHandler
         ConfirmationMetadataWithoutNicAndPension(Period(claimStart, claimEnd), furloughPeriod, frequency)
     }
 
-  private def calculateNi(furloughResult: FurloughCalculationResult,
-                          nic: NicCategory,
-                          frequency: PaymentFrequency,
-                          additionals: Seq[AdditionalPayment],
-                          topUps: Seq[TopUpPayment]): NicCalculationResult =
+  private def calculateNi(
+    furloughResult: FurloughCalculationResult,
+    nic: NicCategory,
+    frequency: PaymentFrequency,
+    additionals: Seq[AdditionalPayment],
+    topUps: Seq[TopUpPayment]
+  ): NicCalculationResult =
     calculateNicGrant(nic, frequency, furloughResult.periodBreakdowns, additionals, topUps)
 
-  private def calculatePension(furloughResult: FurloughCalculationResult,
-                               pensionStatus: PensionStatus,
-                               frequency: PaymentFrequency): PensionCalculationResult =
+  private def calculatePension(
+    furloughResult: FurloughCalculationResult,
+    pensionStatus: PensionStatus,
+    frequency: PaymentFrequency
+  ): PensionCalculationResult =
     calculatePensionGrant(pensionStatus, frequency, furloughResult.periodBreakdowns)
 
 }

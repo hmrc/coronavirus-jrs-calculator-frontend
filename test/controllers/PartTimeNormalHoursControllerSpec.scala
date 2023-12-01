@@ -69,15 +69,17 @@ class PartTimeNormalHoursControllerSpec extends SpecBaseControllerSpecs with Moc
 
   val view = app.injector.instanceOf[PartTimeNormalHoursView]
 
-  val controller = new PartTimeNormalHoursController(messagesApi,
-                                                     mockSessionRepository,
-                                                     navigator,
-                                                     identifier,
-                                                     dataRetrieval,
-                                                     dataRequired,
-                                                     formProvider,
-                                                     component,
-                                                     view)
+  val controller = new PartTimeNormalHoursController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "PartTimeNormalHours Controller" must {
 

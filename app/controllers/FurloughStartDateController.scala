@@ -33,7 +33,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class FurloughStartDateController @Inject()(
+class FurloughStartDateController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   val navigator: Navigator,
@@ -49,30 +49,32 @@ class FurloughStartDateController @Inject()(
   def form(claimEndDate: LocalDate)(implicit messages: Messages): Form[LocalDate] = formProvider(claimEndDate)
   protected val userAnswerPersistence                                             = new UserAnswerPersistence(sessionRepository.set)
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswersV(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStartDate, claimEndDate) =>
-      val preparedForm = request.userAnswers.getV(FurloughStartDatePage) match {
-        case Invalid(e)   => form(claimEndDate)
-        case Valid(value) => form(claimEndDate).fill(value)
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswersV(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStartDate, claimEndDate) =>
+        val preparedForm = request.userAnswers.getV(FurloughStartDatePage) match {
+          case Invalid(e)   => form(claimEndDate)
+          case Valid(value) => form(claimEndDate).fill(value)
+        }
+
+        Future.successful(Ok(view(preparedForm, claimStartDate)))
       }
-
-      Future.successful(Ok(view(preparedForm, claimStartDate)))
     }
-  }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswersV(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStartDate, claimEndDate) =>
-      form(claimEndDate)
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, claimStartDate))),
-          value =>
-            userAnswerPersistence
-              .persistAnswer(request.userAnswers, FurloughStartDatePage, value, None)
-              .map { updatedAnswers =>
-                Redirect(navigator.nextPage(FurloughStartDatePage, updatedAnswers, None))
-            }
-        )
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswersV(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStartDate, claimEndDate) =>
+        form(claimEndDate)
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, claimStartDate))),
+            value =>
+              userAnswerPersistence
+                .persistAnswer(request.userAnswers, FurloughStartDatePage, value, None)
+                .map { updatedAnswers =>
+                  Redirect(navigator.nextPage(FurloughStartDatePage, updatedAnswers, None))
+                }
+          )
+      }
     }
-  }
 }

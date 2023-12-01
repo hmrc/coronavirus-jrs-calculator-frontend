@@ -33,7 +33,7 @@ import views.html.PaymentFrequencyView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PaymentFrequencyController @Inject()(
+class PaymentFrequencyController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -48,42 +48,45 @@ class PaymentFrequencyController @Inject()(
 
   val form: Form[PaymentFrequency] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.getV(PaymentFrequencyPage) match {
-      case Invalid(_)   => form
-      case Valid(value) => form.fill(value)
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      val preparedForm = request.userAnswers.getV(PaymentFrequencyPage) match {
+        case Invalid(_)   => form
+        case Valid(value) => form.fill(value)
+      }
+
+      val radioOptions: Seq[RadioItem] = PaymentFrequency.options(form = form)
+
+      Ok(
+        view(
+          form = preparedForm,
+          postAction = controllers.routes.PaymentFrequencyController.onSubmit(),
+          radioItems = radioOptions
+        )
+      )
     }
 
-    val radioOptions: Seq[RadioItem] = PaymentFrequency.options(form = form)
-
-    Ok(
-      view(
-        form = preparedForm,
-        postAction = controllers.routes.PaymentFrequencyController.onSubmit(),
-        radioItems = radioOptions
-      )
-    )
-  }
-
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val radioOptions: Seq[RadioItem] = PaymentFrequency.options(form = form)
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors =>
-          Future.successful(
-            BadRequest(
-              view(
-                form = formWithErrors,
-                postAction = controllers.routes.PaymentFrequencyController.onSubmit(),
-                radioItems = radioOptions
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      val radioOptions: Seq[RadioItem] = PaymentFrequency.options(form = form)
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(
+                view(
+                  form = formWithErrors,
+                  postAction = controllers.routes.PaymentFrequencyController.onSubmit(),
+                  radioItems = radioOptions
+                )
               )
-            )),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PaymentFrequencyPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PaymentFrequencyPage, updatedAnswers))
-      )
-  }
+            ),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(PaymentFrequencyPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(PaymentFrequencyPage, updatedAnswers))
+        )
+    }
 }

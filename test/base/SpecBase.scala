@@ -78,13 +78,11 @@ trait SpecBase
 
   val internalId = "id"
 
-  lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = {
+  lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest("", "").withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
-  }
 
-  lazy val fakeDataRequest: DataRequest[AnyContentAsEmpty.type] = {
+  lazy val fakeDataRequest: DataRequest[AnyContentAsEmpty.type] =
     DataRequest(fakeRequest, internalId, emptyUserAnswers)
-  }
 
   def fakeDataRequest(headers: (String, String)*): DataRequest[_] =
     DataRequest(fakeRequest.withHeaders(headers: _*), internalId, emptyUserAnswers)

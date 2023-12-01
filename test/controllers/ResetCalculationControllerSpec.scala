@@ -37,12 +37,14 @@ class ResetCalculationControllerSpec extends SpecBaseControllerSpecs with CoreTe
   "resetCalculation Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val controller = new ResetCalculationController(messagesApi,
-                                                      identifier,
-                                                      new FakeDataRetrievalAction(Some(emptyUserAnswers)),
-                                                      dataRequired,
-                                                      component,
-                                                      view)
+      val controller = new ResetCalculationController(
+        messagesApi,
+        identifier,
+        new FakeDataRetrievalAction(Some(emptyUserAnswers)),
+        dataRequired,
+        component,
+        view
+      )
       val request = FakeRequest(GET, resetCalculationRoute).withCSRFToken
         .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 

@@ -34,7 +34,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class FurloughPeriodQuestionController @Inject()(
+class FurloughPeriodQuestionController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   val navigator: Navigator,
@@ -51,47 +51,50 @@ class FurloughPeriodQuestionController @Inject()(
 
   protected val userAnswerPersistence = new UserAnswerPersistence(sessionRepository.set)
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswersOrRestartJourneyV(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
-      getRequiredAnswerV(ClaimPeriodStartPage) { claimStart =>
-        val preparedForm = request.userAnswers.getV(FurloughPeriodQuestionPage) match {
-          case Invalid(_) =>
-            form
-          case Valid(value) => form.fill(value)
-        }
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswersOrRestartJourneyV(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
+        getRequiredAnswerV(ClaimPeriodStartPage) { claimStart =>
+          val preparedForm = request.userAnswers.getV(FurloughPeriodQuestionPage) match {
+            case Invalid(_) =>
+              form
+            case Valid(value) => form.fill(value)
+          }
 
-        extractFurloughPeriodV(request.userAnswers) match {
-          case Valid(FurloughOngoing(_)) =>
-            Future.successful(previousPageOrRedirect(Ok(view(preparedForm, claimStart, furloughStart, furloughStatus, None))))
-          case Valid(FurloughEnded(_, end)) =>
-            Future.successful(previousPageOrRedirect(Ok(view(preparedForm, claimStart, furloughStart, furloughStatus, Some(end)))))
-          case Invalid(errors) =>
-            logger.error("Failed to extract furlough period.")
-            UserAnswers.logErrors(errors)(logger.logger)
-            Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+          extractFurloughPeriodV(request.userAnswers) match {
+            case Valid(FurloughOngoing(_)) =>
+              Future.successful(previousPageOrRedirect(Ok(view(preparedForm, claimStart, furloughStart, furloughStatus, None))))
+            case Valid(FurloughEnded(_, end)) =>
+              Future.successful(previousPageOrRedirect(Ok(view(preparedForm, claimStart, furloughStart, furloughStatus, Some(end)))))
+            case Invalid(errors) =>
+              logger.error("Failed to extract furlough period.")
+              UserAnswers.logErrors(errors)(logger.logger)
+              Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+          }
         }
       }
     }
-  }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswersV(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
-      getRequiredAnswerV(ClaimPeriodStartPage) { claimStart =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => processSubmissionWithErrors(claimStart, furloughStart, furloughStatus, formWithErrors),
-            value => processSubmittedAnswer(request, value)
-          )
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswersV(FurloughStartDatePage, FurloughStatusPage) { (furloughStart, furloughStatus) =>
+        getRequiredAnswerV(ClaimPeriodStartPage) { claimStart =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors => processSubmissionWithErrors(claimStart, furloughStart, furloughStatus, formWithErrors),
+              value => processSubmittedAnswer(request, value)
+            )
+        }
       }
     }
-  }
 
   private def processSubmissionWithErrors(
     claimStart: LocalDate,
     furloughStart: LocalDate,
     furloughStatus: FurloughStatus,
-    formWithErrors: Form[FurloughPeriodQuestion])(implicit request: DataRequest[AnyContent]): Future[Result] =
+    formWithErrors: Form[FurloughPeriodQuestion]
+  )(implicit request: DataRequest[AnyContent]): Future[Result] =
     extractFurloughPeriodV(request.userAnswers) match {
       case Valid(FurloughOngoing(_)) =>
         Future.successful(BadRequest(view(formWithErrors, claimStart, furloughStart, furloughStatus, None)))

@@ -32,7 +32,7 @@ import utils.{CreateRequestHelper, CustomMatchers, ITCoreTestData, IntegrationSp
 
 class ConfirmationControllerISpec
     extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData
-   with FeatureSwitching {
+    with FeatureSwitching {
 
   val november: Seq[(String, Seq[(UserAnswers, BigDecimal)])] = {
     novemberFourWeeklyScenarios ++
@@ -147,7 +147,7 @@ class ConfirmationControllerISpec
                   result must have(
                     httpStatus(OK),
                     titleOf("Claim amount for this employee - Job Retention Scheme calculator - GOV.UK"),
-                    contentExists(s"${outcome.setScale(2).toString()}", ".govuk-panel__title"),
+                    contentExists(s"${outcome.setScale(2).toString()}", ".govuk-panel__title")
                   )
                 }
               }

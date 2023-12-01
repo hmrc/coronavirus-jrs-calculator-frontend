@@ -24,13 +24,14 @@ import play.api.data.Forms._
 
 class RegularPayAmountFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Salary] = Form(
-    mapping(
-      "value" -> bigDecimal(
-        requiredKey = "regularPayAmount.salary.error.required",
-        nonNumericKey = "regularPayAmount.salary.error.invalid"
-      ).verifying(greaterThan(BigDecimal(0.0), "amount.error.must.be.positive"))
-        .verifying(maxTwoDecimals())
-    )(Salary.apply)(Salary.unapply)
-  )
+  def apply(): Form[Salary] =
+    Form(
+      mapping(
+        "value" -> bigDecimal(
+          requiredKey = "regularPayAmount.salary.error.required",
+          nonNumericKey = "regularPayAmount.salary.error.invalid"
+        ).verifying(greaterThan(BigDecimal(0.0), "amount.error.must.be.positive"))
+          .verifying(maxTwoDecimals())
+      )(Salary.apply)(Salary.unapply)
+    )
 }

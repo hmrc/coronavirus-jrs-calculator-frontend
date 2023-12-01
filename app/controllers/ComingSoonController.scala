@@ -24,7 +24,7 @@ import views.html.ComingSoonView
 
 import javax.inject.Inject
 
-class ComingSoonController @Inject()(
+class ComingSoonController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
@@ -33,8 +33,8 @@ class ComingSoonController @Inject()(
   view: ComingSoonView
 ) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(showCalculateTopupsLink: Boolean = false): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(showCalculateTopupsLink: Boolean = false): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
       Ok(view(showCalculateTopupsLink))
-  }
+    }
 }

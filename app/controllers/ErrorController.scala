@@ -23,16 +23,18 @@ import views.html.ErrorView
 
 import javax.inject.Inject
 
-class ErrorController @Inject()(
+class ErrorController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: ErrorView
 ) extends FrontendBaseController with I18nSupport {
 
-  def internalServerError: Action[AnyContent] = Action { implicit request =>
-    InternalServerError(view())
-  }
+  def internalServerError: Action[AnyContent] =
+    Action { implicit request =>
+      InternalServerError(view())
+    }
 
-  def somethingWentWrong: Action[AnyContent] = Action { implicit request =>
-    InternalServerError(view(startAgain = true))
-  }
+  def somethingWentWrong: Action[AnyContent] =
+    Action { implicit request =>
+      InternalServerError(view(startAgain = true))
+    }
 }

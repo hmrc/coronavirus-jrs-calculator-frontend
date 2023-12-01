@@ -51,15 +51,19 @@ class EmployeeStartDateFormProviderSpec extends DateBehaviours with GuiceOneAppP
 
       behave like dateField(form, "value", validData)
 
-      behave like dateFieldWithMax(form,
-                                   "value",
-                                   furloughStart.minusDays(1),
-                                   FormError("value", "employeeStartDate.error.max", Seq("19 March 2020")))
+      behave like dateFieldWithMax(
+        form,
+        "value",
+        furloughStart.minusDays(1),
+        FormError("value", "employeeStartDate.error.max", Seq("19 March 2020"))
+      )
 
-      behave like dateFieldWithMin(form,
-                                   "value",
-                                   formProvider.feb2nd2019,
-                                   FormError("value", "employeeStartDate.error.min", Seq(dateToString(formProvider.feb2nd2019))))
+      behave like dateFieldWithMin(
+        form,
+        "value",
+        formProvider.feb2nd2019,
+        FormError("value", "employeeStartDate.error.min", Seq(dateToString(formProvider.feb2nd2019)))
+      )
 
       behave like mandatoryDateField(form, "value")
 
@@ -78,15 +82,19 @@ class EmployeeStartDateFormProviderSpec extends DateBehaviours with GuiceOneAppP
 
       behave like dateField(form, "value", validData)
 
-      behave like dateFieldWithMax(form,
-                                   "value",
-                                   furloughStart.minusDays(1),
-                                   FormError("value", "employeeStartDate.error.max", Seq("30 October 2020")))
+      behave like dateFieldWithMax(
+        form,
+        "value",
+        furloughStart.minusDays(1),
+        FormError("value", "employeeStartDate.error.max", Seq("30 October 2020"))
+      )
 
-      behave like dateFieldWithMin(form,
-                                   "value",
-                                   formProvider.feb2nd2019,
-                                   FormError("value", "employeeStartDate.error.min", Seq(dateToString(formProvider.feb2nd2019))))
+      behave like dateFieldWithMin(
+        form,
+        "value",
+        formProvider.feb2nd2019,
+        FormError("value", "employeeStartDate.error.min", Seq(dateToString(formProvider.feb2nd2019)))
+      )
 
       behave like mandatoryDateField(form, "value")
 
@@ -105,15 +113,19 @@ class EmployeeStartDateFormProviderSpec extends DateBehaviours with GuiceOneAppP
 
       behave like dateField(form, "value", validData)
 
-      behave like dateFieldWithMax(form,
-                                   "value",
-                                   furloughStart.minusDays(1),
-                                   FormError("value", "employeeStartDate.error.max", Seq("2 March 2021")))
+      behave like dateFieldWithMax(
+        form,
+        "value",
+        furloughStart.minusDays(1),
+        FormError("value", "employeeStartDate.error.max", Seq("2 March 2021"))
+      )
 
-      behave like dateFieldWithMin(form,
-                                   "value",
-                                   formProvider.feb2nd2019,
-                                   FormError("value", "employeeStartDate.error.min", Seq(dateToString(formProvider.feb2nd2019))))
+      behave like dateFieldWithMin(
+        form,
+        "value",
+        formProvider.feb2nd2019,
+        FormError("value", "employeeStartDate.error.min", Seq(dateToString(formProvider.feb2nd2019)))
+      )
 
       behave like mandatoryDateField(form, "value")
 

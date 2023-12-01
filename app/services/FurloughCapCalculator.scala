@@ -30,16 +30,16 @@ trait FurloughCapCalculator extends PeriodHelper with LoggerUtil {
     val furloughCap = capForFrequency(paymentFrequency)
 
     paymentFrequency match {
-      case Monthly if (periodSpansMonth(payPeriod)) =>
+      case Monthly if periodSpansMonth(payPeriod) =>
         calculateFurloughCapNonSimplified(payPeriod)
       case _ => FullPeriodCap(furloughCap)
     }
   }
 
   def partialFurloughCap(period: Period): FurloughCap =
-    if (periodSpansMonth(period)) {
+    if (periodSpansMonth(period))
       calculateFurloughCapNonSimplified(period)
-    } else {
+    else {
       logger.debug("[FurloughCapCalculator][calculateFurloughCapNonSimplified] Starting Simplified calc")
       val max        = dailyMax(period.start.getMonth)
       val periodDays = period.countDays

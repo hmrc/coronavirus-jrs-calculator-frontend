@@ -66,15 +66,17 @@ class PayDateControllerSpec extends SpecBaseControllerSpecs with MockitoSugar {
 
   val view = app.injector.instanceOf[PayDateView]
 
-  val controller = new PayDateController(messagesApi,
-                                         mockSessionRepository,
-                                         navigator,
-                                         identifier,
-                                         dataRetrieval,
-                                         dataRequired,
-                                         formProvider,
-                                         component,
-                                         view)
+  val controller = new PayDateController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "PayDate Controller" must {
 

@@ -50,7 +50,7 @@ class FurloughInLastTaxYearControllerSpec extends SpecBaseControllerSpecs with M
     FakeRequest(POST, furloughInLastTaxYearRoute).withCSRFToken
       .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
       .withFormUrlEncodedBody(
-        "value" -> "true",
+        "value" -> "true"
       )
 
   def controller(stubbedAnswers: Option[UserAnswers] = Some(emptyUserAnswers)) =

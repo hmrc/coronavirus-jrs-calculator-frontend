@@ -39,8 +39,10 @@ class PreviousFurloughPeriodsControllerISpec
 
       setAnswers(userAnswers)
 
-      val res = postRequestHeader("/furloughed-more-than-once", Json.obj("value" -> "false"))("sessionId" -> userAnswers.id,
-                                                                                              "X-Session-ID" -> userAnswers.id)
+      val res = postRequestHeader("/furloughed-more-than-once", Json.obj("value" -> "false"))(
+        "sessionId"    -> userAnswers.id,
+        "X-Session-ID" -> userAnswers.id
+      )
 
       whenReady(res) { result =>
         result must have(
@@ -55,8 +57,10 @@ class PreviousFurloughPeriodsControllerISpec
 
       setAnswers(userAnswers)
 
-      val res = postRequestHeader("/furloughed-more-than-once", Json.obj("value" -> "true"))("sessionId" -> userAnswers.id,
-                                                                                             "X-Session-ID" -> userAnswers.id)
+      val res = postRequestHeader("/furloughed-more-than-once", Json.obj("value" -> "true"))(
+        "sessionId"    -> userAnswers.id,
+        "X-Session-ID" -> userAnswers.id
+      )
 
       whenReady(res) { result =>
         result must have(
@@ -71,8 +75,10 @@ class PreviousFurloughPeriodsControllerISpec
 
       setAnswers(userAnswers)
 
-      val res = postRequestHeader("/furloughed-more-than-once", Json.toJson("value" -> ""))("sessionId" -> userAnswers.id,
-                                                                                            "X-Session-ID" -> userAnswers.id)
+      val res = postRequestHeader("/furloughed-more-than-once", Json.toJson("value" -> ""))(
+        "sessionId"    -> userAnswers.id,
+        "X-Session-ID" -> userAnswers.id
+      )
 
       whenReady(res) { result =>
         result must have(
@@ -87,8 +93,10 @@ class PreviousFurloughPeriodsControllerISpec
 
       setAnswers(userAnswers)
 
-      val res = postRequestHeader("/furloughed-more-than-once", Json.toJson("value" -> ""))("sessionId" -> userAnswers.id,
-                                                                                            "X-Session-ID" -> userAnswers.id)
+      val res = postRequestHeader("/furloughed-more-than-once", Json.toJson("value" -> ""))(
+        "sessionId"    -> userAnswers.id,
+        "X-Session-ID" -> userAnswers.id
+      )
 
       whenReady(res) { result =>
         result must have(

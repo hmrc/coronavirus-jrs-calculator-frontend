@@ -45,6 +45,7 @@ class ConfirmationNextStepsSpec extends ViewBehaviours {
         Selectors.numbered(3) -> nextStepsListMessages(3, claimPeriod),
         Selectors.numbered(4) -> nextStepsListMessages(4, claimPeriod),
         Selectors.numbered(5) -> nextStepsListMessages(5, claimPeriod)
-      ))
+      )
+    )
   }
 }

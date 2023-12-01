@@ -33,19 +33,20 @@ class PartTimeHoursFormProvider @Inject() extends Mappings {
           nonNumericKey = "partTimeHours.error.nonNumeric"
         ).verifying(greaterThan(0.0, "partTimeHours.error.min"))
           .verifying(moreThanUsualHours(usuals, partTimePeriod))
-      )(Hours.apply)(Hours.unapply))
+      )(Hours.apply)(Hours.unapply)
+    )
 
-  def moreThanUsualHours(usuals: Seq[UsualHours], partTimePeriod: Periods): Constraint[Double] = Constraint { input =>
-    usuals
-      .find(_.date.isEqual(partTimePeriod.period.end))
-      .map { usualHours =>
-        if (input <= usualHours.hours.value) {
-          Valid
-        } else {
-          Invalid("partTimeHours.error.max")
+  def moreThanUsualHours(usuals: Seq[UsualHours], partTimePeriod: Periods): Constraint[Double] =
+    Constraint { input =>
+      usuals
+        .find(_.date.isEqual(partTimePeriod.period.end))
+        .map { usualHours =>
+          if (input <= usualHours.hours.value)
+            Valid
+          else
+            Invalid("partTimeHours.error.max")
         }
-      }
-      .getOrElse(Valid)
-  }
+        .getOrElse(Valid)
+    }
 
 }

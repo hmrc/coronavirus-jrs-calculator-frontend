@@ -43,11 +43,13 @@ trait BaseController extends FrontendBaseController with I18nSupport with BackJo
     request.userAnswers.getV(page, idx)
 
   def getRequiredAnswerV[A](page: QuestionPage[A], idx: Int)(
-    f: A => Future[Result])(implicit request: DataRequest[_], reads: Reads[A], errorHandler: ErrorHandler): Future[Result] =
+    f: A => Future[Result]
+  )(implicit request: DataRequest[_], reads: Reads[A], errorHandler: ErrorHandler): Future[Result] =
     getRequiredAnswerV(page, Some(idx))(f)
 
   def getRequiredAnswerV[A](page: QuestionPage[A], idx: Option[Int] = None)(
-    f: A => Future[Result])(implicit request: DataRequest[_], reads: Reads[A], errorHandler: ErrorHandler): Future[Result] =
+    f: A => Future[Result]
+  )(implicit request: DataRequest[_], reads: Reads[A], errorHandler: ErrorHandler): Future[Result] =
     getAnswerV(page, idx) match {
       case Valid(ans) => f(ans)
       case Invalid(errors) =>
@@ -57,7 +59,8 @@ trait BaseController extends FrontendBaseController with I18nSupport with BackJo
     }
 
   def getRequiredAnswerOrRedirectV[A](page: QuestionPage[A], idx: Option[Int] = None)(
-    f: A => Future[Result])(implicit request: DataRequest[_], reads: Reads[A]): Future[Result] =
+    f: A => Future[Result]
+  )(implicit request: DataRequest[_], reads: Reads[A]): Future[Result] =
     getAnswerV(page, idx) match {
       case Valid(ans) => f(ans)
       case Invalid(errors) =>
@@ -121,8 +124,9 @@ trait BaseController extends FrontendBaseController with I18nSupport with BackJo
   }
   //scalastyle:on
 
-  def previousPageOrRedirect(view: Result)(implicit request: DataRequest[_]): Result = validateBackJourney(request.userAnswers) match {
-    case BackToPreviousPage => view
-    case BackFirstPage      => Redirect(routes.ResetCalculationController.onPageLoad())
-  }
+  def previousPageOrRedirect(view: Result)(implicit request: DataRequest[_]): Result =
+    validateBackJourney(request.userAnswers) match {
+      case BackToPreviousPage => view
+      case BackFirstPage      => Redirect(routes.ResetCalculationController.onPageLoad())
+    }
 }

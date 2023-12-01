@@ -60,7 +60,7 @@ trait ITUserAnswersBuilder extends ITCoreTestDataBuilder {
     def withFurloughEndDate(endDate: String): UserAnswers =
       userAnswers.setValue(FurloughEndDatePage, endDate.toLocalDate)
 
-    def withFirstFurloughDate(date: String) : UserAnswers =
+    def withFirstFurloughDate(date: String): UserAnswers =
       userAnswers.setValue(FirstFurloughDatePage, date.toLocalDate)
 
     def withFurloughInLastTaxYear(answer: Boolean): UserAnswers =

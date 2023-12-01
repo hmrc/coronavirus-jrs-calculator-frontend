@@ -44,15 +44,17 @@ class TopUpAmountControllerSpec extends SpecBaseControllerSpecs with MockitoSuga
 
   val view = app.injector.instanceOf[TopUpAmountView]
 
-  val controller = new TopUpAmountController(messagesApi,
-                                             mockSessionRepository,
-                                             navigator,
-                                             identifier,
-                                             dataRetrieval,
-                                             dataRequired,
-                                             formProvider,
-                                             component,
-                                             view)
+  val controller = new TopUpAmountController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "TopUpAmount Controller" must {
 

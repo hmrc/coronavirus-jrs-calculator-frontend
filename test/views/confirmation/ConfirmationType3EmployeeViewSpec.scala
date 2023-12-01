@@ -72,16 +72,17 @@ class ConfirmationType3EmployeeViewSpec
 
     implicit val request: DataRequest[_] = fakeDataRequest(userAnswers)
 
-    val noNicAndPensionBreakdown = {
+    val noNicAndPensionBreakdown =
       loadResultData(userAnswers).value.asInstanceOf[ConfirmationDataResultWithoutNicAndPension].confirmationViewBreakdown
-    }
 
     def applyView(): HtmlFormat.Appendable =
-      extConfirmationView(cvb = noNicAndPensionBreakdown,
-                          claimPeriod = novClaimPeriod,
-                          version = "2",
-                          isNewStarterType5 = false,
-                          EightyPercent)
+      extConfirmationView(
+        cvb = noNicAndPensionBreakdown,
+        claimPeriod = novClaimPeriod,
+        version = "2",
+        isNewStarterType5 = false,
+        EightyPercent
+      )
 
     implicit val doc: Document = asDocument(applyView())
 
@@ -97,16 +98,17 @@ class ConfirmationType3EmployeeViewSpec
 
     implicit val request: DataRequest[_] = fakeDataRequest(userAnswers)
 
-    val noNicAndPensionBreakdown = {
+    val noNicAndPensionBreakdown =
       loadResultData(userAnswers).value.asInstanceOf[ConfirmationDataResultWithoutNicAndPension].confirmationViewBreakdown
-    }
 
     def applyView(): HtmlFormat.Appendable =
-      extConfirmationView(cvb = noNicAndPensionBreakdown,
-                          claimPeriod = novClaimPeriod,
-                          version = "2",
-                          isNewStarterType5 = false,
-                          EightyPercent)
+      extConfirmationView(
+        cvb = noNicAndPensionBreakdown,
+        claimPeriod = novClaimPeriod,
+        version = "2",
+        isNewStarterType5 = false,
+        EightyPercent
+      )
 
     implicit val doc: Document = asDocument(applyView())
 

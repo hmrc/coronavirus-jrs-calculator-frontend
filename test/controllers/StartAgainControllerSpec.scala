@@ -38,7 +38,8 @@ class StartAgainControllerSpec extends SpecBaseControllerSpecs with MockitoSugar
 
     "clear user answers and redirect" in {
       when(mockSessionRepository.get(any())) thenReturn Future.successful(
-        Some(emptyUserAnswers.set(ClaimPeriodStartPage, LocalDate.now()).success.value))
+        Some(emptyUserAnswers.set(ClaimPeriodStartPage, LocalDate.now()).success.value)
+      )
 
       val result = controller.startAgain()(getRequest)
 

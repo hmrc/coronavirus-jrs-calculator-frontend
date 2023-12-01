@@ -24,8 +24,8 @@ import views.ViewUtils._
 
 object AdditionalPaymentPeriods {
 
-  def options(form: Form[_], payDates: Seq[FurloughBreakdown])(implicit messages: Messages): Seq[CheckboxItem] = payDates.zipWithIndex.map {
-    value =>
+  def options(form: Form[_], payDates: Seq[FurloughBreakdown])(implicit messages: Messages): Seq[CheckboxItem] =
+    payDates.zipWithIndex.map { value =>
       val periodEnd = value._1.paymentWithPeriod.periodWithPaymentDate.period.period.end
 
       CheckboxItem(
@@ -35,6 +35,6 @@ object AdditionalPaymentPeriods {
         content = Text(messages("additionalPaymentPeriods.period", dateToString(periodEnd))),
         checked = form.data.values.exists(_ == periodEnd.toString)
       )
-  }
+    }
 
 }

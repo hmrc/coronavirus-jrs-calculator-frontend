@@ -22,10 +22,12 @@ import services.Calculators._
 
 trait AveragePayCalculator extends Calculators {
 
-  def calculateAveragePay(nonFurloughPay: NonFurloughPay,
-                          priorFurloughPeriod: Period,
-                          periods: Seq[PeriodWithPaymentDate],
-                          annualPay: Amount): Seq[AveragePayment] =
+  def calculateAveragePay(
+    nonFurloughPay: NonFurloughPay,
+    priorFurloughPeriod: Period,
+    periods: Seq[PeriodWithPaymentDate],
+    annualPay: Amount
+  ): Seq[AveragePayment] =
     periods map {
       case fp: FullPeriodWithPaymentDate =>
         AveragePaymentWithFullPeriod(
@@ -45,21 +47,23 @@ trait AveragePayCalculator extends Calculators {
         )
     }
 
-  def phaseTwoAveragePay(annualPay: Amount,
-                         priorFurloughPeriod: Period,
-                         periods: Seq[PhaseTwoPeriod],
-                         statutoryLeaveData: Option[StatutoryLeaveData]): Seq[AveragePaymentWithPhaseTwoPeriod] =
+  def phaseTwoAveragePay(
+    annualPay: Amount,
+    priorFurloughPeriod: Period,
+    periods: Seq[PhaseTwoPeriod],
+    statutoryLeaveData: Option[StatutoryLeaveData]
+  ): Seq[AveragePaymentWithPhaseTwoPeriod] =
     periods.map { phaseTwoPeriod =>
       val basedOnDays = phaseTwoPeriod.periodWithPaymentDate match {
         case fp: FullPeriodWithPaymentDate    => daily(fp.period.period, priorFurloughPeriod, annualPay, statutoryLeaveData)
         case pp: PartialPeriodWithPaymentDate => daily(pp.period.partial, priorFurloughPeriod, annualPay, statutoryLeaveData)
       }
 
-      val referencePay = if (phaseTwoPeriod.isPartTime) {
-        partTimeHoursCalculation(basedOnDays, phaseTwoPeriod.furloughed, phaseTwoPeriod.usual)
-      } else {
-        basedOnDays
-      }
+      val referencePay =
+        if (phaseTwoPeriod.isPartTime)
+          partTimeHoursCalculation(basedOnDays, phaseTwoPeriod.furloughed, phaseTwoPeriod.usual)
+        else
+          basedOnDays
 
       AveragePaymentWithPhaseTwoPeriod(referencePay, annualPay, priorFurloughPeriod, phaseTwoPeriod, statutoryLeaveData)
     }
@@ -67,10 +71,12 @@ trait AveragePayCalculator extends Calculators {
   protected def averageDailyCalculator(period: Period, amount: Amount, statLeaveAmount: BigDecimal, statLeaveDays: Int): Amount =
     Amount((amount.value - statLeaveAmount) / (period.countDays - statLeaveDays)).halfUp
 
-  protected def daily(period: Period,
-                      priorFurloughPeriod: Period,
-                      annualPay: Amount,
-                      statutoryLeaveData: Option[StatutoryLeaveData]): Amount = {
+  protected def daily(
+    period: Period,
+    priorFurloughPeriod: Period,
+    annualPay: Amount,
+    statutoryLeaveData: Option[StatutoryLeaveData]
+  ): Amount = {
 
     val statLeaveAmount: BigDecimal = statutoryLeaveData.fold[BigDecimal](0)(_.pay)
     val statLeaveDays: Int          = statutoryLeaveData.fold[Int](0)(_.days)

@@ -38,7 +38,7 @@ class ClaimPeriodStartFormProviderSpec extends SpecBaseControllerSpecs {
         val data = Map(
           "startDate.day"   -> date.getDayOfMonth.toString,
           "startDate.month" -> date.getMonthValue.toString,
-          "startDate.year"  -> date.getYear.toString,
+          "startDate.year"  -> date.getYear.toString
         )
 
         val result = form.bind(data)
@@ -53,7 +53,7 @@ class ClaimPeriodStartFormProviderSpec extends SpecBaseControllerSpecs {
       result.errors must contain allElementsOf List(
         FormError(s"startDate.day", LocalDateFormatter.dayBlankErrorKey),
         FormError(s"startDate.month", LocalDateFormatter.monthBlankErrorKey),
-        FormError(s"startDate.year", LocalDateFormatter.yearBlankErrorKey),
+        FormError(s"startDate.year", LocalDateFormatter.yearBlankErrorKey)
       )
     }
 
@@ -62,13 +62,13 @@ class ClaimPeriodStartFormProviderSpec extends SpecBaseControllerSpecs {
       val data = Map(
         "startDate.day"   -> "1",
         "startDate.month" -> "2",
-        "startDate.year"  -> "2020",
+        "startDate.year"  -> "2020"
       )
 
       val result = form.bind(data)
 
       result.errors mustBe List(
-        FormError("startDate", "claimPeriodStart.error.outofrange", Seq("1 March 2020", dateToString(policyEndDate))),
+        FormError("startDate", "claimPeriodStart.error.outofrange", Seq("1 March 2020", dateToString(policyEndDate)))
       )
     }
 
@@ -77,15 +77,13 @@ class ClaimPeriodStartFormProviderSpec extends SpecBaseControllerSpecs {
       val data = Map(
         "startDate.day"   -> "1",
         "startDate.month" -> s"${appConf.schemeEndDate.plusMonths(1).getMonthValue}",
-        "startDate.year"  -> s"${appConf.schemeEndDate.getYear}",
+        "startDate.year"  -> s"${appConf.schemeEndDate.getYear}"
       )
 
       val result = form.bind(data)
 
       result.errors mustBe List(
-        FormError(key = "startDate",
-                  message = "claimPeriodStart.error.outofrange",
-                  args = Seq("1 March 2020", dateToString(policyEndDate))),
+        FormError(key = "startDate", message = "claimPeriodStart.error.outofrange", args = Seq("1 March 2020", dateToString(policyEndDate)))
       )
     }
   }

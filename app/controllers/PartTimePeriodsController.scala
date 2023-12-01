@@ -34,7 +34,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartTimePeriodsController @Inject()(
+class PartTimePeriodsController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   override val navigator: Navigator,
@@ -49,49 +49,49 @@ class PartTimePeriodsController @Inject()(
 
   val form: Form[List[LocalDate]] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    request.userAnswers.getList(PayDatePage) match {
-      case Nil =>
-        Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-      case dates =>
-        extractFurloughWithinClaimV(request.userAnswers) match {
-          case Valid(furlough) =>
-            val periods = generatePeriodsWithFurlough(dates, furlough).toList
-            val preparedForm = request.userAnswers.getV(PartTimePeriodsPage) match {
-              case Invalid(_)             => form
-              case Valid(selectedPeriods) => form.fill(selectedPeriods.map(_.period.end))
-            }
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      request.userAnswers.getList(PayDatePage) match {
+        case Nil =>
+          Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+        case dates =>
+          extractFurloughWithinClaimV(request.userAnswers) match {
+            case Valid(furlough) =>
+              val periods = generatePeriodsWithFurlough(dates, furlough).toList
+              val preparedForm = request.userAnswers.getV(PartTimePeriodsPage) match {
+                case Invalid(_)             => form
+                case Valid(selectedPeriods) => form.fill(selectedPeriods.map(_.period.end))
+              }
 
-            if (periods.length == 1) {
-              saveAndRedirect(request.userAnswers, periods.map(_.period.end))
-            } else {
-              Future.successful(Ok(view(preparedForm, periods)))
-            }
-          case Invalid(errors) => Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
-        }
+              if (periods.length == 1)
+                saveAndRedirect(request.userAnswers, periods.map(_.period.end))
+              else
+                Future.successful(Ok(view(preparedForm, periods)))
+            case Invalid(errors) => Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+          }
+      }
     }
-  }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    request.userAnswers.getList(PayDatePage) match {
-      case Nil =>
-        Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-      case dates =>
-        extractFurloughWithinClaimV(request.userAnswers) match {
-          case Valid(furlough) =>
-            val periods = generatePeriodsWithFurlough(dates, furlough).toList
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      request.userAnswers.getList(PayDatePage) match {
+        case Nil =>
+          Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+        case dates =>
+          extractFurloughWithinClaimV(request.userAnswers) match {
+            case Valid(furlough) =>
+              val periods = generatePeriodsWithFurlough(dates, furlough).toList
 
-            form
-              .bindFromRequest()
-              .fold(
-                formWithErrors => Future.successful(BadRequest(view(formWithErrors, periods))), { selectedDates =>
-                  saveAndRedirect(request.userAnswers, selectedDates)
-                }
-              )
-          case Invalid(errors) => Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
-        }
+              form
+                .bindFromRequest()
+                .fold(
+                  formWithErrors => Future.successful(BadRequest(view(formWithErrors, periods))),
+                  selectedDates => saveAndRedirect(request.userAnswers, selectedDates)
+                )
+            case Invalid(errors) => Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+          }
+      }
     }
-  }
 
   private def saveAndRedirect(userAnswers: UserAnswers, selectedEndDates: List[LocalDate]): Future[Result] =
     extractFurloughWithinClaimV(userAnswers) match {

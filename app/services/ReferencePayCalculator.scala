@@ -20,32 +20,34 @@ import models.{AveragePayment, AveragePaymentWithPhaseTwoPeriod, CylbPayment, Cy
 
 trait ReferencePayCalculator extends RegularPayCalculator with AveragePayCalculator with CylbCalculator with Calculators {
 
-  def calculateReferencePay(data: ReferencePay): Seq[PaymentWithPeriod] = data match {
-    case rpd: RegularPayData  => calculateRegularPay(rpd.wage, rpd.referencePayData.periods)
-    case vpd: VariablePayData => calculateAveragePay(vpd.nonFurloughPay, vpd.priorFurlough, vpd.periods, vpd.grossPay)
-    case lbd: VariablePayWithCylbData => {
-      val avg = calculateAveragePay(lbd.nonFurloughPay, lbd.priorFurlough, lbd.periods, lbd.grossPay)
+  def calculateReferencePay(data: ReferencePay): Seq[PaymentWithPeriod] =
+    data match {
+      case rpd: RegularPayData  => calculateRegularPay(rpd.wage, rpd.referencePayData.periods)
+      case vpd: VariablePayData => calculateAveragePay(vpd.nonFurloughPay, vpd.priorFurlough, vpd.periods, vpd.grossPay)
+      case lbd: VariablePayWithCylbData =>
+        val avg = calculateAveragePay(lbd.nonFurloughPay, lbd.priorFurlough, lbd.periods, lbd.grossPay)
 
-      withCylb(avg, lbd)
+        withCylb(avg, lbd)
     }
-  }
 
-  def phaseTwoReferencePay(data: PhaseTwoReferencePay): Seq[PaymentWithPhaseTwoPeriod] = data match {
-    case rpd: PhaseTwoRegularPayData => phaseTwoRegularPay(rpd.wage, rpd.referencePayData.periods)
-    case vpd: PhaseTwoVariablePayData =>
-      phaseTwoAveragePay(vpd.annualPay, vpd.priorFurlough, vpd.referencePayData.periods, vpd.referencePayData.statutoryLeave)
-    case lbd: PhaseTwoVariablePayWithCylbData => {
-      val avg = phaseTwoAveragePay(lbd.annualPay, lbd.priorFurlough, lbd.referencePayData.periods, lbd.referencePayData.statutoryLeave)
+  def phaseTwoReferencePay(data: PhaseTwoReferencePay): Seq[PaymentWithPhaseTwoPeriod] =
+    data match {
+      case rpd: PhaseTwoRegularPayData => phaseTwoRegularPay(rpd.wage, rpd.referencePayData.periods)
+      case vpd: PhaseTwoVariablePayData =>
+        phaseTwoAveragePay(vpd.annualPay, vpd.priorFurlough, vpd.referencePayData.periods, vpd.referencePayData.statutoryLeave)
+      case lbd: PhaseTwoVariablePayWithCylbData =>
+        val avg = phaseTwoAveragePay(lbd.annualPay, lbd.priorFurlough, lbd.referencePayData.periods, lbd.referencePayData.statutoryLeave)
 
-      phaseTwoWithCylb(avg, lbd)
+        phaseTwoWithCylb(avg, lbd)
     }
-  }
 
   private def withCylb(avg: Seq[AveragePayment], data: VariablePayWithCylbData): Seq[CylbPayment] =
     avg.map(a => calculateCylb(a, data.nonFurloughPay, data.frequency, data.cylbPayments, a.periodWithPaymentDate))
 
-  private def phaseTwoWithCylb(avg: Seq[AveragePaymentWithPhaseTwoPeriod],
-                               data: PhaseTwoVariablePayWithCylbData): Seq[CylbPaymentWithPhaseTwoPeriod] =
+  private def phaseTwoWithCylb(
+    avg: Seq[AveragePaymentWithPhaseTwoPeriod],
+    data: PhaseTwoVariablePayWithCylbData
+  ): Seq[CylbPaymentWithPhaseTwoPeriod] =
     avg.map(a => phaseTwoCylb(a, data.frequency, data.cylbPayments, a.phaseTwoPeriod))
 
 }

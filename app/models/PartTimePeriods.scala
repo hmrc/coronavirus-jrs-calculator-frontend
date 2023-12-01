@@ -24,27 +24,27 @@ import views.ViewUtils._
 
 object PartTimePeriods {
 
-  def options(form: Form[_], periods: List[Periods])(implicit messages: Messages): Seq[CheckboxItem] = periods.zipWithIndex.map { value =>
-    val periodEnd = value._1.period.end
+  def options(form: Form[_], periods: List[Periods])(implicit messages: Messages): Seq[CheckboxItem] =
+    periods.zipWithIndex.map { value =>
+      val periodEnd = value._1.period.end
 
-    val content: Text = value._1 match {
-      case fp: FullPeriod =>
-        Text(messages("partTimePeriods.fullPeriod", dateToStringWithoutYear(fp.period.start), dateToString(fp.period.end)))
-      case pp: PartialPeriod =>
-        if (pp.partial.countDays == 1) {
-          Text(messages("partTimePeriods.singleDay", dateToString(pp.partial.end)))
-        } else {
-          Text(messages("partTimePeriods.partialPeriod", dateToStringWithoutYear(pp.partial.start), dateToString(pp.partial.end)))
-        }
+      val content: Text = value._1 match {
+        case fp: FullPeriod =>
+          Text(messages("partTimePeriods.fullPeriod", dateToStringWithoutYear(fp.period.start), dateToString(fp.period.end)))
+        case pp: PartialPeriod =>
+          if (pp.partial.countDays == 1)
+            Text(messages("partTimePeriods.singleDay", dateToString(pp.partial.end)))
+          else
+            Text(messages("partTimePeriods.partialPeriod", dateToStringWithoutYear(pp.partial.start), dateToString(pp.partial.end)))
+      }
+
+      CheckboxItem(
+        name = Some(s"value[${value._2}]"),
+        id = Some(s"part-time-period_${value._2.toString}"),
+        value = periodEnd.toString,
+        content = content,
+        checked = form.data.values.exists(_ == periodEnd.toString)
+      )
     }
-
-    CheckboxItem(
-      name = Some(s"value[${value._2}]"),
-      id = Some(s"part-time-period_${value._2.toString}"),
-      value = periodEnd.toString,
-      content = content,
-      checked = form.data.values.exists(_ == periodEnd.toString)
-    )
-  }
 
 }

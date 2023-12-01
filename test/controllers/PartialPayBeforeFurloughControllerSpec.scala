@@ -69,15 +69,17 @@ class PartialPayBeforeFurloughControllerSpec extends SpecBaseControllerSpecs wit
 
   val view = app.injector.instanceOf[VariableLengthPartialPayView]
 
-  val controller = new PartialPayBeforeFurloughController(messagesApi,
-                                                          mockSessionRepository,
-                                                          navigator,
-                                                          identifier,
-                                                          dataRetrieval,
-                                                          dataRequired,
-                                                          formProvider,
-                                                          component,
-                                                          view)
+  val controller = new PartialPayBeforeFurloughController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "PartialPayBeforeFurloughController" must {
 
@@ -91,7 +93,8 @@ class PartialPayBeforeFurloughControllerSpec extends SpecBaseControllerSpecs wit
       contentAsString(result) mustEqual
         view(form, LocalDate.of(2020, 3, 23), LocalDate.of(2020, 3, 26), routes.PartialPayBeforeFurloughController.onSubmit())(
           dataRequest,
-          messages).toString
+          messages
+        ).toString
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
@@ -171,7 +174,8 @@ class PartialPayBeforeFurloughControllerSpec extends SpecBaseControllerSpecs wit
       contentAsString(result) mustEqual
         view(boundForm, LocalDate.of(2020, 3, 23), LocalDate.of(2020, 3, 26), routes.PartialPayBeforeFurloughController.onSubmit())(
           dataRequest,
-          messages).toString
+          messages
+        ).toString
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {

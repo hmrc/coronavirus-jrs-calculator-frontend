@@ -22,11 +22,13 @@ import play.twirl.api.HtmlFormat
 
 trait AmountViewBehaviours extends QuestionViewBehaviours[Amount] {
 
-  def amountPage(form: Form[Amount],
-                 createView: Form[Amount] => HtmlFormat.Appendable,
-                 messageKeyPrefix: String,
-                 headingArgs: Seq[String] = Seq(),
-                 section: Option[String] = None): Unit =
+  def amountPage(
+    form: Form[Amount],
+    createView: Form[Amount] => HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    headingArgs: Seq[String] = Seq(),
+    section: Option[String] = None
+  ): Unit =
     "behave like a page with an amount field" when {
 
       val amount = Amount(BigDecimal(123.45))
@@ -73,9 +75,11 @@ trait AmountViewBehaviours extends QuestionViewBehaviours[Amount] {
         "show an error prefix in the browser title" in {
 
           val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${title(messages(s"$messageKeyPrefix.title",
-                                                                                                         headingArgs: _*),
-                                                                                                section)}""")
+          assertEqualsValue(
+            doc,
+            "title",
+            s"""${messages("error.browser.title.prefix")} ${title(messages(s"$messageKeyPrefix.title", headingArgs: _*), section)}"""
+          )
         }
       }
     }

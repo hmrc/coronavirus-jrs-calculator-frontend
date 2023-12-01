@@ -24,7 +24,8 @@ import play.api.http.Status._
 import play.api.libs.json.Json
 import utils.{CreateRequestHelper, CustomMatchers, ITCoreTestData, IntegrationSpecBase}
 
-class OnPayrollBefore30thOct2020ControllerISpec extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData {
+class OnPayrollBefore30thOct2020ControllerISpec
+    extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData {
 
   "GET /october-payroll" when {
 
@@ -112,7 +113,6 @@ class OnPayrollBefore30thOct2020ControllerISpec extends IntegrationSpecBase with
           formJson = Json.obj("value" -> "true")
         )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
-
         whenReady(res) { result =>
           result must have(
             httpStatus(SEE_OTHER),
@@ -145,7 +145,6 @@ class OnPayrollBefore30thOct2020ControllerISpec extends IntegrationSpecBase with
           formJson = Json.obj("value" -> "true")
         )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
-
         whenReady(res) { result =>
           result must have(
             httpStatus(SEE_OTHER),
@@ -177,7 +176,6 @@ class OnPayrollBefore30thOct2020ControllerISpec extends IntegrationSpecBase with
           path = "/october-payroll",
           formJson = Json.obj("value" -> "true")
         )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
-
 
         whenReady(res) { result =>
           result must have(

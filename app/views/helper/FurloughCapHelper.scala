@@ -23,7 +23,7 @@ import services.Calculators._
 
 import java.time.Month
 
-class FurloughCapHelper @Inject()() {
+class FurloughCapHelper @Inject() () {
 
   def calculationFor(cap: FurloughCap, furloughRate: FurloughGrantRate, month: Month)(implicit messages: Messages): String =
     furloughRate match {
@@ -55,16 +55,18 @@ class FurloughCapHelper @Inject()() {
           monthTwoDaily.formatted("%.2f"),
           value.formatted("%.2f")
         )
-      case PeriodSpansMonthCapWithPartTime(value,
-                                           monthOneFurloughDays,
-                                           monthOne,
-                                           monthOneDaily,
-                                           monthTwoFurloughDays,
-                                           monthTwo,
-                                           monthTwoDaily,
-                                           _,
-                                           usual,
-                                           furloughed) =>
+      case PeriodSpansMonthCapWithPartTime(
+            value,
+            monthOneFurloughDays,
+            monthOne,
+            monthOneDaily,
+            monthTwoFurloughDays,
+            monthTwo,
+            monthTwoDaily,
+            _,
+            usual,
+            furloughed
+          ) =>
         messages(
           "phaseTwoFurloughBreakdown.furloughCap.periodSpansMonthCap.partTime",
           monthOneFurloughDays,
@@ -120,16 +122,18 @@ class FurloughCapHelper @Inject()() {
           seventy(monthTwoDaily),
           seventy(value)
         )
-      case PeriodSpansMonthCapWithPartTime(value,
-                                           monthOneFurloughDays,
-                                           monthOne,
-                                           monthOneDaily,
-                                           monthTwoFurloughDays,
-                                           monthTwo,
-                                           monthTwoDaily,
-                                           _,
-                                           usual,
-                                           furloughed) =>
+      case PeriodSpansMonthCapWithPartTime(
+            value,
+            monthOneFurloughDays,
+            monthOne,
+            monthOneDaily,
+            monthTwoFurloughDays,
+            monthTwo,
+            monthTwoDaily,
+            _,
+            usual,
+            furloughed
+          ) =>
         messages(
           "phaseTwoFurloughBreakdown.furloughCap.periodSpansMonthCap.partTime",
           monthOneFurloughDays,
@@ -185,16 +189,18 @@ class FurloughCapHelper @Inject()() {
           sixty(monthTwoDaily),
           sixty(value)
         )
-      case PeriodSpansMonthCapWithPartTime(value,
-                                           monthOneFurloughDays,
-                                           monthOne,
-                                           monthOneDaily,
-                                           monthTwoFurloughDays,
-                                           monthTwo,
-                                           monthTwoDaily,
-                                           _,
-                                           usual,
-                                           furloughed) =>
+      case PeriodSpansMonthCapWithPartTime(
+            value,
+            monthOneFurloughDays,
+            monthOne,
+            monthOneDaily,
+            monthTwoFurloughDays,
+            monthTwo,
+            monthTwoDaily,
+            _,
+            usual,
+            furloughed
+          ) =>
         messages(
           "phaseTwoFurloughBreakdown.furloughCap.periodSpansMonthCap.partTime",
           monthOneFurloughDays,

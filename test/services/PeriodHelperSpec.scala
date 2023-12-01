@@ -51,10 +51,14 @@ class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreT
 
     val expected: List[Periods] =
       List(
-        PartialPeriod(Period(LocalDate.of(2020, 2, 21), LocalDate.of(2020, 3, 20)),
-                      Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 20))),
-        PartialPeriod(Period(LocalDate.of(2020, 3, 21), LocalDate.of(2020, 4, 20)),
-                      Period(LocalDate.of(2020, 3, 21), LocalDate.of(2020, 4, 10)))
+        PartialPeriod(
+          Period(LocalDate.of(2020, 2, 21), LocalDate.of(2020, 3, 20)),
+          Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 20))
+        ),
+        PartialPeriod(
+          Period(LocalDate.of(2020, 3, 21), LocalDate.of(2020, 4, 20)),
+          Period(LocalDate.of(2020, 3, 21), LocalDate.of(2020, 4, 10))
+        )
       )
 
     val expectedTwo: List[Periods] = List(
@@ -101,7 +105,7 @@ class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreT
       LocalDate.of(2020, 2, 28),
       LocalDate.of(2020, 3, 13),
       LocalDate.of(2020, 3, 27),
-      LocalDate.of(2020, 4, 10),
+      LocalDate.of(2020, 4, 10)
     )
 
     val expectedFourWeekly = Seq(
@@ -185,45 +189,51 @@ class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreT
     "period starts before furlough" in new PeriodHelper {
       val gen = for {
         startMonth <- choose[Int](1, 2)
-        startDay <- if (startMonth == 1) {
-          choose[Int](1, 31)
-        } else {
-          choose[Int](1, 29)
-        }
+        startDay <-
+          if (startMonth == 1)
+            choose[Int](1, 31)
+          else
+            choose[Int](1, 29)
         endDay <- choose[Int](1, 31)
       } yield (startMonth, startDay, endDay)
 
       forAll(gen -> "valid values") { values =>
         fullOrPartialPeriod(period(s"2020,${values._1},${values._2}", s"2020,3,${values._3}"), furloughPeriod) mustBe partialPeriod(
           s"2020,${values._1},${values._2}" -> s"2020,3,${values._3}",
-          "2020,3,1"                        -> s"2020,3,${values._3}")
+          "2020,3,1"                        -> s"2020,3,${values._3}"
+        )
       }
 
       // Specific boundary case
-      fullOrPartialPeriod(period(s"2020,2,29", "2020,3,20"), furloughPeriod) mustBe partialPeriod(s"2020,2,29" -> "2020,3,20",
-                                                                                                  "2020,3,1"   -> "2020,3,20")
+      fullOrPartialPeriod(period(s"2020,2,29", "2020,3,20"), furloughPeriod) mustBe partialPeriod(
+        s"2020,2,29" -> "2020,3,20",
+        "2020,3,1"   -> "2020,3,20"
+      )
     }
 
     "period ends after furlough" in new PeriodHelper {
       val gen = for {
         endMonth <- choose[Int](4, 5)
-        endDay <- if (endMonth == 4) {
-          choose[Int](1, 30)
-        } else {
-          choose[Int](1, 31)
-        }
+        endDay <-
+          if (endMonth == 4)
+            choose[Int](1, 30)
+          else
+            choose[Int](1, 31)
         startDay <- choose[Int](3, 31)
       } yield (endMonth, endDay, startDay)
 
       forAll(gen -> "valid values") { values =>
         fullOrPartialPeriod(period(s"2020,3,${values._3}", s"2020,${values._1},${values._2}"), furloughPeriod) mustBe partialPeriod(
           s"2020,3,${values._3}" -> s"2020,${values._1},${values._2}",
-          s"2020,3,${values._3}" -> "2020,3,31")
+          s"2020,3,${values._3}" -> "2020,3,31"
+        )
       }
 
       // Specific boundary case
-      fullOrPartialPeriod(period("2020,3,31", "2020,4,1"), furloughPeriod) mustBe partialPeriod("2020,3,31" -> "2020,4,1",
-                                                                                                "2020,3,31" -> "2020,3,31")
+      fullOrPartialPeriod(period("2020,3,31", "2020,4,1"), furloughPeriod) mustBe partialPeriod(
+        "2020,3,31" -> "2020,4,1",
+        "2020,3,31" -> "2020,3,31"
+      )
     }
   }
 
@@ -231,8 +241,10 @@ class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreT
     ("frequency", "periods", "lastPeriodPayDate", "expected"),
     (
       Monthly,
-      Seq(FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))),
-          FullPeriod(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)))),
+      Seq(
+        FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))),
+        FullPeriod(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)))
+      ),
       LocalDate.of(2020, 4, 20),
       Seq(
         PaymentDate(LocalDate.of(2020, 3, 20)),
@@ -241,8 +253,10 @@ class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreT
     ),
     (
       Monthly,
-      Seq(FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))),
-          FullPeriod(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)))),
+      Seq(
+        FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 31))),
+        FullPeriod(Period(LocalDate.of(2020, 4, 1), LocalDate.of(2020, 4, 30)))
+      ),
       LocalDate.of(2020, 5, 20),
       Seq(
         PaymentDate(LocalDate.of(2020, 4, 20)),
@@ -251,8 +265,10 @@ class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreT
     ),
     (
       FourWeekly,
-      Seq(FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 28))),
-          FullPeriod(Period(LocalDate.of(2020, 3, 29), LocalDate.of(2020, 4, 25)))),
+      Seq(
+        FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 28))),
+        FullPeriod(Period(LocalDate.of(2020, 3, 29), LocalDate.of(2020, 4, 25)))
+      ),
       LocalDate.of(2020, 4, 25),
       Seq(
         PaymentDate(LocalDate.of(2020, 3, 28)),
@@ -261,8 +277,10 @@ class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreT
     ),
     (
       FortNightly,
-      Seq(FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 14))),
-          FullPeriod(Period(LocalDate.of(2020, 3, 15), LocalDate.of(2020, 3, 28)))),
+      Seq(
+        FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 14))),
+        FullPeriod(Period(LocalDate.of(2020, 3, 15), LocalDate.of(2020, 3, 28)))
+      ),
       LocalDate.of(2020, 4, 4),
       Seq(
         PaymentDate(LocalDate.of(2020, 3, 21)),
@@ -271,8 +289,10 @@ class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreT
     ),
     (
       Weekly,
-      Seq(FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 7))),
-          FullPeriod(Period(LocalDate.of(2020, 3, 8), LocalDate.of(2020, 3, 14)))),
+      Seq(
+        FullPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 7))),
+        FullPeriod(Period(LocalDate.of(2020, 3, 8), LocalDate.of(2020, 3, 14)))
+      ),
       LocalDate.of(2020, 3, 28),
       Seq(
         PaymentDate(LocalDate.of(2020, 3, 21)),
@@ -282,8 +302,10 @@ class PeriodHelperSpec extends SpecBase with ScalaCheckPropertyChecks with CoreT
     (
       Weekly,
       Seq(
-        PartialPeriod(Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 7)),
-                      Period(LocalDate.of(2020, 3, 4), LocalDate.of(2020, 3, 7))),
+        PartialPeriod(
+          Period(LocalDate.of(2020, 3, 1), LocalDate.of(2020, 3, 7)),
+          Period(LocalDate.of(2020, 3, 4), LocalDate.of(2020, 3, 7))
+        ),
         FullPeriod(Period(LocalDate.of(2020, 3, 8), LocalDate.of(2020, 3, 14)))
       ),
       LocalDate.of(2020, 3, 28),

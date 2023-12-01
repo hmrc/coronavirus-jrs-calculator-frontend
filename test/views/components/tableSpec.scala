@@ -39,7 +39,8 @@ class tableSpec extends PlaySpec {
               Cell(Html("Header A")),
               Cell(Html("Header B"))
             )
-          )),
+          )
+        ),
         Seq(
           Row(
             Seq(

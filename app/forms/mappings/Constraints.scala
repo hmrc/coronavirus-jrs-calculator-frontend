@@ -34,44 +34,40 @@ trait Constraints {
     Constraint { input =>
       import ev._
 
-      if (input >= minimum) {
+      if (input >= minimum)
         Valid
-      } else {
+      else
         Invalid(errorKey, minimum)
-      }
     }
 
   protected def maximumValue[A](maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
     Constraint { input =>
       import ev._
 
-      if (input <= maximum) {
+      if (input <= maximum)
         Valid
-      } else {
+      else
         Invalid(errorKey, maximum)
-      }
     }
 
   protected def maximumValueWithArgs[A](maximum: A, errorKey: String, args: Seq[Any])(implicit ev: Ordering[A]): Constraint[A] =
     Constraint { input =>
       import ev._
 
-      if (input <= maximum) {
+      if (input <= maximum)
         Valid
-      } else {
+      else
         Invalid(errorKey, args: _*)
-      }
     }
 
   protected def inRange[A](minimum: A, maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
     Constraint { input =>
       import ev._
 
-      if (input >= minimum && input <= maximum) {
+      if (input >= minimum && input <= maximum)
         Valid
-      } else {
+      else
         Invalid(errorKey, minimum, maximum)
-      }
     }
 
   protected def regexp(regex: String, errorKey: String): Constraint[String] =
@@ -114,17 +110,20 @@ trait Constraints {
         Invalid(errorKey)
     }
 
-  protected def greaterThan[A](minimum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] = Constraint { value =>
-    import ev._
-    if (value > minimum) Valid else Invalid(errorKey)
-  }
+  protected def greaterThan[A](minimum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
+    Constraint { value =>
+      import ev._
+      if (value > minimum) Valid else Invalid(errorKey)
+    }
 
-  protected def lessThan[A](maximum: A, errorKey: String, args: Any*)(implicit ev: Ordering[A]): Constraint[A] = Constraint { value =>
-    import ev._
-    if (value < maximum) Valid else Invalid(errorKey, args: _*)
-  }
+  protected def lessThan[A](maximum: A, errorKey: String, args: Any*)(implicit ev: Ordering[A]): Constraint[A] =
+    Constraint { value =>
+      import ev._
+      if (value < maximum) Valid else Invalid(errorKey, args: _*)
+    }
 
-  protected def maxTwoDecimals(errorKey: Option[String] = None): Constraint[BigDecimal] = Constraint { value =>
-    if (value.scale <= 2) Valid else Invalid(errorKey.getOrElse("amount.error.max.2.decimals"))
-  }
+  protected def maxTwoDecimals(errorKey: Option[String] = None): Constraint[BigDecimal] =
+    Constraint { value =>
+      if (value.scale <= 2) Valid else Invalid(errorKey.getOrElse("amount.error.max.2.decimals"))
+    }
 }

@@ -43,12 +43,13 @@ class RegularPayAmountViewSpec extends SalaryViewBehaviours {
 
   object Selectors extends BaseSelectors
 
-  def expectedContent(cutoffDate: LocalDate) = Seq(
-    Selectors.h1     -> RegularPayAmountMessages.h1(cutoffDate),
-    Selectors.p(1)   -> RegularPayAmountMessages.p1(cutoffDate),
-    Selectors.p(2)   -> RegularPayAmountMessages.p2,
-    Selectors.indent -> RegularPayAmountMessages.indent
-  )
+  def expectedContent(cutoffDate: LocalDate) =
+    Seq(
+      Selectors.h1     -> RegularPayAmountMessages.h1(cutoffDate),
+      Selectors.p(1)   -> RegularPayAmountMessages.p1(cutoffDate),
+      Selectors.p(2)   -> RegularPayAmountMessages.p2,
+      Selectors.indent -> RegularPayAmountMessages.indent
+    )
 
   "RegularPayAmountView" when {
 

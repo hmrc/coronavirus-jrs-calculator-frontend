@@ -66,7 +66,8 @@ class ConfirmationHeadingSpec extends ViewBehaviours {
           Selectors.p(1) -> ConfirmationBlock.p1(80),
           Selectors.p(2) -> ConfirmationBlock.p2(claimPeriod),
           Selectors.p(3) -> ConfirmationBlock.claimAmount(calcResult.total)
-        ))
+        )
+      )
     }
 
     "render the supplied 70% heading when passed a custom percentage of 70%" must {
@@ -80,7 +81,8 @@ class ConfirmationHeadingSpec extends ViewBehaviours {
           Selectors.p(1) -> ConfirmationBlock.p1(70),
           Selectors.p(2) -> ConfirmationBlock.p2(claimPeriod),
           Selectors.p(3) -> ConfirmationBlock.claimAmount(calcResult.atRate(SeventyPercent))
-        ))
+        )
+      )
     }
   }
 }

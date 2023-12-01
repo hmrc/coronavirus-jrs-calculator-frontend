@@ -25,10 +25,12 @@ case class DetailedBreakdown(period: Periods, furlough: DetailedFurloughBreakdow
   def payPeriodEnd(implicit messages: Messages): String   = dateToString(period.period.end)
 }
 
-case class PhaseTwoDetailedBreakdown(period: Periods,
-                                     furlough: PhaseTwoFurloughBreakdown,
-                                     nic: PhaseTwoNicBreakdown,
-                                     pension: PhaseTwoPensionBreakdown) {
+case class PhaseTwoDetailedBreakdown(
+  period: Periods,
+  furlough: PhaseTwoFurloughBreakdown,
+  nic: PhaseTwoNicBreakdown,
+  pension: PhaseTwoPensionBreakdown
+) {
   def payPeriodStart(implicit messages: Messages): String = dateToStringWithoutYear(period.period.start)
   def payPeriodEnd(implicit messages: Messages): String   = dateToString(period.period.end)
 }

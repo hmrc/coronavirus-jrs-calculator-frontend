@@ -28,10 +28,10 @@ import java.util.UUID
 
 trait ITCoreTestData extends ITUserAnswersBuilder {
 
-  def userAnswersId: String = UUID.randomUUID().toString
-  def dummyUserAnswers = regularJourney()
+  def userAnswersId: String         = UUID.randomUUID().toString
+  def dummyUserAnswers              = regularJourney()
   def dummyUserAnswersNoLastPayDate = regularJourneyNoLastPayDate()
-  def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
+  def emptyUserAnswers              = UserAnswers(userAnswersId, Json.obj())
 
   def mandatoryAnswersOnRegularMonthly =
     emptyUserAnswers
@@ -204,7 +204,8 @@ trait ITCoreTestData extends ITUserAnswersBuilder {
           "2020-03-03",
           "2020-03-17",
           "2020-03-31"
-        ))
+        )
+      )
       .withLastPayDate("2020-03-31")
 
   lazy val variableWeekly: UserAnswers =

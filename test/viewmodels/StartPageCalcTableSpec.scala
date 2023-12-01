@@ -49,6 +49,7 @@ class StartPageCalcTableSpec extends ViewBehaviours {
         Selectors.tableRowXcolY(5, 1) -> BaseMessages.Month.september,
         Selectors.tableRowXcolY(5, 2) -> StartPageMessages.WhatYouCanClaim.Table.augSepGovt,
         Selectors.tableRowXcolY(5, 3) -> StartPageMessages.WhatYouCanClaim.Table.augSepEmp
-      ))
+      )
+    )
   }
 }

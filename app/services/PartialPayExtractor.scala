@@ -33,7 +33,8 @@ trait PartialPayExtractor extends PeriodHelper with FurloughPeriodExtractor with
       nel => {
         UserAnswers.logWarnings(nel)(logger.logger)
         Seq.empty[PartialPeriod]
-      }, { furloughPeriod =>
+      },
+      { furloughPeriod =>
         val payDates = userAnswers.getList(PayDatePage)
         generatePeriodsWithFurlough(payDates, furloughPeriod).collect {
           case pp: PartialPeriod => pp

@@ -26,7 +26,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import javax.inject.Inject
 
-class StartAgainController @Inject()(
+class StartAgainController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   navigator: Navigator,
   identify: IdentifierAction,
@@ -34,8 +34,9 @@ class StartAgainController @Inject()(
   sessionRepository: SessionRepository
 ) extends FrontendBaseController with I18nSupport {
 
-  def startAgain: Action[AnyContent] = (identify andThen getData) { implicit request =>
-    sessionRepository.set(UserAnswers(request.internalId))
-    Redirect(routes.RootPageController.onPageLoad())
-  }
+  def startAgain: Action[AnyContent] =
+    (identify andThen getData) { implicit request =>
+      sessionRepository.set(UserAnswers(request.internalId))
+      Redirect(routes.RootPageController.onPageLoad())
+    }
 }

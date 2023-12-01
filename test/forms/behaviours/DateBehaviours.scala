@@ -85,7 +85,7 @@ class DateBehaviours extends FieldBehaviours {
       result.errors must contain allElementsOf List(
         FormError(s"$key.day", LocalDateFormatter.dayBlankErrorKey),
         FormError(s"$key.month", LocalDateFormatter.monthBlankErrorKey),
-        FormError(s"$key.year", LocalDateFormatter.yearBlankErrorKey),
+        FormError(s"$key.year", LocalDateFormatter.yearBlankErrorKey)
       )
     }
 }

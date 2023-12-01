@@ -47,15 +47,17 @@ class TopUpStatusControllerSpec extends SpecBaseControllerSpecs with MockitoSuga
 
   val view = app.injector.instanceOf[TopUpStatusView]
 
-  val controller = new TopUpStatusController(messagesApi,
-                                             mockSessionRepository,
-                                             navigator,
-                                             identifier,
-                                             dataRetrieval,
-                                             dataRequired,
-                                             formProvider,
-                                             component,
-                                             view)
+  val controller = new TopUpStatusController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "TopUpStatusController" must {
 

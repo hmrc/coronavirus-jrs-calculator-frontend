@@ -32,7 +32,7 @@ import views.html.FurloughOngoingView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class FurloughOngoingController @Inject()(
+class FurloughOngoingController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   val navigator: Navigator,
@@ -48,26 +48,28 @@ class FurloughOngoingController @Inject()(
   val form: Form[FurloughStatus]      = formProvider()
   protected val userAnswerPersistence = new UserAnswerPersistence(sessionRepository.set)
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val maybeFurlough = request.userAnswers.getV(FurloughStatusPage)
-    getRequiredAnswerV(ClaimPeriodStartPage) { claimStartDate =>
-      Future.successful(Ok(view(maybeFurlough.map(form.fill).getOrElse(form), claimStartDate)))
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      val maybeFurlough = request.userAnswers.getV(FurloughStatusPage)
+      getRequiredAnswerV(ClaimPeriodStartPage) { claimStartDate =>
+        Future.successful(Ok(view(maybeFurlough.map(form.fill).getOrElse(form), claimStartDate)))
+      }
     }
-  }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswerV(ClaimPeriodStartPage) { claimStartDate =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, claimStartDate))),
-          value =>
-            userAnswerPersistence
-              .persistAnswer(request.userAnswers, FurloughStatusPage, value, None)
-              .map { updatedAnswers =>
-                Redirect(navigator.nextPage(FurloughStatusPage, updatedAnswers, None))
-            }
-        )
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswerV(ClaimPeriodStartPage) { claimStartDate =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, claimStartDate))),
+            value =>
+              userAnswerPersistence
+                .persistAnswer(request.userAnswers, FurloughStatusPage, value, None)
+                .map { updatedAnswers =>
+                  Redirect(navigator.nextPage(FurloughStatusPage, updatedAnswers, None))
+                }
+          )
+      }
     }
-  }
 }

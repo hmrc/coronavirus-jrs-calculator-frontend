@@ -49,7 +49,7 @@ class EmployeeRTISubmissionControllerSpec extends SpecBaseControllerSpecs {
     FakeRequest(POST, employeeRTISubmissionRoute).withCSRFToken
       .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
       .withFormUrlEncodedBody(
-        "value" -> EmployeeRTISubmission.values.head.toString,
+        "value" -> EmployeeRTISubmission.values.head.toString
       )
 
   def controller(stubbedAnswers: Option[UserAnswers] = Some(emptyUserAnswers)) =

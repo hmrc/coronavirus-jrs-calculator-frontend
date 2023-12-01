@@ -36,7 +36,7 @@ import java.time.Month
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LastYearPayController @Inject()(
+class LastYearPayController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -54,14 +54,15 @@ class LastYearPayController @Inject()(
   val form: Form[Amount]              = formProvider()
   protected val userAnswerPersistence = new UserAnswerPersistence(sessionRepository.set)
 
-  def onPageLoad(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getLastYearPeriods(request.userAnswers).fold(
-      nel => {
-        UserAnswers.logErrors(nel)
-        Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-      }, { periods =>
-        withValidPeriod(periods, idx) {
-          period =>
+  def onPageLoad(idx: Int): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getLastYearPeriods(request.userAnswers).fold(
+        nel => {
+          UserAnswers.logErrors(nel)
+          Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+        },
+        periods =>
+          withValidPeriod(periods, idx) { period =>
             val preparedForm = request.userAnswers.getV(LastYearPayPage) match {
               case Invalid(e)   => form
               case Valid(value) => form.fill(value.amount)
@@ -69,16 +70,14 @@ class LastYearPayController @Inject()(
 
             request.userAnswers.getV(ClaimPeriodStartPage) match {
               case Invalid(e) => Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-              case Valid(startDate) => {
+              case Valid(startDate) =>
                 val isStartDateOfClaimInFebruaryAndYear2021: Boolean = startDate.getMonth == Month.FEBRUARY && startDate.getYear == 2021
                 Future.successful(Ok(view(preparedForm, idx, period, isStartDateOfClaimInFebruaryAndYear2021)))
-              }
             }
 
-        }
-      }
-    )
-  }
+          }
+      )
+    }
 
   def withValidPeriod(periods: Seq[Period], idx: Int)(f: Period => Future[Result]): Future[Result] =
     periods.lift(idx - 1) match {
@@ -86,17 +85,18 @@ class LastYearPayController @Inject()(
       case None         => Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
     }
 
-  def onSubmit(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getLastYearPeriods(request.userAnswers).fold(
-      nel => {
-        UserAnswers.logErrors(nel)
-        Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-      }, { periods =>
-        withValidPeriod(periods, idx) {
-          period =>
+  def onSubmit(idx: Int): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getLastYearPeriods(request.userAnswers).fold(
+        nel => {
+          UserAnswers.logErrors(nel)
+          Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+        },
+        periods =>
+          withValidPeriod(periods, idx) { period =>
             request.userAnswers.getV(ClaimPeriodStartPage) match {
               case Invalid(e) => Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-              case Valid(startDate) => {
+              case Valid(startDate) =>
                 val isStartDateOfClaimInFebruaryAndYear2021: Boolean = startDate.getMonth == Month.FEBRUARY && startDate.getYear == 2021
                 form
                   .bindFromRequest()
@@ -108,12 +108,10 @@ class LastYearPayController @Inject()(
                         .persistAnswer(request.userAnswers, LastYearPayPage, LastYearPayment(period.end, value), Some(idx))
                         .map { updatedAnswers =>
                           Redirect(navigator.nextPage(LastYearPayPage, updatedAnswers, Some(idx)))
-                      }
+                        }
                   )
-              }
             }
-        }
-      }
-    )
-  }
+          }
+      )
+    }
 }

@@ -263,8 +263,10 @@ class HasEmployeeBeenOnStatutoryLeaveControllerISpec
 
         setAnswers(userAnswers)
 
-        val res = postRequest("/been-on-statutory-leave", Json.obj("value" -> "true"))("sessionId" -> userAnswers.id,
-                                                                                       "X-Session-ID" -> userAnswers.id)
+        val res = postRequest("/been-on-statutory-leave", Json.obj("value" -> "true"))(
+          "sessionId"    -> userAnswers.id,
+          "X-Session-ID" -> userAnswers.id
+        )
 
         whenReady(res) { result =>
           result must have(
@@ -299,8 +301,10 @@ class HasEmployeeBeenOnStatutoryLeaveControllerISpec
 
         setAnswers(userAnswers)
 
-        val res = postRequest("/been-on-statutory-leave", Json.obj("value" -> "false"))("sessionId" -> userAnswers.id,
-                                                                                        "X-Session-ID" -> userAnswers.id)
+        val res = postRequest("/been-on-statutory-leave", Json.obj("value" -> "false"))(
+          "sessionId"    -> userAnswers.id,
+          "X-Session-ID" -> userAnswers.id
+        )
 
         whenReady(res) { result =>
           result must have(
@@ -335,8 +339,10 @@ class HasEmployeeBeenOnStatutoryLeaveControllerISpec
 
         setAnswers(userAnswers)
 
-        val res = postRequest("/been-on-statutory-leave", Json.obj("value" -> "INVALID"))("sessionId" -> userAnswers.id,
-                                                                                          "X-Session-ID" -> userAnswers.id)
+        val res = postRequest("/been-on-statutory-leave", Json.obj("value" -> "INVALID"))(
+          "sessionId"    -> userAnswers.id,
+          "X-Session-ID" -> userAnswers.id
+        )
 
         whenReady(res) { result =>
           result must have(

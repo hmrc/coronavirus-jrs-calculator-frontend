@@ -34,7 +34,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class OnPayrollBefore30thOct2020Controller @Inject()(
+class OnPayrollBefore30thOct2020Controller @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -52,29 +52,30 @@ class OnPayrollBefore30thOct2020Controller @Inject()(
   val september1st2020 = LocalDate.of(2020, 9, 1)
   val october30th2020  = LocalDate.of(2020, 10, 30)
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    request.userAnswers.getV(EmployeeStartDatePage) match {
-      case Valid(startDate) if startDate.isAfter(october30th2020) =>
-        saveAndRedirect(answer = false)
-      case Valid(startDate) if startDate.isBefore(september1st2020) =>
-        saveAndRedirect(answer = true)
-      case _ => {
-        renderView(StatusCode.OK)(request.userAnswers.getV(OnPayrollBefore30thOct2020Page) match {
-          case Invalid(_)   => form
-          case Valid(value) => form.fill(value)
-        })
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      request.userAnswers.getV(EmployeeStartDatePage) match {
+        case Valid(startDate) if startDate.isAfter(october30th2020) =>
+          saveAndRedirect(answer = false)
+        case Valid(startDate) if startDate.isBefore(september1st2020) =>
+          saveAndRedirect(answer = true)
+        case _ =>
+          renderView(StatusCode.OK)(request.userAnswers.getV(OnPayrollBefore30thOct2020Page) match {
+            case Invalid(_)   => form
+            case Valid(value) => form.fill(value)
+          })
       }
     }
-  }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        renderView(StatusCode.BAD_REQUEST),
-        saveAndRedirect
-      )
-  }
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          renderView(StatusCode.BAD_REQUEST),
+          saveAndRedirect
+        )
+    }
 
   private def renderView(status: Int)(form: Form[Boolean])(implicit request: DataRequest[_]): Future[Result] =
     Future.successful(Status(status)(view(form, postAction = controllers.routes.OnPayrollBefore30thOct2020Controller.onSubmit())))

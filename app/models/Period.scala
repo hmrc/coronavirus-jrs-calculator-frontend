@@ -62,17 +62,17 @@ object PartialPeriod {
 
 object Periods {
   implicit val defaultFormat: Format[Periods] = new Format[Periods] {
-    override def writes(o: Periods): JsValue = o match {
-      case fp: FullPeriod    => Json.writes[FullPeriod].writes(fp)
-      case pp: PartialPeriod => Json.writes[PartialPeriod].writes(pp)
-    }
+    override def writes(o: Periods): JsValue =
+      o match {
+        case fp: FullPeriod    => Json.writes[FullPeriod].writes(fp)
+        case pp: PartialPeriod => Json.writes[PartialPeriod].writes(pp)
+      }
 
     override def reads(json: JsValue): JsResult[Periods] =
-      if ((json \ "partial").isDefined) {
+      if ((json \ "partial").isDefined)
         Json.reads[PartialPeriod].reads(json)
-      } else {
+      else
         Json.reads[FullPeriod].reads(json)
-      }
   }
 }
 
@@ -84,16 +84,15 @@ case class FullPeriodWithPaymentDate(period: FullPeriod, paymentDate: PaymentDat
 case class PartialPeriodWithPaymentDate(period: PartialPeriod, paymentDate: PaymentDate) extends PeriodWithPaymentDate
 
 case class PhaseTwoPeriod(periodWithPaymentDate: PeriodWithPaymentDate, actualHours: Option[Hours], usualHours: Option[Hours]) {
-  def isPartTime: Boolean = (actualHours.isDefined && usualHours.isDefined)
+  def isPartTime: Boolean = actualHours.isDefined && usualHours.isDefined
   def actual: BigDecimal  = actualHours.defaulted.value
   def usual: BigDecimal   = usualHours.defaulted.value
   def furloughed: BigDecimal = {
     val furloughed = usual - actual
-    if (furloughed < 0) {
+    if (furloughed < 0)
       0.0
-    } else {
+    else
       furloughed
-    }
   }
   def isFullTime: Boolean = isPartTime && furloughed == 0
 }

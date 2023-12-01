@@ -33,13 +33,14 @@ class PartTimeNormalHoursFormProvider @Inject() extends Mappings {
           nonNumericKey = "partTimeNormalHours.error.nonNumeric"
         ).verifying(greaterThan(0.0, "partTimeNormalHours.error.min"))
           .verifying(maximumValue(period))
-      )(Hours.apply)(Hours.unapply))
+      )(Hours.apply)(Hours.unapply)
+    )
 
-  private def maximumValue(period: Periods): Constraint[Double] = Constraint { input =>
-    if (input <= period.period.countHours) {
-      Valid
-    } else {
-      Invalid("partTimeNormalHours.error.max")
+  private def maximumValue(period: Periods): Constraint[Double] =
+    Constraint { input =>
+      if (input <= period.period.countHours)
+        Valid
+      else
+        Invalid("partTimeNormalHours.error.max")
     }
-  }
 }

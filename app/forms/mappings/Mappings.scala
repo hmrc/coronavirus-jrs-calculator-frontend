@@ -27,10 +27,12 @@ trait Mappings extends Formatters with Constraints {
   protected def text(errorKey: String = "error.required"): FieldMapping[String] =
     of(stringFormatter(errorKey))
 
-  protected def int(requiredKey: String = "error.required",
-                    wholeNumberKey: String = "error.wholeNumber",
-                    nonNumericKey: String = "error.nonNumeric",
-                    args: Seq[String] = Seq.empty): FieldMapping[Int] =
+  protected def int(
+    requiredKey: String = "error.required",
+    wholeNumberKey: String = "error.wholeNumber",
+    nonNumericKey: String = "error.nonNumeric",
+    args: Seq[String] = Seq.empty
+  ): FieldMapping[Int] =
     of(intFormatter(requiredKey, wholeNumberKey, nonNumericKey, args))
 
   protected def double(requiredKey: String = "error.required", nonNumericKey: String = "error.nonNumeric"): FieldMapping[Double] =
@@ -39,13 +41,16 @@ trait Mappings extends Formatters with Constraints {
   protected def bigDecimal(requiredKey: String = "error.required", nonNumericKey: String = "error.nonNumeric"): FieldMapping[BigDecimal] =
     of(bigDecimalFormatter(requiredKey, nonNumericKey))
 
-  protected def boolean(requiredKey: String = "error.required",
-                        invalidKey: String = "error.boolean",
-                        args: Seq[String] = Seq()): FieldMapping[Boolean] =
+  protected def boolean(
+    requiredKey: String = "error.required",
+    invalidKey: String = "error.boolean",
+    args: Seq[String] = Seq()
+  ): FieldMapping[Boolean] =
     of(booleanFormatter(requiredKey, invalidKey, args))
 
-  protected def enumerable[A](requiredKey: String = "error.required", invalidKey: String = "error.invalid")(
-    implicit ev: Enumerable[A]): FieldMapping[A] =
+  protected def enumerable[A](requiredKey: String = "error.required", invalidKey: String = "error.invalid")(implicit
+    ev: Enumerable[A]
+  ): FieldMapping[A] =
     of(enumerableFormatter[A](requiredKey, invalidKey))
 
   protected def localDate(invalidKey: String): FieldMapping[LocalDate] = of(new LocalDateFormatter(invalidKey))

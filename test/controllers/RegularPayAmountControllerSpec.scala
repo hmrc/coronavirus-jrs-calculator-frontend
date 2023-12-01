@@ -50,15 +50,17 @@ class RegularPayAmountControllerSpec extends SpecBaseControllerSpecs with Mockit
 
   val view = app.injector.instanceOf[RegularPayAmountView]
 
-  val controller = new RegularPayAmountController(messagesApi,
-                                                  mockSessionRepository,
-                                                  navigator,
-                                                  identifier,
-                                                  dataRetrieval,
-                                                  dataRequired,
-                                                  formProvider,
-                                                  component,
-                                                  view)
+  val controller = new RegularPayAmountController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "RegularPayAmountController" must {
 

@@ -159,7 +159,8 @@ class PreviousFurloughPeriodsControllerSpec extends SpecBaseControllerSpecs with
     "redirect to the next page when the value 'true' is submitted" in {
 
       when(mockSessionRepository.get(any())) thenReturn Future.successful(
-        Some(userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019())))
+        Some(userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019()))
+      )
 
       val result = controller(Some(userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019())))
         .onSubmit()(postRequest)
@@ -171,7 +172,8 @@ class PreviousFurloughPeriodsControllerSpec extends SpecBaseControllerSpecs with
 
     "redirect to the next page when the value 'false' is submitted " in {
       when(mockSessionRepository.get(any())) thenReturn Future.successful(
-        Some(userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019())))
+        Some(userAnswersWithPreviousFurloughPeriodsPageSet(userAnswersEmployedBefore1stFeb2019()))
+      )
 
       lazy val postRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
         FakeRequest(POST, previousFurloughPeriodsRoute).withCSRFToken

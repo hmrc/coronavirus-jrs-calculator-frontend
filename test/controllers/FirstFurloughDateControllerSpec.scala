@@ -113,7 +113,9 @@ class FirstFurloughDateControllerSpec extends SpecBaseControllerSpecs with Featu
           userAnswers
             .set(FirstFurloughDatePage, resultDate.plusDays(7))
             .success
-            .value)).onPageLoad()(getRequest)
+            .value
+        )
+      ).onPageLoad()(getRequest)
 
       status(result) mustBe OK
       contentAsString(result) mustEqual

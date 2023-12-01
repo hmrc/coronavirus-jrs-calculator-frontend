@@ -30,9 +30,8 @@ class EmployeeTypeService() {
 
   def isType5NewStarter()(implicit request: DataRequest[_], appConfig: FrontendAppConfig): Boolean = {
 
-    val employeeStartDatePostCovid: Validated[NonEmptyChain[AnswerValidation], Boolean] = {
+    val employeeStartDatePostCovid: Validated[NonEmptyChain[AnswerValidation], Boolean] =
       request.userAnswers.getV(EmployeeStartDatePage).map(startDate => startDate.isAfter(appConfig.employeeStartDatePostCovid))
-    }
 
     val employeeRTIAnswer: AnswerV[EmployeeRTISubmission] = request.userAnswers.getV(EmployeeRTISubmissionPage)
 

@@ -114,9 +114,11 @@ class BaseControllerSpec extends SpecBaseControllerSpecs with ValidatedValues {
     "answer is not found" must {
 
       "return internal server error" in {
-        val result = BaseController.getRequiredAnswerV(RegularPayAmountPage)(futureResult)(DataRequest(fakeRequest, "id", emptyUserAnswers),
-                                                                                           implicitly,
-                                                                                           errorHandler)
+        val result = BaseController.getRequiredAnswerV(RegularPayAmountPage)(futureResult)(
+          DataRequest(fakeRequest, "id", emptyUserAnswers),
+          implicitly,
+          errorHandler
+        )
 
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
@@ -125,9 +127,11 @@ class BaseControllerSpec extends SpecBaseControllerSpecs with ValidatedValues {
     "validated answer is not found" must {
 
       "return internal server error" in {
-        val result = BaseController.getRequiredAnswerV(RegularPayAmountPage)(futureResult)(DataRequest(fakeRequest, "id", emptyUserAnswers),
-                                                                                           implicitly,
-                                                                                           errorHandler)
+        val result = BaseController.getRequiredAnswerV(RegularPayAmountPage)(futureResult)(
+          DataRequest(fakeRequest, "id", emptyUserAnswers),
+          implicitly,
+          errorHandler
+        )
 
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
@@ -138,9 +142,8 @@ class BaseControllerSpec extends SpecBaseControllerSpecs with ValidatedValues {
       "execute provided function" in {
         val userAnswers = emptyUserAnswers.set(RegularPayAmountPage, Salary(123.45))(implicitly).success.value
 
-        val result = BaseController.getRequiredAnswerV(RegularPayAmountPage)(futureResult)(DataRequest(fakeRequest, "id", userAnswers),
-                                                                                           implicitly,
-                                                                                           errorHandler)
+        val result = BaseController
+          .getRequiredAnswerV(RegularPayAmountPage)(futureResult)(DataRequest(fakeRequest, "id", userAnswers), implicitly, errorHandler)
 
         status(result) mustBe OK
         contentAsString(result) mustBe "Answer: Salary(123.45)"
@@ -152,9 +155,8 @@ class BaseControllerSpec extends SpecBaseControllerSpecs with ValidatedValues {
       "execute provided function" in {
         val userAnswers = emptyUserAnswers.set(RegularPayAmountPage, Salary(123.45))(implicitly).success.value
 
-        val result = BaseController.getRequiredAnswerV(RegularPayAmountPage)(futureResult)(DataRequest(fakeRequest, "id", userAnswers),
-                                                                                           implicitly,
-                                                                                           errorHandler)
+        val result = BaseController
+          .getRequiredAnswerV(RegularPayAmountPage)(futureResult)(DataRequest(fakeRequest, "id", userAnswers), implicitly, errorHandler)
 
         status(result) mustBe OK
         contentAsString(result) mustBe "Answer: Salary(123.45)"
@@ -168,9 +170,8 @@ class BaseControllerSpec extends SpecBaseControllerSpecs with ValidatedValues {
     "answer is not found" must {
 
       "return internal server error" in {
-        val result = BaseController.getRequiredAnswerV(PayDatePage, 1)(futureResult)(DataRequest(fakeRequest, "id", emptyUserAnswers),
-                                                                                     implicitly,
-                                                                                     errorHandler)
+        val result = BaseController
+          .getRequiredAnswerV(PayDatePage, 1)(futureResult)(DataRequest(fakeRequest, "id", emptyUserAnswers), implicitly, errorHandler)
 
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
@@ -179,9 +180,8 @@ class BaseControllerSpec extends SpecBaseControllerSpecs with ValidatedValues {
     "valid answer is not found" must {
 
       "return internal server error" in {
-        val result = BaseController.getRequiredAnswerV(PayDatePage, 1)(futureResult)(DataRequest(fakeRequest, "id", emptyUserAnswers),
-                                                                                     implicitly,
-                                                                                     errorHandler)
+        val result = BaseController
+          .getRequiredAnswerV(PayDatePage, 1)(futureResult)(DataRequest(fakeRequest, "id", emptyUserAnswers), implicitly, errorHandler)
 
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
@@ -193,9 +193,8 @@ class BaseControllerSpec extends SpecBaseControllerSpecs with ValidatedValues {
       "execute provided function" in {
         val userAnswers = emptyUserAnswers.set(PayDatePage, JanuaryFirst2001, Some(1))(implicitly).success.value
 
-        val result = BaseController.getRequiredAnswerV(PayDatePage, 1)(futureResult)(DataRequest(fakeRequest, "id", userAnswers),
-                                                                                     implicitly,
-                                                                                     errorHandler)
+        val result = BaseController
+          .getRequiredAnswerV(PayDatePage, 1)(futureResult)(DataRequest(fakeRequest, "id", userAnswers), implicitly, errorHandler)
 
         status(result) mustBe OK
         contentAsString(result) mustBe "Answer: 2000-01-01"
@@ -213,9 +212,8 @@ class BaseControllerSpec extends SpecBaseControllerSpecs with ValidatedValues {
           .success
           .value
 
-        val result = BaseController.getRequiredAnswerV(PayDatePage, 1)(futureResult)(DataRequest(fakeRequest, "id", userAnswers),
-                                                                                     implicitly,
-                                                                                     errorHandler)
+        val result = BaseController
+          .getRequiredAnswerV(PayDatePage, 1)(futureResult)(DataRequest(fakeRequest, "id", userAnswers), implicitly, errorHandler)
 
         status(result) mustBe OK
         contentAsString(result) mustBe "Answer: 2000-01-01"

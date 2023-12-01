@@ -32,22 +32,24 @@ import views.html.StatutoryLeavePayView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class StatutoryLeavePayController @Inject()(override val messagesApi: MessagesApi,
-                                            sessionRepository: SessionRepository,
-                                            val navigator: Navigator,
-                                            identify: IdentifierAction,
-                                            getData: DataRetrievalAction,
-                                            requireData: DataRequiredAction,
-                                            formProvider: StatutoryLeavePayFormProvider,
-                                            val controllerComponents: MessagesControllerComponents,
-                                            view: StatutoryLeavePayView)(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
+class StatutoryLeavePayController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  val navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: StatutoryLeavePayFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: StatutoryLeavePayView
+)(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
     extends BaseController with I18nSupport {
 
   def form(referencePay: BigDecimal): Form[Amount] = formProvider(referencePay)
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswerV(AnnualPayAmountPage) { annualPayAmount =>
-      {
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswerV(AnnualPayAmountPage) { annualPayAmount =>
         val preparedForm = request.userAnswers.getV(StatutoryLeavePayPage) match {
           case Invalid(e)   => form(annualPayAmount.amount)
           case Valid(value) => form(annualPayAmount.amount).fill(value)
@@ -56,11 +58,10 @@ class StatutoryLeavePayController @Inject()(override val messagesApi: MessagesAp
         Future(Ok(view(preparedForm)))
       }
     }
-  }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswerV(AnnualPayAmountPage) { annualPayAmount =>
-      {
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswerV(AnnualPayAmountPage) { annualPayAmount =>
         form(annualPayAmount.amount)
           .bindFromRequest()
           .fold(
@@ -73,5 +74,4 @@ class StatutoryLeavePayController @Inject()(override val messagesApi: MessagesAp
           )
       }
     }
-  }
 }

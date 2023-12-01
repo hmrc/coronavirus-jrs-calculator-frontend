@@ -22,7 +22,6 @@ import play.api.http.Status._
 import play.api.libs.json.Json
 import utils.{CreateRequestHelper, CustomMatchers, IntegrationSpecBase}
 
-
 class ClaimPeriodStartControllerISpec extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with BaseITConstants {
 
   "GET /claim-period-start" when {
@@ -46,13 +45,14 @@ class ClaimPeriodStartControllerISpec extends IntegrationSpecBase with CreateReq
 
       "redirect to claim-period-end page" in {
 
-        val res = postRequest("/claim-period-start",
+        val res = postRequest(
+          "/claim-period-start",
           Json.obj(
-            "startDate.day" -> claimStartDate.getDayOfMonth,
+            "startDate.day"   -> claimStartDate.getDayOfMonth,
             "startDate.month" -> claimStartDate.getMonthValue,
-            "startDate.year" -> claimStartDate.getYear
-          ))()
-
+            "startDate.year"  -> claimStartDate.getYear
+          )
+        )()
 
         whenReady(res) { result =>
           result must have(

@@ -32,7 +32,7 @@ import views.html.NumberOfStatLeaveDaysView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class NumberOfStatLeaveDaysController @Inject()(
+class NumberOfStatLeaveDaysController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -47,42 +47,47 @@ class NumberOfStatLeaveDaysController @Inject()(
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val form: Form[Int] = formProvider(boundaryStart = formHelper.boundaryStartDate, boundaryEnd = formHelper.boundaryEndDate)
-    val preparedForm = request.userAnswers.getV(NumberOfStatLeaveDaysPage) match {
-      case Invalid(_)   => form
-      case Valid(value) => form.fill(value)
-    }
-    val postAction = controllers.routes.NumberOfStatLeaveDaysController.onSubmit()
-    Ok(
-      view(
-        form = preparedForm,
-        postAction = postAction,
-        boundaryStart = contentHelper.boundaryStart(),
-        boundaryEnd = contentHelper.boundaryEnd()
-      ))
-  }
-
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val postAction      = controllers.routes.NumberOfStatLeaveDaysController.onSubmit()
-    val form: Form[Int] = formProvider(formHelper.boundaryStartDate, formHelper.boundaryEndDate)
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors =>
-          Future.successful(
-            BadRequest(
-              view(
-                form = formWithErrors,
-                postAction = postAction,
-                boundaryStart = contentHelper.boundaryStart(),
-                boundaryEnd = contentHelper.boundaryEnd()
-              ))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(NumberOfStatLeaveDaysPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NumberOfStatLeaveDaysPage, updatedAnswers))
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      val form: Form[Int] = formProvider(boundaryStart = formHelper.boundaryStartDate, boundaryEnd = formHelper.boundaryEndDate)
+      val preparedForm = request.userAnswers.getV(NumberOfStatLeaveDaysPage) match {
+        case Invalid(_)   => form
+        case Valid(value) => form.fill(value)
+      }
+      val postAction = controllers.routes.NumberOfStatLeaveDaysController.onSubmit()
+      Ok(
+        view(
+          form = preparedForm,
+          postAction = postAction,
+          boundaryStart = contentHelper.boundaryStart(),
+          boundaryEnd = contentHelper.boundaryEnd()
+        )
       )
-  }
+    }
+
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      val postAction      = controllers.routes.NumberOfStatLeaveDaysController.onSubmit()
+      val form: Form[Int] = formProvider(formHelper.boundaryStartDate, formHelper.boundaryEndDate)
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(
+                view(
+                  form = formWithErrors,
+                  postAction = postAction,
+                  boundaryStart = contentHelper.boundaryStart(),
+                  boundaryEnd = contentHelper.boundaryEnd()
+                )
+              )
+            ),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(NumberOfStatLeaveDaysPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(NumberOfStatLeaveDaysPage, updatedAnswers))
+        )
+    }
 }

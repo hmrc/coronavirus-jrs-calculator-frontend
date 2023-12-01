@@ -75,11 +75,10 @@ package object models {
 
       oldValue match {
         case oldValue: JsArray if index >= 0 && index <= oldValue.value.length =>
-          if (index == oldValue.value.length) {
+          if (index == oldValue.value.length)
             JsSuccess(oldValue.append(newValue))
-          } else {
+          else
             JsSuccess(JsArray(oldValue.value.updated(index, newValue)))
-          }
         case oldValue: JsArray =>
           JsError(s"array index out of bounds: $index, $oldValue")
         case _ =>

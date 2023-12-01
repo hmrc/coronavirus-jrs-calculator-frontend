@@ -21,9 +21,11 @@ import play.twirl.api.Html
 
 import javax.inject.Inject
 
-case class StartPageCalcTable @Inject()(table: views.html.components.table,
-                                        strong: views.html.components.strong,
-                                        visuallyhidden: views.html.components.visuallyhidden) {
+case class StartPageCalcTable @Inject() (
+  table: views.html.components.table,
+  strong: views.html.components.strong,
+  visuallyhidden: views.html.components.visuallyhidden
+) {
 
   def renderTable(implicit messages: Messages): Html =
     table(
@@ -36,7 +38,8 @@ case class StartPageCalcTable @Inject()(table: views.html.components.table,
               Cell(Html(messages("startPage.whatCanYouClaim.table.column2Heading"))),
               Cell(Html(messages("startPage.whatCanYouClaim.table.column3Heading")))
             )
-          )),
+          )
+        ),
         rows = Seq(
           Row(
             Seq(

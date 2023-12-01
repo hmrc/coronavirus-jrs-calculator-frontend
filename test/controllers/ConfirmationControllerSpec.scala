@@ -106,13 +106,12 @@ class ConfirmationControllerSpec extends SpecBaseControllerSpecs with CoreTestDa
       val request: FakeRequest[AnyContentAsEmpty.type]     = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
       val result: Future[Result]                           = controller.onPageLoad()(request)
       val dataRequest: DataRequest[AnyContentAsEmpty.type] = DataRequest(request, userAnswers().id, userAnswers())
-      val payment: RegularPaymentWithPhaseTwoPeriod = {
+      val payment: RegularPaymentWithPhaseTwoPeriod =
         RegularPaymentWithPhaseTwoPeriod(
           regularPay = Amount(2000.00),
           referencePay = Amount(2000.0),
           phaseTwoPeriod = PhaseTwoPeriod(fullPeriodWithPaymentDate("2020, 7, 1", "2020, 7, 31", "2020, 7, 31"), None, None)
         )
-      }
 
       val breakdown = PhaseTwoConfirmationViewBreakdown(
         PhaseTwoFurloughCalculationResult(
@@ -133,7 +132,8 @@ class ConfirmationControllerSpec extends SpecBaseControllerSpecs with CoreTestDa
       contentAsString(result) mustEqual phaseTwoView(breakdown, period("2020, 7, 1", "2020, 7, 31"), calculatorVersionConf)(
         dataRequest,
         messages,
-        appConf).toString
+        appConf
+      ).toString
     }
 
     "return OK and the JRSExtension view with calculations, for a GET for dates 1st to 31st March 2021 (80% Grant)" in new CalculatorVersionConfiguration {
@@ -167,7 +167,7 @@ class ConfirmationControllerSpec extends SpecBaseControllerSpecs with CoreTestDa
       val claimStartDate                    = "2021, 3, 1"
       val claimEndDate                      = "2021, 3, 31"
 
-      val payment: RegularPaymentWithPhaseTwoPeriod = {
+      val payment: RegularPaymentWithPhaseTwoPeriod =
         RegularPaymentWithPhaseTwoPeriod(
           regularPay = employeeIncomeForPeriod,
           referencePay = employeeIncomeForPeriod,
@@ -177,20 +177,20 @@ class ConfirmationControllerSpec extends SpecBaseControllerSpecs with CoreTestDa
             usualHours = None
           )
         )
-      }
 
-      val breakdown: ConfirmationViewBreakdownWithoutNicAndPension = {
+      val breakdown: ConfirmationViewBreakdownWithoutNicAndPension =
         ConfirmationViewBreakdownWithoutNicAndPension(
           furlough = PhaseTwoFurloughCalculationResult(
             total = maxMonthFurloughGrant,
             periodBreakdowns = Seq(
-              PhaseTwoFurloughBreakdown(grant = Amount(maxMonthFurloughGrant),
-                                        paymentWithPeriod = payment,
-                                        furloughCap = FullPeriodCap(maxMonthFurloughGrant))
+              PhaseTwoFurloughBreakdown(
+                grant = Amount(maxMonthFurloughGrant),
+                paymentWithPeriod = payment,
+                furloughCap = FullPeriodCap(maxMonthFurloughGrant)
+              )
             )
           )
         )
-      }
 
       val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
       val dataRequest                                  = DataRequest(request, userAnswers().id, userAnswers())
@@ -229,7 +229,7 @@ class ConfirmationControllerSpec extends SpecBaseControllerSpecs with CoreTestDa
 
       val maxMonthFurloughGrant: BigDecimal = 2500
 
-      val payment: RegularPaymentWithPhaseTwoPeriod = {
+      val payment: RegularPaymentWithPhaseTwoPeriod =
         RegularPaymentWithPhaseTwoPeriod(
           regularPay = employeeIncomeForPeriod,
           referencePay = employeeIncomeForPeriod,
@@ -239,20 +239,20 @@ class ConfirmationControllerSpec extends SpecBaseControllerSpecs with CoreTestDa
             usualHours = None
           )
         )
-      }
 
-      val breakdown: ConfirmationViewBreakdownWithoutNicAndPension = {
+      val breakdown: ConfirmationViewBreakdownWithoutNicAndPension =
         ConfirmationViewBreakdownWithoutNicAndPension(
           furlough = PhaseTwoFurloughCalculationResult(
             total = maxMonthFurloughGrant,
             periodBreakdowns = Seq(
-              PhaseTwoFurloughBreakdown(grant = Amount(maxMonthFurloughGrant),
-                                        paymentWithPeriod = payment,
-                                        furloughCap = FullPeriodCap(maxMonthFurloughGrant))
+              PhaseTwoFurloughBreakdown(
+                grant = Amount(maxMonthFurloughGrant),
+                paymentWithPeriod = payment,
+                furloughCap = FullPeriodCap(maxMonthFurloughGrant)
+              )
             )
           )
         )
-      }
 
       val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
       val dataRequest                                  = DataRequest(request, userAnswers().id, userAnswers())
@@ -291,7 +291,7 @@ class ConfirmationControllerSpec extends SpecBaseControllerSpecs with CoreTestDa
 
       val maxMonthFurloughGrant: BigDecimal = 2500
 
-      val payment: RegularPaymentWithPhaseTwoPeriod = {
+      val payment: RegularPaymentWithPhaseTwoPeriod =
         RegularPaymentWithPhaseTwoPeriod(
           regularPay = employeeIncomeForPeriod,
           referencePay = employeeIncomeForPeriod,
@@ -301,20 +301,20 @@ class ConfirmationControllerSpec extends SpecBaseControllerSpecs with CoreTestDa
             usualHours = None
           )
         )
-      }
 
-      val breakdown: ConfirmationViewBreakdownWithoutNicAndPension = {
+      val breakdown: ConfirmationViewBreakdownWithoutNicAndPension =
         ConfirmationViewBreakdownWithoutNicAndPension(
           furlough = PhaseTwoFurloughCalculationResult(
             total = maxMonthFurloughGrant,
             periodBreakdowns = Seq(
-              PhaseTwoFurloughBreakdown(grant = Amount(maxMonthFurloughGrant),
-                                        paymentWithPeriod = payment,
-                                        furloughCap = FullPeriodCap(maxMonthFurloughGrant))
+              PhaseTwoFurloughBreakdown(
+                grant = Amount(maxMonthFurloughGrant),
+                paymentWithPeriod = payment,
+                furloughCap = FullPeriodCap(maxMonthFurloughGrant)
+              )
             )
           )
         )
-      }
 
       val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
       val dataRequest                                  = DataRequest(request, userAnswers().id, userAnswers())
@@ -353,7 +353,7 @@ class ConfirmationControllerSpec extends SpecBaseControllerSpecs with CoreTestDa
 
       val maxMonthFurloughGrant: BigDecimal = 2500
 
-      val payment: RegularPaymentWithPhaseTwoPeriod = {
+      val payment: RegularPaymentWithPhaseTwoPeriod =
         RegularPaymentWithPhaseTwoPeriod(
           regularPay = employeeIncomeForPeriod,
           referencePay = employeeIncomeForPeriod,
@@ -363,20 +363,20 @@ class ConfirmationControllerSpec extends SpecBaseControllerSpecs with CoreTestDa
             usualHours = None
           )
         )
-      }
 
-      val breakdown: ConfirmationViewBreakdownWithoutNicAndPension = {
+      val breakdown: ConfirmationViewBreakdownWithoutNicAndPension =
         ConfirmationViewBreakdownWithoutNicAndPension(
           furlough = PhaseTwoFurloughCalculationResult(
             total = maxMonthFurloughGrant,
             periodBreakdowns = Seq(
-              PhaseTwoFurloughBreakdown(grant = Amount(maxMonthFurloughGrant),
-                                        paymentWithPeriod = payment,
-                                        furloughCap = FullPeriodCap(maxMonthFurloughGrant))
+              PhaseTwoFurloughBreakdown(
+                grant = Amount(maxMonthFurloughGrant),
+                paymentWithPeriod = payment,
+                furloughCap = FullPeriodCap(maxMonthFurloughGrant)
+              )
             )
           )
         )
-      }
 
       val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
       val dataRequest                                  = DataRequest(request, userAnswers().id, userAnswers())

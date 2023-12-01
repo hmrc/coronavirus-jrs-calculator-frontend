@@ -30,7 +30,7 @@ import views.html.FurloughInLastTaxYearView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class FurloughInLastTaxYearController @Inject()(
+class FurloughInLastTaxYearController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -45,25 +45,27 @@ class FurloughInLastTaxYearController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.getV(FurloughInLastTaxYearPage) match {
-      case Invalid(_)   => form
-      case Valid(value) => form.fill(value)
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      val preparedForm = request.userAnswers.getV(FurloughInLastTaxYearPage) match {
+        case Invalid(_)   => form
+        case Valid(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm))
     }
 
-    Ok(view(preparedForm))
-  }
-
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(FurloughInLastTaxYearPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(FurloughInLastTaxYearPage, updatedAnswers))
-      )
-  }
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(FurloughInLastTaxYearPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(FurloughInLastTaxYearPage, updatedAnswers))
+        )
+    }
 }

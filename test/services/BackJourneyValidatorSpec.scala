@@ -35,6 +35,7 @@ class BackJourneyValidatorSpec extends SpecBase with CoreTestData {
     validateBackJourney(
       emptyUserAnswers
         .withClaimPeriodStart("2020,1,1")
-        .withClaimPeriodEnd("2020,2,1")) mustBe BackFirstPage
+        .withClaimPeriodEnd("2020,2,1")
+    ) mustBe BackFirstPage
   }
 }

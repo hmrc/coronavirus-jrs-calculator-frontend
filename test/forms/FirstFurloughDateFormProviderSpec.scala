@@ -89,7 +89,7 @@ class FirstFurloughDateFormProviderSpec extends SpecBaseControllerSpecs {
         val data = Map(
           "firstFurloughDate.day"   -> date.getDayOfMonth.toString,
           "firstFurloughDate.month" -> date.getMonthValue.toString,
-          "firstFurloughDate.year"  -> date.getYear.toString,
+          "firstFurloughDate.year"  -> date.getYear.toString
         )
 
         val result = form(firstFurloughDatesGenEnd.plusDays(1)).bind(data)
@@ -105,7 +105,7 @@ class FirstFurloughDateFormProviderSpec extends SpecBaseControllerSpecs {
       result.errors must contain allElementsOf List(
         FormError(s"firstFurloughDate.day", LocalDateFormatter.dayBlankErrorKey),
         FormError(s"firstFurloughDate.month", LocalDateFormatter.monthBlankErrorKey),
-        FormError(s"firstFurloughDate.year", LocalDateFormatter.yearBlankErrorKey),
+        FormError(s"firstFurloughDate.year", LocalDateFormatter.yearBlankErrorKey)
       )
     }
 
@@ -114,7 +114,7 @@ class FirstFurloughDateFormProviderSpec extends SpecBaseControllerSpecs {
       val data = Map(
         "firstFurloughDate.day"   -> "1",
         "firstFurloughDate.month" -> "2",
-        "firstFurloughDate.year"  -> "2020",
+        "firstFurloughDate.year"  -> "2020"
       )
 
       val result = form(firstFurloughDatesGenEnd.plusDays(1)).bind(data)

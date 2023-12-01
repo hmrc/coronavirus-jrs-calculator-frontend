@@ -41,15 +41,17 @@ class PensionContributionControllerSpec extends SpecBaseControllerSpecs with Moc
 
   val view = app.injector.instanceOf[PensionContributionView]
 
-  val controller = new PensionContributionController(messagesApi,
-                                                     mockSessionRepository,
-                                                     navigator,
-                                                     identifier,
-                                                     dataRetrieval,
-                                                     dataRequired,
-                                                     formProvider,
-                                                     component,
-                                                     view)
+  val controller = new PensionContributionController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "PensionContributionController" must {
 

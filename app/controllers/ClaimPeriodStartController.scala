@@ -34,7 +34,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ClaimPeriodStartController @Inject()(
+class ClaimPeriodStartController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -49,28 +49,30 @@ class ClaimPeriodStartController @Inject()(
   def form(implicit messages: Messages): Form[LocalDate] = formProvider()
   protected val userAnswerPersistence                    = new UserAnswerPersistence(sessionRepository.set)
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .getOrElse(UserAnswers(request.internalId))
-      .getV(ClaimPeriodStartPage) match {
-      case Invalid(e)   => form
-      case Valid(value) => form.fill(value)
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData) { implicit request =>
+      val preparedForm = request.userAnswers
+        .getOrElse(UserAnswers(request.internalId))
+        .getV(ClaimPeriodStartPage) match {
+        case Invalid(e)   => form
+        case Valid(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm))
     }
 
-    Ok(view(preparedForm))
-  }
-
-  def onSubmit(): Action[AnyContent] = (identify andThen getData).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
-        value =>
-          userAnswerPersistence
-            .persistAnswer(UserAnswers(request.internalId), ClaimPeriodStartPage, value, None)
-            .map { updatedAnswers =>
-              Redirect(navigator.nextPage(ClaimPeriodStartPage, updatedAnswers, None))
-          }
-      )
-  }
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
+          value =>
+            userAnswerPersistence
+              .persistAnswer(UserAnswers(request.internalId), ClaimPeriodStartPage, value, None)
+              .map { updatedAnswers =>
+                Redirect(navigator.nextPage(ClaimPeriodStartPage, updatedAnswers, None))
+              }
+        )
+    }
 }

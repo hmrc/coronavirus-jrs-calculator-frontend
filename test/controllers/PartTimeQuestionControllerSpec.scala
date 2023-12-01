@@ -46,15 +46,17 @@ class PartTimeQuestionControllerSpec extends SpecBaseControllerSpecs with Mockit
 
   val view = app.injector.instanceOf[PartTimeQuestionView]
 
-  val controller = new PartTimeQuestionController(messagesApi,
-                                                  mockSessionRepository,
-                                                  navigator,
-                                                  identifier,
-                                                  dataRetrieval,
-                                                  dataRequired,
-                                                  formProvider,
-                                                  component,
-                                                  view)
+  val controller = new PartTimeQuestionController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "PartTimeQuestion Controller" must {
 
@@ -91,7 +93,8 @@ class PartTimeQuestionControllerSpec extends SpecBaseControllerSpecs with Mockit
       contentAsString(result) mustEqual
         view(form.fill(PartTimeQuestion.values.head), FurloughWithinClaim(LocalDate.of(2020, 7, 1), LocalDate.of(2020, 7, 15)))(
           dataRequest,
-          messages).toString
+          messages
+        ).toString
     }
 
     "redirect to the next page when valid data is submitted" in {

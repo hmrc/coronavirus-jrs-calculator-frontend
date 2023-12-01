@@ -48,15 +48,17 @@ class StatutoryLeavePayControllerSpec extends SpecBaseControllerSpecs with Mocki
 
   val view: StatutoryLeavePayView = app.injector.instanceOf[StatutoryLeavePayView]
 
-  val controller = new StatutoryLeavePayController(messagesApi,
-                                                   mockSessionRepository,
-                                                   navigator,
-                                                   identifier,
-                                                   dataRetrieval,
-                                                   dataRequired,
-                                                   formProvider,
-                                                   component,
-                                                   view)
+  val controller = new StatutoryLeavePayController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "StatutoryLeavePay Controller" must {
 

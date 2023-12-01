@@ -33,13 +33,14 @@ object PayMethod extends Enumerable.Implicits {
     Regular
   )
 
-  def options(form: Form[_])(implicit messages: Messages): Seq[RadioItem] = values.map { value =>
-    RadioItem(
-      value = Some(value.toString),
-      content = Text(messages(s"payMethod.${value.toString}")),
-      checked = form("value").value.contains(value.toString)
-    )
-  }
+  def options(form: Form[_])(implicit messages: Messages): Seq[RadioItem] =
+    values.map { value =>
+      RadioItem(
+        value = Some(value.toString),
+        content = Text(messages(s"payMethod.${value.toString}")),
+        checked = form("value").value.contains(value.toString)
+      )
+    }
 
   implicit val enumerable: Enumerable[PayMethod] =
     Enumerable(values.map(v => v.toString -> v): _*)

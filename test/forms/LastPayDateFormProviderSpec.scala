@@ -39,10 +39,12 @@ class LastPayDateFormProviderSpec extends DateBehaviours with GuiceOneAppPerSuit
 
   ".value" must {
 
-    behave like dateFieldWithMin(form,
-                                 "value",
-                                 minimiumDate.minusDays(90),
-                                 FormError("value", "lastPayDate.error.minimum", Seq(ViewUtils.dateToString(minimiumDate.minusDays(90)))))
+    behave like dateFieldWithMin(
+      form,
+      "value",
+      minimiumDate.minusDays(90),
+      FormError("value", "lastPayDate.error.minimum", Seq(ViewUtils.dateToString(minimiumDate.minusDays(90))))
+    )
 
     behave like mandatoryDateField(form, "value")
   }

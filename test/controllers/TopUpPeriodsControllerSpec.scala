@@ -50,11 +50,13 @@ class TopUpPeriodsControllerSpec extends SpecBaseControllerSpecs with MockitoSug
     fullPeriodFurloughBreakdown(
       1600.00,
       regularPaymentWithFullPeriod(2000.00, 2000.00, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-31")),
-      FullPeriodCap(2500.00)),
+      FullPeriodCap(2500.00)
+    ),
     fullPeriodFurloughBreakdown(
       1600.00,
       regularPaymentWithFullPeriod(2000.00, 2000.00, fullPeriodWithPaymentDate("2020-04-01", "2020-04-30", "2020-04-30")),
-      FullPeriodCap(2500.00))
+      FullPeriodCap(2500.00)
+    )
   )
 
   val baseUserAnswers = emptyUserAnswers
@@ -70,15 +72,17 @@ class TopUpPeriodsControllerSpec extends SpecBaseControllerSpecs with MockitoSug
 
   val view = app.injector.instanceOf[TopUpPeriodsView]
 
-  val controller = new TopUpPeriodsController(messagesApi,
-                                              mockSessionRepository,
-                                              navigator,
-                                              identifier,
-                                              dataRetrieval,
-                                              dataRequired,
-                                              formProvider,
-                                              component,
-                                              view)
+  val controller = new TopUpPeriodsController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "TopupPeriods Controller" must {
 

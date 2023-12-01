@@ -25,7 +25,7 @@ import play.api.data.Form
 import play.api.i18n.Messages
 import views.ViewUtils._
 
-class FurloughStartDateFormProvider @Inject()() extends Mappings with SchemeConfiguration {
+class FurloughStartDateFormProvider @Inject() () extends Mappings with SchemeConfiguration {
 
   def apply(claimPeriodEnd: LocalDate)(implicit messages: Messages): Form[LocalDate] =
     Form(

@@ -37,11 +37,11 @@ trait FurloughCalculator extends FurloughCapCalculator with TaxYearFinder with C
         case pp: PartialPeriodWithPaymentDate => partialFurloughCap(pp.period.partial)
       }
 
-      val capBasedOnHours = if (payment.phaseTwoPeriod.isPartTime) {
-        cap.toPartTime(payment.phaseTwoPeriod.usual, payment.phaseTwoPeriod.furloughed)
-      } else {
-        cap
-      }
+      val capBasedOnHours =
+        if (payment.phaseTwoPeriod.isPartTime)
+          cap.toPartTime(payment.phaseTwoPeriod.usual, payment.phaseTwoPeriod.furloughed)
+        else
+          cap
 
       val grant = claimableAmount(payment.referencePay, capBasedOnHours.value)
 

@@ -33,26 +33,25 @@ trait PeriodHelper {
 
   def generatePeriods(endDates: Seq[LocalDate]): Seq[Period] = {
     @tailrec
-    def generate(acc: Seq[Period], list: Seq[LocalDate]): Seq[Period] = list match {
-      case Nil      => acc
-      case _ +: Nil => acc
-      case h +: t   => generate(acc ++ Seq(Period(h.plusDays(1), t.head)), t)
-    }
+    def generate(acc: Seq[Period], list: Seq[LocalDate]): Seq[Period] =
+      list match {
+        case Nil      => acc
+        case _ +: Nil => acc
+        case h +: t   => generate(acc ++ Seq(Period(h.plusDays(1), t.head)), t)
+      }
 
-    if (endDates.length == 1) {
+    if (endDates.length == 1)
       endDates.map(date => Period(date, date))
-    } else {
+    else
       generate(Seq.empty, sortedEndDates(endDates))
-    }
   }
 
   def generateEndDates(frequency: PaymentFrequency, firstEndDate: LocalDate, furloughPeriod: FurloughWithinClaim): Seq[LocalDate] = {
     def generate(acc: Seq[LocalDate], latest: LocalDate): Seq[LocalDate] =
-      if (!latest.isBefore(furloughPeriod.end)) {
+      if (!latest.isBefore(furloughPeriod.end))
         acc ++ Seq(latest)
-      } else {
+      else
         generate(acc ++ Seq(latest), latest.plusDays(paymentFrequencyDays(frequency)))
-      }
 
     generate(Seq(firstEndDate), firstEndDate.plusDays(paymentFrequencyDays(frequency)))
   }
@@ -60,26 +59,28 @@ trait PeriodHelper {
   def endDateOrTaxYearEnd(period: Period, claimStart: LocalDate): Period = {
     val taxYearStart = LocalDate.of(2019, 4, 6)
     val start =
-      if (claimStart.isEqualOrAfter(LocalDate.of(2020, 11, 1))
-          && period.start.isAfter(LocalDate.of(2020, 3, 19))
-          && period.start.isBefore(LocalDate.of(2020, 4, 6))) {
+      if (
+        claimStart.isEqualOrAfter(LocalDate.of(2020, 11, 1))
+        && period.start.isAfter(LocalDate.of(2020, 3, 19))
+        && period.start.isBefore(LocalDate.of(2020, 4, 6))
+      )
         LocalDate.of(2020, 4, 6)
-      } else if (period.start.isBefore(taxYearStart)) {
+      else if (period.start.isBefore(taxYearStart))
         taxYearStart
-      } else {
+      else
         period.start
-      }
 
     val taxYearEnd = LocalDate.of(2020, 4, 5)
     val end =
-      if (claimStart.isEqualOrAfter(LocalDate.of(2020, 11, 1))
-          && start.isAfter(taxYearEnd)) {
+      if (
+        claimStart.isEqualOrAfter(LocalDate.of(2020, 11, 1))
+        && start.isAfter(taxYearEnd)
+      )
         period.end
-      } else if (period.end.isAfter(taxYearEnd)) {
+      else if (period.end.isAfter(taxYearEnd))
         taxYearEnd
-      } else {
+      else
         period.end
-      }
 
     Period(start, end)
   }
@@ -92,20 +93,22 @@ trait PeriodHelper {
 
   def fullOrPartialPeriod(period: Period, furloughPeriod: FurloughWithinClaim): Periods = {
     val start =
-      if (furloughPeriod.start.isAfter(period.start) &&
-          furloughPeriod.start.isEqualOrBefore(period.end)) {
+      if (
+        furloughPeriod.start.isAfter(period.start) &&
+        furloughPeriod.start.isEqualOrBefore(period.end)
+      )
         furloughPeriod.start
-      } else {
+      else
         period.start
-      }
 
     val end =
-      if (furloughPeriod.end.isEqualOrAfter(period.start) &&
-          furloughPeriod.end.isBefore(period.end)) {
+      if (
+        furloughPeriod.end.isEqualOrAfter(period.start) &&
+        furloughPeriod.end.isBefore(period.end)
+      )
         furloughPeriod.end
-      } else {
+      else
         period.end
-      }
 
     val partial = Period(start, end)
 
@@ -118,7 +121,7 @@ trait PeriodHelper {
 
   def assignPayDates(frequency: PaymentFrequency, sortedPeriods: Seq[Periods], lastPayDay: LocalDate): Seq[PeriodWithPaymentDate] =
     sortedPeriods.zip(sortedPeriods.length - 1 to 0 by -1).map {
-      case (p, idx) => {
+      case (p, idx) =>
         (p, frequency) match {
           case (fp: FullPeriod, Monthly)        => FullPeriodWithPaymentDate(fp, PaymentDate(lastPayDay.minusMonths(idx)))
           case (pp: PartialPeriod, Monthly)     => PartialPeriodWithPaymentDate(pp, PaymentDate(lastPayDay.minusMonths(idx)))
@@ -129,7 +132,6 @@ trait PeriodHelper {
           case (fp: FullPeriod, Weekly)         => FullPeriodWithPaymentDate(fp, PaymentDate(lastPayDay.minusWeeks(idx * 1)))
           case (pp: PartialPeriod, Weekly)      => PartialPeriodWithPaymentDate(pp, PaymentDate(lastPayDay.minusWeeks(idx * 1)))
         }
-      }
     }
 
   def assignPartTimeHours(periods: Seq[PeriodWithPaymentDate], actuals: Seq[PartTimeHours], usuals: Seq[UsualHours]): Seq[PhaseTwoPeriod] =

@@ -58,10 +58,12 @@ class HasEmployeeBeenOnStatutoryLeaveViewSpec extends YesNoViewBehaviours with L
   behave like pageWithBackLink
   behave like pageWithSubmitButton(BaseMessages.continue)
   behave like normalPage(messageKeyPrefix = messageKeyPrefix, headingArgs = Seq(boundaryStart, boundaryEnd))
-  behave like yesNoPage(form,
-                        applyView(),
-                        messageKeyPrefix,
-                        headingArgs = Seq(boundaryStart, boundaryEnd),
-                        titleArgs = Seq(boundaryStart, boundaryEnd))
+  behave like yesNoPage(
+    form,
+    applyView(),
+    messageKeyPrefix,
+    headingArgs = Seq(boundaryStart, boundaryEnd),
+    titleArgs = Seq(boundaryStart, boundaryEnd)
+  )
   behave like pageWithExpectedMessages(expectedContent)
 }

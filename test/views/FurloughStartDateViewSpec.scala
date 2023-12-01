@@ -53,10 +53,11 @@ class FurloughStartDateViewSpec extends QuestionViewBehaviours[LocalDate] {
 
       implicit val request: DataRequest[_] = fakeDataRequest()
 
-      def applyView(): HtmlFormat.Appendable = view(
-        form = form,
-        claimStartDate = period.start
-      )
+      def applyView(): HtmlFormat.Appendable =
+        view(
+          form = form,
+          claimStartDate = period.start
+        )
 
       implicit val doc: Document = asDocument(applyView())
 
@@ -84,10 +85,11 @@ class FurloughStartDateViewSpec extends QuestionViewBehaviours[LocalDate] {
 
       implicit val request: DataRequest[_] = fakeDataRequest()
 
-      def applyView(): HtmlFormat.Appendable = view(
-        form = form,
-        claimStartDate = period.start
-      )
+      def applyView(): HtmlFormat.Appendable =
+        view(
+          form = form,
+          claimStartDate = period.start
+        )
 
       implicit val doc: Document = asDocument(applyView())
 
@@ -116,10 +118,11 @@ class FurloughStartDateViewSpec extends QuestionViewBehaviours[LocalDate] {
 
       implicit val request: DataRequest[_] = fakeDataRequest()
 
-      def applyView(): HtmlFormat.Appendable = view(
-        form = form,
-        claimStartDate = period.start
-      )
+      def applyView(): HtmlFormat.Appendable =
+        view(
+          form = form,
+          claimStartDate = period.start
+        )
 
       implicit val doc: Document = asDocument(applyView())
 

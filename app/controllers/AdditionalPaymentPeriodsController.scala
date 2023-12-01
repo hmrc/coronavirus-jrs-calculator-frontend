@@ -36,7 +36,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AdditionalPaymentPeriodsController @Inject()(
+class AdditionalPaymentPeriodsController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -53,53 +53,58 @@ class AdditionalPaymentPeriodsController @Inject()(
 
   val userAnswerPersistence = new UserAnswerPersistence(sessionRepository.set)
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    handleCalculationFurloughV(request.userAnswers)
-      .map { furlough =>
-        furlough.periodBreakdowns match {
-          case breakdown :: Nil =>
-            import breakdown.paymentWithPeriod.periodWithPaymentDate.period._
-            saveAndRedirect(request.userAnswers, List(period.end))
-          case _ =>
-            val preparedForm = request.userAnswers.getV(AdditionalPaymentPeriodsPage) match {
-              case Invalid(e)           => form
-              case Valid(selectedDates) => form.fill(selectedDates)
-            }
-            Future.successful(Ok(view(preparedForm, furlough.periodBreakdowns)))
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      handleCalculationFurloughV(request.userAnswers)
+        .map { furlough =>
+          furlough.periodBreakdowns match {
+            case breakdown :: Nil =>
+              import breakdown.paymentWithPeriod.periodWithPaymentDate.period._
+              saveAndRedirect(request.userAnswers, List(period.end))
+            case _ =>
+              val preparedForm = request.userAnswers.getV(AdditionalPaymentPeriodsPage) match {
+                case Invalid(e)           => form
+                case Valid(selectedDates) => form.fill(selectedDates)
+              }
+              Future.successful(Ok(view(preparedForm, furlough.periodBreakdowns)))
+          }
         }
-      }
-      .fold(nel => {
+        .fold(
+          nel => {
+            UserAnswers.logErrors(nel)(logger.logger)
+            Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+          },
+          identity
+        )
+    }
+
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      handleCalculationFurloughV(request.userAnswers)
+        .map { furlough =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, furlough.periodBreakdowns))),
+              { dates =>
+                val periods = dates.flatMap { date =>
+                  furlough.periodBreakdowns
+                    .map(_.paymentWithPeriod.periodWithPaymentDate.period.period.end)
+                    .find(_ == date)
+                }
+
+                if (dates.length != periods.length) {
+                  logger.warn("[AdditionalPaymentPeriodsController][onSubmit] Dates in furlough and input do not align")
+                  Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+                } else
+                  saveAndRedirect(request.userAnswers, periods)
+              }
+            )
+        } fold (nel => {
         UserAnswers.logErrors(nel)(logger.logger)
         Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
       }, identity)
-  }
-
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    handleCalculationFurloughV(request.userAnswers)
-      .map { furlough =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, furlough.periodBreakdowns))), { dates =>
-              val periods = dates.flatMap { date =>
-                furlough.periodBreakdowns
-                  .map(_.paymentWithPeriod.periodWithPaymentDate.period.period.end)
-                  .find(_ == date)
-              }
-
-              if (dates.length != periods.length) {
-                logger.warn("[AdditionalPaymentPeriodsController][onSubmit] Dates in furlough and input do not align")
-                Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-              } else {
-                saveAndRedirect(request.userAnswers, periods)
-              }
-            }
-          )
-      } fold (nel => {
-      UserAnswers.logErrors(nel)(logger.logger)
-      Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-    }, identity)
-  }
+    }
 
   private def saveAndRedirect(userAnswers: UserAnswers, additionalPaymentPeriods: List[LocalDate]) =
     userAnswerPersistence

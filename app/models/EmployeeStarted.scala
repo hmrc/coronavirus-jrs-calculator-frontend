@@ -33,13 +33,14 @@ object EmployeeStarted extends Enumerable.Implicits {
     After1Feb2019
   )
 
-  def options(form: Form[_])(implicit messages: Messages): Seq[RadioItem] = values.map { value =>
-    RadioItem(
-      value = Some(value.toString),
-      content = Text(messages(s"variableLengthEmployed.${value.toString}")),
-      checked = form("value").value.contains(value.toString)
-    )
-  }
+  def options(form: Form[_])(implicit messages: Messages): Seq[RadioItem] =
+    values.map { value =>
+      RadioItem(
+        value = Some(value.toString),
+        content = Text(messages(s"variableLengthEmployed.${value.toString}")),
+        checked = form("value").value.contains(value.toString)
+      )
+    }
 
   implicit val enumerable: Enumerable[EmployeeStarted] =
     Enumerable(values.map(v => v.toString -> v): _*)

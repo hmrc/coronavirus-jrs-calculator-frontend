@@ -35,7 +35,7 @@ import controllers.BaseController
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ClaimPeriodQuestionController @Inject()(
+class ClaimPeriodQuestionController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   val navigator: Navigator,
@@ -51,24 +51,25 @@ class ClaimPeriodQuestionController @Inject()(
   val form: Form[ClaimPeriodQuestion] = formProvider()
   protected val userAnswerPersistence = new UserAnswerPersistence(sessionRepository.set)
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
-    if (didNotReuseDates(request.headers.toSimpleMap.get("Referer"), request.userAnswers.data)) {
-      Future.successful(Redirect(routes.ResetCalculationController.onPageLoad()))
-    } else {
-      processOnLoad
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
+      if (didNotReuseDates(request.headers.toSimpleMap.get("Referer"), request.userAnswers.data))
+        Future.successful(Redirect(routes.ResetCalculationController.onPageLoad()))
+      else
+        processOnLoad
     }
-  }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswersV(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStart, claimEnd) =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, claimStart, claimEnd))),
-          value => processSubmittedAnswer(request, value)
-        )
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswersV(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStart, claimEnd) =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, claimStart, claimEnd))),
+            value => processSubmittedAnswer(request, value)
+          )
+      }
     }
-  }
 
   private def processOnLoad(implicit request: DataRequest[AnyContent]): Future[Result] =
     getRequiredAnswersV(ClaimPeriodStartPage, ClaimPeriodEndPage) { (claimStart, claimEnd) =>
@@ -82,16 +83,14 @@ class ClaimPeriodQuestionController @Inject()(
     userAnswerPersistence
       .persistAnswer(request.userAnswers, ClaimPeriodQuestionPage, value, None)
       .map { updatedAnswers =>
-        {
-          Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedAnswers, None))
-          val call = navigator.nextPage(ClaimPeriodQuestionPage, updatedAnswers)
-          updateJourney(updatedAnswers) match {
-            case Valid(updatedJourney) =>
-              sessionRepository.set(updatedJourney.updated)
-              Redirect(call)
-            case Invalid(_) =>
-              InternalServerError(errorHandler.internalServerErrorTemplate(request))
-          }
+        Redirect(navigator.nextPage(ClaimPeriodQuestionPage, updatedAnswers, None))
+        val call = navigator.nextPage(ClaimPeriodQuestionPage, updatedAnswers)
+        updateJourney(updatedAnswers) match {
+          case Valid(updatedJourney) =>
+            sessionRepository.set(updatedJourney.updated)
+            Redirect(call)
+          case Invalid(_) =>
+            InternalServerError(errorHandler.internalServerErrorTemplate(request))
         }
       }
 

@@ -59,11 +59,13 @@ object AuditBreakdown {
 }
 
 @Singleton
-class AuditService @Inject()(auditConnector: AuditConnector, config: FrontendAppConfig) {
+class AuditService @Inject() (auditConnector: AuditConnector, config: FrontendAppConfig) {
 
-  def sendCalculationPerformed(userAnswers: UserAnswers, breakdown: ViewBreakdown)(implicit hc: HeaderCarrier,
-                                                                                   request: Request[Any],
-                                                                                   ec: ExecutionContext): Future[Unit] =
+  def sendCalculationPerformed(userAnswers: UserAnswers, breakdown: ViewBreakdown)(implicit
+    hc: HeaderCarrier,
+    request: Request[Any],
+    ec: ExecutionContext
+  ): Future[Unit] =
     auditEvent(
       JobRetentionSchemeCalculatorEvent.CalculationPerformed,
       "calculation-performed",
@@ -74,7 +76,8 @@ class AuditService @Inject()(auditConnector: AuditConnector, config: FrontendApp
     )
 
   def sendCalculationFailed(
-    userAnswers: UserAnswers)(implicit hc: HeaderCarrier, request: Request[Any], ec: ExecutionContext): Future[Unit] =
+    userAnswers: UserAnswers
+  )(implicit hc: HeaderCarrier, request: Request[Any], ec: ExecutionContext): Future[Unit] =
     auditEvent(
       JobRetentionSchemeCalculatorEvent.CalculationFailed,
       "calculation-failed",
@@ -118,15 +121,17 @@ class AuditService @Inject()(auditConnector: AuditConnector, config: FrontendApp
       "employeeUsualHours"                 -> Json.toJson(userAnswers.getList(PartTimeNormalHoursPage))
     )
 
-  private def auditEvent(event: JobRetentionSchemeCalculatorEvent, transactionName: String, details: Seq[(String, Any)])(
-    implicit hc: HeaderCarrier,
+  private def auditEvent(event: JobRetentionSchemeCalculatorEvent, transactionName: String, details: Seq[(String, Any)])(implicit
+    hc: HeaderCarrier,
     request: Request[Any],
-    ec: ExecutionContext): Future[Unit] =
+    ec: ExecutionContext
+  ): Future[Unit] =
     send(createEvent(event, transactionName, details: _*))
 
-  private def createEvent(event: JobRetentionSchemeCalculatorEvent, transactionName: String, details: (String, Any)*)(
-    implicit hc: HeaderCarrier,
-    request: Request[Any]): DataEvent = {
+  private def createEvent(event: JobRetentionSchemeCalculatorEvent, transactionName: String, details: (String, Any)*)(implicit
+    hc: HeaderCarrier,
+    request: Request[Any]
+  ): DataEvent = {
 
     val detail = hc.toAuditDetails(details.map(pair => pair._1 -> pair._2.toString): _*)
     val tags   = hc.toAuditTags(transactionName, request.path)

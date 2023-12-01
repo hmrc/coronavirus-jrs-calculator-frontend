@@ -32,7 +32,7 @@ import views.html.PartTimeQuestionView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartTimeQuestionController @Inject()(
+class PartTimeQuestionController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   val navigator: Navigator,
@@ -47,38 +47,38 @@ class PartTimeQuestionController @Inject()(
 
   val form: Form[PartTimeQuestion] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    extractFurloughWithinClaimV(request.userAnswers) match {
-      case Valid(furlough) =>
-        val preparedForm = request.userAnswers.getV(PartTimeQuestionPage) match {
-          case Invalid(e)   => form
-          case Valid(value) => form.fill(value)
-        }
-        Ok(view(preparedForm, furlough))
-      case Invalid(err) => {
-        UserAnswers.logErrors(err)(logger.logger)
-        Redirect(routes.ErrorController.somethingWentWrong())
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      extractFurloughWithinClaimV(request.userAnswers) match {
+        case Valid(furlough) =>
+          val preparedForm = request.userAnswers.getV(PartTimeQuestionPage) match {
+            case Invalid(e)   => form
+            case Valid(value) => form.fill(value)
+          }
+          Ok(view(preparedForm, furlough))
+        case Invalid(err) =>
+          UserAnswers.logErrors(err)(logger.logger)
+          Redirect(routes.ErrorController.somethingWentWrong())
       }
     }
-  }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    extractFurloughWithinClaimV(request.userAnswers) match {
-      case Valid(furlough) =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, furlough))),
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(PartTimeQuestionPage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(PartTimeQuestionPage, updatedAnswers))
-          )
-      case Invalid(err) => {
-        UserAnswers.logErrors(err)(logger.logger)
-        Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      extractFurloughWithinClaimV(request.userAnswers) match {
+        case Valid(furlough) =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, furlough))),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(PartTimeQuestionPage, value))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(PartTimeQuestionPage, updatedAnswers))
+            )
+        case Invalid(err) =>
+          UserAnswers.logErrors(err)(logger.logger)
+          Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
       }
     }
-  }
 }

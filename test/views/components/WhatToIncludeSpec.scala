@@ -37,23 +37,24 @@ class WhatToIncludeSpec extends ViewBehaviours {
       val summary                   = "summary > span"
     }
 
-    def expectedWhatToIncludeContent(cylb: Boolean = false) = Seq(
-      Selectors.summary   -> WhatToIncludeMessages.summary,
-      Selectors.p(1)      -> WhatToIncludeMessages.include,
-      Selectors.bullet(1) -> WhatToIncludeMessages.inclL1(cylb),
-      Selectors.bullet(2) -> WhatToIncludeMessages.includeL2,
-      Selectors.bullet(3) -> WhatToIncludeMessages.includeL3,
-      Selectors.bullet(4) -> WhatToIncludeMessages.includeL4,
-      Selectors.bullet(5) -> WhatToIncludeMessages.includeL5,
-      Selectors.p(2)      -> WhatToIncludeMessages.doNotInclude,
-      Selectors
-        .bullet2(1)           -> s"${WhatToIncludeMessages.dontInclL1(cylb)} ${WhatToIncludeMessages.doNotIncludeL1L1} ${WhatToIncludeMessages.doNotIncludeL1L2} ${WhatToIncludeMessages.doNotIncludeL1L3}",
-      Selectors.subBullets(1) -> WhatToIncludeMessages.doNotIncludeL1L1,
-      Selectors.subBullets(2) -> WhatToIncludeMessages.doNotIncludeL1L2,
-      Selectors.subBullets(3) -> WhatToIncludeMessages.doNotIncludeL1L3,
-      Selectors.bullet2(2)    -> WhatToIncludeMessages.doNotIncludeL2,
-      Selectors.bullet2(3)    -> WhatToIncludeMessages.doNotIncludeL3
-    )
+    def expectedWhatToIncludeContent(cylb: Boolean = false) =
+      Seq(
+        Selectors.summary   -> WhatToIncludeMessages.summary,
+        Selectors.p(1)      -> WhatToIncludeMessages.include,
+        Selectors.bullet(1) -> WhatToIncludeMessages.inclL1(cylb),
+        Selectors.bullet(2) -> WhatToIncludeMessages.includeL2,
+        Selectors.bullet(3) -> WhatToIncludeMessages.includeL3,
+        Selectors.bullet(4) -> WhatToIncludeMessages.includeL4,
+        Selectors.bullet(5) -> WhatToIncludeMessages.includeL5,
+        Selectors.p(2)      -> WhatToIncludeMessages.doNotInclude,
+        Selectors
+          .bullet2(1)           -> s"${WhatToIncludeMessages.dontInclL1(cylb)} ${WhatToIncludeMessages.doNotIncludeL1L1} ${WhatToIncludeMessages.doNotIncludeL1L2} ${WhatToIncludeMessages.doNotIncludeL1L3}",
+        Selectors.subBullets(1) -> WhatToIncludeMessages.doNotIncludeL1L1,
+        Selectors.subBullets(2) -> WhatToIncludeMessages.doNotIncludeL1L2,
+        Selectors.subBullets(3) -> WhatToIncludeMessages.doNotIncludeL1L3,
+        Selectors.bullet2(2)    -> WhatToIncludeMessages.doNotIncludeL2,
+        Selectors.bullet2(3)    -> WhatToIncludeMessages.doNotIncludeL3
+      )
 
     behave like pageWithExpectedMessages(expectedWhatToIncludeContent(cylb))
   }

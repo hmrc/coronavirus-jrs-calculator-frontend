@@ -47,15 +47,17 @@ class AdditionalPaymentAmountControllerSpec extends SpecBaseControllerSpecs {
   def controller(stubbedAnswer: UserAnswers = emptyUserAnswers) = {
     def flagProvider() = new FeatureFlagActionProviderImpl()
 
-    new AdditionalPaymentAmountController(messagesApi,
-                                          mockSessionRepository,
-                                          navigator,
-                                          identifier,
-                                          stubDataRetrieval(Some(stubbedAnswer)),
-                                          dataRequired,
-                                          formProvider,
-                                          component,
-                                          view) {
+    new AdditionalPaymentAmountController(
+      messagesApi,
+      mockSessionRepository,
+      navigator,
+      identifier,
+      stubDataRetrieval(Some(stubbedAnswer)),
+      dataRequired,
+      formProvider,
+      component,
+      view
+    ) {
       override val feature: FeatureFlagActionProvider = flagProvider()
       override val userAnswerPersistence              = new UserAnswerPersistence(_ => Future.successful(true))
     }

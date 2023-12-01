@@ -34,14 +34,16 @@ class NumberOfStatLeaveDaysFormProvider @Inject() extends Mappings {
         "numberOfStatLeaveDays.error.wholeNumber",
         "numberOfStatLeaveDays.error.nonNumeric",
         args = Seq(dateToString(boundaryStart), dateToString(boundaryEnd))
-      ).verifying(firstError(
-        maximumValueWithArgs[Int](
-          maximum = daysBetween(boundaryStart, boundaryEnd),
-          errorKey = "numberOfStatLeaveDays.error.maximum",
-          args = Seq(daysBetween(boundaryStart, boundaryEnd), dateToString(boundaryStart), dateToString(boundaryEnd))
-        ),
-        minimumValue[Int](minimum = 1, errorKey = "numberOfStatLeaveDays.error.minimum")
-      ))
+      ).verifying(
+        firstError(
+          maximumValueWithArgs[Int](
+            maximum = daysBetween(boundaryStart, boundaryEnd),
+            errorKey = "numberOfStatLeaveDays.error.maximum",
+            args = Seq(daysBetween(boundaryStart, boundaryEnd), dateToString(boundaryStart), dateToString(boundaryEnd))
+          ),
+          minimumValue[Int](minimum = 1, errorKey = "numberOfStatLeaveDays.error.minimum")
+        )
+      )
     )
 
   private[forms] def daysBetween(boundaryStart: LocalDate, boundaryEnd: LocalDate): Int =

@@ -32,7 +32,7 @@ import views.html.PayMethodView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PayMethodController @Inject()(
+class PayMethodController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -47,25 +47,27 @@ class PayMethodController @Inject()(
 
   val form: Form[PayMethod] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.getV(PayMethodPage) match {
-      case Invalid(e)   => form
-      case Valid(value) => form.fill(value)
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      val preparedForm = request.userAnswers.getV(PayMethodPage) match {
+        case Invalid(e)   => form
+        case Valid(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm))
     }
 
-    Ok(view(preparedForm))
-  }
-
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PayMethodPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PayMethodPage, updatedAnswers))
-      )
-  }
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(PayMethodPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(PayMethodPage, updatedAnswers))
+        )
+    }
 }

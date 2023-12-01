@@ -90,9 +90,8 @@ class JrsExtensionConfirmationViewSpec
       .withRegularPayAmount(10000.00)
 
   val userAnswers: UserAnswers = dec2020Journey()
-  val noNicAndPensionBreakdown: ConfirmationViewBreakdownWithoutNicAndPension = {
+  val noNicAndPensionBreakdown: ConfirmationViewBreakdownWithoutNicAndPension =
     loadResultData(userAnswers).value.asInstanceOf[ConfirmationDataResultWithoutNicAndPension].confirmationViewBreakdown
-  }
 
   val nextStepsListMessage: Int => String = (bullet: Int) => nextStepsListMessages(bullet, decClaimPeriod)
   val calculatePayListMessage: Int => String = { (bullet: Int) =>
@@ -274,9 +273,8 @@ class EmployeeType5JrsExtensionConfirmationViewSpec
     VariableEmployeeTypeFiveSelectors.feedbackLink               -> VariableExtensionType5.feedbackLink
   )
 
-  val noNicAndPensionBreakdown: ConfirmationViewBreakdownWithoutNicAndPension = {
+  val noNicAndPensionBreakdown: ConfirmationViewBreakdownWithoutNicAndPension =
     loadResultData(userAnswers).value.asInstanceOf[ConfirmationDataResultWithoutNicAndPension].confirmationViewBreakdown
-  }
 
   implicit val request: DataRequest[_] = fakeDataRequest(userAnswers)
 

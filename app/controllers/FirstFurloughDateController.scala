@@ -36,7 +36,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class FirstFurloughDateController @Inject()(
+class FirstFurloughDateController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   val navigator: Navigator,
@@ -53,38 +53,41 @@ class FirstFurloughDateController @Inject()(
 
   protected val userAnswerPersistence = new UserAnswerPersistence(sessionRepository.set)
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswerV(FurloughStartDatePage) { startDate =>
-      val preparedForm = request.userAnswers.getV(FirstFurloughDatePage) match {
-        case Invalid(_)   => form(startDate)
-        case Valid(value) => form(startDate).fill(value)
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswerV(FurloughStartDatePage) { startDate =>
+        val preparedForm = request.userAnswers.getV(FirstFurloughDatePage) match {
+          case Invalid(_)   => form(startDate)
+          case Valid(value) => form(startDate).fill(value)
+        }
+        Future(renderPage(Ok, preparedForm))
       }
-      Future(renderPage(Ok, preparedForm))
     }
-  }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswerV(FurloughStartDatePage) { startDate =>
-      form(startDate)
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(renderPage(BadRequest, formWithErrors)),
-          value =>
-            userAnswerPersistence
-              .persistAnswer(request.userAnswers, FirstFurloughDatePage, value, None)
-              .map { updatedAnswers =>
-                Redirect(navigator.nextPage(FirstFurloughDatePage, updatedAnswers, None))
-            }
-        )
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswerV(FurloughStartDatePage) { startDate =>
+        form(startDate)
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(renderPage(BadRequest, formWithErrors)),
+            value =>
+              userAnswerPersistence
+                .persistAnswer(request.userAnswers, FirstFurloughDatePage, value, None)
+                .map { updatedAnswers =>
+                  Redirect(navigator.nextPage(FirstFurloughDatePage, updatedAnswers, None))
+                }
+          )
+      }
     }
-  }
 
   private def renderPage(successfulCallStatus: Status, preparedForm: Form[LocalDate])(implicit request: DataRequest[_]): Result =
     variablePayResolver[LocalDate](
       type3EmployeeResult = Some(mar1st2020),
       type5aEmployeeResult = Some(nov1st2020),
-      type5bEmployeeResult = Some(may1st2021)).fold(InternalServerError(errorHandler.internalServerErrorTemplate(request)))(
-      dateToShow => successfulCallStatus(view(preparedForm, dateToShow))
+      type5bEmployeeResult = Some(may1st2021)
+    ).fold(InternalServerError(errorHandler.internalServerErrorTemplate(request)))(dateToShow =>
+      successfulCallStatus(view(preparedForm, dateToShow))
     )
 
 }

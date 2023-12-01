@@ -28,7 +28,7 @@ import java.time.LocalDate
 
 object ConfirmationConstants extends CoreTestDataBuilder {
 
-  lazy val furlough: FurloughCalculationResult = {
+  lazy val furlough: FurloughCalculationResult =
     FurloughCalculationResult(
       total = 3200.00,
       periodBreakdowns = Seq(
@@ -44,7 +44,6 @@ object ConfirmationConstants extends CoreTestDataBuilder {
         )
       )
     )
-  }
 
   lazy val nic = NicCalculationResult(
     total = 241.36,
@@ -94,7 +93,7 @@ object ConfirmationConstants extends CoreTestDataBuilder {
 
   val furloughPeriod: FurloughOngoing = FurloughOngoing(start = LocalDate.of(2020, 3, 1))
 
-  val meta: ConfirmationMetadata = {
+  val meta: ConfirmationMetadata =
     ConfirmationMetadata(
       Period(
         start = LocalDate.of(2020, 3, 1),
@@ -105,6 +104,5 @@ object ConfirmationConstants extends CoreTestDataBuilder {
       nic = Payable,
       pension = DoesContribute
     )
-  }
 
 }

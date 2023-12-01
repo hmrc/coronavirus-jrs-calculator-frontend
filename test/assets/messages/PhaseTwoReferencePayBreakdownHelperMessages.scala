@@ -23,25 +23,22 @@ object PhaseTwoReferencePayBreakdownHelperMessages extends ValueFormatter {
   object AveragingMethod {
     val h4 = "Calculate the employee’s pay based on their furlough days"
     def p1(isType5: Boolean) =
-      if (isType5) {
+      if (isType5)
         "Averaging method: take the employee’s total pay from 6 April 2020 (or the date the employment started, whichever is later), up to the day before the furlough started on or after 1 November 2020."
-      } else {
+      else
         "Take the total pay from the employee’s start date (or 6 April 2019, if they started earlier than this date) to the day before the employee’s furlough start date (or 5 April 2020, whichever is earlier)."
-      }
 
     def numbered1(amount: BigDecimal, hasStatLeave: Boolean) =
-      if (hasStatLeave) {
+      if (hasStatLeave)
         s"Start with ${currencyFormatter(amount)} (total pay minus the amount paid for periods of statutory leave)."
-      } else {
+      else
         s"Start with ${currencyFormatter(amount)} (total pay)."
-      }
 
     def numbered2(days: Int, hasStatLeave: Boolean) =
-      if (hasStatLeave) {
+      if (hasStatLeave)
         s"Divide by $days (days employed minus the number of days on statutory leave)."
-      } else {
+      else
         s"Divide by $days (days employed)."
-      }
 
     def numbered3(furloughDays: BigDecimal) = s"Multiply by $furloughDays (furlough days)."
     def p2(amount: BigDecimal)              = s"Total pay based on furlough days = ${currencyFormatter(amount)}"

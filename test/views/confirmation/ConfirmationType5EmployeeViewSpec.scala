@@ -100,16 +100,17 @@ class ConfirmationType5EmployeeViewSpec
 
       implicit val request: DataRequest[_] = fakeDataRequest(userAnswers)
 
-      val noNicAndPensionBreakdown: ConfirmationViewBreakdownWithoutNicAndPension = {
+      val noNicAndPensionBreakdown: ConfirmationViewBreakdownWithoutNicAndPension =
         loadResultData(userAnswers).value.asInstanceOf[ConfirmationDataResultWithoutNicAndPension].confirmationViewBreakdown
-      }
 
       def applyView(): HtmlFormat.Appendable =
-        extConfirmationView(cvb = noNicAndPensionBreakdown,
-                            claimPeriod = novClaimPeriod,
-                            version = "2",
-                            isNewStarterType5 = true,
-                            EightyPercent)
+        extConfirmationView(
+          cvb = noNicAndPensionBreakdown,
+          claimPeriod = novClaimPeriod,
+          version = "2",
+          isNewStarterType5 = true,
+          EightyPercent
+        )
 
       implicit val doc: Document = asDocument(applyView())
 
@@ -125,16 +126,17 @@ class ConfirmationType5EmployeeViewSpec
 
       implicit val request: DataRequest[_] = fakeDataRequest(userAnswers)
 
-      val noNicAndPensionBreakdown: ConfirmationViewBreakdownWithoutNicAndPension = {
+      val noNicAndPensionBreakdown: ConfirmationViewBreakdownWithoutNicAndPension =
         loadResultData(userAnswers).value.asInstanceOf[ConfirmationDataResultWithoutNicAndPension].confirmationViewBreakdown
-      }
 
       def applyView(): HtmlFormat.Appendable =
-        extConfirmationView(cvb = noNicAndPensionBreakdown,
-                            claimPeriod = novClaimPeriod,
-                            version = "2",
-                            isNewStarterType5 = true,
-                            EightyPercent)
+        extConfirmationView(
+          cvb = noNicAndPensionBreakdown,
+          claimPeriod = novClaimPeriod,
+          version = "2",
+          isNewStarterType5 = true,
+          EightyPercent
+        )
 
       implicit val doc: Document = asDocument(applyView())
 
@@ -150,20 +152,23 @@ class ConfirmationType5EmployeeViewSpec
 
       implicit val request: DataRequest[_] = fakeDataRequest(userAnswers)
 
-      val noNicAndPensionBreakdown: ConfirmationViewBreakdownWithoutNicAndPension = {
+      val noNicAndPensionBreakdown: ConfirmationViewBreakdownWithoutNicAndPension =
         loadResultData(userAnswers).value.asInstanceOf[ConfirmationDataResultWithoutNicAndPension].confirmationViewBreakdown
-      }
 
       def applyView(): HtmlFormat.Appendable =
-        extConfirmationView(cvb = noNicAndPensionBreakdown,
-                            claimPeriod = mayClaimPeriod,
-                            version = "2",
-                            isNewStarterType5 = true,
-                            EightyPercent)
+        extConfirmationView(
+          cvb = noNicAndPensionBreakdown,
+          claimPeriod = mayClaimPeriod,
+          version = "2",
+          isNewStarterType5 = true,
+          EightyPercent
+        )
 
       implicit val doc: Document = asDocument(applyView())
 
-      doc.toString.contains(breakdownP1(BeenOnStatutoryLeaveMessages.dayEmploymentStarted, dateToString(LocalDate.parse("2021-05-01")))) mustBe true
+      doc.toString.contains(
+        breakdownP1(BeenOnStatutoryLeaveMessages.dayEmploymentStarted, dateToString(LocalDate.parse("2021-05-01")))
+      ) mustBe true
       doc.toString.contains(statLeaveOnly(None, dateToString(LocalDate.parse("2021-05-01")))) mustBe false
     }
 
@@ -175,16 +180,17 @@ class ConfirmationType5EmployeeViewSpec
 
       implicit val request: DataRequest[_] = fakeDataRequest(userAnswers)
 
-      val noNicAndPensionBreakdown: ConfirmationViewBreakdownWithoutNicAndPension = {
+      val noNicAndPensionBreakdown: ConfirmationViewBreakdownWithoutNicAndPension =
         loadResultData(userAnswers).value.asInstanceOf[ConfirmationDataResultWithoutNicAndPension].confirmationViewBreakdown
-      }
 
       def applyView(): HtmlFormat.Appendable =
-        extConfirmationView(cvb = noNicAndPensionBreakdown,
-                            claimPeriod = mayClaimPeriod,
-                            version = "2",
-                            isNewStarterType5 = true,
-                            EightyPercent)
+        extConfirmationView(
+          cvb = noNicAndPensionBreakdown,
+          claimPeriod = mayClaimPeriod,
+          version = "2",
+          isNewStarterType5 = true,
+          EightyPercent
+        )
 
       implicit val doc: Document = asDocument(applyView())
       doc.toString.contains(statLeaveOnly(None, dateToString(LocalDate.parse("2021-05-01")))) mustBe true

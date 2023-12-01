@@ -191,12 +191,11 @@ class OnPayrollBefore30thOct2020ControllerSpec extends SpecBaseControllerSpecs w
 
         when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
 
-        val request = {
+        val request =
           FakeRequest(POST, postActionUrl)
             .withFormUrlEncodedBody(("value", "true"))
             .withCSRFToken
             .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
-        }
 
         val result = controller.onSubmit()(request)
 
@@ -208,12 +207,11 @@ class OnPayrollBefore30thOct2020ControllerSpec extends SpecBaseControllerSpecs w
 
         when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
 
-        val request = {
+        val request =
           FakeRequest(POST, postActionUrl)
             .withFormUrlEncodedBody(("value", "invalid value"))
             .withCSRFToken
             .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
-        }
 
         val boundForm   = form.bind(Map("value" -> "invalid value"))
         val result      = controller.onSubmit()(request)
@@ -228,12 +226,11 @@ class OnPayrollBefore30thOct2020ControllerSpec extends SpecBaseControllerSpecs w
 
         when(mockSessionRepository.get(any())) thenReturn Future.successful(None)
 
-        val request = {
+        val request =
           FakeRequest(POST, postActionUrl)
             .withFormUrlEncodedBody(("value", "yes"))
             .withCSRFToken
             .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
-        }
 
         val result = controller.onSubmit()(request)
 

@@ -19,21 +19,20 @@ package controllers
 import play.api.http.Status._
 import utils.{CreateRequestHelper, CustomMatchers, IntegrationSpecBase}
 
-
 class RootPageControllerISpec extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers {
 
   "GET /" when {
 
-        "redirect to the start page" in {
+    "redirect to the start page" in {
 
-          val res = getRequest("/")()
+      val res = getRequest("/")()
 
-          whenReady(res) { result =>
-            result must have(
-              httpStatus(SEE_OTHER),
-              redirectLocation(controllers.routes.RootPageController.start().url)
-            )
-          }
-        }
+      whenReady(res) { result =>
+        result must have(
+          httpStatus(SEE_OTHER),
+          redirectLocation(controllers.routes.RootPageController.start().url)
+        )
       }
     }
+  }
+}

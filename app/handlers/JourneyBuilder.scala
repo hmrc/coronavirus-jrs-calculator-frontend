@@ -26,24 +26,27 @@ import utils.LoggerUtil
 
 trait JourneyBuilder extends DataExtractor with LoggerUtil {
 
-  def define(data: BranchingQuestions, cylbCutoff: LocalDate): Journey = data match {
-    case BranchingQuestions(Regular, _, _)                                                     => RegularPay
-    case BranchingQuestions(Variable, Some(After1Feb2019), Some(d)) if !d.isBefore(cylbCutoff) => VariablePay
-    case BranchingQuestions(Variable, Some(After1Feb2019), Some(d)) if d.isBefore(cylbCutoff)  => VariablePayWithCylb
-    case BranchingQuestions(Variable, Some(OnOrBefore1Feb2019), _)                             => VariablePayWithCylb
-  }
+  def define(data: BranchingQuestions, cylbCutoff: LocalDate): Journey =
+    data match {
+      case BranchingQuestions(Regular, _, _)                                                     => RegularPay
+      case BranchingQuestions(Variable, Some(After1Feb2019), Some(d)) if !d.isBefore(cylbCutoff) => VariablePay
+      case BranchingQuestions(Variable, Some(After1Feb2019), Some(d)) if d.isBefore(cylbCutoff)  => VariablePayWithCylb
+      case BranchingQuestions(Variable, Some(OnOrBefore1Feb2019), _)                             => VariablePayWithCylb
+    }
 
-  def journeyDataV(journey: Journey, userAnswers: UserAnswers): AnswerV[ReferencePay] = journey match {
-    case RegularPay          => regularPayDataV(userAnswers)
-    case VariablePay         => variablePayDataV(userAnswers)
-    case VariablePayWithCylb => variablePayWithCylbDataV(userAnswers)
-  }
+  def journeyDataV(journey: Journey, userAnswers: UserAnswers): AnswerV[ReferencePay] =
+    journey match {
+      case RegularPay          => regularPayDataV(userAnswers)
+      case VariablePay         => variablePayDataV(userAnswers)
+      case VariablePayWithCylb => variablePayWithCylbDataV(userAnswers)
+    }
 
-  def phaseTwoJourneyDataV(journey: Journey, userAnswers: UserAnswers): AnswerV[PhaseTwoReferencePay] = journey match {
-    case RegularPay          => phaseTwoRegularPayDataV(userAnswers)
-    case VariablePay         => phaseTwoVariablePayDataV(userAnswers)
-    case VariablePayWithCylb => phaseTwoVariablePayWithCylbDataV(userAnswers)
-  }
+  def phaseTwoJourneyDataV(journey: Journey, userAnswers: UserAnswers): AnswerV[PhaseTwoReferencePay] =
+    journey match {
+      case RegularPay          => phaseTwoRegularPayDataV(userAnswers)
+      case VariablePay         => phaseTwoVariablePayDataV(userAnswers)
+      case VariablePayWithCylb => phaseTwoVariablePayWithCylbDataV(userAnswers)
+    }
 
   private def regularPayDataV(userAnswers: UserAnswers): AnswerV[RegularPayData] =
     (
@@ -102,7 +105,8 @@ trait JourneyBuilder extends DataExtractor with LoggerUtil {
           s"\n - referencePayData = $referencePayData" +
           s"\n - annualPay = $annualPay" +
           s"\n - periodFurlough = $priorFurlough" +
-          s"\n - cylbPayments = $cylbPayments")
+          s"\n - cylbPayments = $cylbPayments"
+      )
 
       PhaseTwoVariablePayWithCylbData(
         referencePayData,

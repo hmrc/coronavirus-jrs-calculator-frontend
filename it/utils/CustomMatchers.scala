@@ -102,7 +102,6 @@ trait CustomMatchers {
         )
     }
 
-
   def titleOf(expectedValue: String): HavePropertyMatcher[WSResponse, String] =
     new HavePropertyMatcher[WSResponse, String] {
       def apply(response: WSResponse) =

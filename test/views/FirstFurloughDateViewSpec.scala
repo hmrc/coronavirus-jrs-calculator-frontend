@@ -37,15 +37,15 @@ class FirstFurloughDateViewSpec extends QuestionViewBehaviours[LocalDate] {
   val expectedContent = (date: LocalDate) =>
     Seq(
       Selectors.h1   -> FirstFurloughDateMessages.heading,
-      Selectors.p(1) -> FirstFurloughDateMessages.p1(date),
-  )
+      Selectors.p(1) -> FirstFurloughDateMessages.p1(date)
+    )
 
   val expectedContentWithSecondP = (date: LocalDate) =>
     Seq(
       Selectors.h1   -> FirstFurloughDateMessages.heading,
       Selectors.p(1) -> FirstFurloughDateMessages.p1(date),
       Selectors.p(2) -> FirstFurloughDateMessages.p2
-  )
+    )
 
   val nov1st2020            = LocalDate.of(2020, 11, 1)
   val mar1st2020: LocalDate = LocalDate.of(2020, 3, 1)

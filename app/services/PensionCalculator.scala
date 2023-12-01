@@ -22,9 +22,11 @@ import services.Calculators._
 
 trait PensionCalculator extends FurloughCapCalculator with CommonCalculationService with Calculators {
 
-  def calculatePensionGrant(pensionStatus: PensionStatus,
-                            frequency: PaymentFrequency,
-                            furloughBreakdown: Seq[FurloughBreakdown]): PensionCalculationResult = {
+  def calculatePensionGrant(
+    pensionStatus: PensionStatus,
+    frequency: PaymentFrequency,
+    furloughBreakdown: Seq[FurloughBreakdown]
+  ): PensionCalculationResult = {
     val pensionBreakdowns = furloughBreakdown.map {
       case fp: FullPeriodFurloughBreakdown =>
         calculateFullPeriodPension(pensionStatus, frequency, fp.grant, fp.paymentWithPeriod)
@@ -35,9 +37,11 @@ trait PensionCalculator extends FurloughCapCalculator with CommonCalculationServ
     PensionCalculationResult(pensionBreakdowns.map(_.grant.value).sum, pensionBreakdowns)
   }
 
-  def phaseTwoPension(furloughBreakdowns: Seq[PhaseTwoFurloughBreakdown],
-                      frequency: PaymentFrequency,
-                      pensionStatus: PensionStatus): PhaseTwoPensionCalculationResult = {
+  def phaseTwoPension(
+    furloughBreakdowns: Seq[PhaseTwoFurloughBreakdown],
+    frequency: PaymentFrequency,
+    pensionStatus: PensionStatus
+  ): PhaseTwoPensionCalculationResult = {
     val breakdowns = furloughBreakdowns.map { furloughBreakdown =>
       val phaseTwoPeriod = furloughBreakdown.paymentWithPeriod.phaseTwoPeriod
 
@@ -50,12 +54,13 @@ trait PensionCalculator extends FurloughCapCalculator with CommonCalculationServ
           threshold.copy(value = partialPeriodDailyCalculation(Amount(threshold.value), pp.period).value)
       }
 
-      val thresholdBasedOnHours = if (phaseTwoPeriod.isPartTime) {
-        thresholdBasedOnDays.copy(
-          value = partTimeHoursCalculation(Amount(thresholdBasedOnDays.value), phaseTwoPeriod.furloughed, phaseTwoPeriod.usual).value)
-      } else {
-        thresholdBasedOnDays
-      }
+      val thresholdBasedOnHours =
+        if (phaseTwoPeriod.isPartTime)
+          thresholdBasedOnDays.copy(
+            value = partTimeHoursCalculation(Amount(thresholdBasedOnDays.value), phaseTwoPeriod.furloughed, phaseTwoPeriod.usual).value
+          )
+        else
+          thresholdBasedOnDays
       val roundedFurloughGrant = furloughBreakdown.grant.down
 
       val grant = pensionStatus match {
@@ -69,10 +74,12 @@ trait PensionCalculator extends FurloughCapCalculator with CommonCalculationServ
     PhaseTwoPensionCalculationResult(breakdowns.map(_.grant.value).sum, breakdowns)
   }
 
-  protected def calculatePartialPeriodPension(pensionStatus: PensionStatus,
-                                              frequency: PaymentFrequency,
-                                              furloughPayment: Amount,
-                                              payment: PaymentWithPartialPeriod): PartialPeriodPensionBreakdown = {
+  protected def calculatePartialPeriodPension(
+    pensionStatus: PensionStatus,
+    frequency: PaymentFrequency,
+    furloughPayment: Amount,
+    payment: PaymentWithPartialPeriod
+  ): PartialPeriodPensionBreakdown = {
 
     import payment.periodWithPaymentDate._
 
@@ -90,10 +97,12 @@ trait PensionCalculator extends FurloughCapCalculator with CommonCalculationServ
     PartialPeriodPensionBreakdown(grant, payment, threshold, allowance, pensionStatus)
   }
 
-  protected def calculateFullPeriodPension(pensionStatus: PensionStatus,
-                                           frequency: PaymentFrequency,
-                                           furloughPayment: Amount,
-                                           payment: PaymentWithFullPeriod): FullPeriodPensionBreakdown = {
+  protected def calculateFullPeriodPension(
+    pensionStatus: PensionStatus,
+    frequency: PaymentFrequency,
+    furloughPayment: Amount,
+    payment: PaymentWithFullPeriod
+  ): FullPeriodPensionBreakdown = {
 
     val threshold              = thresholdFinder(frequency, payment.periodWithPaymentDate.paymentDate, PensionRate())
     val roundedFurloughPayment = furloughPayment.down

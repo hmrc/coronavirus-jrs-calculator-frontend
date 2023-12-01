@@ -37,7 +37,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PreviousFurloughPeriodsController @Inject()(
+class PreviousFurloughPeriodsController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -52,37 +52,42 @@ class PreviousFurloughPeriodsController @Inject()(
 
   def form()(implicit request: DataRequest[_]): Form[Boolean] =
     formProvider(
-      employeeTypeResolver[LocalDate](type5aEmployeeResult = Some(nov1st2020),
-                                      type5bEmployeeResult = Some(may1st2021),
-                                      defaultResult = mar1st2020))
-
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.getV(PreviousFurloughPeriodsPage) match {
-      case Invalid(_)   => form
-      case Valid(value) => form.fill(value)
-    }
-    renderPage(Ok, preparedForm)
-  }
-
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(renderPage(BadRequest, formWithErrors)),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PreviousFurloughPeriodsPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PreviousFurloughPeriodsPage, updatedAnswers))
+      employeeTypeResolver[LocalDate](
+        type5aEmployeeResult = Some(nov1st2020),
+        type5bEmployeeResult = Some(may1st2021),
+        defaultResult = mar1st2020
       )
-  }
+    )
+
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      val preparedForm = request.userAnswers.getV(PreviousFurloughPeriodsPage) match {
+        case Invalid(_)   => form
+        case Valid(value) => form.fill(value)
+      }
+      renderPage(Ok, preparedForm)
+    }
+
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(renderPage(BadRequest, formWithErrors)),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(PreviousFurloughPeriodsPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(PreviousFurloughPeriodsPage, updatedAnswers))
+        )
+    }
 
   private def renderPage(successfulCallStatus: Status, preparedForm: Form[Boolean])(implicit request: DataRequest[_]): Result =
-    variablePayResolver[LocalDate](type3EmployeeResult = Some(mar1st2020),
-                                   type5aEmployeeResult = Some(nov1st2020),
-                                   type5bEmployeeResult = Some(may1st2021)).fold(
+    variablePayResolver[LocalDate](
+      type3EmployeeResult = Some(mar1st2020),
+      type5aEmployeeResult = Some(nov1st2020),
+      type5bEmployeeResult = Some(may1st2021)
+    ).fold(
       InternalServerError(errorHandler.internalServerErrorTemplate(request))
-    )(
-      dateToShow => successfulCallStatus(view(preparedForm, dateToShow))
-    )
+    )(dateToShow => successfulCallStatus(view(preparedForm, dateToShow)))
 }

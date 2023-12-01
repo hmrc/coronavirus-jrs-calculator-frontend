@@ -32,7 +32,7 @@ import views.html.RegularLengthEmployedView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class RegularLengthEmployedController @Inject()(
+class RegularLengthEmployedController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -47,25 +47,27 @@ class RegularLengthEmployedController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm: Form[RegularLengthEmployed] = request.userAnswers.getV(RegularLengthEmployedPage) match {
-      case Invalid(_)   => form
-      case Valid(value) => form.fill(value)
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      val preparedForm: Form[RegularLengthEmployed] = request.userAnswers.getV(RegularLengthEmployedPage) match {
+        case Invalid(_)   => form
+        case Valid(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm))
     }
 
-    Ok(view(preparedForm))
-  }
-
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(RegularLengthEmployedPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(RegularLengthEmployedPage, updatedAnswers))
-      )
-  }
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(RegularLengthEmployedPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(RegularLengthEmployedPage, updatedAnswers))
+        )
+    }
 }

@@ -55,16 +55,18 @@ class HasEmployeeBeenOnStatutoryLeaveControllerSpec extends SpecBaseControllerSp
     FakeRequest(GET, hasEmployeeBeenOnStatutoryLeaveRoute).withCSRFToken
       .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
-  val controller = new HasEmployeeBeenOnStatutoryLeaveController(messagesApi,
-                                                                 mockSessionRepository,
-                                                                 navigator,
-                                                                 identifier,
-                                                                 dataRetrieval,
-                                                                 dataRequired,
-                                                                 formProvider,
-                                                                 helper,
-                                                                 component,
-                                                                 view)
+  val controller = new HasEmployeeBeenOnStatutoryLeaveController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    helper,
+    component,
+    view
+  )
 
   "HasEmployeeBeenOnStatutoryLeave Controller" when {
 

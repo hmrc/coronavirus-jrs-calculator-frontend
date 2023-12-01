@@ -48,7 +48,7 @@ class StatutoryLeavePayControllerISpec
       whenReady(res) { result =>
         result must have(
           httpStatus(OK),
-          titleOf(statutoryLeavePay),
+          titleOf(statutoryLeavePay)
         )
       }
     }

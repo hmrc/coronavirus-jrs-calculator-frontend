@@ -25,12 +25,14 @@ trait HoursViewBehaviours extends QuestionViewBehaviours[Hours] {
 
   val hours: Hours = Hours(25.5)
 
-  def decimalPage(form: Form[Hours],
-                  createView: Form[Hours] => HtmlFormat.Appendable,
-                  messageKeyPrefix: String,
-                  expectedFormAction: String,
-                  headingArgs: Seq[String] = Seq(),
-                  section: Option[String] = None): Unit =
+  def decimalPage(
+    form: Form[Hours],
+    createView: Form[Hours] => HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    expectedFormAction: String,
+    headingArgs: Seq[String] = Seq(),
+    section: Option[String] = None
+  ): Unit =
     "behave like a page with a decimal value field" when {
 
       "rendered" must {
@@ -75,9 +77,11 @@ trait HoursViewBehaviours extends QuestionViewBehaviours[Hours] {
         "show an error prefix in the browser title" in {
 
           val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${title(messages(s"$messageKeyPrefix.title",
-                                                                                                         headingArgs: _*),
-                                                                                                section)}""")
+          assertEqualsValue(
+            doc,
+            "title",
+            s"""${messages("error.browser.title.prefix")} ${title(messages(s"$messageKeyPrefix.title", headingArgs: _*), section)}"""
+          )
         }
       }
     }

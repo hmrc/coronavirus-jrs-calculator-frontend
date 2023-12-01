@@ -103,7 +103,8 @@ class NumberOfStatLeaveDaysControllerSpec extends SpecBaseControllerSpecs with M
             contentAsString(result) mustEqual
               view(form(boundaryStartDate, boundaryEndDate), postAction, dateToString(boundaryStartDate), dateToString(boundaryEndDate))(
                 dataRequest,
-                messages).toString
+                messages
+              ).toString
 
           }
         }
@@ -259,7 +260,8 @@ class NumberOfStatLeaveDaysControllerSpec extends SpecBaseControllerSpecs with M
             contentAsString(result) mustEqual
               view(form(boundaryStartDate, boundaryEndDate), postAction, dateToString(boundaryStartDate), dateToString(boundaryEndDate))(
                 dataRequest,
-                messages).toString()
+                messages
+              ).toString()
           }
         }
 

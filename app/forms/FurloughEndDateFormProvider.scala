@@ -26,7 +26,7 @@ import play.api.data.Form
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import utils.LocalDateHelpers._
 
-class FurloughEndDateFormProvider @Inject()() extends Mappings with SchemeConfiguration {
+class FurloughEndDateFormProvider @Inject() () extends Mappings with SchemeConfiguration {
 
   def apply(claimPeriod: Period, furloughStart: LocalDate): Form[LocalDate] =
     Form(
@@ -34,12 +34,13 @@ class FurloughEndDateFormProvider @Inject()() extends Mappings with SchemeConfig
         .verifying(validEndDate(claimPeriod, furloughStart))
     )
 
-  private def validEndDate(claimPeriod: Period, furloughStart: LocalDate): Constraint[LocalDate] = Constraint {
-    case end if claimPeriodPredicate(claimPeriod, end)                  => Invalid("furloughEndDate.error.claimPeriod")
-    case end if twentyOneDaysPredicate(claimPeriod, furloughStart, end) => Invalid("furloughEndDate.error.min.max")
-    case end if furloughEndBeforeStart(furloughStart, end)              => Invalid("furloughEndDate.error.beforeStart")
-    case _                                                              => Valid
-  }
+  private def validEndDate(claimPeriod: Period, furloughStart: LocalDate): Constraint[LocalDate] =
+    Constraint {
+      case end if claimPeriodPredicate(claimPeriod, end)                  => Invalid("furloughEndDate.error.claimPeriod")
+      case end if twentyOneDaysPredicate(claimPeriod, furloughStart, end) => Invalid("furloughEndDate.error.min.max")
+      case end if furloughEndBeforeStart(furloughStart, end)              => Invalid("furloughEndDate.error.beforeStart")
+      case _                                                              => Valid
+    }
 
   private def claimPeriodPredicate(claimPeriod: Period, furloughEnd: LocalDate) =
     furloughEnd.isBefore(claimPeriod.start) || furloughEnd.isAfter(claimPeriod.end)

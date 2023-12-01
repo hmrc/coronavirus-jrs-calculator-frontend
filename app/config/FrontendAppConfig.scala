@@ -27,7 +27,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class FrontendAppConfig @Inject()(val servicesConfig: ServicesConfig)
+class FrontendAppConfig @Inject() (val servicesConfig: ServicesConfig)
     extends UrlConfiguration with SchemeConfiguration with MongoConfiguration with FeatureSwitching {
 
   private val configSource: String => ConfigSource = ConfigSource.default.at
@@ -95,10 +95,12 @@ trait CalculatorVersionConfiguration extends CamelCaseConf {
   lazy val calculatorVersionConf: String = ConfigSource.default.at("calculator.version").loadOrThrow[String]
 }
 
-final case class SchemeConf(startDate: String,
-                            endDate: String,
-                            phaseTwoStartDate: String,
-                            extensionStartDate: String,
-                            may2021extensionStartDate: String)
+final case class SchemeConf(
+  startDate: String,
+  endDate: String,
+  phaseTwoStartDate: String,
+  extensionStartDate: String,
+  may2021extensionStartDate: String
+)
 
 final case class MongoConf(uri: String, timeToLiveInSeconds: Int)

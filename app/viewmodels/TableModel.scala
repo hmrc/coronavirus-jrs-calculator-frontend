@@ -23,29 +23,31 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table, TableR
 case class Cell(value: Html, classes: String = "")
 
 case class Header(cells: Seq[Cell]) {
-  def toGovukHeaderCells: Seq[HeadCell] = cells.map { cell =>
-    HeadCell(
-      content = HtmlContent(cell.value),
-      classes = cell.classes
-    )
-  }
+  def toGovukHeaderCells: Seq[HeadCell] =
+    cells.map { cell =>
+      HeadCell(
+        content = HtmlContent(cell.value),
+        classes = cell.classes
+      )
+    }
 }
 
 case class Row(cells: Seq[Cell]) {
   def toGovukTableRow: Seq[TableRow] =
-    cells.map(
-      cell =>
-        TableRow(
-          content = HtmlContent(cell.value),
-          classes = cell.classes
-      ))
+    cells.map(cell =>
+      TableRow(
+        content = HtmlContent(cell.value),
+        classes = cell.classes
+      )
+    )
 }
 
 case class TableModel(heading: Option[String], headerRow: Option[Header], rows: Seq[Row]) {
 
-  def toGovukTable = Table(
-    caption = heading,
-    rows = rows.map(_.toGovukTableRow),
-    head = headerRow.map(_.toGovukHeaderCells)
-  )
+  def toGovukTable =
+    Table(
+      caption = heading,
+      rows = rows.map(_.toGovukTableRow),
+      head = headerRow.map(_.toGovukHeaderCells)
+    )
 }

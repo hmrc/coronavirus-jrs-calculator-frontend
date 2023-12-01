@@ -30,7 +30,7 @@ import views.html.PartTimeNormalHoursView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartTimeNormalHoursController @Inject()(
+class PartTimeNormalHoursController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   val navigator: Navigator,
@@ -43,36 +43,40 @@ class PartTimeNormalHoursController @Inject()(
 )(implicit ec: ExecutionContext)
     extends BaseController {
 
-  def onPageLoad(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswerOrRedirectV(PartTimePeriodsPage) { partTimePeriods =>
-      withValidPartTimePeriod(partTimePeriods, idx) { partTimePeriod =>
-        val preparedForm = request.userAnswers.getV(PartTimeNormalHoursPage, Some(idx))(UsualHours.format) match {
-          case Invalid(e)   => formProvider(partTimePeriod)
-          case Valid(value) => formProvider(partTimePeriod).fill(value.hours)
+  def onPageLoad(idx: Int): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswerOrRedirectV(PartTimePeriodsPage) { partTimePeriods =>
+        withValidPartTimePeriod(partTimePeriods, idx) { partTimePeriod =>
+          val preparedForm = request.userAnswers.getV(PartTimeNormalHoursPage, Some(idx))(UsualHours.format) match {
+            case Invalid(e)   => formProvider(partTimePeriod)
+            case Valid(value) => formProvider(partTimePeriod).fill(value.hours)
+          }
+
+          Future.successful(Ok(view(preparedForm, partTimePeriod, idx)))
         }
-
-        Future.successful(Ok(view(preparedForm, partTimePeriod, idx)))
       }
     }
-  }
 
-  def onSubmit(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswerOrRedirectV(PartTimePeriodsPage) { partTimePeriods =>
-      withValidPartTimePeriod(partTimePeriods, idx) { partTimePeriod =>
-        formProvider(partTimePeriod)
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, partTimePeriod, idx))),
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers
-                  .set(PartTimeNormalHoursPage, UsualHours(partTimePeriod.period.end, value), Some(idx)))
-                _ <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(PartTimeNormalHoursPage, updatedAnswers, Some(idx)))
-          )
+  def onSubmit(idx: Int): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswerOrRedirectV(PartTimePeriodsPage) { partTimePeriods =>
+        withValidPartTimePeriod(partTimePeriods, idx) { partTimePeriod =>
+          formProvider(partTimePeriod)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, partTimePeriod, idx))),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(
+                    request.userAnswers
+                      .set(PartTimeNormalHoursPage, UsualHours(partTimePeriod.period.end, value), Some(idx))
+                  )
+                  _ <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(PartTimeNormalHoursPage, updatedAnswers, Some(idx)))
+            )
+        }
       }
     }
-  }
 
   private def withValidPartTimePeriod(partTimePeriods: Seq[Periods], idx: Int)(f: Periods => Future[Result]): Future[Result] =
     partTimePeriods.lift(idx - 1) match {

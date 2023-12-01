@@ -43,15 +43,17 @@ class PayPeriodsListControllerSpec extends SpecBaseControllerSpecs with MockitoS
 
   val view = app.injector.instanceOf[PayPeriodsListView]
 
-  val controller = new PayPeriodsListController(messagesApi,
-                                                mockSessionRepository,
-                                                navigator,
-                                                identifier,
-                                                dataRetrieval,
-                                                dataRequired,
-                                                formProvider,
-                                                component,
-                                                view)
+  val controller = new PayPeriodsListController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "PayPeriodsList Controller" must {
 

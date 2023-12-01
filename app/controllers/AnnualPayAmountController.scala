@@ -40,7 +40,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AnnualPayAmountController @Inject()(
+class AnnualPayAmountController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   val navigator: Navigator,
@@ -95,33 +95,32 @@ class AnnualPayAmountController @Inject()(
                 .persistAnswer(request.userAnswers, AnnualPayAmountPage, value, None)
                 .map { updatedAnswers =>
                   Redirect(navigator.nextPage(AnnualPayAmountPage, updatedAnswers, None))
-              }
+                }
           )
       }
     }
 
   private def titleHeading(claimStart: LocalDate, employeeStarted: EmployeeStarted, furloughStart: LocalDate, userAnswers: UserAnswers)(
-    implicit message: Messages): (String, Seq[String]) = {
+    implicit message: Messages
+  ): (String, Seq[String]) = {
     val isExt: Boolean = claimStart.isEqualOrAfter(extensionStartDate)
 
     val employeeStartDate: AnswerV[LocalDate] = userAnswers.getV(EmployeeStartDatePage)
     val isRTISubmissionRequired               = rtiSubmissionRequired(userAnswers)
     val rtiSubmission                         = userAnswers.getV(EmployeeRTISubmissionPage)
 
-    if (isExt) {
-
-      if (isRTISubmissionRequired && rtiSubmission.exists(_ == EmployeeRTISubmission.No)) {
+    if (isExt)
+      if (isRTISubmissionRequired && rtiSubmission.exists(_ == EmployeeRTISubmission.No))
         ("from", Seq(dateToString(apr6th2020), dateToString(furloughStart.minusDays(1))))
-      } else {
+      else
         extensionMatching(employeeStarted, furloughStart, employeeStartDate)
-      }
-    } else {
+    else
       preExtensionMatching(employeeStarted, furloughStart, employeeStartDate)
-    }
   }
 
-  private def extensionMatching(employeeStarted: EmployeeStarted, furloughStart: LocalDate, employeeStartDate: AnswerV[LocalDate])(
-    implicit message: Messages): (String, Seq[String]) =
+  private def extensionMatching(employeeStarted: EmployeeStarted, furloughStart: LocalDate, employeeStartDate: AnswerV[LocalDate])(implicit
+    message: Messages
+  ): (String, Seq[String]) =
     (employeeStarted, employeeStartDate) match {
       case (OnOrBefore1Feb2019, _) =>
         ("from", Seq(dateToString(apr6th2019), dateToString(earliestOf(apr5th2020, furloughStart.minusDays(1)))))
@@ -136,7 +135,8 @@ class AnnualPayAmountController @Inject()(
     }
 
   private def preExtensionMatching(employeeStarted: EmployeeStarted, furloughStart: LocalDate, employeeStartDate: AnswerV[LocalDate])(
-    implicit message: Messages): (String, Seq[String]) =
+    implicit message: Messages
+  ): (String, Seq[String]) =
     (employeeStarted, employeeStartDate) match {
       case (OnOrBefore1Feb2019, _) =>
         ("from", Seq(dateToString(apr6th2019), dateToString(earliestOf(apr5th2020, furloughStart.minusDays(1)))))
@@ -149,8 +149,8 @@ class AnnualPayAmountController @Inject()(
   private def rtiSubmissionRequired(userAnswers: UserAnswers) =
     (userAnswers.getV(ClaimPeriodStartPage), userAnswers.getV(EmployeeStartDatePage)) match {
       case (Valid(claimPeriodStart), Valid(empStartDate))
-          if (claimPeriodStart.isEqualOrAfter(nov1st2020) && empStartDate.isEqualOrAfter(feb1st2020) && empStartDate.isEqualOrBefore(
-            mar19th2020)) =>
+          if claimPeriodStart.isEqualOrAfter(nov1st2020) && empStartDate
+            .isEqualOrAfter(feb1st2020) && empStartDate.isEqualOrBefore(mar19th2020) =>
         true
 
       case _ => false

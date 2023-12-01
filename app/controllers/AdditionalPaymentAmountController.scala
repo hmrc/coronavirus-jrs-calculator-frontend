@@ -34,7 +34,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AdditionalPaymentAmountController @Inject()(
+class AdditionalPaymentAmountController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   val navigator: Navigator,
@@ -51,38 +51,40 @@ class AdditionalPaymentAmountController @Inject()(
   val feature: FeatureFlagActionProvider = new FeatureFlagActionProviderImpl()
   val userAnswerPersistence              = new UserAnswerPersistence(sessionRepository.set)
 
-  def onPageLoad(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswerOrRedirectV(AdditionalPaymentPeriodsPage) { additionalPaymentPeriods =>
-      withValidAdditionalPaymentDate(additionalPaymentPeriods, idx) { paymentDate =>
-        val preparedForm = request.userAnswers.getV(AdditionalPaymentAmountPage, Some(idx)) match {
-          case Invalid(e)   => form
-          case Valid(value) => form.fill(value.amount)
+  def onPageLoad(idx: Int): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswerOrRedirectV(AdditionalPaymentPeriodsPage) { additionalPaymentPeriods =>
+        withValidAdditionalPaymentDate(additionalPaymentPeriods, idx) { paymentDate =>
+          val preparedForm = request.userAnswers.getV(AdditionalPaymentAmountPage, Some(idx)) match {
+            case Invalid(e)   => form
+            case Valid(value) => form.fill(value.amount)
+          }
+
+          Future.successful(Ok(view(preparedForm, paymentDate, idx)))
         }
-
-        Future.successful(Ok(view(preparedForm, paymentDate, idx)))
       }
     }
-  }
 
-  def onSubmit(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswerOrRedirectV(AdditionalPaymentPeriodsPage) { additionalPaymentPeriods =>
-      withValidAdditionalPaymentDate(additionalPaymentPeriods, idx) { paymentDate =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, paymentDate, idx))),
-            value => {
-              val additionalPayment = AdditionalPayment(paymentDate, value)
-              userAnswerPersistence
-                .persistAnswer(request.userAnswers, AdditionalPaymentAmountPage, additionalPayment, Some(idx))
-                .map { updatedAnswers =>
-                  Redirect(navigator.nextPage(AdditionalPaymentAmountPage, updatedAnswers, Some(idx)))
-                }
-            }
-          )
+  def onSubmit(idx: Int): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswerOrRedirectV(AdditionalPaymentPeriodsPage) { additionalPaymentPeriods =>
+        withValidAdditionalPaymentDate(additionalPaymentPeriods, idx) { paymentDate =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, paymentDate, idx))),
+              value => {
+                val additionalPayment = AdditionalPayment(paymentDate, value)
+                userAnswerPersistence
+                  .persistAnswer(request.userAnswers, AdditionalPaymentAmountPage, additionalPayment, Some(idx))
+                  .map { updatedAnswers =>
+                    Redirect(navigator.nextPage(AdditionalPaymentAmountPage, updatedAnswers, Some(idx)))
+                  }
+              }
+            )
+        }
       }
     }
-  }
 
   private def withValidAdditionalPaymentDate(topUpPeriods: Seq[LocalDate], idx: Int)(f: LocalDate => Future[Result]): Future[Result] =
     topUpPeriods.lift(idx - 1) match {

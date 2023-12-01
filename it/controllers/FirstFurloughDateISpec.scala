@@ -7,7 +7,8 @@ import play.api.http.Status._
 import play.api.libs.json.Json
 import utils.{CreateRequestHelper, CustomMatchers, ITCoreTestData, IntegrationSpecBase}
 
-class FirstFurloughDateISpec extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData {
+class FirstFurloughDateISpec
+    extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData {
 
   "GET /first-furlough-date" when {
 
@@ -41,9 +42,9 @@ class FirstFurloughDateISpec extends IntegrationSpecBase with CreateRequestHelpe
         val res = postRequestHeader(
           path = "/first-furlough-date",
           formJson = Json.obj(
-            "firstFurloughDate.day" -> "11",
+            "firstFurloughDate.day"   -> "11",
             "firstFurloughDate.month" -> "11",
-            "firstFurloughDate.year" -> "2020"
+            "firstFurloughDate.year"  -> "2020"
           )
         )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
@@ -57,4 +58,3 @@ class FirstFurloughDateISpec extends IntegrationSpecBase with CreateRequestHelpe
     }
   }
 }
-

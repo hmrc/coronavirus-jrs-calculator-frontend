@@ -12,7 +12,8 @@ import views.ViewUtils.dateToString
 
 import java.time._
 
-class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData {
+class NumberOfStatLeaveDaysControllerISpec
+    extends IntegrationSpecBase with CreateRequestHelper with CustomMatchers with BaseITConstants with ITCoreTestData {
 
   "GET /number-of-days-on-statutory-leave" when {
 
@@ -21,8 +22,8 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
       "render the first furlough date page with correct title" in {
 
         val furloughStartDate: String = "2021, 03, 01"
-        val boundaryStart: String = dateToString(apr6th2019)
-        val boundaryEnd: String = dateToString(apr5th2020)
+        val boundaryStart: String     = dateToString(apr6th2019)
+        val boundaryEnd: String       = dateToString(apr5th2020)
 
         val userAnswers: UserAnswers =
           emptyUserAnswers
@@ -34,7 +35,6 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
             .withPayMethod(Variable)
             .withFurloughInLastTaxYear(false)
             .withVariableLengthEmployed(EmployeeStarted.OnOrBefore1Feb2019)
-
 
         setAnswers(userAnswers)
 
@@ -53,10 +53,10 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
 
       "render the first furlough date page with correct wordy title" in {
 
-        val employeeStartDate = "2020, 01, 31"
+        val employeeStartDate         = "2020, 01, 31"
         val furloughStartDate: String = "2021, 03, 01"
         val firstFurloughDate: String = "2020, 04, 05"
-        val boundaryEnd: String = dateToString(LocalDate.of(2020, 4, 4))
+        val boundaryEnd: String       = dateToString(LocalDate.of(2020, 4, 4))
 
         val userAnswers: UserAnswers =
           emptyUserAnswers
@@ -88,10 +88,10 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
 
       "render the first furlough date page with correct wordy title" in {
 
-        val employeeStartDate = "2020, 04, 10"
+        val employeeStartDate         = "2020, 04, 10"
         val furloughStartDate: String = "2020, 11, 01"
         val firstFurloughDate: String = "2020, 01, 01"
-        val boundaryEnd = dateToString(LocalDate.of(2019, 12, 31))
+        val boundaryEnd               = dateToString(LocalDate.of(2019, 12, 31))
 
         val userAnswers: UserAnswers =
           emptyUserAnswers
@@ -124,10 +124,10 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
 
       "render the first furlough date page with correct wordy title" in {
 
-        val employeeStartDate = "2020, 04, 10"
+        val employeeStartDate         = "2020, 04, 10"
         val furloughStartDate: String = "2021, 05, 01"
         val firstFurloughDate: String = "2020, 05, 21"
-        val boundaryEnd = dateToString(LocalDate.of(2020, 5, 20))
+        val boundaryEnd               = dateToString(LocalDate.of(2020, 5, 20))
 
         val userAnswers: UserAnswers =
           emptyUserAnswers
@@ -201,7 +201,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
 
         "redirect to onward route" in {
 
-          val employeeStartDate = "2020, 01, 31"
+          val employeeStartDate         = "2020, 01, 31"
           val furloughStartDate: String = "2021, 03, 01"
           val firstFurloughDate: String = "2020, 04, 05"
 
@@ -242,7 +242,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
 
         "redirect to onward route" in {
 
-          val employeeStartDate = "2020, 04, 10"
+          val employeeStartDate         = "2020, 04, 10"
           val furloughStartDate: String = "2020, 11, 01"
 
           val userAnswers: UserAnswers =
@@ -281,7 +281,7 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
 
         "redirect to onward route" in {
 
-          val employeeStartDate = "2020, 04, 10"
+          val employeeStartDate         = "2020, 04, 10"
           val furloughStartDate: String = "2021, 05, 01"
           val firstFurloughDate: String = "2020, 05, 21"
 
@@ -336,4 +336,3 @@ class NumberOfStatLeaveDaysControllerISpec extends IntegrationSpecBase with Crea
   }
 
 }
-

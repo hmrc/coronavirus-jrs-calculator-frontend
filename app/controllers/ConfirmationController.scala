@@ -35,7 +35,7 @@ import views.html._
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class ConfirmationController @Inject()(
+class ConfirmationController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
@@ -46,40 +46,41 @@ class ConfirmationController @Inject()(
   phaseTwoView: PhaseTwoConfirmationView,
   extensionView: JrsExtensionConfirmationView,
   auditService: AuditService,
-  val navigator: Navigator)(implicit val errorHandler: ErrorHandler, ec: ExecutionContext, appConfig: FrontendAppConfig)
+  val navigator: Navigator
+)(implicit val errorHandler: ErrorHandler, ec: ExecutionContext, appConfig: FrontendAppConfig)
     extends BaseController with ConfirmationControllerRequestHandler with CalculatorVersionConfiguration with YearMonthHelper
     with FeatureSwitching {
 
   //scalastyle:off
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    if (isEnabled(WriteConfirmationTestCasesToFile)) {
-      writeConfirmationTestCasesToFile(request.userAnswers, loadResultData(request.userAnswers))
-    }
+  def onPageLoad: Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      if (isEnabled(WriteConfirmationTestCasesToFile))
+        writeConfirmationTestCasesToFile(request.userAnswers, loadResultData(request.userAnswers))
 
-    loadResultData(request.userAnswers) match {
-      case Valid(data: PhaseOneConfirmationDataResult) =>
-        auditService.sendCalculationPerformed(request.userAnswers, data.confirmationViewBreakdown)
-        Ok(viewWithDetailedBreakdowns(data.confirmationViewBreakdown, data.metaData.claimPeriod, calculatorVersionConf))
-      case Valid(data: PhaseTwoConfirmationDataResult) =>
-        auditService.sendCalculationPerformed(request.userAnswers, data.confirmationViewBreakdown)
-        Ok(phaseTwoView(data.confirmationViewBreakdown, data.metaData.claimPeriod, calculatorVersionConf))
-      case Valid(data: ConfirmationDataResultWithoutNicAndPension) => {
-        auditService.sendCalculationPerformed(request.userAnswers, data.confirmationViewBreakdown)
-        Ok(
-          extensionView(
-            data.confirmationViewBreakdown,
-            data.metaData.claimPeriod,
-            calculatorVersionConf,
-            employeeTypeService.isType5NewStarter(),
-            FurloughGrantRate.rateForYearMonth(data.metaData.claimPeriod.start.getYearMonth)
-          ))
+      loadResultData(request.userAnswers) match {
+        case Valid(data: PhaseOneConfirmationDataResult) =>
+          auditService.sendCalculationPerformed(request.userAnswers, data.confirmationViewBreakdown)
+          Ok(viewWithDetailedBreakdowns(data.confirmationViewBreakdown, data.metaData.claimPeriod, calculatorVersionConf))
+        case Valid(data: PhaseTwoConfirmationDataResult) =>
+          auditService.sendCalculationPerformed(request.userAnswers, data.confirmationViewBreakdown)
+          Ok(phaseTwoView(data.confirmationViewBreakdown, data.metaData.claimPeriod, calculatorVersionConf))
+        case Valid(data: ConfirmationDataResultWithoutNicAndPension) =>
+          auditService.sendCalculationPerformed(request.userAnswers, data.confirmationViewBreakdown)
+          Ok(
+            extensionView(
+              data.confirmationViewBreakdown,
+              data.metaData.claimPeriod,
+              calculatorVersionConf,
+              employeeTypeService.isType5NewStarter(),
+              FurloughGrantRate.rateForYearMonth(data.metaData.claimPeriod.start.getYearMonth)
+            )
+          )
+        case Invalid(e) =>
+          auditService.sendCalculationFailed(request.userAnswers)
+          PagerDutyHelper.alert(CALCULATION_FAILED)
+          UserAnswers.logErrors(e)(logger.logger)
+          Redirect(routes.ErrorController.somethingWentWrong())
       }
-      case Invalid(e) =>
-        auditService.sendCalculationFailed(request.userAnswers)
-        PagerDutyHelper.alert(CALCULATION_FAILED)
-        UserAnswers.logErrors(e)(logger.logger)
-        Redirect(routes.ErrorController.somethingWentWrong())
     }
-  }
 
 }

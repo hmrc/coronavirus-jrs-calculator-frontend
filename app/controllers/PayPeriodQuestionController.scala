@@ -33,7 +33,7 @@ import views.html.PayPeriodQuestionView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PayPeriodQuestionController @Inject()(
+class PayPeriodQuestionController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   val navigator: Navigator,
@@ -48,23 +48,25 @@ class PayPeriodQuestionController @Inject()(
 
   val form: Form[PayPeriodQuestion] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.getV(PayPeriodQuestionPage) match {
-      case Invalid(_)   => form
-      case Valid(value) => form.fill(value)
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      val preparedForm = request.userAnswers.getV(PayPeriodQuestionPage) match {
+        case Invalid(_)   => form
+        case Valid(value) => form.fill(value)
+      }
+
+      previousPageOrRedirect(Ok(view(preparedForm, generatePeriods(request.userAnswers.getList(PayDatePage)))))
     }
 
-    previousPageOrRedirect(Ok(view(preparedForm, generatePeriods(request.userAnswers.getList(PayDatePage)))))
-  }
-
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, generatePeriods(request.userAnswers.getList(PayDatePage))))),
-        value => processSubmittedAnswer(request, value)
-      )
-  }
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, generatePeriods(request.userAnswers.getList(PayDatePage))))),
+          value => processSubmittedAnswer(request, value)
+        )
+    }
 
   private def processSubmittedAnswer(request: DataRequest[AnyContent], value: PayPeriodQuestion): Future[Result] =
     for {

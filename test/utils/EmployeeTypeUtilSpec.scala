@@ -390,8 +390,10 @@ class EmployeeTypeUtilSpec extends SpecBase with EmployeeTypeUtil with LogCaptur
         withCaptureOfLoggingFrom(PagerDutyHelper.logger) { logs =>
           intercept[InternalServerException] {
             actualEmployeeTypeResolverResult()
-            logs.exists(_.getMessage == s"${PagerDutyHelper.PagerDutyKeys.EMPLOYEE_TYPE_COULD_NOT_BE_RESOLVED} " +
-              s"[EmployeeTypeService][employeeTypeResolver] no valid answer for PayMethodPage") mustBe true
+            logs.exists(
+              _.getMessage == s"${PagerDutyHelper.PagerDutyKeys.EMPLOYEE_TYPE_COULD_NOT_BE_RESOLVED} " +
+                s"[EmployeeTypeService][employeeTypeResolver] no valid answer for PayMethodPage"
+            ) mustBe true
           }
         }
       }

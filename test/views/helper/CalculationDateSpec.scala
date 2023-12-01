@@ -40,6 +40,7 @@ class CalculationDateSpec extends ViewBehaviours {
       Seq(
         Selectors.p(1) -> dateAndCalculatorVersion(dateToString(LocalDate.now()), version),
         Selectors.p(2) -> disclaimerTopPage
-      ))
+      )
+    )
   }
 }

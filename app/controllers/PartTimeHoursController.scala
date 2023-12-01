@@ -30,7 +30,7 @@ import views.html.PartTimeHoursView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartTimeHoursController @Inject()(
+class PartTimeHoursController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   val navigator: Navigator,
@@ -43,41 +43,43 @@ class PartTimeHoursController @Inject()(
 )(implicit ec: ExecutionContext)
     extends BaseController {
 
-  def onPageLoad(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswerOrRedirectV(PartTimePeriodsPage) { partTimePeriods =>
-      withValidPartTimePeriod(partTimePeriods, idx) { partTimePeriod =>
-        val usuals: Seq[UsualHours] = request.userAnswers.getList(PartTimeNormalHoursPage)(UsualHours.format)
-        val form                    = formProvider(usuals, partTimePeriod)
-        val preparedForm = request.userAnswers.getV(PartTimeHoursPage, Some(idx))(PartTimeHours.format) match {
-          case Invalid(e)   => form
-          case Valid(value) => form.fill(value.hours)
+  def onPageLoad(idx: Int): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswerOrRedirectV(PartTimePeriodsPage) { partTimePeriods =>
+        withValidPartTimePeriod(partTimePeriods, idx) { partTimePeriod =>
+          val usuals: Seq[UsualHours] = request.userAnswers.getList(PartTimeNormalHoursPage)(UsualHours.format)
+          val form                    = formProvider(usuals, partTimePeriod)
+          val preparedForm = request.userAnswers.getV(PartTimeHoursPage, Some(idx))(PartTimeHours.format) match {
+            case Invalid(e)   => form
+            case Valid(value) => form.fill(value.hours)
+          }
+
+          Future.successful(Ok(view(preparedForm, partTimePeriod, idx)))
         }
-
-        Future.successful(Ok(view(preparedForm, partTimePeriod, idx)))
       }
     }
-  }
 
-  def onSubmit(idx: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getRequiredAnswerOrRedirectV(PartTimePeriodsPage) { partTimePeriods =>
-      withValidPartTimePeriod(partTimePeriods, idx) { partTimePeriod =>
-        val usuals: Seq[UsualHours] = request.userAnswers.getList(PartTimeNormalHoursPage)(UsualHours.format)
-        formProvider(usuals, partTimePeriod)
-          .bindFromRequest()
-          .fold(
-            formWithErrors => {
-              Future.successful(BadRequest(view(formWithErrors, partTimePeriod, idx)))
-            },
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers
-                  .set(PartTimeHoursPage, PartTimeHours(partTimePeriod.period.end, value), Some(idx)))
-                _ <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(PartTimeHoursPage, updatedAnswers, Some(idx)))
-          )
+  def onSubmit(idx: Int): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getRequiredAnswerOrRedirectV(PartTimePeriodsPage) { partTimePeriods =>
+        withValidPartTimePeriod(partTimePeriods, idx) { partTimePeriod =>
+          val usuals: Seq[UsualHours] = request.userAnswers.getList(PartTimeNormalHoursPage)(UsualHours.format)
+          formProvider(usuals, partTimePeriod)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, partTimePeriod, idx))),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(
+                    request.userAnswers
+                      .set(PartTimeHoursPage, PartTimeHours(partTimePeriod.period.end, value), Some(idx))
+                  )
+                  _ <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(PartTimeHoursPage, updatedAnswers, Some(idx)))
+            )
+        }
       }
     }
-  }
 
   private def withValidPartTimePeriod(partTimePeriods: Seq[Periods], idx: Int)(f: Periods => Future[Result]): Future[Result] =
     partTimePeriods.lift(idx - 1) match {

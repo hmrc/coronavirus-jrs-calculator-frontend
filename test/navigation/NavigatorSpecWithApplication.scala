@@ -55,11 +55,17 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
       "go to correct page after furloughOngoingPage" in {
         navigator
-          .nextPage(FurloughStatusPage, emptyUserAnswers.withFurloughStatus(FurloughStatus.FurloughOngoing)) mustBe routes.PaymentFrequencyController
+          .nextPage(
+            FurloughStatusPage,
+            emptyUserAnswers.withFurloughStatus(FurloughStatus.FurloughOngoing)
+          ) mustBe routes.PaymentFrequencyController
           .onPageLoad()
 
         navigator
-          .nextPage(FurloughStatusPage, emptyUserAnswers.withFurloughStatus(FurloughStatus.FurloughEnded)) mustBe routes.FurloughEndDateController
+          .nextPage(
+            FurloughStatusPage,
+            emptyUserAnswers.withFurloughStatus(FurloughStatus.FurloughEnded)
+          ) mustBe routes.FurloughEndDateController
           .onPageLoad()
       }
 
@@ -69,11 +75,13 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
       }
 
       "go to pay dates page after PayMethodPage for claims starting before 01/11/2020" in {
-        navigator.nextPage(PayMethodPage,
-                           emptyUserAnswers
-                             .withPayMethod(Regular)
-                             .withClaimPeriodStart("2020-10-01")
-                             .withPayDate(List())) mustBe routes.PayDateController.onPageLoad(1)
+        navigator.nextPage(
+          PayMethodPage,
+          emptyUserAnswers
+            .withPayMethod(Regular)
+            .withClaimPeriodStart("2020-10-01")
+            .withPayDate(List())
+        ) mustBe routes.PayDateController.onPageLoad(1)
 
         navigator.nextPage(PayMethodPage, emptyUserAnswers) mustBe routes.PayMethodController.onPageLoad()
       }
@@ -118,18 +126,22 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
       }
 
       "go to regular-pay-amount page after PayMethodPage if regular and PayDates were persisted in fast journey" in {
-        navigator.nextPage(PayMethodPage,
-                           dummyUserAnswers
-                             .withPayMethod(Regular)
-                             .withPayDate(List("2020-1-1"))) mustBe routes.RegularPayAmountController.onPageLoad()
+        navigator.nextPage(
+          PayMethodPage,
+          dummyUserAnswers
+            .withPayMethod(Regular)
+            .withPayDate(List("2020-1-1"))
+        ) mustBe routes.RegularPayAmountController.onPageLoad()
       }
 
       "go to RegularLengthEmployedPage after PayMethodPage for claims starting on or after 01/11/2020 for Regular payMethods" in {
-        navigator.nextPage(PayMethodPage,
-                           emptyUserAnswers
-                             .withPayMethod(Regular)
-                             .withClaimPeriodStart("2020-11-01")
-                             .withPayDate(List())) mustBe routes.RegularLengthEmployedController.onPageLoad()
+        navigator.nextPage(
+          PayMethodPage,
+          emptyUserAnswers
+            .withPayMethod(Regular)
+            .withClaimPeriodStart("2020-11-01")
+            .withPayDate(List())
+        ) mustBe routes.RegularLengthEmployedController.onPageLoad()
 
         navigator.nextPage(PayMethodPage, emptyUserAnswers) mustBe routes.PayMethodController.onPageLoad()
       }
@@ -201,17 +213,21 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
       }
 
       "go to NicCategoryPage after PartTimeQuestionPage if `PartTimeNo`" in {
-        navigator.nextPage(PartTimeQuestionPage,
-                           emptyUserAnswers
-                             .withClaimPeriodStart("2020, 7, 31")
-                             .withPartTimeQuestion(PartTimeNo)) mustBe routes.NicCategoryController.onPageLoad()
+        navigator.nextPage(
+          PartTimeQuestionPage,
+          emptyUserAnswers
+            .withClaimPeriodStart("2020, 7, 31")
+            .withPartTimeQuestion(PartTimeNo)
+        ) mustBe routes.NicCategoryController.onPageLoad()
       }
 
       "go to ConfirmationPage after PartTimeQuestionPage if `PartTimeNo` and claim started after July" in {
-        navigator.nextPage(PartTimeQuestionPage,
-                           emptyUserAnswers
-                             .withClaimPeriodStart("2020, 8, 1")
-                             .withPartTimeQuestion(PartTimeNo)) mustBe routes.ConfirmationController.onPageLoad()
+        navigator.nextPage(
+          PartTimeQuestionPage,
+          emptyUserAnswers
+            .withClaimPeriodStart("2020, 8, 1")
+            .withPartTimeQuestion(PartTimeNo)
+        ) mustBe routes.ConfirmationController.onPageLoad()
       }
 
       "go to PartTimeQuestionPage after RegularPayAmountPage if phase two started and furlough has ended" in {
@@ -927,12 +943,11 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "the date is before 2020-4-5 return LastPayDateController.onPageLoad()" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(PayDatePage, LocalDate.of(2020, 4, 4), Some(1))
               .success
               .value
-          }
 
           val actual   = navigator.requireLastPayDateRoutes(userAnswers)
           val expected = routes.LastPayDateController.onPageLoad()
@@ -942,7 +957,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "the date.head is after or equal 2020-4-6 and pay method is regular return RegularPayAmountController.onPageLoad()" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(PayDatePage, LocalDate.of(2020, 4, 6), Some(1))
               .success
@@ -950,7 +965,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(PayMethodPage, Regular)
               .success
               .value
-          }
 
           val actual: Call   = navigator.requireLastPayDateRoutes(userAnswers)
           val expected: Call = routes.RegularPayAmountController.onPageLoad()
@@ -963,7 +977,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "the date is before 2020-4-5 return LastPayDateController.onPageLoad()" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(PayDatePage, LocalDate.of(2020, 4, 3), Some(1))
               .success
@@ -971,7 +985,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(PayDatePage, LocalDate.of(2020, 4, 4), Some(1))
               .success
               .value
-          }
 
           val actual   = navigator.requireLastPayDateRoutes(userAnswers)
           val expected = routes.LastPayDateController.onPageLoad()
@@ -981,7 +994,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "the date.head is after or equal 2020-4-6 and pay method is regular return RegularPayAmountController.onPageLoad()" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(PayDatePage, LocalDate.of(2020, 4, 6), Some(1))
               .success
@@ -992,7 +1005,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(PayMethodPage, Regular)
               .success
               .value
-          }
 
           val actual: Call   = navigator.requireLastPayDateRoutes(userAnswers)
           val expected: Call = routes.RegularPayAmountController.onPageLoad()
@@ -1051,7 +1063,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
       "user has selected the 'Variable' pay option" must {
         "route to the employee first furloughed page when the furlough start date is after November 8th and was on payroll before 30th October 2020" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(FurloughStartDatePage, LocalDate.of(2020, 11, 10))
               .success
@@ -1062,7 +1074,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(OnPayrollBefore30thOct2020Page, true)
               .success
               .value
-          }
 
           val actual: Call   = navigator.onPayrollBefore30thOct2020Routes(userAnswers)
           val expected: Call = routes.PreviousFurloughPeriodsController.onPageLoad()
@@ -1072,7 +1083,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "route to the employee first furloughed page when the furlough start date is after May 8th and was not on payroll before 30th October 2020" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(FurloughStartDatePage, LocalDate.of(2021, 5, 10))
               .success
@@ -1083,7 +1094,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(OnPayrollBefore30thOct2020Page, false)
               .success
               .value
-          }
 
           val actual: Call   = navigator.onPayrollBefore30thOct2020Routes(userAnswers)
           val expected: Call = routes.PreviousFurloughPeriodsController.onPageLoad()
@@ -1093,7 +1103,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "route to the employee first furloughed page when the furlough start date is after May 8th and was on payroll before 30th October 2020" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(FurloughStartDatePage, LocalDate.of(2021, 5, 10))
               .success
@@ -1104,7 +1114,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(OnPayrollBefore30thOct2020Page, true)
               .success
               .value
-          }
 
           val actual: Call   = navigator.onPayrollBefore30thOct2020Routes(userAnswers)
           val expected: Call = routes.PreviousFurloughPeriodsController.onPageLoad()
@@ -1114,7 +1123,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "route to the last pay date page when the furlough start date is before November 8th and was on payroll before 30th October 2020" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(FurloughStartDatePage, LocalDate.of(2020, 11, 7))
               .success
@@ -1125,7 +1134,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(OnPayrollBefore30thOct2020Page, true)
               .success
               .value
-          }
 
           val actual: Call   = navigator.onPayrollBefore30thOct2020Routes(userAnswers)
           val expected: Call = routes.PayDateController.onPageLoad(1)
@@ -1135,7 +1143,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "route to the last pay date page when the furlough start date is before May 8th 2021 and was not on payroll before 30th October 2020" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(FurloughStartDatePage, LocalDate.of(2021, 4, 7))
               .success
@@ -1146,7 +1154,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(OnPayrollBefore30thOct2020Page, false)
               .success
               .value
-          }
 
           val actual: Call   = navigator.onPayrollBefore30thOct2020Routes(userAnswers)
           val expected: Call = routes.PayDateController.onPageLoad(1)
@@ -1158,7 +1165,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
       "user has not selected a PayMethod option" must {
         "route the user back to the starting page" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(FurloughStartDatePage, LocalDate.of(2021, 4, 7))
               .success
@@ -1166,7 +1173,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(OnPayrollBefore30thOct2020Page, false)
               .success
               .value
-          }
 
           val actual: Call   = navigator.onPayrollBefore30thOct2020Routes(userAnswers)
           val expected: Call = routes.RootPageController.onPageLoad()
@@ -1182,7 +1188,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "the furlough start date is after the 8th Nov 2020 and was on payroll before 30th Oct 2020" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(FurloughStartDatePage, LocalDate.of(2021, 5, 7))
               .success
@@ -1193,7 +1199,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(OnPayrollBefore30thOct2020Page, true)
               .success
               .value
-          }
 
           val actual: Call   = navigator.routeToEmployeeFirstFurloughed(userAnswers)
           val expected: Call = routes.PreviousFurloughPeriodsController.onPageLoad()
@@ -1203,7 +1208,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "the furlough start date is after the 8th May 2021 and was not on payroll before 30th Oct 2020" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(FurloughStartDatePage, LocalDate.of(2021, 5, 9))
               .success
@@ -1214,7 +1219,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(OnPayrollBefore30thOct2020Page, false)
               .success
               .value
-          }
 
           val actual: Call   = navigator.routeToEmployeeFirstFurloughed(userAnswers)
           val expected: Call = routes.PreviousFurloughPeriodsController.onPageLoad()
@@ -1227,7 +1231,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "doesn't fall into the above categories" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(FurloughStartDatePage, LocalDate.of(2020, 10, 9))
               .success
@@ -1238,7 +1242,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(OnPayrollBefore30thOct2020Page, true)
               .success
               .value
-          }
 
           val actual: Call   = navigator.routeToEmployeeFirstFurloughed(userAnswers)
           val expected: Call = routes.PayDateController.onPageLoad(1)
@@ -1252,7 +1255,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
       "route to the next page (PartTimeQuestionPage) when the answer to the StatutoryLeavePayPage is valid" in {
 
-        val userAnswers: UserAnswers = {
+        val userAnswers: UserAnswers =
           emptyUserAnswers
             .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
             .success
@@ -1263,7 +1266,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
             .set(StatutoryLeavePayPage, Amount(BigDecimal(30.10)))
             .success
             .value
-        }
         val actual: Call   = navigator.statutoryLeavePayRoutes(userAnswers)
         val expected: Call = routes.PartTimeQuestionController.onPageLoad()
 
@@ -1272,7 +1274,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
       "stay on the same page StatutoryLeavePayPage - when the answer is invalid" in {
 
-        val userAnswers: UserAnswers = {
+        val userAnswers: UserAnswers =
           emptyUserAnswers
             .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
             .success
@@ -1280,7 +1282,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
             .set(ClaimPeriodEndPage, LocalDate.of(2021, 5, 31))
             .success
             .value
-        }
         val actual: Call   = navigator.statutoryLeavePayRoutes(userAnswers)
         val expected: Call = routes.StatutoryLeavePayController.onPageLoad()
 
@@ -1294,7 +1295,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "route to the next page (PartTimeQuestionPage) when the user answers 'No' on HasEmployeeBeenOnStatutoryLeavePage" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
               .success
@@ -1305,7 +1306,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(HasEmployeeBeenOnStatutoryLeavePage, false)
               .success
               .value
-          }
           val actual: Call   = navigator.hasBeenOnStatutoryLeaveRoutes(userAnswers)
           val expected: Call = routes.PartTimeQuestionController.onPageLoad()
 
@@ -1314,7 +1314,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "route to the next page (NumberOfStatLeaveDaysPage) when the user answers 'Yes' on HasEmployeeBeenOnStatutoryLeavePage" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
               .success
@@ -1325,7 +1325,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(HasEmployeeBeenOnStatutoryLeavePage, true)
               .success
               .value
-          }
           val actual: Call   = navigator.hasBeenOnStatutoryLeaveRoutes(userAnswers)
           val expected: Call = routes.NumberOfStatLeaveDaysController.onPageLoad()
 
@@ -1334,7 +1333,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
         "route back to the page (HasEmployeeBeenOnStatutoryLeavePage) when the user hasn't answered the HasEmployeeBeenOnStatutoryLeavePage" in {
 
-          val userAnswers: UserAnswers = {
+          val userAnswers: UserAnswers =
             emptyUserAnswers
               .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
               .success
@@ -1342,7 +1341,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
               .set(ClaimPeriodEndPage, LocalDate.of(2021, 5, 31))
               .success
               .value
-          }
           val actual: Call   = navigator.hasBeenOnStatutoryLeaveRoutes(userAnswers)
           val expected: Call = routes.HasEmployeeBeenOnStatutoryLeaveController.onPageLoad()
 
@@ -1355,7 +1353,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
       "route to the next page (StatutoryLeavePayPage) when the answer to the NumberOfStatLeaveDaysPage is valid" in {
 
-        val userAnswers: UserAnswers = {
+        val userAnswers: UserAnswers =
           emptyUserAnswers
             .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
             .success
@@ -1366,7 +1364,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
             .set(NumberOfStatLeaveDaysPage, 1)
             .success
             .value
-        }
         val actual: Call   = navigator.numberOfStatLeaveDaysRoutes(userAnswers)
         val expected: Call = routes.StatutoryLeavePayController.onPageLoad()
 
@@ -1375,7 +1372,7 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
 
       "route back to the page (NumberOfStatLeaveDaysPage) when the user hasn't answered the NumberOfStatLeaveDaysPage" in {
 
-        val userAnswers: UserAnswers = {
+        val userAnswers: UserAnswers =
           emptyUserAnswers
             .set(ClaimPeriodStartPage, LocalDate.of(2021, 5, 1))
             .success
@@ -1383,7 +1380,6 @@ class NavigatorSpecWithApplication extends SpecBaseControllerSpecs with CoreTest
             .set(ClaimPeriodEndPage, LocalDate.of(2021, 5, 31))
             .success
             .value
-        }
         val actual: Call   = navigator.numberOfStatLeaveDaysRoutes(userAnswers)
         val expected: Call = routes.NumberOfStatLeaveDaysController.onPageLoad()
 

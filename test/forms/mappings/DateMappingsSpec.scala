@@ -59,7 +59,7 @@ class DateMappingsSpec extends PlaySpec with ScalaCheckPropertyChecks with Gener
     result.errors must contain allElementsOf List(
       FormError(s"value.day", LocalDateFormatter.dayBlankErrorKey),
       FormError(s"value.month", LocalDateFormatter.monthBlankErrorKey),
-      FormError(s"value.year", LocalDateFormatter.yearBlankErrorKey),
+      FormError(s"value.year", LocalDateFormatter.yearBlankErrorKey)
     )
   }
 
@@ -181,7 +181,7 @@ class DateMappingsSpec extends PlaySpec with ScalaCheckPropertyChecks with Gener
 
       result.errors must contain allElementsOf List(
         FormError(s"value.day", LocalDateFormatter.dayBlankErrorKey),
-        FormError(s"value.month", LocalDateFormatter.monthBlankErrorKey),
+        FormError(s"value.month", LocalDateFormatter.monthBlankErrorKey)
       )
     }
   }
@@ -205,7 +205,7 @@ class DateMappingsSpec extends PlaySpec with ScalaCheckPropertyChecks with Gener
 
       result.errors must contain allElementsOf List(
         FormError(s"value.day", LocalDateFormatter.dayBlankErrorKey),
-        FormError(s"value.year", LocalDateFormatter.yearBlankErrorKey),
+        FormError(s"value.year", LocalDateFormatter.yearBlankErrorKey)
       )
     }
   }
@@ -229,7 +229,7 @@ class DateMappingsSpec extends PlaySpec with ScalaCheckPropertyChecks with Gener
 
       result.errors must contain allElementsOf List(
         FormError(s"value.month", LocalDateFormatter.monthBlankErrorKey),
-        FormError(s"value.year", LocalDateFormatter.yearBlankErrorKey),
+        FormError(s"value.year", LocalDateFormatter.yearBlankErrorKey)
       )
     }
   }
@@ -247,7 +247,7 @@ class DateMappingsSpec extends PlaySpec with ScalaCheckPropertyChecks with Gener
 
       result.errors must contain allElementsOf List(
         FormError(s"value.day", LocalDateFormatter.dayInvalidErrorKey),
-        FormError(s"value.month", LocalDateFormatter.monthInvalidErrorKey),
+        FormError(s"value.month", LocalDateFormatter.monthInvalidErrorKey)
       )
     }
   }
@@ -265,7 +265,7 @@ class DateMappingsSpec extends PlaySpec with ScalaCheckPropertyChecks with Gener
 
       result.errors must contain allElementsOf List(
         FormError(s"value.day", LocalDateFormatter.dayInvalidErrorKey),
-        FormError(s"value.year", LocalDateFormatter.yearInvalidErrorKey),
+        FormError(s"value.year", LocalDateFormatter.yearInvalidErrorKey)
       )
     }
   }
@@ -283,7 +283,7 @@ class DateMappingsSpec extends PlaySpec with ScalaCheckPropertyChecks with Gener
 
       result.errors must contain allElementsOf List(
         FormError(s"value.month", LocalDateFormatter.monthInvalidErrorKey),
-        FormError(s"value.year", LocalDateFormatter.yearInvalidErrorKey),
+        FormError(s"value.year", LocalDateFormatter.yearInvalidErrorKey)
       )
     }
   }
@@ -302,7 +302,7 @@ class DateMappingsSpec extends PlaySpec with ScalaCheckPropertyChecks with Gener
       result.errors must contain allElementsOf List(
         FormError(s"value.day", LocalDateFormatter.dayInvalidErrorKey),
         FormError(s"value.month", LocalDateFormatter.monthInvalidErrorKey),
-        FormError(s"value.year", LocalDateFormatter.yearInvalidErrorKey),
+        FormError(s"value.year", LocalDateFormatter.yearInvalidErrorKey)
       )
     }
   }

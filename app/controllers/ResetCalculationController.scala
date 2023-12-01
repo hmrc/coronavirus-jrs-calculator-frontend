@@ -24,7 +24,7 @@ import views.html.ResetCalculationView
 
 import javax.inject.Inject
 
-class ResetCalculationController @Inject()(
+class ResetCalculationController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
@@ -33,11 +33,13 @@ class ResetCalculationController @Inject()(
   view: ResetCalculationView
 ) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    Ok(view())
-  }
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      Ok(view())
+    }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    Redirect(routes.ClaimPeriodStartController.onPageLoad())
-  }
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) {
+      Redirect(routes.ClaimPeriodStartController.onPageLoad())
+    }
 }

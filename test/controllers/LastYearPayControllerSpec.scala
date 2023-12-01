@@ -120,9 +120,11 @@ class LastYearPayControllerSpec extends SpecBaseControllerSpecs {
       val request = getRequest(1)
       val result  = controller(Some(variableMonthlyPartialWithClaimPeriodInFeb2021EmployedBeforeFeb2019)).onPageLoad(1)(request)
       val dataRequest =
-        DataRequest(request,
-                    variableMonthlyPartialWithClaimPeriodInFeb2021EmployedBeforeFeb2019.id,
-                    variableMonthlyPartialWithClaimPeriodInFeb2021EmployedBeforeFeb2019)
+        DataRequest(
+          request,
+          variableMonthlyPartialWithClaimPeriodInFeb2021EmployedBeforeFeb2019.id,
+          variableMonthlyPartialWithClaimPeriodInFeb2021EmployedBeforeFeb2019
+        )
       val expectedView = view(form, 1, period("2020, 2, 1", "2020, 2, 28"), true)(dataRequest, messages).toString
 
       status(result) mustEqual OK

@@ -29,47 +29,53 @@ import utils.LoggerUtil
 import javax.inject.Inject
 import scala.collection.immutable.ListMap
 
-class FeatureSwitchController @Inject()(controllerComponents: MessagesControllerComponents,
-                                        view: feature_switch,
-                                        implicit val appConfig: FrontendAppConfig)
-    extends FrontendController(controllerComponents) with FeatureSwitching with I18nSupport with LoggerUtil {
+class FeatureSwitchController @Inject() (
+  controllerComponents: MessagesControllerComponents,
+  view: feature_switch,
+  implicit val appConfig: FrontendAppConfig
+) extends FrontendController(controllerComponents) with FeatureSwitching with I18nSupport with LoggerUtil {
 
-  def show: Action[AnyContent] = Action { implicit req =>
-    val bfs: Map[BooleanFeatureSwitch, Boolean]         = ListMap(booleanFeatureSwitches map (switch => switch        -> isEnabled(switch)): _*)
-    val cfs: Map[CustomValueFeatureSwitch, Set[String]] = ListMap(customValueFeatureSwitch map (switch => switch      -> switch.values): _*)
-    val configurableConstants: Map[String, String]      = ListMap(configurableConstantsKeys map (constant => constant -> getValue(constant)): _*)
-    Ok(view(bfs, cfs, configurableConstants, FeatureSwitchController.submit()))
-  }
-
-  def submit: Action[AnyContent] = Action { implicit req =>
-    val submittedData: Map[String, Seq[String]] = req.body.asFormUrlEncoded match {
-      case None       => Map()
-      case Some(data) => data
+  def show: Action[AnyContent] =
+    Action { implicit req =>
+      val bfs: Map[BooleanFeatureSwitch, Boolean]         = ListMap(booleanFeatureSwitches map (switch => switch -> isEnabled(switch)): _*)
+      val cfs: Map[CustomValueFeatureSwitch, Set[String]] = ListMap(customValueFeatureSwitch map (switch => switch -> switch.values): _*)
+      val configurableConstants: Map[String, String] =
+        ListMap(configurableConstantsKeys map (constant => constant -> getValue(constant)): _*)
+      Ok(view(bfs, cfs, configurableConstants, FeatureSwitchController.submit()))
     }
 
-    val frontendFeatureSwitches: Map[FeatureSwitch, String] = submittedData.map(kv => FeatureSwitch.get(kv._1) -> kv._2.head).collect {
-      case (Some(k), v) => k -> v
+  def submit: Action[AnyContent] =
+    Action { implicit req =>
+      val submittedData: Map[String, Seq[String]] = req.body.asFormUrlEncoded match {
+        case None       => Map()
+        case Some(data) => data
+      }
+
+      val frontendFeatureSwitches: Map[FeatureSwitch, String] = submittedData.map(kv => FeatureSwitch.get(kv._1) -> kv._2.head).collect {
+        case (Some(k), v) => k -> v
+      }
+
+      logger.debug(s"[submit] frontendFeatureSwitches > $frontendFeatureSwitches")
+
+      val bfs: Map[BooleanFeatureSwitch, Boolean] = frontendFeatureSwitches.collect {
+        case (a: BooleanFeatureSwitch, b) => a -> b.toBoolean
+      }
+      val cfs: Map[CustomValueFeatureSwitch, String] = frontendFeatureSwitches.collect { case (a: CustomValueFeatureSwitch, b) => a -> b }
+      val configurableConstants: Map[String, String] =
+        submittedData
+          .filter { case (key, _) => configurableConstantsKeys.contains(key) }
+          .map(kv => kv._1 -> kv._2.headOption)
+          .collect {
+            case (k, Some(v)) => k -> v
+          }
+
+      logger.debug(s"[submit] booleanFeatureSwitches > $bfs")
+      logger.debug(s"[submit] customValueFeatureSwitches > $cfs")
+
+      booleanFeatureSwitches.foreach(fs => if (bfs.exists(_._1 == fs)) enable(fs) else disable(fs))
+      cfs.foreach(fs => setValue(fs._1, fs._2))
+      configurableConstants.foreach(constant => setValue(constant._1, constant._2))
+
+      Redirect(FeatureSwitchController.show())
     }
-
-    logger.debug(s"[submit] frontendFeatureSwitches > $frontendFeatureSwitches")
-
-    val bfs: Map[BooleanFeatureSwitch, Boolean]    = frontendFeatureSwitches.collect { case (a: BooleanFeatureSwitch, b)     => a -> b.toBoolean }
-    val cfs: Map[CustomValueFeatureSwitch, String] = frontendFeatureSwitches.collect { case (a: CustomValueFeatureSwitch, b) => a -> b }
-    val configurableConstants: Map[String, String] =
-      submittedData
-        .filter { case (key, _) => configurableConstantsKeys.contains(key) }
-        .map(kv => kv._1 -> kv._2.headOption)
-        .collect {
-          case (k, Some(v)) => k -> v
-        }
-
-    logger.debug(s"[submit] booleanFeatureSwitches > $bfs")
-    logger.debug(s"[submit] customValueFeatureSwitches > $cfs")
-
-    booleanFeatureSwitches.foreach(fs => if (bfs.exists(_._1 == fs)) enable(fs) else disable(fs))
-    cfs.foreach(fs => setValue(fs._1, fs._2))
-    configurableConstants.foreach(constant => setValue(constant._1, constant._2))
-
-    Redirect(FeatureSwitchController.show())
-  }
 }

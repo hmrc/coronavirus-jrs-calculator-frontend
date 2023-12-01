@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DefaultSessionRepository @Inject()(mongo: MongoComponent, appConfig: FrontendAppConfig)(implicit ec: ExecutionContext)
+class DefaultSessionRepository @Inject() (mongo: MongoComponent, appConfig: FrontendAppConfig)(implicit ec: ExecutionContext)
     extends PlayMongoRepository[UserAnswers](
       mongo,
       "user-answers",

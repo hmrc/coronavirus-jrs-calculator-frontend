@@ -38,22 +38,23 @@ trait DataExtractor extends FurloughPeriodExtractor with PeriodHelper {
     ).mapN { (furloughStart, employeeStartDate, claimStart) =>
       val isRtiSubmissionRequired = rtiSubmissionRequired(claimStart, employeeStartDate)
       val rtiSubmission           = userAnswers.getV(EmployeeRTISubmissionPage)
-      val empStartDateToConsiderForCalc = if (isRtiSubmissionRequired && rtiSubmission.exists(_ == EmployeeRTISubmission.No)) {
-        apr6th2020
-      } else {
-        employeeStartDate
-      }
+      val empStartDateToConsiderForCalc =
+        if (isRtiSubmissionRequired && rtiSubmission.exists(_ == EmployeeRTISubmission.No))
+          apr6th2020
+        else
+          employeeStartDate
       endDateOrTaxYearEnd(Period(empStartDateToConsiderForCalc, furloughStart.minusDays(1)), claimStart)
     }
   }
 
   private def rtiSubmissionRequired(claimStart: LocalDate, employeeStartDate: LocalDate) =
-    if (claimStart.isEqualOrAfter(nov1st2020) && employeeStartDate.isEqualOrAfter(feb1st2020) && employeeStartDate.isEqualOrBefore(
-          mar19th2020)) {
+    if (
+      claimStart.isEqualOrAfter(nov1st2020) && employeeStartDate
+        .isEqualOrAfter(feb1st2020) && employeeStartDate.isEqualOrBefore(mar19th2020)
+    )
       true
-    } else {
+    else
       false
-    }
 
   def extractNonFurloughV(userAnswers: UserAnswers): AnswerV[NonFurloughPay] = {
     val preFurloughPay  = userAnswers.getV(PartialPayBeforeFurloughPage).toOption

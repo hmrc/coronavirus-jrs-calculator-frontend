@@ -33,7 +33,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ClaimPeriodEndController @Inject()(
+class ClaimPeriodEndController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -49,32 +49,34 @@ class ClaimPeriodEndController @Inject()(
   def form(claimStart: LocalDate)(implicit messages: Messages): Form[LocalDate] = formProvider(claimStart)
   protected val userAnswerPersistence                                           = new UserAnswerPersistence(sessionRepository.set)
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val maybeClaimStart = request.userAnswers.getV(ClaimPeriodStartPage)
-    val maybeClaimEnd   = request.userAnswers.getV(ClaimPeriodEndPage)
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      val maybeClaimStart = request.userAnswers.getV(ClaimPeriodStartPage)
+      val maybeClaimEnd   = request.userAnswers.getV(ClaimPeriodEndPage)
 
-    (maybeClaimStart, maybeClaimEnd) match {
-      case (Valid(claimStart), Valid(end)) => Ok(view(form(claimStart).fill(end)))
-      case (Valid(claimStart), Invalid(_)) => Ok(view(form(claimStart)))
-      case (Invalid(_), _)                 => Redirect(routes.ClaimPeriodStartController.onPageLoad())
+      (maybeClaimStart, maybeClaimEnd) match {
+        case (Valid(claimStart), Valid(end)) => Ok(view(form(claimStart).fill(end)))
+        case (Valid(claimStart), Invalid(_)) => Ok(view(form(claimStart)))
+        case (Invalid(_), _)                 => Redirect(routes.ClaimPeriodStartController.onPageLoad())
+      }
     }
-  }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    request.userAnswers.getV(ClaimPeriodStartPage) match {
-      case Valid(claimStart) =>
-        form(claimStart)
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
-            value =>
-              userAnswerPersistence
-                .persistAnswer(request.userAnswers, ClaimPeriodEndPage, value, None)
-                .map { updatedAnswers =>
-                  Redirect(navigator.nextPage(ClaimPeriodEndPage, updatedAnswers, None))
-              }
-          )
-      case Invalid(_) => Future.successful(Redirect(routes.ClaimPeriodStartController.onPageLoad()))
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      request.userAnswers.getV(ClaimPeriodStartPage) match {
+        case Valid(claimStart) =>
+          form(claimStart)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
+              value =>
+                userAnswerPersistence
+                  .persistAnswer(request.userAnswers, ClaimPeriodEndPage, value, None)
+                  .map { updatedAnswers =>
+                    Redirect(navigator.nextPage(ClaimPeriodEndPage, updatedAnswers, None))
+                  }
+            )
+        case Invalid(_) => Future.successful(Redirect(routes.ClaimPeriodStartController.onPageLoad()))
+      }
     }
-  }
 }

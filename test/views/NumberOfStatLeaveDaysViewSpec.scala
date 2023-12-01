@@ -46,25 +46,26 @@ class NumberOfStatLeaveDaysViewSpec extends IntViewBehaviours {
       view(
         form = form,
         postAction = postAction,
-        boundaryStart = if (employeeType == Type4) {
-          messages("hasEmployeeBeenOnStatutoryLeave.dayEmploymentStarted")
-        } else {
-          dateToString(boundaryStart)
-        },
+        boundaryStart =
+          if (employeeType == Type4)
+            messages("hasEmployeeBeenOnStatutoryLeave.dayEmploymentStarted")
+          else
+            dateToString(boundaryStart),
         boundaryEnd = dateToString(boundaryEnd)
       )(fakeRequest, messages)
 
   object Selectors extends BaseSelectors
 
-  def expectedContent(boundaryStart: LocalDate, boundaryEnd: LocalDate, employeeType: EmployeeType) = Seq(
-    Selectors.h1        -> NumberOfStatLeaveDaysMessages.h1(boundaryStart, boundaryEnd, employeeType),
-    Selectors.detail    -> NumberOfStatLeaveDaysMessages.dropDown,
-    Selectors.p(1)      -> NumberOfStatLeaveDaysMessages.dropDownParagraph,
-    Selectors.bullet(1) -> NumberOfStatLeaveDaysMessages.bullet1,
-    Selectors.bullet(2) -> NumberOfStatLeaveDaysMessages.bullet2,
-    Selectors.bullet(3) -> NumberOfStatLeaveDaysMessages.bullet3,
-    Selectors.bullet(4) -> NumberOfStatLeaveDaysMessages.bullet4
-  )
+  def expectedContent(boundaryStart: LocalDate, boundaryEnd: LocalDate, employeeType: EmployeeType) =
+    Seq(
+      Selectors.h1        -> NumberOfStatLeaveDaysMessages.h1(boundaryStart, boundaryEnd, employeeType),
+      Selectors.detail    -> NumberOfStatLeaveDaysMessages.dropDown,
+      Selectors.p(1)      -> NumberOfStatLeaveDaysMessages.dropDownParagraph,
+      Selectors.bullet(1) -> NumberOfStatLeaveDaysMessages.bullet1,
+      Selectors.bullet(2) -> NumberOfStatLeaveDaysMessages.bullet2,
+      Selectors.bullet(3) -> NumberOfStatLeaveDaysMessages.bullet3,
+      Selectors.bullet(4) -> NumberOfStatLeaveDaysMessages.bullet4
+    )
 
   "NumberOfStatLeaveDaysView" when {
 
@@ -90,11 +91,10 @@ class NumberOfStatLeaveDaysViewSpec extends IntViewBehaviours {
     implicit val doc: Document = asDocument(applyView(boundaryStart, boundaryEnd, employeeType)(form))
 
     val headingArgs =
-      if (employeeType == Type4) {
+      if (employeeType == Type4)
         Seq(messages("hasEmployeeBeenOnStatutoryLeave.dayEmploymentStarted"), dateToString(boundaryEnd))
-      } else {
+      else
         Seq(dateToString(boundaryStart), dateToString(boundaryEnd))
-      }
 
     behave like pageWithBackLink
     behave like normalPage(

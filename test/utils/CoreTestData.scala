@@ -181,7 +181,8 @@ trait CoreTestData extends UserAnswersBuilder {
           "2020-03-03",
           "2020-03-17",
           "2020-03-31"
-        ))
+        )
+      )
       .withLastPayDate("2020-03-31")
 
   lazy val cylbMarch2021Year: UserAnswers =
@@ -199,7 +200,8 @@ trait CoreTestData extends UserAnswersBuilder {
           "2021-03-03",
           "2021-03-17",
           "2021-03-31"
-        ))
+        )
+      )
       .withLastPayDate("2021-03-31")
 
   lazy val cylbMarch2022Year: UserAnswers =
@@ -217,7 +219,8 @@ trait CoreTestData extends UserAnswersBuilder {
           "2022-03-03",
           "2022-03-17",
           "2022-03-31"
-        ))
+        )
+      )
       .withLastPayDate("2022-03-31")
 
   lazy val variableWeekly: UserAnswers =

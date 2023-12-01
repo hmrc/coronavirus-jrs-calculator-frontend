@@ -62,7 +62,8 @@ class AdditionalPaymentUpToEightyPercentSpec extends ViewBehaviours {
       behave like pageWithExpectedMessages(
         Seq(
           Selectors.p(1) -> AdditionalPaymentBlock.stillPayNICandPension
-        ))
+        )
+      )
     }
 
     "render the expected 70% top up content" must {
@@ -74,7 +75,8 @@ class AdditionalPaymentUpToEightyPercentSpec extends ViewBehaviours {
         Seq(
           Selectors.p(1) -> AdditionalPaymentBlock.p1(62.5), // 500 - ((500 / 80) * 70)
           Selectors.p(2) -> AdditionalPaymentBlock.stillPayNICandPension
-        ))
+        )
+      )
     }
 
     "render the expected 60% top up content" must {
@@ -86,7 +88,8 @@ class AdditionalPaymentUpToEightyPercentSpec extends ViewBehaviours {
         Seq(
           Selectors.p(1) -> AdditionalPaymentBlock.p1(125), // 500 - ((500 / 80) * 60)
           Selectors.p(2) -> AdditionalPaymentBlock.stillPayNICandPension
-        ))
+        )
+      )
     }
   }
 }

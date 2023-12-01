@@ -68,15 +68,17 @@ class PartialPayAfterFurloughControllerSpec extends SpecBaseControllerSpecs with
 
   val view = app.injector.instanceOf[VariableLengthPartialPayView]
 
-  val controller = new PartialPayAfterFurloughController(messagesApi,
-                                                         mockSessionRepository,
-                                                         navigator,
-                                                         identifier,
-                                                         dataRetrieval,
-                                                         dataRequired,
-                                                         formProvider,
-                                                         component,
-                                                         view)
+  val controller = new PartialPayAfterFurloughController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "PartialPayAfterFurloughController" must {
 

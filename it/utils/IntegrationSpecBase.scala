@@ -18,7 +18,7 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext}
 
 trait IntegrationSpecBase
-  extends PlaySpec with GivenWhenThen with TestSuite with ScalaFutures with IntegrationPatience with WiremockHelper
+    extends PlaySpec with GivenWhenThen with TestSuite with ScalaFutures with IntegrationPatience with WiremockHelper
     with GuiceOneServerPerSuite with TryValues with BeforeAndAfterEach with BeforeAndAfterAll with Eventually with CreateRequestHelper
     with CustomMatchers {
 
@@ -26,7 +26,7 @@ trait IntegrationSpecBase
   implicit val hc: HeaderCarrier    = HeaderCarrier()
   implicit lazy val messagesApi     = app.injector.instanceOf[MessagesApi]
   implicit lazy val messages        = messagesApi.preferred(Seq(Lang(Locale.UK)))
-  implicit lazy val appConfig        = app.injector.instanceOf[FrontendAppConfig]
+  implicit lazy val appConfig       = app.injector.instanceOf[FrontendAppConfig]
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
     .in(Environment.simple(mode = Mode.Dev))
@@ -36,13 +36,14 @@ trait IntegrationSpecBase
   val mockPort = WiremockHelper.wiremockPort.toString
   val mockUrl  = s"http://$mockHost:$mockPort"
 
-  def config: Map[String, String] = Map(
-    "play.filters.csrf.header.bypassHeaders.Csrf-Token"          -> "nocheck",
-    "play.http.router"                                           -> "testOnlyDoNotUseInAppConf.Routes",
-    "auditing.enabled"                                           -> "false",
-    "microservice.services.job-retention-scheme-calculator.host" -> mockHost,
-    "microservice.services.job-retention-scheme-calculator.port" -> mockPort
-  )
+  def config: Map[String, String] =
+    Map(
+      "play.filters.csrf.header.bypassHeaders.Csrf-Token"          -> "nocheck",
+      "play.http.router"                                           -> "testOnlyDoNotUseInAppConf.Routes",
+      "auditing.enabled"                                           -> "false",
+      "microservice.services.job-retention-scheme-calculator.host" -> mockHost,
+      "microservice.services.job-retention-scheme-calculator.port" -> mockPort
+    )
 
   lazy val mongo: SessionRepository = app.injector.instanceOf[SessionRepository]
 
@@ -61,6 +62,5 @@ trait IntegrationSpecBase
   }
 
   def dateToStringFmt(date: LocalDate): String = s"${date.getYear}-${date.getMonthValue}-${date.getDayOfMonth}"
-
 
 }

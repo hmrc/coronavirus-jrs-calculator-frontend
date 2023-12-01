@@ -32,7 +32,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LastPayDateController @Inject()(
+class LastPayDateController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -46,35 +46,37 @@ class LastPayDateController @Inject()(
     extends FrontendBaseController with I18nSupport {
 
   def form(latestPayDate: LocalDate)(implicit messages: Messages): Form[LocalDate] = formProvider(latestPayDate)
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    request.userAnswers.getList(PayDatePage).lastOption match {
-      case Some(date) =>
-        val preparedForm = request.userAnswers.getV(LastPayDatePage) match {
-          case Invalid(e)   => form(date)
-          case Valid(value) => form(date).fill(value)
-        }
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      request.userAnswers.getList(PayDatePage).lastOption match {
+        case Some(date) =>
+          val preparedForm = request.userAnswers.getV(LastPayDatePage) match {
+            case Invalid(e)   => form(date)
+            case Valid(value) => form(date).fill(value)
+          }
 
-        Ok(view(preparedForm, date))
+          Ok(view(preparedForm, date))
 
-      case None => Redirect(routes.PayDateController.onPageLoad(1))
+        case None => Redirect(routes.PayDateController.onPageLoad(1))
+      }
     }
-  }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    request.userAnswers.getList(PayDatePage).lastOption match {
-      case Some(date) =>
-        form(date)
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, date))),
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(LastPayDatePage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(LastPayDatePage, updatedAnswers))
-          )
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      request.userAnswers.getList(PayDatePage).lastOption match {
+        case Some(date) =>
+          form(date)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, date))),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(LastPayDatePage, value))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(LastPayDatePage, updatedAnswers))
+            )
 
-      case None => Future.successful(Redirect(routes.PayDateController.onPageLoad(1)))
+        case None => Future.successful(Redirect(routes.PayDateController.onPageLoad(1)))
+      }
     }
-  }
 }

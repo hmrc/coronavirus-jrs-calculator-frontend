@@ -24,17 +24,20 @@ import views.html.CalculationUnsupportView
 
 import javax.inject.Inject
 
-class CalculationUnsupportedController @Inject()(identify: IdentifierAction,
-                                                 getData: DataRetrievalAction,
-                                                 calculationUnsupportedView: CalculationUnsupportView,
-                                                 val controllerComponents: MessagesControllerComponents)
-    extends FrontendBaseController with I18nSupport {
+class CalculationUnsupportedController @Inject() (
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  calculationUnsupportedView: CalculationUnsupportView,
+  val controllerComponents: MessagesControllerComponents
+) extends FrontendBaseController with I18nSupport {
 
-  def multipleFurloughUnsupported: Action[AnyContent] = (identify andThen getData) { implicit request =>
-    Ok(calculationUnsupportedView())
-  }
+  def multipleFurloughUnsupported: Action[AnyContent] =
+    (identify andThen getData) { implicit request =>
+      Ok(calculationUnsupportedView())
+    }
 
-  def startDateWithinLookbackUnsupported: Action[AnyContent] = (identify andThen getData) { implicit request =>
-    Ok(calculationUnsupportedView())
-  }
+  def startDateWithinLookbackUnsupported: Action[AnyContent] =
+    (identify andThen getData) { implicit request =>
+      Ok(calculationUnsupportedView())
+    }
 }

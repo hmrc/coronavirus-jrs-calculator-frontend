@@ -52,14 +52,15 @@ object PaymentFrequency extends Enumerable.Implicits {
     FourWeekly  -> 28
   )
 
-  def options(form: Form[_])(implicit messages: Messages): Seq[RadioItem] = values.toSeq.map { value =>
-    RadioItem(
-      value = Some(value.toString),
-      content = Text(messages(s"payFrequency.${value.toString}")),
-      checked = form("value").value.contains(value.toString),
-      id = Some(value.toString)
-    )
-  }
+  def options(form: Form[_])(implicit messages: Messages): Seq[RadioItem] =
+    values.toSeq.map { value =>
+      RadioItem(
+        value = Some(value.toString),
+        content = Text(messages(s"payFrequency.${value.toString}")),
+        checked = form("value").value.contains(value.toString),
+        id = Some(value.toString)
+      )
+    }
 
   implicit val enumerable: Enumerable[PaymentFrequency] =
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)

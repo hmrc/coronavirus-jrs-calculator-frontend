@@ -23,12 +23,14 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.CheckboxItem
 trait CheckboxViewBehaviours[A] extends ViewBehaviours {
 
   //noinspection ScalaStyle
-  def checkboxPage(form: Form[Set[A]],
-                   createView: Form[Set[A]] => HtmlFormat.Appendable,
-                   messageKeyPrefix: String,
-                   options: Seq[CheckboxItem],
-                   fieldKey: String = "value",
-                   legend: Option[String] = None): Unit =
+  def checkboxPage(
+    form: Form[Set[A]],
+    createView: Form[Set[A]] => HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    options: Seq[CheckboxItem],
+    fieldKey: String = "value",
+    legend: Option[String] = None
+  ): Unit =
     "behave like a checkbox page" must {
       "contain a legend for the question" in {
         val doc     = asDocument(createView(form))
@@ -39,30 +41,26 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
 
       "contain an input for the value" in {
         val doc = asDocument(createView(form))
-        for (option <- options) {
+        for (option <- options)
           assertRenderedById(doc, option.value)
-        }
       }
 
       "contain a label for each input" in {
         val doc = asDocument(createView(form))
-        for (option <- options) {
+        for (option <- options)
           doc.select(s"label[for=${option.value}]").text mustEqual option.content.text
-        }
       }
 
       "rendered" must {
 
         "contain checkboxes for the values" in {
           val doc = asDocument(createView(form))
-          for (option <- options) {
+          for (option <- options)
             assertContainsRadioButton(doc, option.id.get, "value[]", option.value, false)
-          }
         }
       }
 
-      for (option <- options) {
-
+      for (option <- options)
         s"rendered with a value of '${option.value}'" must {
 
           s"have the '${option.value}' radio button selected" in {
@@ -73,7 +71,6 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
             assertContainsRadioButton(doc, option.id.get, "value[]", option.value, true)
           }
         }
-      }
 
       "rendered with all values" must {
 
@@ -84,11 +81,10 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
         val formWithData = form.bind(valuesMap)
         val doc          = asDocument(createView(formWithData))
 
-        for (option <- options) {
+        for (option <- options)
           s"have ${option.value} value selected" in {
             assertContainsRadioButton(doc, option.id.get, "value[]", option.value, true)
           }
-        }
       }
 
       "not render an error summary" in {

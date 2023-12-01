@@ -24,11 +24,13 @@ import services.Calculators._
 
 trait NicCalculator extends FurloughCapCalculator with CommonCalculationService with Calculators {
 
-  def calculateNicGrant(nicCategory: NicCategory,
-                        frequency: PaymentFrequency,
-                        furloughBreakdowns: Seq[FurloughBreakdown],
-                        additionals: Seq[AdditionalPayment],
-                        topUps: Seq[TopUpPayment]): NicCalculationResult = {
+  def calculateNicGrant(
+    nicCategory: NicCategory,
+    frequency: PaymentFrequency,
+    furloughBreakdowns: Seq[FurloughBreakdown],
+    additionals: Seq[AdditionalPayment],
+    topUps: Seq[TopUpPayment]
+  ): NicCalculationResult = {
     val breakdowns = furloughBreakdowns.map {
       case fp: FullPeriodFurloughBreakdown =>
         calculateFullPeriodNic(
@@ -52,9 +54,11 @@ trait NicCalculator extends FurloughCapCalculator with CommonCalculationService 
     NicCalculationResult(breakdowns.map(_.grant.value).sum, breakdowns)
   }
 
-  def phaseTwoNic(furloughBreakdowns: Seq[PhaseTwoFurloughBreakdown],
-                  frequency: PaymentFrequency,
-                  nicCategory: NicCategory): PhaseTwoNicCalculationResult = {
+  def phaseTwoNic(
+    furloughBreakdowns: Seq[PhaseTwoFurloughBreakdown],
+    frequency: PaymentFrequency,
+    nicCategory: NicCategory
+  ): PhaseTwoNicCalculationResult = {
     val breakdowns = furloughBreakdowns.map { furloughBreakdown =>
       val phaseTwoPeriod = furloughBreakdown.paymentWithPeriod.phaseTwoPeriod
 
@@ -67,12 +71,13 @@ trait NicCalculator extends FurloughCapCalculator with CommonCalculationService 
           threshold.copy(value = partialPeriodDailyCalculation(Amount(threshold.value), pp.period).value)
       }
 
-      val thresholdBasedOnHours = if (phaseTwoPeriod.isPartTime) {
-        thresholdBasedOnDays.copy(
-          value = partTimeHoursCalculation(Amount(thresholdBasedOnDays.value), phaseTwoPeriod.furloughed, phaseTwoPeriod.usual).value)
-      } else {
-        thresholdBasedOnDays
-      }
+      val thresholdBasedOnHours =
+        if (phaseTwoPeriod.isPartTime)
+          thresholdBasedOnDays.copy(
+            value = partTimeHoursCalculation(Amount(thresholdBasedOnDays.value), phaseTwoPeriod.furloughed, phaseTwoPeriod.usual).value
+          )
+        else
+          thresholdBasedOnDays
 
       val roundedFurloughGrant = furloughBreakdown.grant.down
 
@@ -87,12 +92,14 @@ trait NicCalculator extends FurloughCapCalculator with CommonCalculationService 
     PhaseTwoNicCalculationResult(breakdowns.map(_.grant.value).sum, breakdowns)
   }
 
-  protected def calculatePartialPeriodNic(nicCategory: NicCategory,
-                                          frequency: PaymentFrequency,
-                                          furloughGrant: Amount,
-                                          payment: PaymentWithPartialPeriod,
-                                          additionalPayment: Option[Amount],
-                                          topUp: Option[Amount]): PartialPeriodNicBreakdown = {
+  protected def calculatePartialPeriodNic(
+    nicCategory: NicCategory,
+    frequency: PaymentFrequency,
+    furloughGrant: Amount,
+    payment: PaymentWithPartialPeriod,
+    additionalPayment: Option[Amount],
+    topUp: Option[Amount]
+  ): PartialPeriodNicBreakdown = {
 
     import payment.periodWithPaymentDate._
 
@@ -111,12 +118,14 @@ trait NicCalculator extends FurloughCapCalculator with CommonCalculationService 
     PartialPeriodNicBreakdown(nicCap.cappedGrant, topUp.defaulted, additionalPayment.defaulted, payment, threshold, nicCap, nicCategory)
   }
 
-  protected def calculateFullPeriodNic(nicCategory: NicCategory,
-                                       frequency: PaymentFrequency,
-                                       furloughGrant: Amount,
-                                       payment: PaymentWithFullPeriod,
-                                       additionalPayment: Option[Amount],
-                                       topUp: Option[Amount]): FullPeriodNicBreakdown = {
+  protected def calculateFullPeriodNic(
+    nicCategory: NicCategory,
+    frequency: PaymentFrequency,
+    furloughGrant: Amount,
+    payment: PaymentWithFullPeriod,
+    additionalPayment: Option[Amount],
+    topUp: Option[Amount]
+  ): FullPeriodNicBreakdown = {
 
     import payment.periodWithPaymentDate._
 
@@ -134,11 +143,13 @@ trait NicCalculator extends FurloughCapCalculator with CommonCalculationService 
     FullPeriodNicBreakdown(nicCap.cappedGrant, topUp.defaulted, additionalPayment.defaulted, payment, threshold, nicCap, nicCategory)
   }
 
-  private def periodCalculation(total: Amount,
-                                frequency: PaymentFrequency,
-                                paymentDate: PaymentDate,
-                                furloughGrant: Amount,
-                                topUpPayment: Option[Amount]): CalculationParameters = {
+  private def periodCalculation(
+    total: Amount,
+    frequency: PaymentFrequency,
+    paymentDate: PaymentDate,
+    furloughGrant: Amount,
+    topUpPayment: Option[Amount]
+  ): CalculationParameters = {
     val roundedTotalPay       = total.down
     val threshold: Threshold  = thresholdFinder(frequency, paymentDate, NiRate())
     val grossNi: Amount       = greaterThanAllowance(roundedTotalPay, threshold.value, NiRate())

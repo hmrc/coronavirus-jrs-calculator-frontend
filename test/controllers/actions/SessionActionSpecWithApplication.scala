@@ -26,9 +26,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class SessionActionSpecWithApplication extends SpecBaseControllerSpecs {
 
   class Harness(action: IdentifierAction) {
-    def onPageLoad(): Action[AnyContent] = action { _ =>
-      Results.Ok
-    }
+    def onPageLoad(): Action[AnyContent] =
+      action { _ =>
+        Results.Ok
+      }
   }
 
   "Session Action" when {

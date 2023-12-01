@@ -33,16 +33,16 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
       FurloughCalculationResult(
         3200.00,
         Seq(
-          fullPeriodFurloughBreakdown(1600.00,
-                                      regularPaymentWithFullPeriod(2000.00,
-                                                                   2000.00,
-                                                                   fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-20")),
-                                      FullPeriodCap(2500.00)),
-          fullPeriodFurloughBreakdown(1600.00,
-                                      regularPaymentWithFullPeriod(2000.00,
-                                                                   2000.00,
-                                                                   fullPeriodWithPaymentDate("2020-04-01", "2020-04-30", "2020-04-20")),
-                                      FullPeriodCap(2500.00))
+          fullPeriodFurloughBreakdown(
+            1600.00,
+            regularPaymentWithFullPeriod(2000.00, 2000.00, fullPeriodWithPaymentDate("2020-03-01", "2020-03-31", "2020-03-20")),
+            FullPeriodCap(2500.00)
+          ),
+          fullPeriodFurloughBreakdown(
+            1600.00,
+            regularPaymentWithFullPeriod(2000.00, 2000.00, fullPeriodWithPaymentDate("2020-04-01", "2020-04-30", "2020-04-20")),
+            FullPeriodCap(2500.00)
+          )
         )
       )
 
@@ -117,11 +117,11 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
         List(
           PhaseTwoFurloughBreakdown(
             Amount(1600.0),
-            RegularPaymentWithPhaseTwoPeriod(Amount(2000.0),
-                                             Amount(2000.0),
-                                             PhaseTwoPeriod(fullPeriodWithPaymentDate("2020-08-01", "2020-08-31", "2020-09-20"),
-                                                            None,
-                                                            None)),
+            RegularPaymentWithPhaseTwoPeriod(
+              Amount(2000.0),
+              Amount(2000.0),
+              PhaseTwoPeriod(fullPeriodWithPaymentDate("2020-08-01", "2020-08-31", "2020-09-20"), None, None)
+            ),
             FullPeriodCap(2500.0)
           )
         )
@@ -164,7 +164,8 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
             1016.13,
             3500.00,
             2483.87,
-            partialPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 10", "2020, 3, 31", "2020, 3, 31")),
+            partialPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 10", "2020, 3, 31", "2020, 3, 31")
+          ),
           PartialPeriodCap(1774.30, 22, 3, 80.65)
         )
       )
@@ -181,7 +182,8 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
             1016.13,
             3500.00,
             2483.87,
-            partialPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 10", "2020, 3, 31", "2020, 3, 31")),
+            partialPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 10", "2020, 3, 31", "2020, 3, 31")
+          ),
           Threshold(719.0, TaxYearEnding2020, Monthly),
           NicCap(Amount(1774.30), Amount(202.83), Amount(244.85)),
           Payable
@@ -198,7 +200,8 @@ class ConfirmationControllerRequestHandlerSpec extends SpecBase with CoreTestDat
             1016.13,
             3500.00,
             2483.87,
-            partialPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 10", "2020, 3, 31", "2020, 3, 31")),
+            partialPeriodWithPaymentDate("2020, 3, 1", "2020, 3, 31", "2020, 3, 10", "2020, 3, 31", "2020, 3, 31")
+          ),
           Threshold(512.0, TaxYearEnding2020, Monthly),
           363.35,
           DoesContribute

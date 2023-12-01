@@ -59,15 +59,17 @@ class PartTimePeriodsControllerSpec extends SpecBaseControllerSpecs with Mockito
 
   val view = app.injector.instanceOf[PartTimePeriodsView]
 
-  val controller = new PartTimePeriodsController(messagesApi,
-                                                 mockSessionRepository,
-                                                 navigator,
-                                                 identifier,
-                                                 dataRetrieval,
-                                                 dataRequired,
-                                                 formProvider,
-                                                 component,
-                                                 view)
+  val controller = new PartTimePeriodsController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "PartTimePeriodsController" must {
 

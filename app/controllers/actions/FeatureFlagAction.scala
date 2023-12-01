@@ -33,14 +33,16 @@ class FeatureFlagAction(
   override protected def filter[A](request: IdentifierRequest[A]): Future[Option[Result]] =
     maybeFlag
       .map(flag =>
-        Future.successful(if (FeatureFlag.isEnabled(flag)) {
-          None
-        } else {
-          flag match {
-            case FeatureFlagKeyWithRedirect(_, redirectRoute) => Some(Redirect(redirectRoute))
-            case FeatureFlagWith404(_)                        => Some(NotFound(eh.notFoundTemplate(request)))
-          }
-        }))
+        Future.successful(
+          if (FeatureFlag.isEnabled(flag))
+            None
+          else
+            flag match {
+              case FeatureFlagKeyWithRedirect(_, redirectRoute) => Some(Redirect(redirectRoute))
+              case FeatureFlagWith404(_)                        => Some(NotFound(eh.notFoundTemplate(request)))
+            }
+        )
+      )
       .getOrElse(Future.successful(None))
 }
 
@@ -50,7 +52,7 @@ trait FeatureFlagActionProvider {
   def apply(flag: FeatureFlag): ActionFilter[IdentifierRequest] = apply(Some(flag))
 }
 
-class FeatureFlagActionProviderImpl @Inject()(implicit ec: ExecutionContext, eh: ErrorHandler) extends FeatureFlagActionProvider {
+class FeatureFlagActionProviderImpl @Inject() (implicit ec: ExecutionContext, eh: ErrorHandler) extends FeatureFlagActionProvider {
   override def apply(flag: Option[FeatureFlag] = None): ActionFilter[IdentifierRequest] =
     new FeatureFlagAction(flag, eh, ec)
 }

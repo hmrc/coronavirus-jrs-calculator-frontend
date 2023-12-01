@@ -54,15 +54,17 @@ class PaymentFrequencyControllerSpec extends SpecBaseControllerSpecs with Mockit
 
   val view = app.injector.instanceOf[PaymentFrequencyView]
 
-  val controller = new PaymentFrequencyController(messagesApi,
-                                                  mockSessionRepository,
-                                                  navigator,
-                                                  identifier,
-                                                  dataRetrieval,
-                                                  dataRequired,
-                                                  formProvider,
-                                                  component,
-                                                  view)
+  val controller = new PaymentFrequencyController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "PaymentFrequency Controller" must {
 
@@ -88,9 +90,11 @@ class PaymentFrequencyControllerSpec extends SpecBaseControllerSpecs with Mockit
 
       status(result) mustEqual OK
       contentAsString(result) mustEqual
-        view(form = form.fill(PaymentFrequency.values.head),
-             postAction = controllers.routes.PaymentFrequencyController.onSubmit(),
-             radioItems = allRadioOptions())(dataRequest, messages).toString
+        view(
+          form = form.fill(PaymentFrequency.values.head),
+          postAction = controllers.routes.PaymentFrequencyController.onSubmit(),
+          radioItems = allRadioOptions()
+        )(dataRequest, messages).toString
     }
 
     "redirect to the next page when valid data is submitted" in {

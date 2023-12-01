@@ -42,21 +42,17 @@ class Navigator @Inject()
 
   private[this] val normalRoutes: Page => UserAnswers => Call = {
     case ClaimPeriodStartPage =>
-      _ =>
-        routes.ClaimPeriodEndController.onPageLoad()
+      _ => routes.ClaimPeriodEndController.onPageLoad()
     case ClaimPeriodEndPage =>
-      _ =>
-        routes.FurloughStartDateController.onPageLoad()
+      _ => routes.FurloughStartDateController.onPageLoad()
     case FurloughStatusPage =>
       furloughOngoingRoutes
     case FurloughStartDatePage =>
       furloughOngoingRoutes
     case FurloughEndDatePage =>
-      _ =>
-        routes.PaymentFrequencyController.onPageLoad()
+      _ => routes.PaymentFrequencyController.onPageLoad()
     case PaymentFrequencyPage =>
-      _ =>
-        routes.PayMethodController.onPageLoad()
+      _ => routes.PayMethodController.onPageLoad()
     case PayMethodPage =>
       payMethodRoutes
     case FurloughInLastTaxYearPage =>
@@ -72,28 +68,23 @@ class Navigator @Inject()
     case PartialPayBeforeFurloughPage =>
       partialPayBeforeFurloughRoutes
     case PartialPayAfterFurloughPage =>
-      _ =>
-        routes.TopUpStatusController.onPageLoad()
+      _ => routes.TopUpStatusController.onPageLoad()
     case AnnualPayAmountPage =>
       annualPayAmountRoutes
     case LastPayDatePage =>
       lastPayDateRoutes
     case NicCategoryPage =>
-      _ =>
-        routes.PensionContributionController.onPageLoad()
+      _ => routes.PensionContributionController.onPageLoad()
     case PensionStatusPage =>
-      _ =>
-        routes.ConfirmationController.onPageLoad()
+      _ => routes.ConfirmationController.onPageLoad()
     case TopUpStatusPage =>
       topUpStatusRoutes
     case TopUpPeriodsPage =>
-      _ =>
-        routes.TopUpAmountController.onPageLoad(1)
+      _ => routes.TopUpAmountController.onPageLoad(1)
     case AdditionalPaymentStatusPage =>
       additionalPaymentStatusRoutes
     case AdditionalPaymentPeriodsPage =>
-      _ =>
-        routes.AdditionalPaymentAmountController.onPageLoad(1)
+      _ => routes.AdditionalPaymentAmountController.onPageLoad(1)
 
     case FurloughPeriodQuestionPage =>
       furloughPeriodQuestionRoutes
@@ -106,8 +97,7 @@ class Navigator @Inject()
       payPeriodQuestionRoutes
     case PartTimeQuestionPage => partTimeQuestionRoute
     case PartTimePeriodsPage =>
-      _ =>
-        routes.PartTimeNormalHoursController.onPageLoad(1)
+      _ => routes.PartTimeNormalHoursController.onPageLoad(1)
     case PreviousFurloughPeriodsPage =>
       firstFurloughedRoutes
     case FirstFurloughDatePage =>
@@ -121,16 +111,14 @@ class Navigator @Inject()
     case HasEmployeeBeenOnStatutoryLeavePage =>
       hasBeenOnStatutoryLeaveRoutes
     case _ =>
-      _ =>
-        routes.RootPageController.onPageLoad()
+      _ => routes.RootPageController.onPageLoad()
   }
 
   private[this] def regularPayAmountRoute: UserAnswers => Call = { userAnswer =>
-    if (isPhaseTwoOnwards(userAnswer)) {
+    if (isPhaseTwoOnwards(userAnswer))
       routes.PartTimeQuestionController.onPageLoad()
-    } else {
+    else
       routes.TopUpStatusController.onPageLoad()
-    }
   }
 
   private[this] def partTimeQuestionRoute: UserAnswers => Call =
@@ -139,7 +127,7 @@ class Navigator @Inject()
         case Valid(PartTimeYes) => routes.PartTimePeriodsController.onPageLoad()
         case Valid(PartTimeNo)  => skipNicAndPensionFromAug2020(userAnswer)
         case _                  => routes.PartTimePeriodsController.onPageLoad()
-    }
+      }
 
   private[this] val payDateRoutes: (Int, UserAnswers) => Call = { (previousIdx, userAnswers) =>
     (for {
@@ -148,18 +136,18 @@ class Navigator @Inject()
     } yield {
       val endDate = userAnswers
         .getV(FurloughEndDatePage)
-        .fold(nel => {
-          UserAnswers.logWarnings(nel)(logger.logger)
-          claimEndDate
-        }, { furloughEndDate =>
-          earliestOf(claimEndDate, furloughEndDate)
-        })
+        .fold(
+          nel => {
+            UserAnswers.logWarnings(nel)(logger.logger)
+            claimEndDate
+          },
+          furloughEndDate => earliestOf(claimEndDate, furloughEndDate)
+        )
 
-      if (lastPayDate.isAfter(endDate.minusDays(1))) {
+      if (lastPayDate.isAfter(endDate.minusDays(1)))
         routes.PayPeriodsListController.onPageLoad()
-      } else {
+      else
         routes.PayDateController.onPageLoad(previousIdx + 1)
-      }
     }).getOrElse(routes.ErrorController.internalServerError())
   }
 
@@ -182,12 +170,12 @@ class Navigator @Inject()
       nel => {
         UserAnswers.logErrors(nel)(logger.logger)
         routes.ErrorController.somethingWentWrong()
-      }, { periods =>
+      },
+      periods =>
         periods.lift.apply(previousIdx) match {
           case Some(_) => routes.LastYearPayController.onPageLoad(previousIdx + 1)
           case None    => routes.AnnualPayAmountController.onPageLoad()
         }
-      }
     )
   }
 
@@ -195,11 +183,10 @@ class Navigator @Inject()
     userAnswers
       .getV(TopUpPeriodsPage)
       .map { topUpPeriods =>
-        if (topUpPeriods.isDefinedAt(previousIdx)) {
+        if (topUpPeriods.isDefinedAt(previousIdx))
           routes.TopUpAmountController.onPageLoad(previousIdx + 1)
-        } else {
+        else
           routes.AdditionalPaymentStatusController.onPageLoad()
-        }
       }
       .getOrElse(routes.TopUpPeriodsController.onPageLoad())
   }
@@ -234,7 +221,7 @@ class Navigator @Inject()
         routes.AdditionalPaymentAmountController.onPageLoad(previousIdx + 1)
       case Valid(_) => skipNicAndPensionFromAug2020(userAnswers)
       case _        => routes.AdditionalPaymentPeriodsController.onPageLoad()
-  }
+    }
 
   private val idxRoutes: Page => (Int, UserAnswers) => Call = {
     case PayDatePage                 => payDateRoutes
@@ -244,8 +231,7 @@ class Navigator @Inject()
     case PartTimeNormalHoursPage     => partTimeNormalHoursRoutes
     case AdditionalPaymentAmountPage => additionalPaymentAmountRoutes
     case _ =>
-      (_, _) =>
-        routes.RootPageController.onPageLoad()
+      (_, _) => routes.RootPageController.onPageLoad()
   }
 
   def routeFor(page: Page): Call =
@@ -259,11 +245,10 @@ class Navigator @Inject()
     }
 
   private[this] def partialPayBeforeFurloughRoutes: UserAnswers => Call = { userAnswers =>
-    if (hasPartialPayAfter(userAnswers)) {
+    if (hasPartialPayAfter(userAnswers))
       routes.PartialPayAfterFurloughController.onPageLoad()
-    } else {
+    else
       nextPage(PartialPayAfterFurloughPage, userAnswers)
-    }
   }
 
   def nextPage(page: Page, userAnswers: UserAnswers, idx: Option[Int] = None): Call =
@@ -353,11 +338,10 @@ class Navigator @Inject()
       case (Valid(Regular), Valid(claimStartDate), dates) if dates.isEmpty => routes.PayDateController.onPageLoad(1)
       case (Valid(Regular), Valid(claimStartDate), _)                      => routes.RegularPayAmountController.onPageLoad()
       case (Valid(Variable), Valid(claimStartDate), _) =>
-        if (claimStartDate.isBefore(LocalDate.of(2020, 11, 1))) {
+        if (claimStartDate.isBefore(LocalDate.of(2020, 11, 1)))
           routes.VariableLengthEmployedController.onPageLoad()
-        } else {
+        else
           routes.FurloughInLastTaxYearController.onPageLoad()
-        }
       case (Invalid(_), _, _) => routes.PayMethodController.onPageLoad()
     }
   }
@@ -475,13 +459,12 @@ class Navigator @Inject()
   }
 
   private def phaseOneAnnualPayAmountRoute(userAnswers: UserAnswers): Call =
-    if (hasPartialPayBefore(userAnswers)) {
+    if (hasPartialPayBefore(userAnswers))
       routes.PartialPayBeforeFurloughController.onPageLoad()
-    } else if (hasPartialPayAfter(userAnswers)) {
+    else if (hasPartialPayAfter(userAnswers))
       routes.PartialPayAfterFurloughController.onPageLoad()
-    } else {
+    else
       routes.TopUpStatusController.onPageLoad()
-    }
 
   private def furloughPeriodQuestionRoutes: UserAnswers => Call = { userAnswers =>
     userAnswers.getV(FurloughPeriodQuestionPage) match {
@@ -501,11 +484,12 @@ class Navigator @Inject()
           nel => {
             UserAnswers.logErrors(nel)(logger.logger)
             routes.ClaimPeriodQuestionController.onPageLoad()
-          }, {
+          },
+          {
             case ClaimPeriodQuestion.ClaimOnSamePeriod      => routes.FurloughPeriodQuestionController.onPageLoad()
             case ClaimPeriodQuestion.ClaimOnDifferentPeriod => routes.ClaimPeriodStartController.onPageLoad()
           }
-      )
+        )
 
   private def payPeriodQuestionRoutes: UserAnswers => Call = { userAnswers =>
     userAnswers.getV(PayPeriodQuestionPage) match {
@@ -518,11 +502,10 @@ class Navigator @Inject()
   private[navigation] def requireLastPayDateRoutes: UserAnswers => Call = { userAnswers =>
     val endDates = sortedEndDates(userAnswers.getList(PayDatePage))
     val period   = Period(endDates.head.plusDays(1), endDates.last)
-    if (period.start.isBefore(LocalDate.of(2020, 4, 6))) {
+    if (period.start.isBefore(LocalDate.of(2020, 4, 6)))
       routes.LastPayDateController.onPageLoad()
-    } else {
+    else
       lastPayDateRoutes(userAnswers)
-    }
   }
 
   private[navigation] def onPayrollBefore30thOct2020Routes: UserAnswers => Call = { userAnswers =>
@@ -531,7 +514,8 @@ class Navigator @Inject()
       case Valid(Regular)  => regularPayOnPayrollBefore30thOct2020Routes(userAnswers)
       case Invalid(_) =>
         logger.info(
-          "[Navigator][onPayrollBefore30thOct2020Routes] - User tried to route from 'onPayrollBefore30thOct2020' page but did not have a valid answer for 'PayMethodPage'")
+          "[Navigator][onPayrollBefore30thOct2020Routes] - User tried to route from 'onPayrollBefore30thOct2020' page but did not have a valid answer for 'PayMethodPage'"
+        )
         routes.RootPageController.onPageLoad()
     }
   }

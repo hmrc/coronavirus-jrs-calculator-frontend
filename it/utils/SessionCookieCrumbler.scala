@@ -23,7 +23,7 @@ object SessionCookieCrumbler {
   private val cookieKey = "gvBoGdgzqG1AarzF1LY0zQ=="
 
   private def crumbleCookie(cookie: WSCookie) = {
-    val crypted = Crypted(cookie.value)
+    val crypted   = Crypted(cookie.value)
     val decrypted = CompositeSymmetricCrypto.aesGCM(cookieKey, Seq()).decrypt(crypted).value
 
     def decode(data: String): Map[String, String] = {
@@ -31,9 +31,12 @@ object SessionCookieCrumbler {
       val map = data.substring(41, data.length)
 
       val Regex = """(.*)=(.*)""".r
-      map.split("&").map {
-        case Regex(k, v) => k -> v
-      }.toMap
+      map
+        .split("&")
+        .map {
+          case Regex(k, v) => k -> v
+        }
+        .toMap
     }
 
     decode(decrypted)

@@ -32,7 +32,7 @@ import views.html.PayPeriodsListView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PayPeriodsListController @Inject()(
+class PayPeriodsListController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -47,46 +47,48 @@ class PayPeriodsListController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    extractPayPeriods(request.userAnswers) match {
-      case Nil => Redirect(routes.ErrorController.somethingWentWrong())
-      case periods =>
-        extractClaimPeriod(request.userAnswers) match {
-          case Valid(claimPeriod) =>
-            val preparedForm = request.userAnswers.getV(PayPeriodsListPage) match {
-              case Invalid(e)   => form
-              case Valid(value) => form.fill(value)
-            }
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      extractPayPeriods(request.userAnswers) match {
+        case Nil => Redirect(routes.ErrorController.somethingWentWrong())
+        case periods =>
+          extractClaimPeriod(request.userAnswers) match {
+            case Valid(claimPeriod) =>
+              val preparedForm = request.userAnswers.getV(PayPeriodsListPage) match {
+                case Invalid(e)   => form
+                case Valid(value) => form.fill(value)
+              }
 
-            Ok(view(preparedForm, periods, claimPeriod))
-          case Invalid(err) =>
-            UserAnswers.logErrors(err)(logger.logger)
-            Redirect(routes.ErrorController.somethingWentWrong())
-        }
-    }
-  }
-
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    extractPayPeriods(request.userAnswers) match {
-      case Nil => Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-      case periods =>
-        extractClaimPeriod(request.userAnswers) match {
-          case Valid(claimPeriod) =>
-            form
-              .bindFromRequest()
-              .fold(
-                formWithErrors => Future.successful(BadRequest(view(formWithErrors, periods, claimPeriod))),
-                value =>
-                  for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodsListPage, value))
-                    _              <- sessionRepository.set(updatedAnswers)
-                  } yield Redirect(navigator.nextPage(PayPeriodsListPage, updatedAnswers))
-              )
-          case Invalid(err) =>
-            UserAnswers.logErrors(err)(logger.logger)
-            Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-        }
+              Ok(view(preparedForm, periods, claimPeriod))
+            case Invalid(err) =>
+              UserAnswers.logErrors(err)(logger.logger)
+              Redirect(routes.ErrorController.somethingWentWrong())
+          }
+      }
     }
 
-  }
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      extractPayPeriods(request.userAnswers) match {
+        case Nil => Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+        case periods =>
+          extractClaimPeriod(request.userAnswers) match {
+            case Valid(claimPeriod) =>
+              form
+                .bindFromRequest()
+                .fold(
+                  formWithErrors => Future.successful(BadRequest(view(formWithErrors, periods, claimPeriod))),
+                  value =>
+                    for {
+                      updatedAnswers <- Future.fromTry(request.userAnswers.set(PayPeriodsListPage, value))
+                      _              <- sessionRepository.set(updatedAnswers)
+                    } yield Redirect(navigator.nextPage(PayPeriodsListPage, updatedAnswers))
+                )
+            case Invalid(err) =>
+              UserAnswers.logErrors(err)(logger.logger)
+              Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+          }
+      }
+
+    }
 }

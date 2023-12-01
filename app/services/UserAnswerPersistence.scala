@@ -24,8 +24,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class UserAnswerPersistence(persist: UserAnswers => Future[Boolean])(implicit ec: ExecutionContext) {
 
-  def persistAnswer[A](userAnswers: UserAnswers, questionPage: QuestionPage[A], answer: A, idx: Option[Int])(
-    implicit writes: Writes[A]): Future[UserAnswers] =
+  def persistAnswer[A](userAnswers: UserAnswers, questionPage: QuestionPage[A], answer: A, idx: Option[Int])(implicit
+    writes: Writes[A]
+  ): Future[UserAnswers] =
     for {
       updatedAnswers <- Future.fromTry(userAnswers.set(questionPage, answer, idx))
       _              <- persist(updatedAnswers)

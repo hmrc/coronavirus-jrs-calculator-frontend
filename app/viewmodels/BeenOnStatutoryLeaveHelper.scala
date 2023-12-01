@@ -51,11 +51,10 @@ class BeenOnStatutoryLeaveHelper extends EmployeeTypeUtil with KeyDatesUtil with
     request.userAnswers.getV(EmployeeStartDatePage) match {
       case Valid(startDate) =>
         logger.debug(s"[type5BoundaryStart] start date: $startDate")
-        if (startDate.isAfter(apr6th2020)) {
+        if (startDate.isAfter(apr6th2020))
           Some(messages("hasEmployeeBeenOnStatutoryLeave.dayEmploymentStarted"))
-        } else {
+        else
           Some(dateToString(apr6th2020))
-        }
       case _ =>
         logger.debug("[BeenOnStatutoryLeaveHelper][type5BoundaryStart] no answer for EmployeeStartDatePage")
         None

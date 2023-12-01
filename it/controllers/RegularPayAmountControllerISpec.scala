@@ -12,8 +12,7 @@ import views.ViewUtils._
 
 import java.time.LocalDate
 
-class RegularPayAmountControllerISpec extends IntegrationSpecBase with CustomMatchers
- with CreateRequestHelper with BaseITConstants {
+class RegularPayAmountControllerISpec extends IntegrationSpecBase with CustomMatchers with CreateRequestHelper with BaseITConstants {
 
   "employee is type 1" when {
 
@@ -72,9 +71,10 @@ class RegularPayAmountControllerISpec extends IntegrationSpecBase with CustomMat
 
         setAnswers(userAnswers)
 
-        val res = postRequest("/regular-pay-amount",
-          Json.obj("value" -> ans.amount.toString())
-        )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
+        val res = postRequest("/regular-pay-amount", Json.obj("value" -> ans.amount.toString()))(
+          "sessionId"    -> userAnswers.id,
+          "X-Session-ID" -> userAnswers.id
+        )
 
         whenReady(res) { result =>
           result must have(
@@ -104,9 +104,8 @@ class RegularPayAmountControllerISpec extends IntegrationSpecBase with CustomMat
 
         setAnswers(userAnswers)
 
-        val res = postRequest("/regular-pay-amount",
-          Json.obj("value" -> "NOPE")
-        )("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
+        val res =
+          postRequest("/regular-pay-amount", Json.obj("value" -> "NOPE"))("sessionId" -> userAnswers.id, "X-Session-ID" -> userAnswers.id)
 
         whenReady(res) { result =>
           result must have(

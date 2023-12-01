@@ -31,16 +31,16 @@ class FirstFurloughDateFormProvider @Inject() extends Mappings with SchemeConfig
   def apply(furloughStartDate: LocalDate)(implicit messages: Messages): Form[LocalDate] =
     Form(
       "firstFurloughDate" -> localDate(invalidKey = "firstFurloughStartDate.error.invalid")
-        .verifying(validFirstFurloughDate(furloughStartDate)))
+        .verifying(validFirstFurloughDate(furloughStartDate))
+    )
 
-  private def validFirstFurloughDate(furloughStartDate: LocalDate)(implicit messages: Messages): Constraint[LocalDate] = Constraint {
-    firstFurloughDate =>
-      if (!firstFurloughDate.isBefore(furloughStartDate)) {
+  private def validFirstFurloughDate(furloughStartDate: LocalDate)(implicit messages: Messages): Constraint[LocalDate] =
+    Constraint { firstFurloughDate =>
+      if (!firstFurloughDate.isBefore(furloughStartDate))
         Invalid("firstFurloughStartDate.error.afterStartDate", ViewUtils.dateToString(furloughStartDate))
-      } else if (firstFurloughDate.isBefore(extensionStartDate)) {
+      else if (firstFurloughDate.isBefore(extensionStartDate))
         Invalid("firstFurloughStartDate.error.beforeExtensionDate")
-      } else {
+      else
         Valid
-      }
-  }
+    }
 }

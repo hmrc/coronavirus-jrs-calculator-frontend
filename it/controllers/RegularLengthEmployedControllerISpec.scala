@@ -84,7 +84,8 @@ class RegularLengthEmployedControllerISpec
 
           val res = postRequestHeader("/regular-length-employed", Json.obj("value" -> RegularLengthEmployed.Yes.toString))(
             "sessionId"    -> userAnswers.id,
-            "X-Session-ID" -> userAnswers.id)
+            "X-Session-ID" -> userAnswers.id
+          )
 
           whenReady(res) { result =>
             result must have(
@@ -115,7 +116,8 @@ class RegularLengthEmployedControllerISpec
 
           val res = postRequestHeader("/regular-length-employed", Json.obj("value" -> RegularLengthEmployed.No.toString))(
             "sessionId"    -> userAnswers.id,
-            "X-Session-ID" -> userAnswers.id)
+            "X-Session-ID" -> userAnswers.id
+          )
 
           whenReady(res) { result =>
             result must have(
@@ -144,8 +146,10 @@ class RegularLengthEmployedControllerISpec
 
           setAnswers(userAnswers)
 
-          val res = postRequestHeader("/regular-length-employed", Json.obj("value" -> "bleh"))("sessionId" -> userAnswers.id,
-                                                                                               "X-Session-ID" -> userAnswers.id)
+          val res = postRequestHeader("/regular-length-employed", Json.obj("value" -> "bleh"))(
+            "sessionId"    -> userAnswers.id,
+            "X-Session-ID" -> userAnswers.id
+          )
 
           whenReady(res) { result =>
             result must have(

@@ -54,8 +54,10 @@ final case class UserAnswers(
   def getList[A](page: Gettable[A])(implicit rds: Reads[A]): Seq[A] =
     page.path.read[Seq[A]].reads(data).getOrElse(Seq.empty)
 
-  def setListItemWithInvalidation[A](page: Settable[A] with Gettable[A], value: A, idx: Int)(implicit writes: Writes[A],
-                                                                                             rds: Reads[A]): Try[UserAnswers] = {
+  def setListItemWithInvalidation[A](page: Settable[A] with Gettable[A], value: A, idx: Int)(implicit
+    writes: Writes[A],
+    rds: Reads[A]
+  ): Try[UserAnswers] = {
     val list        = page.path.read[Seq[A]].reads(data).getOrElse(Seq.empty)
     val amendedList = list.patch(idx - 1, Seq(value), list.size)
 
@@ -140,16 +142,15 @@ object AnswerValidation {
     data: JsObject = JsObject(Seq.empty),
     idx: Option[Int] = None
   ): AnswerValidation =
-    if (jsError.errors.size == 1) {
+    if (jsError.errors.size == 1)
       jsError.errors.head match {
         case (path, error) if error == Seq(JsonValidationError(Seq("error.path.missing"))) =>
           EmptyAnswerError(path, jsError, data)
         case (path, error) =>
           GenericValidationError("Generic exception", jsError, data)
       }
-    } else {
+    else
       GenericValidationError("Generic exception", jsError, data)
-    }
 }
 
 case class EmptyAnswerError(

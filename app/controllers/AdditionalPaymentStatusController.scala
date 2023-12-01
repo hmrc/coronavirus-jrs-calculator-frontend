@@ -34,40 +34,44 @@ import views.html.AdditionalPaymentStatusView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AdditionalPaymentStatusController @Inject()(override val messagesApi: MessagesApi,
-                                                  sessionRepository: SessionRepository,
-                                                  navigator: Navigator,
-                                                  identify: IdentifierAction,
-                                                  getData: DataRetrievalAction,
-                                                  requireData: DataRequiredAction,
-                                                  formProvider: AdditionalPaymentStatusFormProvider,
-                                                  val controllerComponents: MessagesControllerComponents,
-                                                  view: AdditionalPaymentStatusView)(implicit ec: ExecutionContext)
+class AdditionalPaymentStatusController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: AdditionalPaymentStatusFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: AdditionalPaymentStatusView
+)(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with FurloughCalculationHandler {
 
   val form: Form[AdditionalPaymentStatus] = formProvider()
   val userAnswerPersistence               = new UserAnswerPersistence(sessionRepository.set)
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.getV(AdditionalPaymentStatusPage) match {
-      case Invalid(e)   => form
-      case Valid(value) => form.fill(value)
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      val preparedForm = request.userAnswers.getV(AdditionalPaymentStatusPage) match {
+        case Invalid(e)   => form
+        case Valid(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm))
     }
 
-    Ok(view(preparedForm))
-  }
-
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
-        value =>
-          userAnswerPersistence
-            .persistAnswer(request.userAnswers, AdditionalPaymentStatusPage, value, None)
-            .map { updatedAnswers =>
-              Redirect(navigator.nextPage(AdditionalPaymentStatusPage, updatedAnswers, None))
-          }
-      )
-  }
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
+          value =>
+            userAnswerPersistence
+              .persistAnswer(request.userAnswers, AdditionalPaymentStatusPage, value, None)
+              .map { updatedAnswers =>
+                Redirect(navigator.nextPage(AdditionalPaymentStatusPage, updatedAnswers, None))
+              }
+        )
+    }
 }

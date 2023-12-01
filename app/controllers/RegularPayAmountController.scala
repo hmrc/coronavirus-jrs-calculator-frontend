@@ -37,15 +37,17 @@ import views.html.RegularPayAmountView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class RegularPayAmountController @Inject()(override val messagesApi: MessagesApi,
-                                           sessionRepository: SessionRepository,
-                                           navigator: Navigator,
-                                           identify: IdentifierAction,
-                                           getData: DataRetrievalAction,
-                                           requireData: DataRequiredAction,
-                                           formProvider: RegularPayAmountFormProvider,
-                                           val controllerComponents: MessagesControllerComponents,
-                                           view: RegularPayAmountView)(implicit ec: ExecutionContext)
+class RegularPayAmountController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: RegularPayAmountFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: RegularPayAmountView
+)(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with EmployeeTypeUtil {
 
   val form: Form[Salary] = formProvider()
@@ -70,9 +72,7 @@ class RegularPayAmountController @Inject()(override val messagesApi: MessagesApi
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-            Future.successful(BadRequest(view(formWithErrors, postAction, cutoffDateResolver)))
-          },
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, postAction, cutoffDateResolver))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(RegularPayAmountPage, value))

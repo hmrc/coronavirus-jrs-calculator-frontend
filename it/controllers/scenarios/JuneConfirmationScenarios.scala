@@ -17,11 +17,15 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-28".toLocalDate)),
-          PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-26".toLocalDate),
-                        Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-28".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-26".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(2000)
@@ -72,11 +76,15 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-28".toLocalDate)),
-          PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-26".toLocalDate),
-                        Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-28".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-26".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(3500)
@@ -94,8 +102,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-29")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-06-27".toLocalDate, "2021-07-24".toLocalDate),
-                                                Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-27".toLocalDate, "2021-07-24".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(2200)
@@ -113,8 +127,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-26".toLocalDate),
-                                                Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-26".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(3500)
@@ -131,8 +151,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-26".toLocalDate),
-                                                Period("2021-06-29".toLocalDate, "2021-06-29".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-26".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-29".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(3500)
@@ -149,8 +175,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-05-06".toLocalDate, "2021-06-02".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-06".toLocalDate, "2021-06-02".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(2654.11)
@@ -168,8 +200,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-05-06".toLocalDate, "2021-06-02".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-06".toLocalDate, "2021-06-02".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(3200.11)
@@ -187,8 +225,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-05-10".toLocalDate, "2021-06-06".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-10".toLocalDate, "2021-06-06".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(2322.11)
@@ -206,12 +250,18 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          PartialPeriod(Period("2021-05-05".toLocalDate, "2021-06-01".toLocalDate),
-                        Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate)),
-          PartialPeriod(Period("2021-06-02".toLocalDate, "2021-06-29".toLocalDate),
-                        Period("2021-06-02".toLocalDate, "2021-06-02".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-05".toLocalDate, "2021-06-01".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate)
+            ),
+            PartialPeriod(
+              Period("2021-06-02".toLocalDate, "2021-06-29".toLocalDate),
+              Period("2021-06-02".toLocalDate, "2021-06-02".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(1465.55)
@@ -230,11 +280,15 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-28".toLocalDate)),
-          PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-26".toLocalDate),
-                        Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-28".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-26".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(2000)
@@ -245,7 +299,8 @@ object JuneConfirmationScenarios
         .withUsualHours(List(UsualHours("2021-06-28".toLocalDate, Hours(148.0)), UsualHours("2021-07-26".toLocalDate, Hours(15.86))))
         .withPartTimeHours(List(PartTimeHours("2021-06-28".toLocalDate, Hours(40.0)), PartTimeHours("2021-07-26".toLocalDate, Hours(1.86))))
         -> 1268.46
-    ))
+    )
+  )
 
   val juneFixedMonthlyScenarios: Seq[(String, Seq[(UserAnswers, BigDecimal)])] = Seq(
     "June Fixed Monthly Scenarios" -> Seq(
@@ -294,8 +349,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-06-01".toLocalDate, "2021-06-30".toLocalDate),
-                                                Period("2021-06-05".toLocalDate, "2021-06-21".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-01".toLocalDate, "2021-06-30".toLocalDate),
+              Period("2021-06-05".toLocalDate, "2021-06-21".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(2400)
@@ -314,8 +375,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-06-01".toLocalDate, "2021-06-30".toLocalDate),
-                                                Period("2021-06-05".toLocalDate, "2021-06-21".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-01".toLocalDate, "2021-06-30".toLocalDate),
+              Period("2021-06-05".toLocalDate, "2021-06-21".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(6500)
@@ -334,8 +401,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-06-01".toLocalDate, "2021-06-30".toLocalDate),
-                                                Period("2021-06-02".toLocalDate, "2021-06-11".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-01".toLocalDate, "2021-06-30".toLocalDate),
+              Period("2021-06-02".toLocalDate, "2021-06-11".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(2400)
@@ -354,8 +427,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-02")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-06-01".toLocalDate, "2021-06-30".toLocalDate),
-                                                Period("2021-06-02".toLocalDate, "2021-06-20".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-01".toLocalDate, "2021-06-30".toLocalDate),
+              Period("2021-06-02".toLocalDate, "2021-06-20".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(5555)
@@ -373,12 +452,18 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          PartialPeriod(Period("2021-05-26".toLocalDate, "2021-06-25".toLocalDate),
-                        Period("2021-06-01".toLocalDate, "2021-06-25".toLocalDate)),
-          PartialPeriod(Period("2021-06-26".toLocalDate, "2021-07-25".toLocalDate),
-                        Period("2021-06-26".toLocalDate, "2021-06-30".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-26".toLocalDate, "2021-06-25".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-25".toLocalDate)
+            ),
+            PartialPeriod(
+              Period("2021-06-26".toLocalDate, "2021-07-25".toLocalDate),
+              Period("2021-06-26".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(4900)
@@ -396,8 +481,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-06-01".toLocalDate, "2021-06-30".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-01".toLocalDate, "2021-06-30".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(2654.11)
@@ -415,8 +506,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-05-27".toLocalDate, "2021-06-25".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-27".toLocalDate, "2021-06-25".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(2654.11)
@@ -435,8 +532,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-05-03".toLocalDate, "2021-06-02".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-03".toLocalDate, "2021-06-02".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(3200.11)
@@ -455,8 +558,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-05-10".toLocalDate, "2021-06-08".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-10".toLocalDate, "2021-06-08".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(2322.11)
@@ -475,12 +584,18 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          PartialPeriod(Period("2021-05-02".toLocalDate, "2021-06-01".toLocalDate),
-                        Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate)),
-          PartialPeriod(Period("2021-06-02".toLocalDate, "2021-07-01".toLocalDate),
-                        Period("2021-06-02".toLocalDate, "2021-06-02".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-02".toLocalDate, "2021-06-01".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate)
+            ),
+            PartialPeriod(
+              Period("2021-06-02".toLocalDate, "2021-07-01".toLocalDate),
+              Period("2021-06-02".toLocalDate, "2021-06-02".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(1465.55)
@@ -498,8 +613,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-06-01".toLocalDate, "2021-06-30".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-01".toLocalDate, "2021-06-30".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(3222)
@@ -529,7 +650,8 @@ object JuneConfirmationScenarios
         .withUsualHours(List(UsualHours("2021-06-30".toLocalDate, Hours(160.0))))
         .withPartTimeHours(List(PartTimeHours("2021-06-30".toLocalDate, Hours(40.0))))
         -> 1440.00
-    ))
+    )
+  )
 
   val juneFixedTwoWeeklyScenarios: Seq[(String, Seq[(UserAnswers, BigDecimal)])] = Seq(
     "June Fixed Two Weekly Scenarios" -> Seq(
@@ -540,12 +662,16 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate)),
-          FullPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate)),
-          PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
-                        Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate)),
+            FullPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(650)
@@ -553,14 +679,20 @@ object JuneConfirmationScenarios
         .withClaimPeriodEnd("2021-06-30")
         .withRegularLengthEmployed(RegularLengthEmployed.Yes)
         .withPayDate(List("2021-05-31", "2021-06-14", "2021-06-28", "2021-07-12"))
-        .withUsualHours(List(UsualHours("2021-06-14".toLocalDate, Hours(98.0)),
-                             UsualHours("2021-06-28".toLocalDate, Hours(98.0)),
-                             UsualHours("2021-07-12".toLocalDate, Hours(21.0))))
-        .withPartTimeHours(List(
-          PartTimeHours("2021-06-14".toLocalDate, Hours(48.0)),
-          PartTimeHours("2021-06-28".toLocalDate, Hours(48.0)),
-          PartTimeHours("2021-07-12".toLocalDate, Hours(6.0))
-        ))
+        .withUsualHours(
+          List(
+            UsualHours("2021-06-14".toLocalDate, Hours(98.0)),
+            UsualHours("2021-06-28".toLocalDate, Hours(98.0)),
+            UsualHours("2021-07-12".toLocalDate, Hours(21.0))
+          )
+        )
+        .withPartTimeHours(
+          List(
+            PartTimeHours("2021-06-14".toLocalDate, Hours(48.0)),
+            PartTimeHours("2021-06-28".toLocalDate, Hours(48.0)),
+            PartTimeHours("2021-07-12".toLocalDate, Hours(6.0))
+          )
+        )
         -> 583.66,
       emptyUserAnswers
         .withFurloughStatus(FurloughStatus.FurloughEnded)
@@ -569,12 +701,16 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate)),
-          FullPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate)),
-          PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
-                        Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate)),
+            FullPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(2300.12)
@@ -582,14 +718,20 @@ object JuneConfirmationScenarios
         .withClaimPeriodEnd("2021-06-30")
         .withRegularLengthEmployed(RegularLengthEmployed.Yes)
         .withPayDate(List("2021-05-31", "2021-06-14", "2021-06-28", "2021-07-12"))
-        .withUsualHours(List(UsualHours("2021-06-14".toLocalDate, Hours(98.0)),
-                             UsualHours("2021-06-28".toLocalDate, Hours(98.0)),
-                             UsualHours("2021-07-12".toLocalDate, Hours(21.0))))
-        .withPartTimeHours(List(
-          PartTimeHours("2021-06-14".toLocalDate, Hours(48.0)),
-          PartTimeHours("2021-06-28".toLocalDate, Hours(48.0)),
-          PartTimeHours("2021-07-12".toLocalDate, Hours(6.0))
-        ))
+        .withUsualHours(
+          List(
+            UsualHours("2021-06-14".toLocalDate, Hours(98.0)),
+            UsualHours("2021-06-28".toLocalDate, Hours(98.0)),
+            UsualHours("2021-07-12".toLocalDate, Hours(21.0))
+          )
+        )
+        .withPartTimeHours(
+          List(
+            PartTimeHours("2021-06-14".toLocalDate, Hours(48.0)),
+            PartTimeHours("2021-06-28".toLocalDate, Hours(48.0)),
+            PartTimeHours("2021-07-12".toLocalDate, Hours(6.0))
+          )
+        )
         -> 1296.44,
       emptyUserAnswers
         .withFurloughStatus(FurloughStatus.FurloughEnded)
@@ -598,8 +740,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-13")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
-                                                Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(650)
@@ -617,8 +765,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-03")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-05-29".toLocalDate, "2021-06-11".toLocalDate),
-                                                Period("2021-06-03".toLocalDate, "2021-06-11".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-29".toLocalDate, "2021-06-11".toLocalDate),
+              Period("2021-06-03".toLocalDate, "2021-06-11".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(464.28)
@@ -635,8 +789,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-28")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
-                                                Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(789.12)
@@ -654,12 +814,18 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          PartialPeriod(Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate),
-                        Period("2021-06-05".toLocalDate, "2021-06-14".toLocalDate)),
-          PartialPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate),
-                        Period("2021-06-15".toLocalDate, "2021-06-25".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate),
+              Period("2021-06-05".toLocalDate, "2021-06-14".toLocalDate)
+            ),
+            PartialPeriod(
+              Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate),
+              Period("2021-06-15".toLocalDate, "2021-06-25".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(643.12)
@@ -676,8 +842,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-05-20".toLocalDate, "2021-06-02".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-20".toLocalDate, "2021-06-02".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(1000.34)
@@ -694,8 +866,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-05-21".toLocalDate, "2021-06-03".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-21".toLocalDate, "2021-06-03".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(1500)
@@ -713,8 +891,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-05-24".toLocalDate, "2021-06-06".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-24".toLocalDate, "2021-06-06".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(1010.11)
@@ -732,12 +916,18 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          PartialPeriod(Period("2021-05-19".toLocalDate, "2021-06-01".toLocalDate),
-                        Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate)),
-          PartialPeriod(Period("2021-06-02".toLocalDate, "2021-06-15".toLocalDate),
-                        Period("2021-06-02".toLocalDate, "2021-06-02".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-19".toLocalDate, "2021-06-01".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate)
+            ),
+            PartialPeriod(
+              Period("2021-06-02".toLocalDate, "2021-06-15".toLocalDate),
+              Period("2021-06-02".toLocalDate, "2021-06-02".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(1465.55)
@@ -756,12 +946,16 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate)),
-          FullPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate)),
-          PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
-                        Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate)),
+            FullPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(650)
@@ -769,16 +963,23 @@ object JuneConfirmationScenarios
         .withClaimPeriodEnd("2021-06-30")
         .withRegularLengthEmployed(RegularLengthEmployed.No)
         .withPayDate(List("2021-05-31", "2021-06-14", "2021-06-28", "2021-07-12"))
-        .withUsualHours(List(UsualHours("2021-06-14".toLocalDate, Hours(98.0)),
-                             UsualHours("2021-06-28".toLocalDate, Hours(98.0)),
-                             UsualHours("2021-07-12".toLocalDate, Hours(21.0))))
-        .withPartTimeHours(List(
-          PartTimeHours("2021-06-14".toLocalDate, Hours(48.0)),
-          PartTimeHours("2021-06-28".toLocalDate, Hours(48.0)),
-          PartTimeHours("2021-07-12".toLocalDate, Hours(6.0))
-        ))
+        .withUsualHours(
+          List(
+            UsualHours("2021-06-14".toLocalDate, Hours(98.0)),
+            UsualHours("2021-06-28".toLocalDate, Hours(98.0)),
+            UsualHours("2021-07-12".toLocalDate, Hours(21.0))
+          )
+        )
+        .withPartTimeHours(
+          List(
+            PartTimeHours("2021-06-14".toLocalDate, Hours(48.0)),
+            PartTimeHours("2021-06-28".toLocalDate, Hours(48.0)),
+            PartTimeHours("2021-07-12".toLocalDate, Hours(6.0))
+          )
+        )
         -> 583.66
-    ))
+    )
+  )
 
   val juneFixedWeeklyScenarios: Seq[(String, Seq[(UserAnswers, BigDecimal)])] = Seq(
     "June Fixed Weekly Scenarios" -> Seq(
@@ -806,14 +1007,18 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate)),
-          FullPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate)),
-          FullPeriod(Period("2021-06-15".toLocalDate, "2021-06-21".toLocalDate)),
-          FullPeriod(Period("2021-06-22".toLocalDate, "2021-06-28".toLocalDate)),
-          PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-05".toLocalDate),
-                        Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate)),
+            FullPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate)),
+            FullPeriod(Period("2021-06-15".toLocalDate, "2021-06-21".toLocalDate)),
+            FullPeriod(Period("2021-06-22".toLocalDate, "2021-06-28".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-05".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(600)
@@ -821,20 +1026,24 @@ object JuneConfirmationScenarios
         .withClaimPeriodEnd("2021-06-30")
         .withRegularLengthEmployed(RegularLengthEmployed.Yes)
         .withPayDate(List("2021-05-31", "2021-06-07", "2021-06-14", "2021-06-21", "2021-06-28", "2021-07-05"))
-        .withUsualHours(List(
-          UsualHours("2021-06-07".toLocalDate, Hours(37.0)),
-          UsualHours("2021-06-14".toLocalDate, Hours(37.0)),
-          UsualHours("2021-06-21".toLocalDate, Hours(37.0)),
-          UsualHours("2021-06-28".toLocalDate, Hours(37.0)),
-          UsualHours("2021-07-05".toLocalDate, Hours(15.86))
-        ))
-        .withPartTimeHours(List(
-          PartTimeHours("2021-06-07".toLocalDate, Hours(10.0)),
-          PartTimeHours("2021-06-14".toLocalDate, Hours(12.0)),
-          PartTimeHours("2021-06-21".toLocalDate, Hours(10.0)),
-          PartTimeHours("2021-06-28".toLocalDate, Hours(15.0)),
-          PartTimeHours("2021-07-05".toLocalDate, Hours(1.06))
-        ))
+        .withUsualHours(
+          List(
+            UsualHours("2021-06-07".toLocalDate, Hours(37.0)),
+            UsualHours("2021-06-14".toLocalDate, Hours(37.0)),
+            UsualHours("2021-06-21".toLocalDate, Hours(37.0)),
+            UsualHours("2021-06-28".toLocalDate, Hours(37.0)),
+            UsualHours("2021-07-05".toLocalDate, Hours(15.86))
+          )
+        )
+        .withPartTimeHours(
+          List(
+            PartTimeHours("2021-06-07".toLocalDate, Hours(10.0)),
+            PartTimeHours("2021-06-14".toLocalDate, Hours(12.0)),
+            PartTimeHours("2021-06-21".toLocalDate, Hours(10.0)),
+            PartTimeHours("2021-06-28".toLocalDate, Hours(15.0)),
+            PartTimeHours("2021-07-05".toLocalDate, Hours(1.06))
+          )
+        )
         -> 1438.26,
       emptyUserAnswers
         .withFurloughStatus(FurloughStatus.FurloughOngoing)
@@ -842,14 +1051,20 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-02")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          PartialPeriod(Period("2021-06-04".toLocalDate, "2021-06-10".toLocalDate),
-                        Period("2021-06-06".toLocalDate, "2021-06-10".toLocalDate)),
-          FullPeriod(Period("2021-06-11".toLocalDate, "2021-06-17".toLocalDate)),
-          FullPeriod(Period("2021-06-18".toLocalDate, "2021-06-24".toLocalDate)),
-          PartialPeriod(Period("2021-06-25".toLocalDate, "2021-07-01".toLocalDate),
-                        Period("2021-06-25".toLocalDate, "2021-06-29".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-04".toLocalDate, "2021-06-10".toLocalDate),
+              Period("2021-06-06".toLocalDate, "2021-06-10".toLocalDate)
+            ),
+            FullPeriod(Period("2021-06-11".toLocalDate, "2021-06-17".toLocalDate)),
+            FullPeriod(Period("2021-06-18".toLocalDate, "2021-06-24".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-25".toLocalDate, "2021-07-01".toLocalDate),
+              Period("2021-06-25".toLocalDate, "2021-06-29".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(1200)
@@ -857,18 +1072,22 @@ object JuneConfirmationScenarios
         .withClaimPeriodEnd("2021-06-29")
         .withRegularLengthEmployed(RegularLengthEmployed.Yes)
         .withPayDate(List("2021-06-03", "2021-06-10", "2021-06-17", "2021-06-24", "2021-07-01"))
-        .withUsualHours(List(
-          UsualHours("2021-06-10".toLocalDate, Hours(37.0)),
-          UsualHours("2021-06-17".toLocalDate, Hours(37.0)),
-          UsualHours("2021-06-24".toLocalDate, Hours(37.0)),
-          UsualHours("2021-07-01".toLocalDate, Hours(37.0))
-        ))
-        .withPartTimeHours(List(
-          PartTimeHours("2021-06-10".toLocalDate, Hours(10.0)),
-          PartTimeHours("2021-06-17".toLocalDate, Hours(12.0)),
-          PartTimeHours("2021-06-24".toLocalDate, Hours(10.0)),
-          PartTimeHours("2021-07-01".toLocalDate, Hours(15.0))
-        ))
+        .withUsualHours(
+          List(
+            UsualHours("2021-06-10".toLocalDate, Hours(37.0)),
+            UsualHours("2021-06-17".toLocalDate, Hours(37.0)),
+            UsualHours("2021-06-24".toLocalDate, Hours(37.0)),
+            UsualHours("2021-07-01".toLocalDate, Hours(37.0))
+          )
+        )
+        .withPartTimeHours(
+          List(
+            PartTimeHours("2021-06-10".toLocalDate, Hours(10.0)),
+            PartTimeHours("2021-06-17".toLocalDate, Hours(12.0)),
+            PartTimeHours("2021-06-24".toLocalDate, Hours(10.0)),
+            PartTimeHours("2021-07-01".toLocalDate, Hours(15.0))
+          )
+        )
         -> 1362.66,
       emptyUserAnswers
         .withFurloughStatus(FurloughStatus.FurloughEnded)
@@ -877,12 +1096,18 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-02")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          PartialPeriod(Period("2021-06-04".toLocalDate, "2021-06-10".toLocalDate),
-                        Period("2021-06-06".toLocalDate, "2021-06-10".toLocalDate)),
-          PartialPeriod(Period("2021-06-25".toLocalDate, "2021-07-01".toLocalDate),
-                        Period("2021-06-25".toLocalDate, "2021-06-27".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-04".toLocalDate, "2021-06-10".toLocalDate),
+              Period("2021-06-06".toLocalDate, "2021-06-10".toLocalDate)
+            ),
+            PartialPeriod(
+              Period("2021-06-25".toLocalDate, "2021-07-01".toLocalDate),
+              Period("2021-06-25".toLocalDate, "2021-06-27".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(1200)
@@ -900,12 +1125,16 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          FullPeriod(Period("2021-06-14".toLocalDate, "2021-06-20".toLocalDate)),
-          FullPeriod(Period("2021-06-21".toLocalDate, "2021-06-27".toLocalDate)),
-          PartialPeriod(Period("2021-06-28".toLocalDate, "2021-07-04".toLocalDate),
-                        Period("2021-06-28".toLocalDate, "2021-06-30".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-14".toLocalDate, "2021-06-20".toLocalDate)),
+            FullPeriod(Period("2021-06-21".toLocalDate, "2021-06-27".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-28".toLocalDate, "2021-07-04".toLocalDate),
+              Period("2021-06-28".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(600)
@@ -913,14 +1142,20 @@ object JuneConfirmationScenarios
         .withClaimPeriodEnd("2021-06-30")
         .withRegularLengthEmployed(RegularLengthEmployed.Yes)
         .withPayDate(List("2021-06-13", "2021-06-20", "2021-06-27", "2021-07-04"))
-        .withUsualHours(List(UsualHours("2021-06-20".toLocalDate, Hours(37.0)),
-                             UsualHours("2021-06-27".toLocalDate, Hours(37.0)),
-                             UsualHours("2021-07-04".toLocalDate, Hours(15.86))))
-        .withPartTimeHours(List(
-          PartTimeHours("2021-06-20".toLocalDate, Hours(10.0)),
-          PartTimeHours("2021-06-27".toLocalDate, Hours(15.0)),
-          PartTimeHours("2021-07-04".toLocalDate, Hours(1.06))
-        ))
+        .withUsualHours(
+          List(
+            UsualHours("2021-06-20".toLocalDate, Hours(37.0)),
+            UsualHours("2021-06-27".toLocalDate, Hours(37.0)),
+            UsualHours("2021-07-04".toLocalDate, Hours(15.86))
+          )
+        )
+        .withPartTimeHours(
+          List(
+            PartTimeHours("2021-06-20".toLocalDate, Hours(10.0)),
+            PartTimeHours("2021-06-27".toLocalDate, Hours(15.0)),
+            PartTimeHours("2021-07-04".toLocalDate, Hours(1.06))
+          )
+        )
         -> 827.64,
       emptyUserAnswers
         .withFurloughStatus(FurloughStatus.FurloughOngoing)
@@ -928,8 +1163,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-29")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-05".toLocalDate),
-                                                Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-05".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(550)
@@ -947,11 +1188,15 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate)),
-          PartialPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate),
-                        Period("2021-06-08".toLocalDate, "2021-06-08".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate),
+              Period("2021-06-08".toLocalDate, "2021-06-08".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(600)
@@ -968,8 +1213,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-05-29".toLocalDate, "2021-06-04".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-29".toLocalDate, "2021-06-04".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(666.12)
@@ -987,8 +1238,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-05-29".toLocalDate, "2021-06-04".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-29".toLocalDate, "2021-06-04".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-02".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(890.11)
@@ -1006,8 +1263,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-05-30".toLocalDate, "2021-06-05".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-30".toLocalDate, "2021-06-05".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(500)
@@ -1025,8 +1288,14 @@ object JuneConfirmationScenarios
         .withClaimPeriodStart("2021-06-01")
         .withLastYear(List())
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-05-26".toLocalDate, "2021-06-01".toLocalDate),
-                                                Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-26".toLocalDate, "2021-06-01".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-01".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Regular)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withRegularPayAmount(754.44)
@@ -1056,7 +1325,8 @@ object JuneConfirmationScenarios
         .withUsualHours(List(UsualHours("2021-06-12".toLocalDate, Hours(40.0))))
         .withPartTimeHours(List(PartTimeHours("2021-06-12".toLocalDate, Hours(14.0))))
         -> 286.00
-    ))
+    )
+  )
 
   val juneVariableFourWeeklyScenarios: Seq[(String, Seq[(UserAnswers, BigDecimal)])] = Seq(
     "June Variable Four Weekly Scenarios" -> Seq(
@@ -1072,12 +1342,18 @@ object JuneConfirmationScenarios
         .withLastYear(List())
         .withFurloughInLastTaxYear(false)
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          PartialPeriod(Period("2021-05-30".toLocalDate, "2021-06-26".toLocalDate),
-                        Period("2021-06-01".toLocalDate, "2021-06-26".toLocalDate)),
-          PartialPeriod(Period("2021-06-27".toLocalDate, "2021-07-24".toLocalDate),
-                        Period("2021-06-27".toLocalDate, "2021-06-29".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-05-30".toLocalDate, "2021-06-26".toLocalDate),
+              Period("2021-06-01".toLocalDate, "2021-06-26".toLocalDate)
+            ),
+            PartialPeriod(
+              Period("2021-06-27".toLocalDate, "2021-07-24".toLocalDate),
+              Period("2021-06-27".toLocalDate, "2021-06-29".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(1500)
@@ -1099,8 +1375,14 @@ object JuneConfirmationScenarios
         .withLastYear(List())
         .withFurloughInLastTaxYear(false)
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(PartialPeriod(Period("2021-06-30".toLocalDate, "2021-07-27".toLocalDate),
-                                                Period("2021-06-30".toLocalDate, "2021-06-30".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-30".toLocalDate, "2021-07-27".toLocalDate),
+              Period("2021-06-30".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(19564.4)
@@ -1140,11 +1422,15 @@ object JuneConfirmationScenarios
         .withLastYear(List())
         .withFurloughInLastTaxYear(false)
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-28".toLocalDate)),
-          PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-26".toLocalDate),
-                        Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-28".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-26".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(26000)
@@ -1167,11 +1453,15 @@ object JuneConfirmationScenarios
         .withFurloughInLastTaxYear(false)
         .withStatutoryLeavePay(Amount(9243))
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-28".toLocalDate)),
-          PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-26".toLocalDate),
-                        Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-28".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-26".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(26000)
@@ -1181,7 +1471,8 @@ object JuneConfirmationScenarios
         .withUsualHours(List(UsualHours("2021-06-28".toLocalDate, Hours(40.0)), UsualHours("2021-07-26".toLocalDate, Hours(40.0))))
         .withPartTimeHours(List(PartTimeHours("2021-06-28".toLocalDate, Hours(14.0)), PartTimeHours("2021-07-26".toLocalDate, Hours(14.0))))
         -> 1608.33
-    ))
+    )
+  )
 
   val juneVariableMonthlyScenarios: Seq[(String, Seq[(UserAnswers, BigDecimal)])] = Seq(
     "June Variable Monthly Scenarios" -> Seq(
@@ -1290,7 +1581,8 @@ object JuneConfirmationScenarios
         .withUsualHours(List())
         .withPartTimeHours(List())
         -> 1555.20
-    ))
+    )
+  )
 
   val juneVariableTwoWeeklyScenarios: Seq[(String, Seq[(UserAnswers, BigDecimal)])] = Seq(
     "June Variable Two Weekly Scenarios" -> Seq(
@@ -1306,27 +1598,39 @@ object JuneConfirmationScenarios
         .withLastYear(List())
         .withFurloughInLastTaxYear(false)
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          PartialPeriod(Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate),
-                        Period("2021-06-13".toLocalDate, "2021-06-14".toLocalDate)),
-          FullPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate)),
-          PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
-                        Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate),
+              Period("2021-06-13".toLocalDate, "2021-06-14".toLocalDate)
+            ),
+            FullPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(34000)
         .withFurloughStartDate("2021-06-01")
         .withClaimPeriodEnd("2021-06-30")
         .withPayDate(List("2021-05-31", "2021-06-14", "2021-06-28", "2021-07-12"))
-        .withUsualHours(List(UsualHours("2021-06-14".toLocalDate, Hours(40.0)),
-                             UsualHours("2021-06-28".toLocalDate, Hours(50.0)),
-                             UsualHours("2021-07-12".toLocalDate, Hours(50.0))))
-        .withPartTimeHours(List(
-          PartTimeHours("2021-06-14".toLocalDate, Hours(14.0)),
-          PartTimeHours("2021-06-28".toLocalDate, Hours(15.0)),
-          PartTimeHours("2021-07-12".toLocalDate, Hours(15.0))
-        ))
+        .withUsualHours(
+          List(
+            UsualHours("2021-06-14".toLocalDate, Hours(40.0)),
+            UsualHours("2021-06-28".toLocalDate, Hours(50.0)),
+            UsualHours("2021-07-12".toLocalDate, Hours(50.0))
+          )
+        )
+        .withPartTimeHours(
+          List(
+            PartTimeHours("2021-06-14".toLocalDate, Hours(14.0)),
+            PartTimeHours("2021-06-28".toLocalDate, Hours(15.0)),
+            PartTimeHours("2021-07-12".toLocalDate, Hours(15.0))
+          )
+        )
         -> 1032.71,
       emptyUserAnswers
         .withFurloughStatus(FurloughStatus.FurloughEnded)
@@ -1340,12 +1644,18 @@ object JuneConfirmationScenarios
         .withLastYear(List())
         .withFurloughInLastTaxYear(false)
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          PartialPeriod(Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate),
-                        Period("2021-06-05".toLocalDate, "2021-06-14".toLocalDate)),
-          PartialPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate),
-                        Period("2021-06-15".toLocalDate, "2021-06-25".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate),
+              Period("2021-06-05".toLocalDate, "2021-06-14".toLocalDate)
+            ),
+            PartialPeriod(
+              Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate),
+              Period("2021-06-15".toLocalDate, "2021-06-25".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(19564.4)
@@ -1366,12 +1676,18 @@ object JuneConfirmationScenarios
         .withLastYear(List())
         .withFurloughInLastTaxYear(false)
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          PartialPeriod(Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate),
-                        Period("2021-06-05".toLocalDate, "2021-06-14".toLocalDate)),
-          PartialPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate),
-                        Period("2021-06-15".toLocalDate, "2021-06-25".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate),
+              Period("2021-06-05".toLocalDate, "2021-06-14".toLocalDate)
+            ),
+            PartialPeriod(
+              Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate),
+              Period("2021-06-15".toLocalDate, "2021-06-25".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(1000)
@@ -1411,26 +1727,36 @@ object JuneConfirmationScenarios
         .withLastYear(List())
         .withFurloughInLastTaxYear(false)
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate)),
-          FullPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate)),
-          PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
-                        Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate)),
+            FullPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(19564.4)
         .withFurloughStartDate("2021-06-01")
         .withClaimPeriodEnd("2021-06-30")
         .withPayDate(List("2021-05-31", "2021-06-14", "2021-06-28", "2021-07-12"))
-        .withUsualHours(List(UsualHours("2021-06-14".toLocalDate, Hours(40.0)),
-                             UsualHours("2021-06-28".toLocalDate, Hours(50.0)),
-                             UsualHours("2021-07-12".toLocalDate, Hours(50.0))))
-        .withPartTimeHours(List(
-          PartTimeHours("2021-06-14".toLocalDate, Hours(14.0)),
-          PartTimeHours("2021-06-28".toLocalDate, Hours(15.0)),
-          PartTimeHours("2021-07-12".toLocalDate, Hours(15.0))
-        ))
+        .withUsualHours(
+          List(
+            UsualHours("2021-06-14".toLocalDate, Hours(40.0)),
+            UsualHours("2021-06-28".toLocalDate, Hours(50.0)),
+            UsualHours("2021-07-12".toLocalDate, Hours(50.0))
+          )
+        )
+        .withPartTimeHours(
+          List(
+            PartTimeHours("2021-06-14".toLocalDate, Hours(14.0)),
+            PartTimeHours("2021-06-28".toLocalDate, Hours(15.0)),
+            PartTimeHours("2021-07-12".toLocalDate, Hours(15.0))
+          )
+        )
         -> 1674.37,
       emptyUserAnswers
         .withFurloughStatus(FurloughStatus.FurloughEnded)
@@ -1445,28 +1771,39 @@ object JuneConfirmationScenarios
         .withFurloughInLastTaxYear(false)
         .withStatutoryLeavePay(Amount(9243))
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate)),
-          FullPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate)),
-          PartialPeriod(Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
-                        Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-14".toLocalDate)),
+            FullPeriod(Period("2021-06-15".toLocalDate, "2021-06-28".toLocalDate)),
+            PartialPeriod(
+              Period("2021-06-29".toLocalDate, "2021-07-12".toLocalDate),
+              Period("2021-06-29".toLocalDate, "2021-06-30".toLocalDate)
+            )
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(19564.4)
         .withFurloughStartDate("2021-06-01")
         .withClaimPeriodEnd("2021-06-30")
         .withPayDate(List("2021-05-31", "2021-06-14", "2021-06-28", "2021-07-12"))
-        .withUsualHours(List(UsualHours("2021-06-14".toLocalDate, Hours(40.0)),
-                             UsualHours("2021-06-28".toLocalDate, Hours(50.0)),
-                             UsualHours("2021-07-12".toLocalDate, Hours(50.0))))
-        .withPartTimeHours(List(
-          PartTimeHours("2021-06-14".toLocalDate, Hours(14.0)),
-          PartTimeHours("2021-06-28".toLocalDate, Hours(15.0)),
-          PartTimeHours("2021-07-12".toLocalDate, Hours(15.0))
-        ))
+        .withUsualHours(
+          List(
+            UsualHours("2021-06-14".toLocalDate, Hours(40.0)),
+            UsualHours("2021-06-28".toLocalDate, Hours(50.0)),
+            UsualHours("2021-07-12".toLocalDate, Hours(50.0))
+          )
+        )
+        .withPartTimeHours(
+          List(
+            PartTimeHours("2021-06-14".toLocalDate, Hours(14.0)),
+            PartTimeHours("2021-06-28".toLocalDate, Hours(15.0)),
+            PartTimeHours("2021-07-12".toLocalDate, Hours(15.0))
+          )
+        )
         -> 1674.37
-    ))
+    )
+  )
 
   val juneVariableWeeklyScenarios: Seq[(String, Seq[(UserAnswers, BigDecimal)])] = Seq(
     "June Variable Weekly Scenarios" -> Seq(
@@ -1482,11 +1819,15 @@ object JuneConfirmationScenarios
         .withLastYear(List())
         .withFurloughInLastTaxYear(false)
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          PartialPeriod(Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate),
-                        Period("2021-06-04".toLocalDate, "2021-06-07".toLocalDate)),
-          FullPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate),
+              Period("2021-06-04".toLocalDate, "2021-06-07".toLocalDate)
+            ),
+            FullPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate))
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(19564.4)
@@ -1508,11 +1849,15 @@ object JuneConfirmationScenarios
         .withLastYear(List())
         .withFurloughInLastTaxYear(false)
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          PartialPeriod(Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate),
-                        Period("2021-06-04".toLocalDate, "2021-06-07".toLocalDate)),
-          FullPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate),
+              Period("2021-06-04".toLocalDate, "2021-06-07".toLocalDate)
+            ),
+            FullPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate))
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(26000)
@@ -1536,11 +1881,15 @@ object JuneConfirmationScenarios
         .withLastYear(List())
         .withFurloughInLastTaxYear(false)
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(
-          PartialPeriod(Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate),
-                        Period("2021-06-04".toLocalDate, "2021-06-07".toLocalDate)),
-          FullPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate))
-        ))
+        .withPartTimePeriods(
+          List(
+            PartialPeriod(
+              Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate),
+              Period("2021-06-04".toLocalDate, "2021-06-07".toLocalDate)
+            ),
+            FullPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate))
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(12000)
@@ -1599,8 +1948,12 @@ object JuneConfirmationScenarios
         .withLastYear(List())
         .withFurloughInLastTaxYear(false)
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate)),
-                                  FullPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate)),
+            FullPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate))
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(19564.4)
@@ -1623,8 +1976,12 @@ object JuneConfirmationScenarios
         .withFurloughInLastTaxYear(false)
         .withStatutoryLeavePay(Amount(9243))
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate)),
-                                  FullPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate)),
+            FullPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate))
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(19564.4)
@@ -1646,8 +2003,12 @@ object JuneConfirmationScenarios
         .withLastYear(List())
         .withFurloughInLastTaxYear(false)
         .withPayPeriodsList(PayPeriodsList.Yes)
-        .withPartTimePeriods(List(FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate)),
-                                  FullPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate))))
+        .withPartTimePeriods(
+          List(
+            FullPeriod(Period("2021-06-01".toLocalDate, "2021-06-07".toLocalDate)),
+            FullPeriod(Period("2021-06-08".toLocalDate, "2021-06-14".toLocalDate))
+          )
+        )
         .withPayMethod(PayMethod.Variable)
         .withPartTimeQuestion(PartTimeQuestion.PartTimeYes)
         .withAnnualPayAmount(4782.2)
@@ -1657,5 +2018,6 @@ object JuneConfirmationScenarios
         .withUsualHours(List(UsualHours("2021-06-07".toLocalDate, Hours(40.0)), UsualHours("2021-06-14".toLocalDate, Hours(50.0))))
         .withPartTimeHours(List(PartTimeHours("2021-06-07".toLocalDate, Hours(14.0)), PartTimeHours("2021-06-14".toLocalDate, Hours(15.0))))
         -> 392.97
-    ))
+    )
+  )
 }

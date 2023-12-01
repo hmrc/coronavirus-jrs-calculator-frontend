@@ -65,13 +65,13 @@ object JRSExtensionConfirmationMessages extends ValueFormatter {
 
     val h2BreakdownOfCalculations = "Breakdown of calculations"
 
-    val breakDownParagraphOne
-      : String = "You told us this employee gets paid a regular amount each time. We’ve worked out their daily earnings" +
-      " and multiplied by the number of furlough days and furlough hours in each pay period. The furlough grant is 80% of this."
+    val breakDownParagraphOne: String =
+      "You told us this employee gets paid a regular amount each time. We’ve worked out their daily earnings" +
+        " and multiplied by the number of furlough days and furlough hours in each pay period. The furlough grant is 80% of this."
 
-    val breakDownParagraphTwo
-      : String = "There’s a maximum amount you can claim. If this affects your claim, we’ve adjusted the calculations. " +
-      "Work out the maximum wage amount you can claim (opens in new tab)."
+    val breakDownParagraphTwo: String =
+      "There’s a maximum amount you can claim. If this affects your claim, we’ve adjusted the calculations. " +
+        "Work out the maximum wage amount you can claim (opens in new tab)."
 
     val breakDownParagraphThree = "Calculations are rounded to the nearest penny unless otherwise stated."
 
@@ -110,8 +110,9 @@ object JRSExtensionConfirmationMessages extends ValueFormatter {
 
     val furloughGrantIndent = (furloughPay: BigDecimal) => s"Total furlough grant for pay period = ${currencyFormatter(furloughPay)}"
 
-    val disclaimerBottomPage = "The results of the calculation rely on the accuracy of the information you entered, for which you are responsible." +
-      " You cannot claim for more money than you are going to pay out under the scheme."
+    val disclaimerBottomPage =
+      "The results of the calculation rely on the accuracy of the information you entered, for which you are responsible." +
+        " You cannot claim for more money than you are going to pay out under the scheme."
 
     val printOrSave  = "Print or save a copy of this page"
     val webchatLink  = "Webchat help (opens in a new tab)."
@@ -164,9 +165,9 @@ object JRSExtensionConfirmationMessages extends ValueFormatter {
       " furloughed on or after 1 November 2020. Then, we’ve multiplied that by the number of furlough days and furlough hours in each pay period." +
       " The furlough grant is 80% of this."
 
-    val breakDownParagraphTwo
-      : String = "There’s a maximum amount you can claim. If this affects your claim, we’ve adjusted the calculations. " +
-      "Work out the maximum wage amount you can claim (opens in new tab)."
+    val breakDownParagraphTwo: String =
+      "There’s a maximum amount you can claim. If this affects your claim, we’ve adjusted the calculations. " +
+        "Work out the maximum wage amount you can claim (opens in new tab)."
 
     val breakDownParagraphThree = "Calculations are rounded to the nearest penny unless otherwise stated."
 
@@ -195,8 +196,9 @@ object JRSExtensionConfirmationMessages extends ValueFormatter {
 
     val furloughGrantIndent = (furloughPay: BigDecimal) => s"Total furlough grant for pay period = ${currencyFormatter(furloughPay)}"
 
-    val disclaimerBottomPage = "The results of the calculation rely on the accuracy of the information you entered, for which you are responsible." +
-      " You cannot claim for more money than you are going to pay out under the scheme."
+    val disclaimerBottomPage =
+      "The results of the calculation rely on the accuracy of the information you entered, for which you are responsible." +
+        " You cannot claim for more money than you are going to pay out under the scheme."
 
     val printOrSave  = "Print or save a copy of this page"
     val webchatLink  = "Webchat help (opens in a new tab)."

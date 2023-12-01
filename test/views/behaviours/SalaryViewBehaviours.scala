@@ -22,11 +22,13 @@ import play.twirl.api.HtmlFormat
 
 trait SalaryViewBehaviours extends QuestionViewBehaviours[Salary] {
 
-  def salaryPage(form: Form[Salary],
-                 createView: Form[Salary] => HtmlFormat.Appendable,
-                 messageKeyPrefix: String,
-                 headingArgs: Seq[String] = Seq(),
-                 section: Option[String] = None): Unit =
+  def salaryPage(
+    form: Form[Salary],
+    createView: Form[Salary] => HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    headingArgs: Seq[String] = Seq(),
+    section: Option[String] = None
+  ): Unit =
     "behave like a page with a salary field" when {
 
       val salary = Salary(BigDecimal(123.45))
@@ -73,9 +75,11 @@ trait SalaryViewBehaviours extends QuestionViewBehaviours[Salary] {
         "show an error prefix in the browser title" in {
 
           val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${title(messages(s"$messageKeyPrefix.title",
-                                                                                                         headingArgs: _*),
-                                                                                                section)}""")
+          assertEqualsValue(
+            doc,
+            "title",
+            s"""${messages("error.browser.title.prefix")} ${title(messages(s"$messageKeyPrefix.title", headingArgs: _*), section)}"""
+          )
         }
       }
     }

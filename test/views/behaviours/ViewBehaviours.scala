@@ -21,8 +21,9 @@ import views._
 
 trait ViewBehaviours extends ViewSpecBase {
 
-  def normalPage(messageKeyPrefix: String, headingArgs: Seq[String] = Seq(), section: Option[String] = None)(
-    implicit document: Document): Unit =
+  def normalPage(messageKeyPrefix: String, headingArgs: Seq[String] = Seq(), section: Option[String] = None)(implicit
+    document: Document
+  ): Unit =
     "behave like a normal page" when {
 
       "rendered" must {
@@ -35,11 +36,10 @@ trait ViewBehaviours extends ViewSpecBase {
           assertPageTitleEqualsMessage(document, s"$messageKeyPrefix.heading", headingArgs: _*)
         }
 
-        if (frontendAppConfig.languageTranslationEnabled) {
+        if (frontendAppConfig.languageTranslationEnabled)
           "display welsh language toggles" in {
             assertRenderedById(document, "cymraeg-switch")
           }
-        }
       }
     }
 
@@ -95,24 +95,27 @@ trait ViewBehaviours extends ViewSpecBase {
       }
     }
 
-  def pageWithExpectedMessages(checks: Seq[(String, String)])(implicit document: Document): Unit = checks.foreach {
-    case (cssSelector, message) =>
-      s"element with cssSelector '$cssSelector'" must {
+  def pageWithExpectedMessages(checks: Seq[(String, String)])(implicit document: Document): Unit =
+    checks.foreach {
+      case (cssSelector, message) =>
+        s"element with cssSelector '$cssSelector'" must {
 
-        s"have message '$message'" in {
-          val elem = document.select(cssSelector)
-          elem.first.text() mustBe message
+          s"have message '$message'" in {
+            val elem = document.select(cssSelector)
+            elem.first.text() mustBe message
+          }
         }
-      }
-  }
+    }
 
   def pageWithBulletedPoint(msg: String, bullet: Int)(implicit document: Document): Unit =
     s"behave like a page with bullet point$bullet" must {
 
       s"have a button with message '$msg'" in {
-        assertEqualsMessage(document,
-                            cssSelector = s"#main-content > div > div > div > ul > li:nth-child($bullet)",
-                            expectedMessageKey = msg)
+        assertEqualsMessage(
+          document,
+          cssSelector = s"#main-content > div > div > div > ul > li:nth-child($bullet)",
+          expectedMessageKey = msg
+        )
       }
     }
 
@@ -128,9 +131,11 @@ trait ViewBehaviours extends ViewSpecBase {
     "behave like a page with a warning" must {
 
       s"have a warning message '$msg'" in {
-        assertEqualsMessage(document,
-                            "#main-content > div > div > div > form > div > strong > span.govuk-\\!-font-weight-bold > div:nth-child(1)",
-                            msg)
+        assertEqualsMessage(
+          document,
+          "#main-content > div > div > div > form > div > strong > span.govuk-\\!-font-weight-bold > div:nth-child(1)",
+          msg
+        )
       }
     }
 

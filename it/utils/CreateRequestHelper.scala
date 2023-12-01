@@ -9,26 +9,25 @@ import play.api.libs.ws.{DefaultWSCookie, WSClient, WSResponse}
 import scala.concurrent.Future
 import scala.concurrent.duration.{Duration, FiniteDuration, SECONDS}
 
-
 trait CreateRequestHelper extends ServerProvider {
 
-  val defaultSeconds = 5
+  val defaultSeconds                           = 5
   implicit val defaultDuration: FiniteDuration = Duration.apply(defaultSeconds, SECONDS)
 
   val app: Application
 
   lazy val ws: WSClient = app.injector.instanceOf(classOf[WSClient])
 
-  implicit val defaultCookie = DefaultWSCookie("CSRF-Token","nocheck")
+  implicit val defaultCookie = DefaultWSCookie("CSRF-Token", "nocheck")
 
   def bakeCookie(sessionKvs: (String, String)*): (String, String) =
     HeaderNames.COOKIE ->
       SessionCookieBaker.bakeSessionCookie(
-        (sessionKvs).toMap
+        sessionKvs.toMap
       )
 
   def getRequest(path: String, follow: Boolean = false)(sessionKvs: (String, String)*): Future[WSResponse] = {
-    val allHeaders = Seq("Csrf-Token" -> "nocheck", bakeCookie(sessionKvs:_*))
+    val allHeaders = Seq("Csrf-Token" -> "nocheck", bakeCookie(sessionKvs: _*))
     ws.url(s"http://localhost:$port/job-retention-scheme-calculator$path")
       .withHttpHeaders(allHeaders: _*)
       .withFollowRedirects(follow)
@@ -36,17 +35,18 @@ trait CreateRequestHelper extends ServerProvider {
 
   }
 
-  def getRequestHeaders(path: String, follow: Boolean = false,headers: Seq[(String, String)] = Seq.empty)(sessionKvs: (String, String)*): Future[WSResponse] = {
-    val allHeaders = headers ++ Seq("Csrf-Token" -> "nocheck", bakeCookie(sessionKvs:_*))
+  def getRequestHeaders(path: String, follow: Boolean = false, headers: Seq[(String, String)] = Seq.empty)(
+    sessionKvs: (String, String)*
+  ): Future[WSResponse] = {
+    val allHeaders = headers ++ Seq("Csrf-Token" -> "nocheck", bakeCookie(sessionKvs: _*))
     ws.url(s"http://localhost:$port/job-retention-scheme-calculator$path")
       .withHttpHeaders(allHeaders: _*)
       .withFollowRedirects(follow)
       .get()
   }
-
 
   def internalPostRequest(path: String, formJson: JsValue, follow: Boolean = false)(sessionKvs: (String, String)*)(): Future[WSResponse] = {
-    val allHeaders = Seq("Csrf-Token" -> "nocheck", bakeCookie(sessionKvs:_*))
+    val allHeaders = Seq("Csrf-Token" -> "nocheck", bakeCookie(sessionKvs: _*))
     ws.url(s"http://localhost:$port/internal$path")
       .withHttpHeaders(allHeaders: _*)
       .withFollowRedirects(follow)
@@ -54,22 +54,22 @@ trait CreateRequestHelper extends ServerProvider {
   }
 
   def postRequest(path: String, formJson: JsValue, follow: Boolean = false)(sessionKvs: (String, String)*)(): Future[WSResponse] = {
-    val allHeaders = Seq("Csrf-Token" -> "nocheck", bakeCookie(sessionKvs:_*))
+    val allHeaders = Seq("Csrf-Token" -> "nocheck", bakeCookie(sessionKvs: _*))
     ws.url(s"http://localhost:$port/job-retention-scheme-calculator$path")
       .withHttpHeaders(allHeaders: _*)
       .withFollowRedirects(follow)
       .post(formJson)
   }
 
-  def postRequestHeader(path: String, formJson: JsValue, follow: Boolean = false, headers: Seq[(String, String)] = Seq.empty)
-                       (sessionKvs: (String, String)*)(): Future[WSResponse] = {
+  def postRequestHeader(path: String, formJson: JsValue, follow: Boolean = false, headers: Seq[(String, String)] = Seq.empty)(
+    sessionKvs: (String, String)*
+  )(): Future[WSResponse] = {
 
-    val allHeaders = headers ++ Seq("Csrf-Token" -> "nocheck", bakeCookie(sessionKvs:_*))
+    val allHeaders = headers ++ Seq("Csrf-Token" -> "nocheck", bakeCookie(sessionKvs: _*))
     ws.url(s"http://localhost:$port/job-retention-scheme-calculator$path")
       .withHttpHeaders(allHeaders: _*)
       .withFollowRedirects(follow)
       .post(formJson)
   }
-
 
 }

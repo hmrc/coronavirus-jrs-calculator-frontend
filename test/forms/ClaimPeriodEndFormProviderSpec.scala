@@ -47,7 +47,7 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
         val data = Map(
           "endDate.day"   -> date.getDayOfMonth.toString,
           "endDate.month" -> date.getMonthValue.toString,
-          "endDate.year"  -> date.getYear.toString,
+          "endDate.year"  -> date.getYear.toString
         )
 
         val result = form.bind(data)
@@ -62,7 +62,7 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
       result.errors must contain allElementsOf List(
         FormError("endDate.day", LocalDateFormatter.dayBlankErrorKey),
         FormError("endDate.month", LocalDateFormatter.monthBlankErrorKey),
-        FormError("endDate.year", LocalDateFormatter.yearBlankErrorKey),
+        FormError("endDate.year", LocalDateFormatter.yearBlankErrorKey)
       )
     }
 
@@ -71,7 +71,7 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
       val data = Map(
         "endDate.day"   -> "1",
         "endDate.month" -> "2",
-        "endDate.year"  -> "2020",
+        "endDate.year"  -> "2020"
       )
 
       val result = form.bind(data)
@@ -88,7 +88,7 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
       val data = Map(
         "endDate.day"   -> s"${appConf.schemeEndDate.plusMonths(1).getDayOfMonth}",
         "endDate.month" -> s"${appConf.schemeEndDate.plusMonths(1).getMonthValue}",
-        "endDate.year"  -> s"${appConf.schemeEndDate.plusMonths(1).getYear}",
+        "endDate.year"  -> s"${appConf.schemeEndDate.plusMonths(1).getYear}"
       )
 
       val result = form.bind(data)
@@ -98,7 +98,8 @@ class ClaimPeriodEndFormProviderSpec extends SpecBaseControllerSpecs {
           key = "endDate",
           message = "claimPeriodEnd.cannot.be.after.policyEnd",
           args = Seq(ViewUtils.dateToString(appConf.schemeEndDate))
-        ))
+        )
+      )
     }
 
     "fail with invalid dates -  less than 7 days after phase two start date and not at the start or end of a month" in {

@@ -23,13 +23,15 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
 
   val answer = "answer"
 
-  def stringPage(form: Form[String],
-                 createView: Form[String] => HtmlFormat.Appendable,
-                 messageKeyPrefix: String,
-                 expectedFormAction: String,
-                 expectedHintKey: Option[String] = None,
-                 section: Option[String] = None,
-                 headingArgs: Seq[String] = Seq()) =
+  def stringPage(
+    form: Form[String],
+    createView: Form[String] => HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    expectedFormAction: String,
+    expectedHintKey: Option[String] = None,
+    section: Option[String] = None,
+    headingArgs: Seq[String] = Seq()
+  ) =
     "behave like a page with a string value field" when {
 
       "rendered" must {
@@ -75,9 +77,11 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
         "show an error prefix in the browser title" in {
 
           val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${title(messages(s"$messageKeyPrefix.title",
-                                                                                                         headingArgs: _*),
-                                                                                                section)}""")
+          assertEqualsValue(
+            doc,
+            "title",
+            s"""${messages("error.browser.title.prefix")} ${title(messages(s"$messageKeyPrefix.title", headingArgs: _*), section)}"""
+          )
         }
       }
     }

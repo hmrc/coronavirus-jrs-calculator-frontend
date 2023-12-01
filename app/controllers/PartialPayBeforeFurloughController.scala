@@ -32,7 +32,7 @@ import views.html.VariableLengthPartialPayView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartialPayBeforeFurloughController @Inject()(
+class PartialPayBeforeFurloughController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   val navigator: Navigator,
@@ -47,56 +47,60 @@ class PartialPayBeforeFurloughController @Inject()(
 
   val form: Form[FurloughPartialPay] = formProvider()
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getPartialPeriods(request.userAnswers)
-      .find(isFurloughStart)
-      .map(getBeforeFurloughPeriodRemainder)
-      .fold(
-        Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-      ) { beforeFurlough =>
-        val preparedForm = request.userAnswers.getV(PartialPayBeforeFurloughPage) match {
-          case Invalid(_)   => form
-          case Valid(value) => form.fill(value)
-        }
+  def onPageLoad: Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getPartialPeriods(request.userAnswers)
+        .find(isFurloughStart)
+        .map(getBeforeFurloughPeriodRemainder)
+        .fold(
+          Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+        ) { beforeFurlough =>
+          val preparedForm = request.userAnswers.getV(PartialPayBeforeFurloughPage) match {
+            case Invalid(_)   => form
+            case Valid(value) => form.fill(value)
+          }
 
-        Future.successful(
-          Ok(
-            view(
-              preparedForm,
-              beforeFurlough.start,
-              beforeFurlough.end,
-              routes.PartialPayBeforeFurloughController.onSubmit()
-            )))
-      }
-  }
-
-  def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getPartialPeriods(request.userAnswers)
-      .find(isFurloughStart)
-      .map(getBeforeFurloughPeriodRemainder)
-      .fold(
-        Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
-      ) { partialPeriodBefore =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors =>
-              Future.successful(
-                BadRequest(
-                  view(
-                    formWithErrors,
-                    partialPeriodBefore.start,
-                    partialPeriodBefore.end,
-                    routes.PartialPayBeforeFurloughController.onSubmit()
-                  ))), { value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(PartialPayBeforeFurloughPage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield {
-                Redirect(navigator.nextPage(PartialPayBeforeFurloughPage, updatedAnswers))
-              }
-            }
+          Future.successful(
+            Ok(
+              view(
+                preparedForm,
+                beforeFurlough.start,
+                beforeFurlough.end,
+                routes.PartialPayBeforeFurloughController.onSubmit()
+              )
+            )
           )
-      }
-  }
+        }
+    }
+
+  def onSubmit: Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      getPartialPeriods(request.userAnswers)
+        .find(isFurloughStart)
+        .map(getBeforeFurloughPeriodRemainder)
+        .fold(
+          Future.successful(Redirect(routes.ErrorController.somethingWentWrong()))
+        ) { partialPeriodBefore =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors =>
+                Future.successful(
+                  BadRequest(
+                    view(
+                      formWithErrors,
+                      partialPeriodBefore.start,
+                      partialPeriodBefore.end,
+                      routes.PartialPayBeforeFurloughController.onSubmit()
+                    )
+                  )
+                ),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(PartialPayBeforeFurloughPage, value))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(PartialPayBeforeFurloughPage, updatedAnswers))
+            )
+        }
+    }
 }

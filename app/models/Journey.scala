@@ -40,12 +40,13 @@ case class RegularPayData(referencePayData: ReferencePayData, wage: Amount) exte
 case class VariablePayData(referencePayData: ReferencePayData, grossPay: Amount, nonFurloughPay: NonFurloughPay, priorFurlough: Period)
     extends ReferencePay
 
-case class VariablePayWithCylbData(referencePayData: ReferencePayData,
-                                   grossPay: Amount,
-                                   nonFurloughPay: NonFurloughPay,
-                                   priorFurlough: Period,
-                                   cylbPayments: Seq[LastYearPayment])
-    extends ReferencePay
+case class VariablePayWithCylbData(
+  referencePayData: ReferencePayData,
+  grossPay: Amount,
+  nonFurloughPay: NonFurloughPay,
+  priorFurlough: Period,
+  cylbPayments: Seq[LastYearPayment]
+) extends ReferencePay
 
 sealed trait PhaseTwoJourney
 case object PhaseTwoRegularPay          extends PhaseTwoJourney
@@ -54,10 +55,12 @@ case object PhaseTwoVariablePayWithCylb extends PhaseTwoJourney
 
 case class StatutoryLeaveData(days: Int, pay: BigDecimal)
 
-case class PhaseTwoReferencePayData(furloughPeriod: FurloughWithinClaim,
-                                    periods: Seq[PhaseTwoPeriod],
-                                    frequency: PaymentFrequency,
-                                    statutoryLeave: Option[StatutoryLeaveData] = None)
+case class PhaseTwoReferencePayData(
+  furloughPeriod: FurloughWithinClaim,
+  periods: Seq[PhaseTwoPeriod],
+  frequency: PaymentFrequency,
+  statutoryLeave: Option[StatutoryLeaveData] = None
+)
 
 sealed trait PhaseTwoReferencePay {
   val referencePayData: PhaseTwoReferencePayData
@@ -73,8 +76,9 @@ case class PhaseTwoRegularPayData(referencePayData: PhaseTwoReferencePayData, wa
 case class PhaseTwoVariablePayData(referencePayData: PhaseTwoReferencePayData, annualPay: Amount, priorFurlough: Period)
     extends PhaseTwoReferencePay
 
-case class PhaseTwoVariablePayWithCylbData(referencePayData: PhaseTwoReferencePayData,
-                                           annualPay: Amount,
-                                           priorFurlough: Period,
-                                           cylbPayments: Seq[LastYearPayment])
-    extends PhaseTwoReferencePay
+case class PhaseTwoVariablePayWithCylbData(
+  referencePayData: PhaseTwoReferencePayData,
+  annualPay: Amount,
+  priorFurlough: Period,
+  cylbPayments: Seq[LastYearPayment]
+) extends PhaseTwoReferencePay

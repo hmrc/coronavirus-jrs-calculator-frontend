@@ -31,12 +31,12 @@ class ClaimPeriodStartFormProvider @Inject() extends Mappings with SchemeConfigu
   def apply()(implicit messages: Messages): Form[LocalDate] =
     Form("startDate" -> localDate(invalidKey = "claimPeriodStart.error.invalid").verifying(validStartDate))
 
-  private def validStartDate(implicit messages: Messages): Constraint[LocalDate] = Constraint { claimStartDate =>
-    if (!claimStartDate.isBefore(schemeStartDate) && !claimStartDate.isAfter(schemeEndDate)) {
-      Valid
-    } else {
-      Invalid("claimPeriodStart.error.outofrange", ViewUtils.dateToString(schemeStartDate), ViewUtils.dateToString(schemeEndDate))
+  private def validStartDate(implicit messages: Messages): Constraint[LocalDate] =
+    Constraint { claimStartDate =>
+      if (!claimStartDate.isBefore(schemeStartDate) && !claimStartDate.isAfter(schemeEndDate))
+        Valid
+      else
+        Invalid("claimPeriodStart.error.outofrange", ViewUtils.dateToString(schemeStartDate), ViewUtils.dateToString(schemeEndDate))
     }
-  }
 
 }

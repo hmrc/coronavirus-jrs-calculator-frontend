@@ -32,5 +32,6 @@ class AdditionalPaymentAmountFormProvider @Inject() extends Mappings {
           nonNumericKey = "additionalPaymentAmount.error.nonNumeric"
         ).verifying(minimumValue(BigDecimal(0.0), "amount.error.negative"))
           .verifying(maxTwoDecimals())
-      )(Amount.apply)(Amount.unapply))
+      )(Amount.apply)(Amount.unapply)
+    )
 }

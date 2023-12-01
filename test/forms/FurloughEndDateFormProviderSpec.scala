@@ -77,7 +77,7 @@ class FurloughEndDateFormProviderSpec extends SpecBaseControllerSpecs {
           "value.day"   -> claimEnd.plusDays(days).getDayOfMonth.toString,
           "value.month" -> claimEnd.getMonthValue.toString,
           "value.year"  -> claimEnd.getYear.toString
-      )
+        )
 
       form.bind(data(1)).errors.size mustBe 1
       form.bind(data(1)).errors.head.message mustBe "furloughEndDate.error.claimPeriod"

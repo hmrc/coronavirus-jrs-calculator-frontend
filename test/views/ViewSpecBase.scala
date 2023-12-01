@@ -37,11 +37,12 @@ trait ViewSpecBase extends SpecBase with BaseSelectors {
   def dummyView(content: Html) = govukWrapper(thisPage = ConfirmationPage)(content)(fakeRequest, messages)
 
   implicit class ContentExtension(x: Content) {
-    def text: String = x match {
-      case Text(text)        => text
-      case HtmlContent(html) => Jsoup.parse(html.toString).text
-      case _                 => ""
-    }
+    def text: String =
+      x match {
+        case Text(text)        => text
+        case HtmlContent(html) => Jsoup.parse(html.toString).text
+        case _                 => ""
+      }
   }
 
   def asDocument(html: Html): Document = Jsoup.parse(html.toString())
@@ -99,35 +100,36 @@ trait ViewSpecBase extends SpecBase with BaseSelectors {
     val label = labels.first
     assert(label.text().contains(expectedText), s"\n\nLabel for $forElement was not $expectedText")
 
-    if (expectedHintText.isDefined) {
-      assert(label.getElementsByClass("form-hint").first.text == expectedHintText.get,
-             s"\n\nLabel for $forElement did not contain hint text $expectedHintText")
-    }
+    if (expectedHintText.isDefined)
+      assert(
+        label.getElementsByClass("form-hint").first.text == expectedHintText.get,
+        s"\n\nLabel for $forElement did not contain hint text $expectedHintText"
+      )
   }
 
   def assertElementHasClass(doc: Document, id: String, expectedClass: String) =
     assert(doc.getElementById(id).hasClass(expectedClass), s"\n\nElement $id does not have class $expectedClass")
 
-  def assertContainsRadioButton(doc: Document,
-                                id: String,
-                                name: String,
-                                value: String,
-                                isChecked: Boolean,
-                                hint: Option[Content] = None) = {
+  def assertContainsRadioButton(
+    doc: Document,
+    id: String,
+    name: String,
+    value: String,
+    isChecked: Boolean,
+    hint: Option[Content] = None
+  ) = {
     assertRenderedById(doc, id)
     val radio = doc.getElementById(id)
     assert(radio.attr("name") == name, s"\n\nElement $id does not have name $name")
     assert(radio.attr("value") == value, s"\n\nElement $id does not have value $value")
     hint.map { h =>
-      if (hint.isDefined) {
+      if (hint.isDefined)
         assertContainsText(doc, h.asHtml.toString)
-      }
     }
-    if (isChecked) {
+    if (isChecked)
       assert(radio.hasAttr("checked"), s"\n\nElement $id is not checked")
-    } else {
+    else
       assert(!radio.hasAttr("checked"), s"\n\nElement $id is checked")
-    }
   }
 
   def currency(amt: BigDecimal): String = f"£$amt%,1.2f".replace(".00", "")

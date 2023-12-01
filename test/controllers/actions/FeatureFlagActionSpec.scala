@@ -26,9 +26,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class FeatureFlagActionSpec extends SpecBaseControllerSpecs {
 
   class Harness(identify: IdentifierAction, flagAction: FeatureFlagAction) {
-    def onPageLoad() = (identify andThen flagAction) {
-      Results.Ok
-    }
+    def onPageLoad() =
+      (identify andThen flagAction) {
+        Results.Ok
+      }
   }
 
   val eh = injector.instanceOf[ErrorHandler]

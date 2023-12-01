@@ -35,13 +35,11 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
     for {
       seq1 <- gen
       seq2 <- Gen.listOfN(seq1.length, genValue)
-    } yield {
-      seq1.toSeq.zip(seq2).foldRight("") {
-        case ((n, Some(v)), m) =>
-          m + n + v
-        case ((n, _), m) =>
-          m + n
-      }
+    } yield seq1.toSeq.zip(seq2).foldRight("") {
+      case ((n, Some(v)), m) =>
+        m + n + v
+      case ((n, _), m) =>
+        m + n
     }
   }
 
@@ -98,7 +96,7 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
 
     Gen.frequency(
       (10, genWholeAmount),
-      (10, genSmallAmount),
+      (10, genSmallAmount)
     )
   }
 
@@ -111,30 +109,22 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
   def positiveBigDecimalsWithMaxAnd2DP(maxValue: BigDecimal): Gen[BigDecimal] =
     for {
       value <- arbitrary[BigDecimal] suchThat (bd => bd.setScale(0, RoundingMode.FLOOR).compareTo(BigDecimal(0)) > 0 && bd < maxValue)
-    } yield {
-      value.setScale(2, RoundingMode.HALF_UP)
-    }
+    } yield value.setScale(2, RoundingMode.HALF_UP)
 
   def positiveBigDecimalsWithMaxAndMoreThan2DP(maxValue: BigDecimal): Gen[BigDecimal] =
     for {
       value <- arbitrary[BigDecimal] suchThat (bd => bd > 0 && bd < maxValue)
-    } yield {
-      value.setScale(3, RoundingMode.HALF_UP)
-    }
+    } yield value.setScale(3, RoundingMode.HALF_UP)
 
   def positiveBigDecimalsWith2dp: Gen[BigDecimal] =
     for {
       value <- arbitrary[BigDecimal] suchThat (bd => bd >= 1)
-    } yield {
-      value.setScale(2, RoundingMode.HALF_UP)
-    }
+    } yield value.setScale(2, RoundingMode.HALF_UP)
 
   def positiveBigDecimalsWithMoreThan2dp: Gen[BigDecimal] =
     for {
       value <- arbitrary[BigDecimal] suchThat (bd => bd >= 1)
-    } yield {
-      value.setScale(3, RoundingMode.HALF_UP)
-    }
+    } yield value.setScale(3, RoundingMode.HALF_UP)
 
   def decimals: Gen[String] =
     arbitrary[BigDecimal]
@@ -177,9 +167,9 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
     nonEmptyString suchThat (!excluded.contains(_))
 
   def oneOf[T](xs: Seq[Gen[T]]): Gen[T] =
-    if (xs.isEmpty) {
+    if (xs.isEmpty)
       throw new IllegalArgumentException("oneOf called on empty collection")
-    } else {
+    else {
       val vector = xs.toVector
       choose(0, vector.size - 1).flatMap(vector(_))
     }

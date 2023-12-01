@@ -65,15 +65,17 @@ class PayPeriodQuestionControllerSpec extends SpecBaseControllerSpecs with Mocki
 
   val view = app.injector.instanceOf[PayPeriodQuestionView]
 
-  val controller = new PayPeriodQuestionController(messagesApi,
-                                                   mockSessionRepository,
-                                                   navigator,
-                                                   identifier,
-                                                   dataRetrieval,
-                                                   dataRequired,
-                                                   formProvider,
-                                                   component,
-                                                   view)
+  val controller = new PayPeriodQuestionController(
+    messagesApi,
+    mockSessionRepository,
+    navigator,
+    identifier,
+    dataRetrieval,
+    dataRequired,
+    formProvider,
+    component,
+    view
+  )
 
   "PayPeriodQuestion Controller" must {
 

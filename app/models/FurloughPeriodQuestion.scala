@@ -33,13 +33,14 @@ object FurloughPeriodQuestion extends Enumerable.Implicits {
     FurloughedOnDifferentPeriod
   )
 
-  def options(form: Form[_])(implicit messages: Messages): Seq[RadioItem] = values.map { value =>
-    RadioItem(
-      value = Some(value.toString),
-      content = Text(messages(s"furloughPeriodQuestion.${value.toString}")),
-      checked = form("value").value.contains(value.toString)
-    )
-  }
+  def options(form: Form[_])(implicit messages: Messages): Seq[RadioItem] =
+    values.map { value =>
+      RadioItem(
+        value = Some(value.toString),
+        content = Text(messages(s"furloughPeriodQuestion.${value.toString}")),
+        checked = form("value").value.contains(value.toString)
+      )
+    }
 
   implicit val enumerable: Enumerable[FurloughPeriodQuestion] =
     Enumerable(values.map(v => v.toString -> v): _*)

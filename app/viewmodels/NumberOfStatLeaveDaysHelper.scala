@@ -34,7 +34,8 @@ class NumberOfStatLeaveDaysHelper extends EmployeeTypeUtil with KeyDatesUtil wit
       logger.debug(
         s"[NumberOfDaysOnStatLeaveHelper][latestOfEmployeeStartDateOrDefaultDate] " +
           s"\n - defaultDate: $defaultDate" +
-          s"\n - employeeStartDate: $employeeStartDate")
+          s"\n - employeeStartDate: $employeeStartDate"
+      )
       employeeStartDate.map(employeeStartDate => latestOf(defaultDate, employeeStartDate))
     }
 

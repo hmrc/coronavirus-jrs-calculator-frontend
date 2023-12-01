@@ -33,43 +33,48 @@ import views.html.HasEmployeeBeenOnStatutoryLeaveView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class HasEmployeeBeenOnStatutoryLeaveController @Inject()(override val messagesApi: MessagesApi,
-                                                          sessionRepository: SessionRepository,
-                                                          navigator: Navigator,
-                                                          identify: IdentifierAction,
-                                                          getData: DataRetrievalAction,
-                                                          requireData: DataRequiredAction,
-                                                          formProvider: HasEmployeeBeenOnStatutoryLeaveFormProvider,
-                                                          helper: BeenOnStatutoryLeaveHelper,
-                                                          val controllerComponents: MessagesControllerComponents,
-                                                          view: HasEmployeeBeenOnStatutoryLeaveView)(implicit ec: ExecutionContext)
+class HasEmployeeBeenOnStatutoryLeaveController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: HasEmployeeBeenOnStatutoryLeaveFormProvider,
+  helper: BeenOnStatutoryLeaveHelper,
+  val controllerComponents: MessagesControllerComponents,
+  view: HasEmployeeBeenOnStatutoryLeaveView
+)(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with LoggerUtil {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    logger.debug(
-      s"[HasEmployeeBeenOnStatutoryLeaveController][onPageLoad] " +
-        s"boundaryStart: ${helper.boundaryStart()}, boundaryEnd: ${helper.boundaryEnd()}")
-    val form: Form[Boolean] = formProvider(helper.boundaryStart(), helper.boundaryEnd())
-    val preparedForm = request.userAnswers.getV(HasEmployeeBeenOnStatutoryLeavePage) match {
-      case Invalid(_)   => form
-      case Valid(value) => form.fill(value)
-    }
-    val postAction = controllers.routes.HasEmployeeBeenOnStatutoryLeaveController.onSubmit()
-    Ok(view(preparedForm, postAction, helper.boundaryStart(), helper.boundaryEnd()))
-  }
-
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val postAction          = controllers.routes.HasEmployeeBeenOnStatutoryLeaveController.onSubmit()
-    val form: Form[Boolean] = formProvider(helper.boundaryStart(), helper.boundaryEnd())
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, postAction, helper.boundaryStart(), helper.boundaryEnd()))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(HasEmployeeBeenOnStatutoryLeavePage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(HasEmployeeBeenOnStatutoryLeavePage, updatedAnswers))
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData) { implicit request =>
+      logger.debug(
+        s"[HasEmployeeBeenOnStatutoryLeaveController][onPageLoad] " +
+          s"boundaryStart: ${helper.boundaryStart()}, boundaryEnd: ${helper.boundaryEnd()}"
       )
-  }
+      val form: Form[Boolean] = formProvider(helper.boundaryStart(), helper.boundaryEnd())
+      val preparedForm = request.userAnswers.getV(HasEmployeeBeenOnStatutoryLeavePage) match {
+        case Invalid(_)   => form
+        case Valid(value) => form.fill(value)
+      }
+      val postAction = controllers.routes.HasEmployeeBeenOnStatutoryLeaveController.onSubmit()
+      Ok(view(preparedForm, postAction, helper.boundaryStart(), helper.boundaryEnd()))
+    }
+
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      val postAction          = controllers.routes.HasEmployeeBeenOnStatutoryLeaveController.onSubmit()
+      val form: Form[Boolean] = formProvider(helper.boundaryStart(), helper.boundaryEnd())
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, postAction, helper.boundaryStart(), helper.boundaryEnd()))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(HasEmployeeBeenOnStatutoryLeavePage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(HasEmployeeBeenOnStatutoryLeavePage, updatedAnswers))
+        )
+    }
 }

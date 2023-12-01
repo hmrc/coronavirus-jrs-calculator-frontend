@@ -28,12 +28,11 @@ case object HasEmployeeBeenOnStatutoryLeavePage extends QuestionPage[Boolean] {
   override def toString: String = "hasEmployeeBeenOnStatutoryLeave"
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    if (value.contains(false)) {
+    if (value.contains(false))
       for {
         updateOne <- userAnswers.remove(NumberOfStatLeaveDaysPage)
         updateTwo <- updateOne.remove(StatutoryLeavePayPage)
       } yield updateTwo
-    } else {
+    else
       Success(userAnswers)
-    }
 }

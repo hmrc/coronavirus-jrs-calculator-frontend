@@ -183,7 +183,8 @@ class RichJsValueSpec extends PlaySpec with ScalaCheckPropertyChecks with ModelG
       value.set(path, JsString("bar")) mustEqual JsSuccess(
         Json.obj(
           "foo" -> Json.arr("bar")
-        ))
+        )
+      )
     }
 
     "set into an object which does not exist" in {
@@ -197,7 +198,8 @@ class RichJsValueSpec extends PlaySpec with ScalaCheckPropertyChecks with ModelG
           "foo" -> Json.obj(
             "bar" -> "baz"
           )
-        ))
+        )
+      )
     }
 
     "set nested objects and arrays" in {
@@ -215,7 +217,8 @@ class RichJsValueSpec extends PlaySpec with ScalaCheckPropertyChecks with ModelG
               )
             )
           )
-        ))
+        )
+      )
     }
   }
 
