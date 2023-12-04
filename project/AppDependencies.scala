@@ -21,14 +21,14 @@ object AppDependencies {
     "com.kenshoo"                   %% "metrics-play"                       % "2.7.3_0.8.2"
   )
 
-  val scalatestVersion = "3.2.17"
+  val scalatestVersion = "3.1.4"
 
   val test = Seq(
     "uk.gov.hmrc.mongo"             %% s"hmrc-mongo-test$playSuffix"        % hmrcMongoVersion,
     "uk.gov.hmrc"                   %% s"bootstrap-test$playSuffix"         % bootstrapVersion,
     "org.scalatest"                 %% "scalatest"                          % scalatestVersion,
     "com.ironcorelabs"              %% "cats-scalatest"                     % "3.1.1",
-    "org.scalatestplus.play"        %% "scalatestplus-play"                 % "7.0.0",
+    "org.scalatestplus.play"        %% "scalatestplus-play"                 % "5.1.0",
     "org.pegdown"                   %  "pegdown"                            % "1.6.0",
     "org.jsoup"                     %  "jsoup"                              % "1.17.1",
     "org.playframework"             %% "play-test"                          % "3.0.0",
@@ -38,10 +38,7 @@ object AppDependencies {
     "org.scalatestplus"             %% "scalacheck-1-16"                    % "3.2.14.0",
     "org.scalacheck"                %% "scalacheck"                         % "1.17.0",
     "com.vladsch.flexmark"          %  "flexmark-all"                       % "0.64.8",
-//    "com.google.inject"             % "guice"                               % "7.0.0",
-//    "com.google.inject.extensions"  % "guice-servlet"                       % "7.0.0",
-//    "com.google.inject.extensions"  % "guice-assistedinject"                % "7.0.0"
-
+    "uk.gov.hmrc"                   %% "bootstrap-test-play-28"             % "7.22.0"
   ).map(_ % "test, it")
 
   def apply(): Seq[ModuleID] = compile ++ test

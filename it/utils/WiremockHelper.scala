@@ -21,7 +21,7 @@ trait WiremockHelper {
   lazy val wmConfig  = wireMockConfig().port(wiremockPort)
   val wireMockServer = new WireMockServer(wmConfig)
 
-  implicit val system = ActorSystem("my-system")
+  implicit val system                     = ActorSystem("my-system")
   implicit val materializer: Materializer = Materializer(system)
 
   def startWiremock(): Unit = {
