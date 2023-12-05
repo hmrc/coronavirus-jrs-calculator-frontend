@@ -49,7 +49,7 @@ private[mappings] class LocalDateFormatter(invalidKey: String) extends Formatter
         requiredKey = blankErrorKey,
         wholeNumberKey = invalidErrorKey,
         nonNumericKey = invalidErrorKey
-      ).bind(s"$key.$subKey", data.mapValues(_.trim))
+      ).bind(s"$key.$subKey", data.map { case (k, v) => (k, v.trim) })
         .right
         .flatMap(int => if (extraValidation(int)) Right(int) else Left(Seq(FormError(s"$key.$subKey", invalidErrorKey))))
 

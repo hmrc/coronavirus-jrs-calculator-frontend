@@ -25,13 +25,13 @@ import models.requests.DataRequest
 import navigation.Navigator
 import pages.{ClaimPeriodEndPage, ClaimPeriodQuestionPage, ClaimPeriodStartPage}
 import play.api.data.Form
-import play.api.i18n.MessagesApi
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.JsObject
 import play.api.mvc._
 import repositories.SessionRepository
 import services.UserAnswerPersistence
 import views.html.ClaimPeriodQuestionView
-
+import controllers.BaseController
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -46,7 +46,7 @@ class ClaimPeriodQuestionController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   view: ClaimPeriodQuestionView
 )(implicit ec: ExecutionContext, errorHandler: ErrorHandler)
-    extends BaseController with FastJourneyUserAnswersHandler {
+    extends BaseController with FastJourneyUserAnswersHandler with I18nSupport {
 
   val form: Form[ClaimPeriodQuestion] = formProvider()
   protected val userAnswerPersistence = new UserAnswerPersistence(sessionRepository.set)

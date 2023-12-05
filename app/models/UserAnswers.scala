@@ -24,13 +24,13 @@ import play.api.libs.json._
 import queries.{Gettable, Query, Settable}
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
-import java.time.LocalDateTime
+import java.time.Instant
 import scala.util.{Failure, Success, Try}
 
 final case class UserAnswers(
   id: String,
   data: JsObject = Json.obj(),
-  lastUpdated: LocalDateTime = LocalDateTime.now
+  lastUpdated: Instant = Instant.now
 ) {
 
   private def path[T <: Query](page: T, idx: Option[Int]): JsPath =
@@ -225,7 +225,7 @@ object UserAnswers {
     (
       (__ \ "_id").read[String] and
         (__ \ "data").read[JsObject] and
-        (__ \ "lastUpdated").read(MongoJavatimeFormats.localDateTimeReads)
+        (__ \ "lastUpdated").read[Instant](MongoJavatimeFormats.instantReads)
     )(UserAnswers.apply _)
   }
 
@@ -236,7 +236,7 @@ object UserAnswers {
     (
       (__ \ "_id").write[String] and
         (__ \ "data").write[JsObject] and
-        (__ \ "lastUpdated").write(MongoJavatimeFormats.localDateTimeWrites)
+        (__ \ "lastUpdated").write[Instant](MongoJavatimeFormats.instantWrites)
     )(unlift(UserAnswers.unapply))
   }
 }
