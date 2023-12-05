@@ -16,10 +16,11 @@
 
 package views
 
-import assets.constants.PaymentFrequencyConstants.allRadioOptions
+import assets.constants.PaymentFrequencyConstants.{allRadioOptions, radioItem}
 import assets.messages.{BaseMessages, PaymentFrequencyMessages}
 import forms.PaymentFrequencyFormProvider
 import models.PaymentFrequency
+import models.PaymentFrequency._
 import models.requests.DataRequest
 import org.jsoup.nodes.Document
 import play.api.data.Form
@@ -81,8 +82,15 @@ class PaymentFrequencyViewSpec extends ViewBehaviours {
               radioItems = radioItems
             )
 
+          val allSelectedRadioOptions = option.value.get match {
+            case "weekly"      => Seq(radioItem(Weekly, checked = true), radioItem(FortNightly), radioItem(FourWeekly), radioItem(Monthly))
+            case "fortnightly" => Seq(radioItem(Weekly), radioItem(FortNightly, checked = true), radioItem(FourWeekly), radioItem(Monthly))
+            case "fourweekly"  => Seq(radioItem(Weekly), radioItem(FortNightly), radioItem(FourWeekly, checked = true), radioItem(Monthly))
+            case "monthly"     => Seq(radioItem(Weekly), radioItem(FortNightly), radioItem(FourWeekly), radioItem(Monthly, checked = true))
+          }
+
           val formWithData: Form[PaymentFrequency] = form.bind(Map("value" -> s"${option.value.get}"))
-          val doc                                  = asDocument(applyView(formWithData, allRadioOptions(checked = true)))
+          val doc                                  = asDocument(applyView(formWithData, allSelectedRadioOptions))
 
           assertContainsRadioButton(doc, id = option.value.get, name = "value", value = option.value.get, isChecked = true)
         }

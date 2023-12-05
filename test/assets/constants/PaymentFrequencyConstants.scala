@@ -42,4 +42,13 @@ object PaymentFrequencyConstants {
       radioButton(Monthly)
     )
   }
+
+  def radioItem(paymentFrequency: PaymentFrequency, checked: Boolean = false)(implicit messages: Messages): RadioItem =
+    RadioItem(
+      value = Some(paymentFrequency.toString),
+      content = Text(messages(s"payFrequency.${paymentFrequency.toString}")),
+      checked = checked,
+      id = Some(paymentFrequency.toString)
+    )
+
 }
