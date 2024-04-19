@@ -2,26 +2,26 @@ import sbt.*
 
 object AppDependencies {
 
-  val playSuffix = "-play-28"
-  val bootstrapVersion = "8.1.0"
-  val hmrcMongoVersion = "1.6.0"
+  val playSuffix = "-play-30"
+  val bootstrapVersion = "8.4.0"
+  val hmrcMongoVersion = "1.8.0"
 
-  val compile = Seq(
+  val compile: Seq[ModuleID] = Seq(
     "uk.gov.hmrc.mongo"             %% s"hmrc-mongo$playSuffix"             % hmrcMongoVersion,
-    "uk.gov.hmrc"                   %% "play-conditional-form-mapping"      % s"1.13.0$playSuffix",
+    "uk.gov.hmrc"                   %% "play-conditional-form-mapping"      % s"2.0.0$playSuffix",
     "uk.gov.hmrc"                   %% s"bootstrap-frontend$playSuffix"     % bootstrapVersion,
-    "uk.gov.hmrc"                   %% "play-frontend-hmrc"                 % s"7.29.0$playSuffix",
+    "uk.gov.hmrc"                   %% "play-frontend-hmrc"                 % s"8.4.0$playSuffix",
     "org.typelevel"                 %% "cats-core"                          % "2.10.0",
     "com.softwaremill.quicklens"    %% "quicklens"                          % "1.9.6",
     "com.github.pureconfig"         %% "pureconfig"                         % "0.17.4",
     "com.fasterxml.jackson.module"  %% "jackson-module-scala"               % "2.16.0",
-    "org.playframework"             %% "play-json"                          % "3.0.1",
+    "org.playframework"             %% "play-json"                          % "3.0.2",
     "ch.qos.logback"                % "logback-classic"                     % "1.4.14",
     "com.typesafe.play"             %% "play-logback"                       % "2.8.21",
     "com.kenshoo"                   %% "metrics-play"                       % "2.7.3_0.8.2"
   )
 
-  val test = Seq(
+  val test: Seq[ModuleID] = Seq(
     "uk.gov.hmrc.mongo"             %% s"hmrc-mongo-test$playSuffix"        % hmrcMongoVersion,
     "uk.gov.hmrc"                   %% s"bootstrap-test$playSuffix"         % bootstrapVersion,
     "com.ironcorelabs"              %% "cats-scalatest"                     % "3.1.1",
@@ -30,7 +30,7 @@ object AppDependencies {
     "org.playframework"             %% "play-test"                          % "3.0.0",
     "org.scalatestplus"             %% "mockito-3-12"                       % "3.2.10.0",
     "org.mockito"                   %  "mockito-core"                       % "5.8.0",
-    "org.wiremock"                  % "wiremock"                            % "3.3.1",
+    "org.wiremock"                  %  "wiremock"                           % "3.3.1",
     "org.scalatestplus"             %% "scalacheck-1-16"                    % "3.2.14.0",
     "org.scalacheck"                %% "scalacheck"                         % "1.17.0",
     "com.vladsch.flexmark"          %  "flexmark-all"                       % "0.64.8",
@@ -38,16 +38,16 @@ object AppDependencies {
 
   def apply(): Seq[ModuleID] = compile ++ test
 
-  val akkaVersion = "2.6.21"
-  val akkaHttpVersion = "10.2.10"
+  val pekkoHTTPVersion = "1.0.1"
+  val pekkoVersion = "1.0.2"
 
-  val overrides = Seq(
-    "com.typesafe.akka" %% "akka-stream" % akkaVersion,
-    "com.typesafe.akka" %% "akka-protobuf" % akkaVersion,
-    "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
-    "com.typesafe.akka" %% "akka-actor" % akkaVersion,
-    "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
-    "com.typesafe.akka" %% "akka-serialization-jackson" % akkaVersion,
-    "com.typesafe.akka" %% "akka-http-core" % akkaHttpVersion
+  val overrides: Seq[ModuleID] = Seq(
+    "org.apache.pekko" %% "pekko-stream" % pekkoVersion,
+    "org.apache.pekko" %% "pekko-protobuf" % pekkoVersion,
+    "org.apache.pekko" %% "pekko-slf4j" % pekkoVersion,
+    "org.apache.pekko" %% "pekko-actor" % pekkoVersion,
+    "org.apache.pekko" %% "pekko-actor-typed" % pekkoVersion,
+    "org.apache.pekko" %% "pekko-serialization-jackson" % pekkoVersion,
+    "org.apache.pekko" %% "pekko-http-core" % pekkoHTTPVersion
   )
 }

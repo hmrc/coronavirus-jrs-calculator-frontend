@@ -16,7 +16,7 @@
 
 package controllers
 
-import akka.util.Timeout
+import org.apache.pekko.util.Timeout
 import base.SpecBaseControllerSpecs
 import cats.scalatest.ValidatedValues
 import cats.syntax.validated._
