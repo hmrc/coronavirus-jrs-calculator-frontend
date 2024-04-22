@@ -10,7 +10,7 @@ object AppDependencies {
     "uk.gov.hmrc.mongo"             %% s"hmrc-mongo$playSuffix"             % hmrcMongoVersion,
     "uk.gov.hmrc"                   %% "play-conditional-form-mapping"      % s"2.0.0$playSuffix",
     "uk.gov.hmrc"                   %% s"bootstrap-frontend$playSuffix"     % bootstrapVersion,
-    "uk.gov.hmrc"                   %% "play-frontend-hmrc"                 % s"8.4.0$playSuffix",
+    "uk.gov.hmrc"                   %% s"play-frontend-hmrc$playSuffix"     % s"8.4.0",
     "org.typelevel"                 %% "cats-core"                          % "2.10.0",
     "com.softwaremill.quicklens"    %% "quicklens"                          % "1.9.6",
     "com.github.pureconfig"         %% "pureconfig"                         % "0.17.4",
