@@ -17,7 +17,7 @@ object AppDependencies {
     "com.fasterxml.jackson.module"  %% "jackson-module-scala"                         % "2.16.0",
     "org.playframework"             %% "play-json"                                    % "3.0.2",
     "ch.qos.logback"                % "logback-classic"                               % "1.4.14",
-    "com.typesafe.play"             %% "play-logback"                                 % "2.8.21",
+    "com.typesafe.play"             %% "play-logback"                                 % "2.9.3",
   )
 
   val test: Seq[ModuleID] = Seq(
