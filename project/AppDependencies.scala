@@ -33,7 +33,9 @@ object AppDependencies {
     "org.scalatestplus"             %% "scalacheck-1-16"                    % "3.2.14.0",
     "org.scalacheck"                %% "scalacheck"                         % "1.17.0",
     "com.vladsch.flexmark"          %  "flexmark-all"                       % "0.64.8",
-  ).map(_ % "test, it")
+  ).map(_ % "test")
+
+  val it: Seq[ModuleID] = Seq()
 
   def apply(): Seq[ModuleID] = compile ++ test
 
