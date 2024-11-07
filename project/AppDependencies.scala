@@ -11,13 +11,13 @@ object AppDependencies {
     "uk.gov.hmrc"                   %% s"play-conditional-form-mapping$playSuffix"    % "2.0.0",
     "uk.gov.hmrc"                   %% s"bootstrap-frontend$playSuffix"               % bootstrapVersion,
     "uk.gov.hmrc"                   %% s"play-frontend-hmrc$playSuffix"               % "8.4.0",
-    "org.typelevel"                 %% "cats-core"                                    % "2.10.0",
-    "com.softwaremill.quicklens"    %% "quicklens"                                    % "1.9.6",
-    "com.github.pureconfig"         %% "pureconfig"                                   % "0.17.4",
-    "com.fasterxml.jackson.module"  %% "jackson-module-scala"                         % "2.16.0",
-    "org.playframework"             %% "play-json"                                    % "3.0.2",
-    "ch.qos.logback"                % "logback-classic"                               % "1.4.14",
-    "com.typesafe.play"             %% "play-logback"                                 % "2.9.3",
+    "org.typelevel"                 %% "cats-core"                                    % "2.12.0",
+    "com.softwaremill.quicklens"    %% "quicklens"                                    % "1.9.7",
+    "com.github.pureconfig"         %% "pureconfig"                                   % "0.17.7",
+    "com.fasterxml.jackson.module"  %% "jackson-module-scala"                         % "2.17.2",
+    "org.playframework"             %% "play-json"                                    % "3.0.4",
+    "ch.qos.logback"                % "logback-classic"                               % "1.5.6",
+    "com.typesafe.play"             %% "play-logback"                                 % "2.9.5",
   )
 
   val test: Seq[ModuleID] = Seq(
@@ -33,7 +33,9 @@ object AppDependencies {
     "org.scalatestplus"             %% "scalacheck-1-16"                    % "3.2.14.0",
     "org.scalacheck"                %% "scalacheck"                         % "1.17.0",
     "com.vladsch.flexmark"          %  "flexmark-all"                       % "0.64.8",
-  ).map(_ % "test, it")
+  ).map(_ % "test")
+
+  val it: Seq[ModuleID] = Seq()
 
   def apply(): Seq[ModuleID] = compile ++ test
 
