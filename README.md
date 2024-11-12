@@ -14,7 +14,7 @@ To read about the service, please visit this repository's [GitHub Wiki](https://
 ##### Run tests
 * Run the following tests
     - `sbt test`
-    - `sbt it:test`
+    - `sbt it/test`
 
 ##### Run acceptance tests
 * [Acceptance tests](https://github.com/hmrc/coronavirus-jrs-calculator-acceptance-tests)
