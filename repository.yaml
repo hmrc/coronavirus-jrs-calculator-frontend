@@ -3,3 +3,4 @@ digital-service: Coronavirus Job Retention Scheme Calculator
 test-repositories:
   - coronavirus-jrs-calculator-performance-tests
   - coronavirus-jrs-calculator-acceptance-tests
+serviceNowMapping: SNSVC0005662
